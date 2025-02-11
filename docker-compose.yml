@@ -39,3 +39,14 @@ services:
       interval: 1s
       timeout: 2s
       retries: 100
+  api_gateway:
+    image: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      backend:
+        condition: service_healthy
+      frontend:
+        condition: service_healthy
+    ports:
+      - 7000:80
