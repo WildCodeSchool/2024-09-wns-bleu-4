@@ -1,17 +1,15 @@
-import { BaseEntity, Column, Entity } from "typeorm";
-import { User } from "./User";
-import { File } from "./File";
+import { BaseEntity, Entity, ManyToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from '@/entities/User';
+import { Resource } from '@/entities/Resource';
 
-@Entity() 
+@Entity()
 export class Comment extends BaseEntity {
+    @PrimaryGeneratedColumn()
+    id: number;
 
-@Column()
-id: number;
+    @ManyToMany(() => User)
+    user: User;
 
-@Column()
-user: any;
-
-@Column()
-file: any;
-
+    @OneToOne(() => Resource)
+    resource: Resource;
 }
