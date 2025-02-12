@@ -1,52 +1,52 @@
 services:
-  db:
-    image: postgres
-    environment:
-      POSTGRES_PASSWORD: example
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -d postgres -U postgres"]
-      interval: 1s
-      timeout: 5s
-      retries: 50
-  adminer:
-    image: adminer
-    depends_on:
-      db:
-        condition: service_healthy
-  backend:
-    build: ./backend
-    volumes:
-      - ./backend/src:/app/src
-    healthcheck:
-      test: 'curl --fail --request POST --header ''content-type: application/json'' --url ''http://localhost:4000'' --data ''{"query":"query { __typename }"}'' || exit 1'
-      interval: 1s
-      timeout: 2s
-      retries: 100
-    env_file:
-      - .env
-    depends_on:
-      db:
-        condition: service_healthy
-  frontend:
-    build: ./frontend
-    volumes:
-      - ./frontend/src:/app/src
-    depends_on:
-      backend:
-        condition: service_healthy
-    healthcheck:
-      test: "curl --fail --request GET --url 'http://localhost:5173' || exit 1"
-      interval: 1s
-      timeout: 2s
-      retries: 100
-  api_gateway:
-    image: nginx
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-    depends_on:
-      backend:
-        condition: service_healthy
-      frontend:
-        condition: service_healthy
-    ports:
-      - 7000:80
+    db:
+        image: postgres
+        environment:
+            POSTGRES_PASSWORD: example
+        healthcheck:
+            test: ['CMD-SHELL', 'pg_isready -d postgres -U postgres']
+            interval: 1s
+            timeout: 5s
+            retries: 50
+    adminer:
+        image: adminer
+        depends_on:
+            db:
+                condition: service_healthy
+    backend:
+        build: ./backend
+        volumes:
+            - ./backend/src:/app/src
+        healthcheck:
+            test: 'curl --fail --request POST --header ''content-type: application/json'' --url ''http://localhost:4000'' --data ''{"query":"query { __typename }"}'' || exit 1'
+            interval: 1s
+            timeout: 2s
+            retries: 100
+        env_file:
+            - .env
+        depends_on:
+            db:
+                condition: service_healthy
+    frontend:
+        build: ./frontend
+        volumes:
+            - ./frontend/src:/app/src
+        depends_on:
+            backend:
+                condition: service_healthy
+        healthcheck:
+            test: "curl --fail --request GET --url 'http://localhost:5173' || exit 1"
+            interval: 1s
+            timeout: 2s
+            retries: 100
+    api_gateway:
+        image: nginx
+        volumes:
+            - ./nginx.conf:/etc/nginx/nginx.conf
+        depends_on:
+            backend:
+                condition: service_healthy
+            frontend:
+                condition: service_healthy
+        ports:
+            - 7000:80

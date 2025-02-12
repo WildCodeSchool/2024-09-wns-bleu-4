@@ -15,30 +15,30 @@ const typeDefs = `#graphql
 
 const books = [
     {
-      title: 'The Awakening',
-      author: 'Kate Chopin',
+        title: 'The Awakening',
+        author: 'Kate Chopin',
     },
     {
-      title: 'City of Glass',
-      author: 'Paul Auster',
+        title: 'City of Glass',
+        author: 'Paul Auster',
     },
-  ];
+];
 
 const resolvers = {
     Query: {
-      books: () => books,
+        books: () => books,
     },
-  };
+};
 
 const server = new ApolloServer({
     typeDefs,
     resolvers,
-  });
+});
 
-  const start = async () => {
+const start = async () => {
     const { url } = await startStandaloneServer(server, {
-      listen: { port: 4000 },
+        listen: { port: 4000 },
     });
     console.log(`🚀  Server ready at: ${url}`);
-  }
-  start();
+};
+start();
