@@ -1,11 +1,12 @@
-import { BaseEntity, Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { User } from "./User";
+import { BaseEntity, Column, Entity, ManyToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { User } from "@/entities/User";
+
 export enum FileVisibility {
     PRIVATE = "private", PUBLIC = "public"
 }
 
 @Entity()
-export class File extends BaseEntity {
+export class Resource extends BaseEntity {
     @PrimaryGeneratedColumn()
     id : number;
 
@@ -48,4 +49,7 @@ export class File extends BaseEntity {
         length: 320,
     })
     description: string;
+
+    @ManyToMany(() => User, (User) => User.resourceAccess)
+    usersWithAccess: User[]
 }

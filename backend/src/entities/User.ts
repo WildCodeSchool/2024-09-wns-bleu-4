@@ -1,4 +1,6 @@
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, ManyToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Resource } from "@/entities/Resource";
+
 export enum UserRole {
     USER = "user", ADMIN = "admin",
 }
@@ -32,8 +34,11 @@ export class User extends BaseEntity {
   })
   role: UserRole;
 
-  @ManyToOne(() => User, user => user.subscription)
-    subscription: User;
+  @ManyToMany(() => Resource, (Resource) => Resource.usersWithAccess)
+  resourceAccess: Resource[]
+
+  @OneToOne(() => User, user => user.subscription, { nullable: true })
+  subscription: User;
 
   @Column()
   createdAt: Date;
