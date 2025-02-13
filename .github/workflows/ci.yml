@@ -23,12 +23,8 @@ jobs:
 
       - name: Build Docker container
         run: |
-          docker compose up --build
+          docker compose up --build -d
         continue-on-error: false
-
-      - name: Stop api_gateway
-        run: |
-          docker stop 2024-09-wns-bleu-4-api_gateway-1
 
       - name: Stop Docker
         run: docker compose down
