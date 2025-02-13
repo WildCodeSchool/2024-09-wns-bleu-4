@@ -11,5 +11,4 @@ export class Contact extends BaseEntity {
 
   @ManyToMany(() => User)
   targetUser: User;
-
 }

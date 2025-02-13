@@ -15,8 +15,8 @@ export class LikeInput implements Partial<Like> {
 @Resolver(Like)
 class LikeResolver {
     @Query(() => [Like])
-    async getLikesByUser(@Arg("userId", () => Number) userId: number): Promise<Like[]> {
-        const likes = await Like.find({ where: { user: { id: userId } } });
+    async getLikesByUser(@Arg("id", () => ID) id: number): Promise<Like[]> {
+        const likes = await Like.find({ where: { user: { id: id } } });
         return likes;
     }
 

@@ -36,7 +36,7 @@ class UserInfo {
 class UserResolver {
   
   @Mutation(() => String)
-  async register(@Arg("data", () => UserInput) newUserData: UserInput) {
+  async register(@Arg("data", () => UserInput) newUserData: User) {
     
     const randomCode = uuidv4();
     const result = await TempUser.save({

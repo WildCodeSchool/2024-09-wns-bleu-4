@@ -1,6 +1,7 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "@/entities/User";
 import { Resource } from "@/entities/Resource";
+import { Field } from "type-graphql";
 
 @Entity() 
 export class Comment extends BaseEntity {
@@ -10,9 +11,10 @@ export class Comment extends BaseEntity {
     @ManyToMany(() => User)
     user: User;
 
-    @ManyToOne(() => Resource)
+    @ManyToOne(() => Resource, (resource) => resource.comments)
     resource: Resource;
 
+    @Field(() => String)
     @Column(
         { type: 'text' })
     content: string;
