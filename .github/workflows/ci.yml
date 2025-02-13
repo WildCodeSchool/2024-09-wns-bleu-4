@@ -19,7 +19,7 @@ jobs:
 
       - name: Build Docker container
         run: |
-          docker-compose up --build
+          docker compose up --build 
         continue-on-error: false
 
       - name: Run Tests
