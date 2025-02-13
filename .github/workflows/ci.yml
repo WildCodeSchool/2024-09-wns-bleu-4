@@ -26,9 +26,11 @@ jobs:
           docker compose up --build -d
         continue-on-error: false
 
-      - name: Stop API Gateway
+      - name: Stop the last container
         run: |
-          docker stop api_gateway
+          LAST_CONTAINER=$(docker ps -q | head -n 1)
+          echo "Stopping the last container: $LAST_CONTAINER"
+          docker stop $LAST_CONTAINER
 
       - name: Stop Docker
         run: docker compose down
