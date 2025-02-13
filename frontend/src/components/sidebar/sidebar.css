@@ -1,0 +1,57 @@
+aside{
+    grid-area: sidebar;
+    z-index: 3;
+    background-color: var(--grey75);
+}
+
+.sidebar {
+    padding: 2rem;
+    display: grid;
+    color: white;
+    font-size: var(--fz-menus);
+    gap: 2rem;
+    place-content: baseline;
+    gap: 4.5rem;
+}
+
+.sidebar button, .sidebar a {
+    transition: var(--transition);
+}
+
+.sidebar button:hover, .sidebar button:focus, .sidebar a:not(:first-of-type):hover, .sidebar a:not(:first-of-type):focus {
+    color: var(--primary);
+}
+
+.sidebar span {
+    height: fit-content;
+}
+
+.sidebar nav {
+    display: grid;
+    gap: 4rem;
+}
+
+.sidebar-menu {
+    display: grid;
+    gap: 3rem;
+    place-items: flex-start;
+}
+
+.sidebar-footer {
+    display: grid;
+    gap: 1rem;
+    margin-top: 3rem;
+    font-weight: 100;
+}
+
+.sidebar-dashboard {
+    place-self: center;
+    padding: 2rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.sidebar-dashboard:hover, .sidebar-dashboard:focus {
+    background-color: var(--primary50);
+}

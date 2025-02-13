@@ -1,0 +1,36 @@
+.header {
+    grid-area: 'header';
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    padding: 2rem 4rem;
+    justify-content: space-between;
+}
+
+.log {
+    display: flex;
+    gap: 60px;
+    padding: .5rem 30px;
+    box-shadow: var(--shadow);
+    background-color: transparent;
+    font-size: var(--fz-menus);
+    font-weight: var(--regular);
+    border-radius: var(--radius);
+    font-family: var(--text);
+}
+
+.log a:last-child {
+    font-weight: var(--semi-bold);
+    background-color: var(--grey60);
+}
+
+.log a {
+    padding: 6px 20px;
+    border-radius: var(--radius);
+    transition: var(--transition);
+    color: white;
+}
+
+.log a:hover, .log a:focus {
+    color: var(--primary);
+}

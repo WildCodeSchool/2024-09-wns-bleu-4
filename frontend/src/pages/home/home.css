@@ -1,0 +1,17 @@
+.home-title {
+    font-family: var(--title);
+    font-size: var(--fz-h1);
+    font-weight: var(--semi-bold);
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transform: translateY(100%);
+    margin-left: 8rem;
+}
+
+@media (max-width: 999.98px) {
+    .home-title {
+        margin-left: 2rem;
+    }
+}
