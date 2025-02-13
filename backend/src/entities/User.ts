@@ -1,14 +1,16 @@
+import { Resource } from '@/entities/Resource';
+import { Field, ID, ObjectType } from 'type-graphql';
 import {
     BaseEntity,
     Column,
     CreateDateColumn,
     Entity,
+    JoinColumn,
     ManyToMany,
     OneToOne,
     PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Resource } from '@/entities/Resource';
-import { Field, ObjectType } from 'type-graphql';
+import { Subscribtion } from './Subscribtion';
 
 export enum UserRole {
     USER = 'user',
@@ -33,7 +35,8 @@ export class TempUser extends BaseEntity {
 @ObjectType()
 @Entity()
 export class User extends BaseEntity {
-    @PrimaryGeneratedColumn()
+    @Field(() => ID)
+    @PrimaryGeneratedColumn('uuid')
     id: number;
 
     @Field(() => String)
@@ -65,8 +68,14 @@ export class User extends BaseEntity {
     })
     resourceAccess: Resource[];
 
-    @OneToOne(() => User, (user) => user.subscription, { nullable: true })
-    subscription: User;
+    @Field(() => Subscribtion, { nullable: true })
+    @OneToOne(() => Subscribtion, (subscription) => subscription.user, {
+        nullable: true,
+        eager: true,
+        onDelete: 'SET NULL',
+    })
+    @JoinColumn()
+    subscription: Subscribtion | null;
 
     @CreateDateColumn()
     createdAt: Date;
