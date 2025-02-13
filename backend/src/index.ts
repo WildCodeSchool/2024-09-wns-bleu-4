@@ -1,41 +1,14 @@
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
-
-const typeDefs = `#graphql
-  type Book {
-    title: String
-    author: String
-  }
+import { dataSource } from '@/db';
+import { buildSchema } from 'type-graphql';
 
 
-  type Query {
-    books: [Book]
-  }
-`;
-
-const books = [
-    {
-        title: 'The Awakening',
-        author: 'Kate Chopin',
-    },
-    {
-        title: 'City of Glass',
-        author: 'Paul Auster',
-    },
-];
-
-const resolvers = {
-    Query: {
-        books: () => books,
-    },
-};
-
-const server = new ApolloServer({
-    typeDefs,
-    resolvers,
-});
 
 const start = async () => {
+    await dataSource.initialize();
+    const schema = await buildSchema({ resolvers: [] });
+    const server = new ApolloServer({ schema: dataSource });
     const { url } = await startStandaloneServer(server, {
         listen: { port: 4000 },
     });

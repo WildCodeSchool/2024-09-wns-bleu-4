@@ -11,7 +11,7 @@ export enum Reason {
 }
 
 @Entity()
-export class Comment extends BaseEntity {
+export class Report extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 

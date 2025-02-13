@@ -3,7 +3,7 @@ import { User } from '@/entities/User';
 import { Resource } from '@/entities/Resource';
 
 @Entity()
-export class Comment extends BaseEntity {
+export class Like extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
