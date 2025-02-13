@@ -13,9 +13,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up .env
+      - name: Create .env
         run: |
-          echo .env
+          touch .env
 
       - name: Set up Docker
         run: |
