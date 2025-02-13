@@ -26,6 +26,11 @@ jobs:
           docker compose up --build
         continue-on-error: false
 
+      - name: Wait for 50 seconds before stopping API Gateway
+        run: |
+          echo "Waiting 50 seconds before stopping API Gateway..."
+          sleep 60
+
       - name: Stop API Gateway
         run: |
           docker compose stop api_gateway
