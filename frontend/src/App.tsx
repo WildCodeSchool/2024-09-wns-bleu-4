@@ -11,11 +11,11 @@ const App = () => {
                 */}
                 <Route path="/" element={<Layout />}>
                     <Route index element={<Home />} />
-                    <Route path="/abonnement" element={<div>Abonnement</div>} />
-                    <Route path="/a-propos" element={<div>À propos</div>} />
-                    <Route path="/plan-site" element={<div>Plan du site</div>} />
+                    <Route path="/subscription" element={<div>Abonnement</div>} />
+                    <Route path="/about" element={<div>À propos</div>} />
+                    <Route path="/sitemap" element={<div>Plan du site</div>} />
                     <Route path="/cgu" element={<div>CGU</div>} />
-                    <Route path="/politique-confidentialite" element={<div>Politique de confidentialité</div>} />
+                    <Route path="/privacy-policy" element={<div>Politique de confidentialité</div>} />
                 </Route>
             </Routes>
         </BrowserRouter>

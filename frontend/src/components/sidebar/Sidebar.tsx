@@ -11,14 +11,14 @@ const Sidebar = () => {
                 </Link>
                 <div className='sidebar-menu'>
                     <button>Possibilités</button>
-                    <Link to="/abonnements">Abonnements</Link>
+                    <Link to="/subscription">Abonnements</Link>
                     <button>Cas d'utilisation</button>
-                    <Link to="/a-propos">À propos</Link>
+                    <Link to="/about">À propos</Link>
                 </div>
                 <div className="sidebar-footer">
                     <Link to="/cgu">CGU</Link>
-                    <Link to="/politique-confidentialite">Politique de confidentialité</Link>
-                    <Link to="/plan-site">Plan du site</Link>
+                    <Link to="/privacy-policy">Politique de confidentialité</Link>
+                    <Link to="/sitemap">Plan du site</Link>
                 </div>
             </nav>
         </aside>

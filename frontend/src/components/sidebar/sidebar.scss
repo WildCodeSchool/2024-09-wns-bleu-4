@@ -1,0 +1,66 @@
+.sidebar{
+    grid-area: sidebar;
+    z-index: 3;
+    background-color: var(--grey75);
+    padding: 2rem;
+    display: grid;
+    color: white;
+    font-size: var(--fz-menus);
+    gap: 2rem;
+    place-content: baseline;
+    gap: 4.5rem;
+    
+    span {
+        height: fit-content;
+    }
+    
+    nav {
+        display: grid;
+        gap: 4rem;
+    }
+}
+
+.sidebar-menu {
+    display: grid;
+    gap: 3rem;
+    place-items: flex-start;
+}
+
+.sidebar-footer {
+    display: grid;
+    gap: 1rem;
+    margin-top: 3rem;
+
+    a {
+        position: relative;
+        width: fit-content;
+        font-weight: var(--light);
+
+        &::before {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: white;
+            transition: var(--transition);
+        }
+
+        &:hover::before {
+            width: 100%;
+        }
+    }
+}
+
+.sidebar-dashboard {
+    place-self: center;
+    padding: 2rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    
+    &:hover, &:focus {
+        background-color: var(--primary50);
+    }
+}
