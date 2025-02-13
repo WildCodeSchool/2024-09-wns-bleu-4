@@ -1,10 +1,10 @@
 const Home = () => {
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-            <h1 className="text-4xl font-bold text-blue-600">Home</h1>
-            <p className="text-lg bg-white text-gray-800 px-6 py-3 rounded-lg shadow-lg border-4 border-red-500 mt-4">
-                Welcome to home page! 🚀
-            </p>
+        <div className="flex justify-center items-center h-full">
+            <h1 className="text-2xl font-semibold text-gray-900">
+                La solution simple et rapide pour tous vos transferts de
+                fichiers
+            </h1>
         </div>
     );
 };
