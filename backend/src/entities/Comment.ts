@@ -14,7 +14,7 @@ export class Comment extends BaseEntity {
     resource: Resource;
 
     @Column(
-        { type: "longtext" })
+        { type: 'text' })
     content: string;
 
     @CreateDateColumn()

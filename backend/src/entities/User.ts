@@ -8,6 +8,7 @@ import {
     PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Resource } from '@/entities/Resource';
+import { Field, ObjectType } from 'type-graphql';
 
 export enum UserRole {
     USER = 'user',
@@ -19,21 +20,23 @@ export class TempUser extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column('varchar')
     email: string;
 
-    @Column()
+    @Column('varchar')
     password: string;
 
-    @Column()
+    @Column('varchar')
     generatedCode: string;
 }
 
+@ObjectType()
 @Entity()
 export class User extends BaseEntity {
-    @PrimaryGeneratedColumn("uuid")
+    @PrimaryGeneratedColumn()
     id: number;
 
+    @Field(() => String)
     @Column({
         type: 'varchar',
         length: 320,

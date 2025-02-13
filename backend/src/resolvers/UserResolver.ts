@@ -16,19 +16,19 @@ import { Resend } from 'resend';
 
 @InputType()
 export class UserInput implements Partial<User> {
-  @Field()
+  @Field(() => String)
   email: string;
 
-  @Field()
+  @Field(() => String)
   password: string;
 }
 
 @ObjectType()
 class UserInfo {
-  @Field()
+  @Field(() => Boolean)
   isLoggedIn: boolean;
 
-  @Field({ nullable: true })
+  @Field(() => String ,{ nullable: true })
   email?: String;
 }
 
@@ -36,7 +36,7 @@ class UserInfo {
 class UserResolver {
   
   @Mutation(() => String)
-  async register(@Arg("data") newUserData: UserInput) {
+  async register(@Arg("data", () => UserInput) newUserData: UserInput) {
     
     const randomCode = uuidv4();
     const result = await TempUser.save({
@@ -76,7 +76,7 @@ class UserResolver {
   }
 
   @Mutation(() => String)
-  async login(@Arg("data") loginUserData: UserInput, @Ctx() context: any) {
+  async login(@Arg("data", () => UserInput) loginUserData: UserInput, @Ctx() context: any) {
     
     const user = await User.findOneBy({ email: loginUserData.email });
 
@@ -115,7 +115,7 @@ class UserResolver {
   }
 
   @Mutation(() => String)
-  async confirmEmail(@Arg("codeByUser") codeByUser: string) {
+  async confirmEmail(@Arg("codeByUser", () => String) codeByUser: string) {
     const tempUser = await TempUser.findOneByOrFail({ generatedCode: codeByUser });
     await User.save({
       email: tempUser.email,
@@ -125,18 +125,6 @@ class UserResolver {
     return "ok";
   }
 
-  @Mutation(() => String)
-  async forgotPassword(@Arg("userEmail") userEmail: string) {
-    return ""
-  }
-
-  @Mutation(() => String)
-  async changePassword(
-    @Arg("code") code: string,
-    @Arg("password") password: string
-  ) {
-    return ""
-  }
 }
 
 export default UserResolver;

@@ -8,6 +8,6 @@ export class Subscribtion extends BaseEntity {
   @CreateDateColumn()
   paidAt: Date;
 
-  @Column()
+  @Column('date')
   endAt: Date;
 }

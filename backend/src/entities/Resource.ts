@@ -4,10 +4,12 @@ import {
     CreateDateColumn,
     Entity,
     ManyToMany,
+    OneToMany,
     OneToOne,
     PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from '@/entities/User';
+import { Like } from './Like';
 
 export enum FileVisibility {
     PRIVATE = 'private',
@@ -59,7 +61,10 @@ export class Resource extends BaseEntity {
     @ManyToMany(() => User, (User) => User.resourceAccess)
     usersWithAccess: User[];
 
-    @Column({ nullable: true })
+    @OneToMany(() => Like, (like) => like.resource)
+    likes: Like
+
+    @Column('date', { nullable: true })
     expireAt: Date;
 
     @CreateDateColumn()

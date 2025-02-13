@@ -1,4 +1,4 @@
-import { BaseEntity, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "@/entities/User";
 
 @Entity()
@@ -6,10 +6,10 @@ export class Contact extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User)
+  @ManyToMany(() => User)
   sourceUser: User;
 
-  @ManyToOne(() => User)
+  @ManyToMany(() => User)
   targetUser: User;
 
 }

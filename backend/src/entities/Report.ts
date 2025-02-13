@@ -15,13 +15,13 @@ export class Report extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column(() => User)
     user: User;
 
-    @Column()
+    @Column(() => Resource)
     resource: Resource;
 
-    @Column({ type: 'longtext', nullable: true })
+    @Column({ type: 'text', nullable: true })
     content: string;
 
     @Column({ type: 'enum', enum: Reason, default: Reason.NONE })

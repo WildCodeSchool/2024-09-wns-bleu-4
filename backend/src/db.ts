@@ -12,7 +12,7 @@ export const dataSource = new DataSource({
     host: 'db',
     username: 'postgres',
     database: 'postgres',
-    password: 'feur',
+    password: 'example',
     entities: [Comment, Contact, Like, Report, Resource, Subscribtion, User],
     synchronize: true,
     logging: ['error', 'query'],
