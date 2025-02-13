@@ -23,7 +23,7 @@ jobs:
 
       - name: Build Docker container
         run: |
-          timeout 60s docker compose up --build
+          docker compose up --build --scale 2024-09-wns-bleu-4-api_gateway-1
         continue-on-error: false
 
       - name: Stop Docker
