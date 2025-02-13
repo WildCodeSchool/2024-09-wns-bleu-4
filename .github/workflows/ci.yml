@@ -26,11 +26,9 @@ jobs:
           docker compose up --build -d
         continue-on-error: false
 
-      - name: Stop the last container
+      - name: Stop api_gateway
         run: |
-          LAST_CONTAINER=$(docker ps -q | head -n 1)
-          echo "Stopping the last container: $LAST_CONTAINER"
-          docker stop $LAST_CONTAINER
+          docker stop 2024-09-wns-bleu-4-api_gateway-1
 
       - name: Stop Docker
         run: docker compose down
