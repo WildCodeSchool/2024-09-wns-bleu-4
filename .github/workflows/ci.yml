@@ -23,16 +23,12 @@ jobs:
 
       - name: Build Docker container
         run: |
-          docker compose up --build  -d
+          docker compose up --build
         continue-on-error: false
-
-      - name: Check containers status
-        run: |
-          docker-compose ps
 
       - name: Stop API Gateway
         run: |
-          docker-compose stop api_gateway
+          docker compose stop api_gateway
 
       - name: Stop Docker
         run: docker-compose down
