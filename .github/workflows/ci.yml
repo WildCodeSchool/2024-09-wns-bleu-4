@@ -32,3 +32,4 @@ jobs:
 
       - name: Stop Docker
         run: docker compose down
+        
