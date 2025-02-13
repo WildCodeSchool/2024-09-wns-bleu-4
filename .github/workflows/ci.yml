@@ -23,17 +23,12 @@ jobs:
 
       - name: Build Docker container
         run: |
-          docker compose up --build
+          docker compose up --build -d
         continue-on-error: false
-
-      - name: Wait for 50 seconds before stopping API Gateway
-        run: |
-          echo "Waiting 50 seconds before stopping API Gateway..."
-          sleep 60
 
       - name: Stop API Gateway
         run: |
-          docker compose stop api_gateway
+          docker stop api_gateway
 
       - name: Stop Docker
-        run: docker-compose down
+        run: docker compose down
