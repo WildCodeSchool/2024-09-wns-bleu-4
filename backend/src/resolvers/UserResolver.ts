@@ -48,7 +48,7 @@ class UserResolver {
 
       try {
         const { data } = await resend.emails.send({
-          from: `Acme <${process.env.RESEND_EMAIL_SENDER}>`,
+          from: `${process.env.RESEND_EMAIL_SENDER}`,
           to: [newUserData.email],
           subject: "Verify Email",
           html: `
@@ -66,6 +66,24 @@ class UserResolver {
       }
 
     return "The user has been created!";
+  }
+
+  @Mutation(() => User)
+  async createUser(@Arg("user", () => UserInput) newUser: User): Promise<User> {
+    const user = User.create(newUser)
+    await user.save();
+    return user;
+  }
+
+  @Mutation(() => String)
+  async confirmEmail(@Arg("codeByUser", () => String) codeByUser: string) {
+    const tempUser = await TempUser.findOneByOrFail({ generatedCode: codeByUser });
+    await User.save({
+      email: tempUser.email,
+      password: tempUser.password,
+    });
+    tempUser.remove();
+    return "ok";
   }
   
   async isPasswordCorrect(user: User | null, userInputData: UserInput): Promise<boolean> {
@@ -105,6 +123,12 @@ class UserResolver {
     return "The user has been logged out";
   }
 
+  @Query(() => [User])
+  async getAllUsers(): Promise<User[]> {
+    const users = await User.find();
+    return users;
+  }
+
   @Query(() => UserInfo)
   async getUserInfo(@Ctx() context: any) {
     if (context.email) {
@@ -112,17 +136,6 @@ class UserResolver {
     } else {
       return { isLoggedIn: false };
     }
-  }
-
-  @Mutation(() => String)
-  async confirmEmail(@Arg("codeByUser", () => String) codeByUser: string) {
-    const tempUser = await TempUser.findOneByOrFail({ generatedCode: codeByUser });
-    await User.save({
-      email: tempUser.email,
-      password: tempUser.password,
-    });
-    tempUser.remove();
-    return "ok";
   }
 
 }
