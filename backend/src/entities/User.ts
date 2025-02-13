@@ -15,8 +15,23 @@ export enum UserRole {
 }
 
 @Entity()
-export class User extends BaseEntity {
+export class TempUser extends BaseEntity {
     @PrimaryGeneratedColumn()
+    id: number;
+
+    @Column()
+    email: string;
+
+    @Column()
+    password: string;
+
+    @Column()
+    generatedCode: string;
+}
+
+@Entity()
+export class User extends BaseEntity {
+    @PrimaryGeneratedColumn("uuid")
     id: number;
 
     @Column({
@@ -42,7 +57,9 @@ export class User extends BaseEntity {
     })
     role: UserRole;
 
-    @ManyToMany(() => Resource, (Resource) => Resource.usersWithAccess, { nullable: true })
+    @ManyToMany(() => Resource, (Resource) => Resource.usersWithAccess, {
+        nullable: true,
+    })
     resourceAccess: Resource[];
 
     @OneToOne(() => User, (user) => user.subscription, { nullable: true })

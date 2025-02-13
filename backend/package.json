@@ -14,11 +14,17 @@
     "license": "ISC",
     "dependencies": {
         "@apollo/server": "^4.11.3",
+        "argon2": "^0.41.1",
+        "dotenv": "^16.4.7",
         "graphql": "^16.10.0",
+        "jsonwebtoken": "^9.0.2",
+        "resend": "^4.1.2",
         "type-graphql": "^2.0.0-rc.2",
-        "typeorm": "^0.3.20"
+        "typeorm": "^0.3.20",
+        "uuid": "^11.0.5"
     },
     "devDependencies": {
+        "@types/jsonwebtoken": "^9.0.8",
         "@types/node": "^22.13.2",
         "@typescript-eslint/eslint-plugin": "^8.24.0",
         "@typescript-eslint/parser": "^8.24.0",
