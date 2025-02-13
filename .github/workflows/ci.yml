@@ -29,5 +29,9 @@ jobs:
       - name: Run Tests
         run: pytest
 
+      - name: Stop API Gateway
+        run: |
+          docker-compose stop api_gateway
+
       - name: Stop Docker
         run: docker-compose down
