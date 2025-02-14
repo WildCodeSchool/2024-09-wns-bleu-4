@@ -28,8 +28,8 @@ class LikeResolver {
     }
 
     @Mutation(() => String)
-    async deleteLike(@Arg("id", () => LikeInput) id: LikeInput): Promise<string> {
-        await Like.delete(id);
+    async deleteLike(@Arg("likeToDelete", () => LikeInput) likeToDelete: LikeInput): Promise<string> {
+        await Like.delete(likeToDelete);
         return 'Like deleted';
     }
 }

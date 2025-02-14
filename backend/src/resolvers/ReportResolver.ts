@@ -40,8 +40,8 @@ class ReportResolver {
     }
 
     @Mutation(() => String)
-    async deleteReport(@Arg("id", () => ReportInput) id: ReportInput): Promise<string> {
-        await Report.delete(id);
+    async deleteReport(@Arg("reportToDelete", () => ReportInput) reportToDelete: ReportInput): Promise<string> {
+        await Report.delete(reportToDelete);
         return "Signalement supprimé";
     }
 }

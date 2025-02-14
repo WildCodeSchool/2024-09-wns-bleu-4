@@ -19,8 +19,7 @@ export class Comment extends BaseEntity {
 
     @Field(() => String)
     @MaxLength(500, { message: "The content length can't exceed 500 caracters." })
-    @Column(
-        { type: 'text', length: 500 })
+    @Column({ type: 'text' })
     content: string;
 
     @IsDate()

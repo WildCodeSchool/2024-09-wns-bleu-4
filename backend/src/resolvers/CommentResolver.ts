@@ -37,8 +37,8 @@ class CommentResolver {
     }
 
     @Mutation(() => String)
-    async deleteComment(@Arg("id", () => CommentInput) id: CommentInput): Promise<string> {
-        await Comment.delete(id);
+    async deleteComment(@Arg("commentToDelete", () => CommentInput) commentToDelete: CommentInput): Promise<string> {
+        await Comment.delete(commentToDelete);
         return "Commentaire supprimé";
     }
 }
