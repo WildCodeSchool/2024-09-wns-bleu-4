@@ -1,8 +1,15 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { User } from '@/entities/User';
 import { Resource } from '@/entities/Resource';
-import { Field, ID, ObjectType } from 'type-graphql';
+import { User } from '@/entities/User';
 import { IsDate, IsEnum } from 'class-validator';
+import { Field, ID, ObjectType, registerEnumType } from 'type-graphql';
+import {
+    BaseEntity,
+    Column,
+    CreateDateColumn,
+    Entity,
+    ManyToOne,
+    PrimaryGeneratedColumn,
+} from 'typeorm';
 
 export enum Reason {
     INNAPROPRIATE = 'inappropriate content',
@@ -12,10 +19,14 @@ export enum Reason {
     NONE = 'none',
 }
 
+registerEnumType(Reason, {
+    name: 'Reason',
+    description: 'The reasons for reporting a resource',
+});
+
 @ObjectType()
 @Entity()
 export class Report extends BaseEntity {
-
     @Field(() => ID)
     @PrimaryGeneratedColumn()
     id: number;
