@@ -1,3 +1,5 @@
+import { User } from '@/entities/User';
+import { Field, ObjectType } from 'type-graphql';
 import {
     BaseEntity,
     Column,
@@ -8,10 +10,8 @@ import {
     OneToOne,
     PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from '@/entities/User';
-import { Like } from './Like';
-import { Field, ObjectType } from 'type-graphql';
 import { Comment } from './Comment';
+import { Like } from './Like';
 import { Report } from './Report';
 
 export enum FileVisibility {
@@ -62,22 +62,23 @@ export class Resource extends BaseEntity {
     @Column({
         type: 'varchar',
         length: 320,
-        nullable: true
+        nullable: true,
     })
     description: string;
 
     @ManyToMany(() => User, (User) => User.resourceAccess)
     usersWithAccess: User[];
 
-    @OneToMany(() => Like, (like) => like.resource)
-    likes: Like[]
+    @Field(() => [Like])
+    @OneToMany(() => Like, (like) => like.resource, { nullable: true })
+    likes: Like[];
 
-    @OneToMany(() => Comment, (comment) => comment.resource)
-    comments: Comment[]
+    @OneToMany(() => Comment, (comment) => comment.resource, { nullable: true })
+    comments: Comment[];
 
     @OneToMany(() => Report, (report) => report.resource)
-    reports: Report[]
-    
+    reports: Report[];
+
     @Column('date', { nullable: true })
     expireAt: Date;
 

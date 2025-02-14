@@ -6,12 +6,18 @@ import { startStandaloneServer } from '@apollo/server/standalone';
 import 'dotenv/config';
 import 'reflect-metadata';
 import { buildSchema } from 'type-graphql';
+import ResourceResolver from './resolvers/ResourceResolver';
 import SubscribtionResolver from './resolvers/SubscribtionResolver';
 
 const start = async () => {
     await dataSource.initialize();
     const schema = await buildSchema({
-        resolvers: [UserResolver, LikeResolver, SubscribtionResolver],
+        resolvers: [
+            UserResolver,
+            LikeResolver,
+            SubscribtionResolver,
+            ResourceResolver,
+        ],
         authChecker: ({ context }, rolesForOperation) => {
             if (context.email) {
                 if (rolesForOperation.length === 0) {
