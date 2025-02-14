@@ -10,7 +10,7 @@ import {
     OneToOne,
     PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Subscribtion } from './Subscribtion';
+import { Subscription } from '@/entities/Subscription';
 import { IsDate, IsEmail, IsEnum, Length } from 'class-validator';
 
 export enum UserRole {
@@ -37,7 +37,7 @@ export class TempUser extends BaseEntity {
 @Entity()
 export class User extends BaseEntity {
     @Field(() => ID)
-    @PrimaryGeneratedColumn('uuid')
+    @PrimaryGeneratedColumn()
     id: number;
 
     @Field(() => String)
@@ -74,14 +74,14 @@ export class User extends BaseEntity {
     })
     resourceAccess: Resource[];
 
-    @Field(() => Subscribtion, { nullable: true })
-    @OneToOne(() => Subscribtion, (subscription) => subscription.user, {
+    @Field(() => Subscription, { nullable: true })
+    @OneToOne(() => Subscription, (subscription) => subscription.user, {
         nullable: true,
         eager: true,
         onDelete: 'SET NULL',
     })
     @JoinColumn()
-    subscription: Subscribtion | null;
+    subscription: Subscription | null;
 
     @IsDate()
     @CreateDateColumn()

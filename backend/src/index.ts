@@ -7,17 +7,21 @@ import 'dotenv/config';
 import 'reflect-metadata';
 import { buildSchema } from 'type-graphql';
 import ResourceResolver from './resolvers/ResourceResolver';
-import SubscribtionResolver from './resolvers/SubscribtionResolver';
+import SubscriptionResolver from './resolvers/SubscriptionResolver';
 import CommentResolver from './resolvers/CommentResolver';
+import ReportResolver from './resolvers/ReportResolver';
+import ContactResolver from './resolvers/ContactResolver';
 
 const start = async () => {
     await dataSource.initialize();
     const schema = await buildSchema({
         resolvers: [
             UserResolver,
+            ContactResolver,
             LikeResolver,
             CommentResolver,
-            SubscribtionResolver,
+            ReportResolver,
+            SubscriptionResolver,
             ResourceResolver,
         ],
         authChecker: ({ context }, rolesForOperation) => {

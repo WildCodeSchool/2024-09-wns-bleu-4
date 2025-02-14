@@ -1,4 +1,4 @@
-import { Subscribtion } from '@/entities/Subscribtion';
+import { Subscription } from '@/entities/Subscription';
 import { User } from '@/entities/User';
 import { Arg, ID, Mutation, Resolver } from 'type-graphql';
 
@@ -6,30 +6,30 @@ import { Arg, ID, Mutation, Resolver } from 'type-graphql';
 const calculateEndAt = (paidAt: Date): Date =>
     new Date(paidAt.setMonth(paidAt.getMonth() + 1));
 
-@Resolver(Subscribtion)
-class SubscribtionResolver {
-    @Mutation(() => Subscribtion)
-    async createSubscribtion(
+@Resolver(Subscription)
+class SubscriptionResolver {
+    @Mutation(() => Subscription)
+    async createSubscription(
         @Arg('userId', () => ID) userId: User['id'],
-    ): Promise<Subscribtion> {
+    ): Promise<Subscription> {
         const user = await User.findOneBy({ id: userId });
         if (!user) {
             throw new Error('User not found');
         }
         const paidAt = new Date();
 
-        const subscribtion = Subscribtion.create({
+        const subscription = Subscription.create({
             paidAt: paidAt.toISOString(),
             endAt: calculateEndAt(paidAt).toISOString(),
         });
-        await subscribtion.save();
-        user.subscription = subscribtion;
+        await subscription.save();
+        user.subscription = subscription;
         await user.save();
-        return subscribtion;
+        return subscription;
     }
 
     @Mutation(() => String)
-    async deleteSubscribtion(
+    async deleteSubscription(
         @Arg('userId', () => ID) userId: User['id'],
     ): Promise<string> {
         const user = await User.findOneBy({ id: userId });
@@ -42,4 +42,4 @@ class SubscribtionResolver {
     }
 }
 
-export default SubscribtionResolver;
+export default SubscriptionResolver;

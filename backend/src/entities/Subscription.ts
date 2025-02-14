@@ -11,7 +11,7 @@ import { IsDate } from 'class-validator';
 
 @ObjectType()
 @Entity()
-export class Subscribtion extends BaseEntity {
+export class Subscription extends BaseEntity {
     @Field(() => ID)
     @PrimaryGeneratedColumn()
     id: number;

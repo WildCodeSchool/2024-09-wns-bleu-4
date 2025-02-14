@@ -78,11 +78,11 @@ export class Resource extends BaseEntity {
     usersWithAccess: User[];
 
     @Field(() => [Like])
-    @OneToMany(() => Like, (like) => like.resource, { nullable: true })
+    @OneToMany(() => Like, (like) => like.resource)
     likes: Like[];
 
     @Field(() => [Comment])
-    @OneToMany(() => Comment, (comment) => comment.resource, { nullable: true })
+    @OneToMany(() => Comment, (comment) => comment.resource)
     comments: Comment[];
 
     @Field(() => [Report])

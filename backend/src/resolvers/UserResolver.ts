@@ -24,7 +24,7 @@ export class UserInput implements Partial<User> {
 }
 
 @ObjectType()
-class UserInfo {
+export class UserInfo {
   @Field(() => Boolean)
   isLoggedIn: boolean;
 
