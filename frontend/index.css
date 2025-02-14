@@ -50,6 +50,15 @@
   }
 }
 
+.form-log {
+  display: grid;
+  gap: 50px;
+  place-items: baseline;
+  place-self: center;
+  color: red;
+  transform: translateY(100%);
+}
+
 .sidebar {
   grid-area: sidebar;
   z-index: 3;

@@ -1,6 +1,7 @@
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import Layout from './pages/Layout';
 import Home from './pages/home/Home';
+import Login from './pages/Log/Login';
 
 const App = () => {
     return (
@@ -11,6 +12,7 @@ const App = () => {
                 */}
                 <Route path="/" element={<Layout />}>
                     <Route index element={<Home />} />
+                    <Route path="/login" element={<Login />} />
                     <Route path="/subscription" element={<div>Abonnement</div>} />
                     <Route path="/about" element={<div>À propos</div>} />
                     <Route path="/sitemap" element={<div>Plan du site</div>} />

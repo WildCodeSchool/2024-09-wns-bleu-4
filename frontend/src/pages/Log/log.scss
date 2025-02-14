@@ -1,0 +1,63 @@
+.form-log {
+    display: grid;
+    gap: 40px;
+    place-items: center;
+    place-self: center;
+    color: white;
+    transform: translateY(40%);
+
+    b {
+        font-size: var(--fz-h2);
+        font-weight: var(--bold);
+    }
+
+    p {
+        color: rgb(194, 5, 5);
+        font-size: var(--fz-text);
+        font-weight: var(--semi-bold);
+    }
+
+    form {
+        display: grid;
+        gap: 1rem;
+        width: 100%;
+
+        .form-label {
+            display: grid;
+            gap: 12px;
+            font-size: var(--fz-menu);
+            font-weight: var(--semi-bold);
+            place-content: baseline;
+
+            input {
+                width: 400px;
+                padding: 1rem 1.25rem;
+                border-radius: var(--radius);
+                box-shadow: var(--shadow);
+                outline: none;
+            }
+        }
+
+        button {
+            margin-top: 2rem;
+            background-color: var(--primary);
+            place-self: center;
+            padding: 1rem 1.25rem;
+            border-radius: var(--radius);
+            font-size: var(--fz-menu);
+            font-weight: var(--semi-bold);
+            transition: var(--transition);
+
+            &:disabled {
+                background-color: var(--grey);
+                color: rgba(255, 255, 255, 0.651);
+            }
+
+            &:hover:not(:disabled), &:focus:not(:disabled) {
+                background-color: var(--secondary);
+                color: var(--grey);
+                cursor: pointer;;
+            }
+        }
+    }
+}
