@@ -20,11 +20,15 @@ export class LikeInput implements Partial<Like> {
     resource: Resource;
 }
 
+// Exemple pour fetch les entités lié à Like
 @Resolver(Like)
 class LikeResolver {
     @Query(() => [Like])
     async getLikesByUser(@Arg('id', () => ID) id: User['id']): Promise<Like[]> {
-        const likes = await Like.find({ where: { user: { id: id } } });
+        const likes = await Like.find({
+            where: { user: { id: id } },
+            relations: ['user', 'resource'],
+        });
         return likes;
     }
 
@@ -36,7 +40,9 @@ class LikeResolver {
     }
 
     @Mutation(() => String)
-    async deleteLike(@Arg("likeToDelete", () => LikeInput) likeToDelete: LikeInput): Promise<string> {
+    async deleteLike(
+        @Arg('likeToDelete', () => LikeInput) likeToDelete: LikeInput,
+    ): Promise<string> {
         await Like.delete(likeToDelete);
         return 'Like deleted';
     }
