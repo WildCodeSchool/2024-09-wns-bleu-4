@@ -1,7 +1,8 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from '@/entities/User';
 import { Resource } from '@/entities/Resource';
-import { Field, ObjectType } from 'type-graphql';
+import { Field, ID, ObjectType } from 'type-graphql';
+import { IsDate, IsEnum } from 'class-validator';
 
 export enum Reason {
     INNAPROPRIATE = 'inappropriate content',
@@ -14,6 +15,8 @@ export enum Reason {
 @ObjectType()
 @Entity()
 export class Report extends BaseEntity {
+
+    @Field(() => ID)
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -28,9 +31,11 @@ export class Report extends BaseEntity {
     content: string;
 
     @Field(() => Reason)
+    @IsEnum(Reason)
     @Column({ type: 'enum', enum: Reason, default: Reason.NONE })
     reason: Reason;
 
+    @IsDate()
     @CreateDateColumn()
     createdAt: Date;
 }

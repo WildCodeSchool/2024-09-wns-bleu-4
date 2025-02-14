@@ -7,6 +7,7 @@ import {
     PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from './User';
+import { IsDate } from 'class-validator';
 
 @ObjectType()
 @Entity()
@@ -15,10 +16,12 @@ export class Subscribtion extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @IsDate()
     @Field(() => Date)
     @Column('timestamp')
     paidAt: Date;
 
+    @IsDate()
     @Field(() => Date)
     @Column('timestamp')
     endAt: Date;

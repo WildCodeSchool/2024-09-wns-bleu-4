@@ -13,6 +13,7 @@ import {
 import { Comment } from './Comment';
 import { Like } from './Like';
 import { Report } from './Report';
+import { IsDate, IsEnum, Length, MaxLength } from 'class-validator';
 
 export enum FileVisibility {
     PRIVATE = 'private',
@@ -29,6 +30,7 @@ export class Resource extends BaseEntity {
     user: User;
 
     @Field(() => String)
+    @MaxLength(150, { message: "The file name can't exceed 150 caracters."})
     @Column({
         type: 'varchar',
         length: 150,
@@ -37,6 +39,7 @@ export class Resource extends BaseEntity {
     name: string;
 
     @Field(() => String)
+    @MaxLength(100, { message: "The path name can't exceed 100 caracters."})
     @Column({
         type: 'varchar',
         length: 100,
@@ -44,6 +47,7 @@ export class Resource extends BaseEntity {
     path: string;
 
     @Field(() => String)
+    @MaxLength(150, { message: "The url length can't exceed 255 caracters."})
     @Column({
         type: 'varchar',
         length: 255,
@@ -51,6 +55,7 @@ export class Resource extends BaseEntity {
     })
     url: string;
 
+    @IsEnum(FileVisibility)
     @Column({
         type: 'enum',
         enum: FileVisibility,
@@ -59,6 +64,7 @@ export class Resource extends BaseEntity {
     visibility: FileVisibility;
 
     @Field(() => String)
+    @Length(30, 320, { message: "File description length must be between 30 and 320 caracters."})
     @Column({
         type: 'varchar',
         length: 320,
@@ -66,6 +72,7 @@ export class Resource extends BaseEntity {
     })
     description: string;
 
+    @Field(() => [User])
     @ManyToMany(() => User, (User) => User.resourceAccess)
     usersWithAccess: User[];
 
@@ -73,15 +80,19 @@ export class Resource extends BaseEntity {
     @OneToMany(() => Like, (like) => like.resource, { nullable: true })
     likes: Like[];
 
+    @Field(() => [Comment])
     @OneToMany(() => Comment, (comment) => comment.resource, { nullable: true })
     comments: Comment[];
 
+    @Field(() => [Report])
     @OneToMany(() => Report, (report) => report.resource)
     reports: Report[];
 
+    @IsDate()
     @Column('date', { nullable: true })
     expireAt: Date;
 
+    @IsDate()
     @CreateDateColumn()
     createdAt: Date;
 }

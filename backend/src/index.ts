@@ -8,6 +8,7 @@ import 'reflect-metadata';
 import { buildSchema } from 'type-graphql';
 import ResourceResolver from './resolvers/ResourceResolver';
 import SubscribtionResolver from './resolvers/SubscribtionResolver';
+import CommentResolver from './resolvers/CommentResolver';
 
 const start = async () => {
     await dataSource.initialize();
@@ -15,6 +16,7 @@ const start = async () => {
         resolvers: [
             UserResolver,
             LikeResolver,
+            CommentResolver,
             SubscribtionResolver,
             ResourceResolver,
         ],

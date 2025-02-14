@@ -11,6 +11,7 @@ import {
     PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Subscribtion } from './Subscribtion';
+import { IsDate, IsEmail, IsEnum, Length } from 'class-validator';
 
 export enum UserRole {
     USER = 'user',
@@ -40,22 +41,27 @@ export class User extends BaseEntity {
     id: number;
 
     @Field(() => String)
+    @IsEmail()
+    @Length(5, 150, { message: "Email must be between 5 and 150 caracters."})
     @Column({
         type: 'varchar',
-        length: 320,
+        length: 150,
         unique: true,
     })
     email: string;
 
+    @Length(5, 150, { message: "Password must be between 5 and 150 caracters."})
     @Column({
         type: 'varchar',
         length: 150,
     })
     password: string;
 
+    @IsDate()
     @CreateDateColumn()
     lastLoggedAt: Date;
 
+    @IsEnum(UserRole)
     @Column({
         type: 'enum',
         enum: UserRole,
@@ -77,6 +83,7 @@ export class User extends BaseEntity {
     @JoinColumn()
     subscription: Subscribtion | null;
 
+    @IsDate()
     @CreateDateColumn()
     createdAt: Date;
 }
