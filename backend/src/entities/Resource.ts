@@ -6,8 +6,8 @@ import {
     CreateDateColumn,
     Entity,
     ManyToMany,
+    ManyToOne,
     OneToMany,
-    OneToOne,
     PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Comment } from './Comment';
@@ -23,10 +23,11 @@ export enum FileVisibility {
 @ObjectType()
 @Entity()
 export class Resource extends BaseEntity {
+    @Field(() => Number)
     @PrimaryGeneratedColumn()
     id: number;
 
-    @OneToOne(() => User)
+    @ManyToOne(() => User)
     user: User;
 
     @Field(() => String)
