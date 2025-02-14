@@ -1,7 +1,15 @@
 import { Comment } from '@/entities/Comment';
 import { Resource } from '@/entities/Resource';
 import { User } from '@/entities/User';
-import { Arg, Field, ID, InputType, Mutation, Query, Resolver } from 'type-graphql';
+import {
+    Arg,
+    Field,
+    ID,
+    InputType,
+    Mutation,
+    Query,
+    Resolver,
+} from 'type-graphql';
 
 @InputType()
 export class CommentInput implements Partial<Comment> {
@@ -18,28 +26,36 @@ export class CommentInput implements Partial<Comment> {
 @Resolver(Comment)
 class CommentResolver {
     @Query(() => [Comment])
-    async getCommentsByUser(@Arg("id", () => ID) id: User['id']): Promise<Comment[]> {
+    async getCommentsByUser(
+        @Arg('id', () => ID) id: User['id'],
+    ): Promise<Comment[]> {
         const comments = await Comment.findBy({ user: { id: id } });
         return comments;
     }
 
     @Query(() => [Comment])
-    async getCommentsByResource(@Arg("id", () => ID) id: Resource['id']): Promise<Comment[]> {
+    async getCommentsByResource(
+        @Arg('id', () => ID) id: Resource['id'],
+    ): Promise<Comment[]> {
         const comments = await Comment.findBy({ resource: { id: id } });
         return comments;
     }
 
     @Mutation(() => Comment)
-    async createComment(@Arg("newComment", () => Comment) newComment: Comment): Promise<Comment> {
+    async createComment(
+        @Arg('newComment', () => CommentInput) newComment: Comment,
+    ): Promise<Comment> {
         const comment = Comment.create(newComment);
         await comment.save();
         return comment;
     }
 
     @Mutation(() => String)
-    async deleteComment(@Arg("id", () => CommentInput) id: CommentInput): Promise<string> {
+    async deleteComment(
+        @Arg('id', () => CommentInput) id: CommentInput,
+    ): Promise<string> {
         await Comment.delete(id);
-        return "Commentaire supprimé";
+        return 'Comment deleted';
     }
 }
 
