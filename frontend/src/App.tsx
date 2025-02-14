@@ -11,15 +11,11 @@ const App = () => {
                 */}
                 <Route path="/" element={<Layout />}>
                     <Route index element={<Home />} />
-                    <Route path="/option1" element={<div>Option 1</div>} />
-                    <Route path="/option2" element={<div>Option 2</div>} />
-                    <Route
-                        path="/abonnements"
-                        element={<div>Abonnements</div>}
-                    />
-                    <Route path="/cas1" element={<div>Cas 1</div>} />
-                    <Route path="/cas2" element={<div>Cas 2</div>} />
-                    <Route path="/a-propos" element={<div>À propos</div>} />
+                    <Route path="/subscription" element={<div>Abonnement</div>} />
+                    <Route path="/about" element={<div>À propos</div>} />
+                    <Route path="/sitemap" element={<div>Plan du site</div>} />
+                    <Route path="/cgu" element={<div>CGU</div>} />
+                    <Route path="/privacy-policy" element={<div>Politique de confidentialité</div>} />
                 </Route>
             </Routes>
         </BrowserRouter>

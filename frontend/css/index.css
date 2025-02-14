@@ -1,0 +1,195 @@
+@import "tailwindcss";
+:root {
+  /* Colors */
+  --primary: #FF934F;
+  --primary75: rgba(255, 147, 79, .75);
+  --primary50: rgba(255, 147, 79, .50);
+  --secondary: #F5ED31;
+  --secondary75: rgba(245, 237, 49, .75);
+  --secondary50: rgba(245, 237, 49, .50);
+  --dark: #080708;
+  --grey: #403E3B;
+  --grey75: rgba(64, 62, 59, .75);
+  --grey60: rgba(64, 62, 59, .6);
+  --gradient: linear-gradient(43deg, rgba(64,62,59,1) -10%, rgba(255,170,79,1) 50%);
+  /*Radius*/
+  --radius: 100px;
+  /*Fonts*/
+  --fz-h2: clamp(1.5rem, 1.3846rem + 0.5128vw, 2rem);
+  --fz-h1: clamp(2.5rem, 2.1538rem + 1.5385vw, 4rem);
+  --fz-menus: clamp(1.125rem, 1.0385rem + 0.3846vw, 1.5rem);
+  --fz-text: 1rem;
+  /*Font weight*/
+  --bold: 800;
+  --semi-bold: 600;
+  --regular: 400;
+  --light: 200;
+  /* Polices */
+  --title: "Poppins", sans-serif;
+  --text: "Railway", sans-serif;
+  /*Transition*/
+  --transition: all .3s ease-in-out;
+  /*Box shadow*/
+  --shadow: 0 0 10px 0px var(--primary) ;
+}
+
+.home-title {
+  font-family: var(--title);
+  font-size: var(--fz-h1);
+  font-weight: var(--semi-bold);
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transform: translateY(100%);
+  margin-left: 8rem;
+}
+@media (max-width: 1199.98px) {
+  .home-title {
+    margin-left: 2rem;
+  }
+}
+
+.sidebar {
+  grid-area: sidebar;
+  z-index: 3;
+  background-color: var(--grey75);
+  padding: 2rem;
+  display: grid;
+  color: white;
+  font-size: var(--fz-menus);
+  gap: 2rem;
+  place-content: baseline;
+  gap: 4.5rem;
+}
+.sidebar span {
+  height: fit-content;
+}
+.sidebar nav {
+  display: grid;
+  gap: 4rem;
+}
+
+.sidebar-menu {
+  display: grid;
+  gap: 3rem;
+  place-items: flex-start;
+}
+
+.sidebar-footer {
+  display: grid;
+  gap: 1rem;
+  margin-top: 3rem;
+}
+.sidebar-footer a {
+  position: relative;
+  width: fit-content;
+  font-weight: var(--light);
+}
+.sidebar-footer a::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: white;
+  transition: var(--transition);
+}
+.sidebar-footer a:hover::before {
+  width: 100%;
+}
+
+.sidebar-dashboard {
+  place-self: center;
+  padding: 2rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+}
+.sidebar-dashboard:hover, .sidebar-dashboard:focus {
+  background-color: var(--primary50);
+}
+
+.header {
+  grid-area: "header";
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  padding: 2rem 4rem;
+  justify-content: space-between;
+}
+.header .log {
+  display: flex;
+  gap: 60px;
+  padding: 0.5rem 30px;
+  box-shadow: var(--shadow);
+  background-color: transparent;
+  font-size: var(--fz-menus);
+  font-weight: var(--regular);
+  border-radius: var(--radius);
+  font-family: var(--text);
+}
+.header .log a {
+  padding: 6px 20px;
+  border-radius: var(--radius);
+  transition: var(--transition);
+  color: white;
+}
+.header .log a:hover, .header .log a:focus {
+  color: var(--primary);
+}
+.header .log a.active {
+  font-weight: var(--semi-bold);
+  background-color: var(--grey60);
+}
+
+.blur {
+  position: absolute;
+  top: -50px;
+  left: 0;
+  background-color: var(--grey60);
+  backdrop-filter: blur(150px);
+  height: 110%;
+  width: 110%;
+}
+
+.yellow {
+  height: 30rem;
+  aspect-ratio: 1/1;
+  background-color: var(--secondary50);
+  position: absolute;
+  border-radius: 200px;
+  top: 5%;
+  left: 10%;
+}
+
+.orange {
+  height: 40rem;
+  aspect-ratio: 1/1;
+  background-color: var(--primary50);
+  position: absolute;
+  border-radius: 200px;
+  top: 20%;
+  left: 30%;
+}
+
+.body {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  background-color: var(--dark);
+  font-family: var(--text);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto 1fr 200px;
+  grid-template-areas: "sidebar header " "sidebar main " "sidebar main ";
+  overflow: hidden;
+}
+
+main {
+  z-index: 1;
+  height: 100%;
+}
+
+/*# sourceMappingURL=index.css.map */
