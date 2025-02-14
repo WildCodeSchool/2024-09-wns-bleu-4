@@ -9,4 +9,6 @@ RUN npm install
 
 COPY . .
 
+RUN npm run build:sass
+
 CMD npm start
