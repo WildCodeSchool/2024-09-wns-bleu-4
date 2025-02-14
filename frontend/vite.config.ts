@@ -10,5 +10,7 @@ export default defineConfig({
         hmr: { path: '/hmr' },
         allowedHosts: ['frontend'],
     },
-    css: { postcss: { plugins: [tailwindcss()] } }
+    css: {
+        postcss: { plugins: [tailwindcss()] },
+    }
 });

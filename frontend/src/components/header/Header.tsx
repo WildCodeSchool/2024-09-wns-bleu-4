@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import Logo from '../Logo';
 
-const Login = () => {
+const Header = () => {
 
     return (
         <div className="header">
@@ -14,4 +14,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default Header;
