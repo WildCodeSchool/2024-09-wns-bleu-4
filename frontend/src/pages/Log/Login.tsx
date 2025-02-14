@@ -14,11 +14,11 @@ const Login = () => {
             <form action="">
                 <label className="form-label" htmlFor="email">
                     Email
-                    <input type="email" placeholder="exemple@exemple.com" />
+                    <input type="email" placeholder="exemple@exemple.com" required/>
                 </label>
                 <label className="form-label" htmlFor="password">
                     Mot de passe
-                    <input type="password" value={password} onChange={handlePasswordChange} placeholder="Votre mot de passe" />
+                    <input type="password" value={password} onChange={handlePasswordChange} placeholder="Votre mot de passe" required />
                 </label>
                 <button disabled={password.length < 12} type="submit">Valider</button>
             </form>
