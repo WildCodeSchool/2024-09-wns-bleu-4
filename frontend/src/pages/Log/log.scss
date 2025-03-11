@@ -87,6 +87,10 @@
             font-size: var(--fz-small);
             text-align: center;
 
+            span {
+                max-width: 50ch;
+            }
+
             a {
                 text-decoration: underline transparent;
                 text-underline-offset: 2px;
