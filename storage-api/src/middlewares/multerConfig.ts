@@ -2,7 +2,7 @@ import multer from 'multer';
 import path from 'path';
 
 const storage = multer.diskStorage({
-    destination: 'uploads/', // Dossier où seront stockés les fichiers
+    destination: 'uploads/', // Dossier ou seront stocké les fichiers
     filename: (req, file, cb) => {
         cb(
             null,
