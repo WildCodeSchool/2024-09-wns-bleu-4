@@ -1,9 +1,8 @@
-import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
-const Login = () => {
-
+const Sign = () => {
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState('');
@@ -18,7 +17,7 @@ const Login = () => {
 
     return (
         <div className="form-log">
-            <b>Connexion</b>
+            <b>Inscription</b>
             <form action="">
                 <label className="form-label" htmlFor="email">
                     Email
@@ -38,8 +37,8 @@ const Login = () => {
                     </button>
                 </label>
                 <div className="links-supp">
-                    <Link to="/forgot-password">Mot de passe oublié ?</Link>
-                    <Link to="/login">Pas encore de compte ? Inscrivez-vous !</Link>
+                    <span>En appuyant sur "Valider", vous avez lu et vous acceptez les <Link to="/cgu">CGU</Link> et la <Link to="/privacy-policy">Politique de Confidentialité</Link>.  
+                    </span>
                 </div>
                 <button disabled={password.length < 12 || email === ""} type="submit">Valider</button>
             </form>
@@ -47,4 +46,4 @@ const Login = () => {
     )
 }
 
-export default Login;
+export default Sign;
