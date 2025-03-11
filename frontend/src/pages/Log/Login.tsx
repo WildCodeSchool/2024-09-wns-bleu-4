@@ -1,0 +1,50 @@
+import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
+import { Link } from "react-router-dom";
+
+const Login = () => {
+
+    const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [email, setEmail] = useState('');
+
+    const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setPassword(event.target.value);
+    };
+
+    const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setEmail(event.target.value);
+    };
+
+    return (
+        <div className="form-log">
+            <b>Connexion</b>
+            <form action="">
+                <label className="form-label" htmlFor="email">
+                    Email
+                    <input type="email" placeholder="exemple@exemple.com" onChange={handleEmailChange} required/>
+                </label>
+                <label className="form-label" htmlFor="password">
+                    Mot de passe
+                    <input 
+                            type={showPassword ? "text" : "password"} 
+                            value={password} 
+                            onChange={handlePasswordChange} 
+                            placeholder="Votre mot de passe" 
+                            required 
+                        />
+                    <button type="button" className="show-password" onClick={() => setShowPassword(!showPassword)}>
+                        {showPassword ? <EyeOff /> : <Eye />}
+                    </button>
+                </label>
+                <div className="links-supp">
+                    <Link to="/forgot-password">Mot de passe oublié ?</Link>
+                    <Link to="/login">Pas encore de compte ? Inscrivez-vous !</Link>
+                </div>
+                <button disabled={password.length < 12 || email === ""} type="submit">Valider</button>
+            </form>
+        </div>
+    )
+}
+
+export default Login;

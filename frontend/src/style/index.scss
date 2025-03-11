@@ -1,0 +1,27 @@
+@use '../pages/home/home' as home;
+@use '../pages/Log/log' as log;
+
+@use '../components/sidebar/sidebar' as sidebar;
+@use '../components/header/header' as header;
+@use '../components/background/background' as background;
+
+.body {
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+    background-color: var(--dark);
+    font-family: var(--text);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto 1fr 200px;
+    grid-template-areas:
+        "sidebar header "
+        "sidebar main "
+        "sidebar main ";
+    overflow: hidden;
+}
+
+main {
+    z-index: 1;
+    height: 100%;
+}

@@ -1,0 +1,29 @@
+.blur {
+    position: absolute;
+    top: -50px;
+    left: 0;
+    background-color: var(--grey60);
+    backdrop-filter: blur(150px);
+    height: 110%;
+    width: 110%;
+}
+
+.yellow {
+    height: 30rem;
+    aspect-ratio: 1/1;
+    background-color: var(--secondary50);
+    position: absolute;
+    border-radius: 200px;
+    top: 5%;
+    left: 10%;
+}
+
+.orange {
+    height: 40rem;
+    aspect-ratio: 1/1;
+    background-color: var(--primary50);
+    position: absolute;
+    border-radius: 200px;
+    top: 20%;
+    left: 30%;
+}
