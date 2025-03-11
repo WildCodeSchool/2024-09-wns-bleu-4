@@ -15,6 +15,7 @@ const App = () => {
                     <Route index element={<Home />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/sign" element={<Sign />} />
+                    <Route path="/forgot-password" element={<div>Mot de passe oublié</div>} />
                     <Route path="/subscription" element={<div>Abonnement</div>} />
                     <Route path="/about" element={<div>À propos</div>} />
                     <Route path="/sitemap" element={<div>Plan du site</div>} />

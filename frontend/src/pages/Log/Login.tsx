@@ -8,11 +8,11 @@ const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState('');
 
-    const handlePasswordChange = (event) => {
+    const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setPassword(event.target.value);
     };
 
-    const handleEmailChange = (event) => {
+    const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(event.target.value);
     };
 
@@ -38,8 +38,8 @@ const Login = () => {
                     </button>
                 </label>
                 <div className="links-supp">
-                    <Link to="/">Mot de passe oublié ?</Link>
-                    <Link to="/">Pas encore de compte ? Inscrivez-vous !</Link>
+                    <Link to="/forgot-password">Mot de passe oublié ?</Link>
+                    <Link to="/login">Pas encore de compte ? Inscrivez-vous !</Link>
                 </div>
                 <button disabled={password.length < 12 || email === ""} type="submit">Valider</button>
             </form>

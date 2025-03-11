@@ -7,11 +7,11 @@ const Sign = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState('');
 
-    const handlePasswordChange = (event) => {
+    const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setPassword(event.target.value);
     };
 
-    const handleEmailChange = (event) => {
+    const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(event.target.value);
     };
 
@@ -37,7 +37,7 @@ const Sign = () => {
                     </button>
                 </label>
                 <div className="links-supp">
-                    <span>En appuyant sur "Valider", vous avez lu et vous acceptez les <Link to="/">CGU</Link> et la <Link to="/">Politique de Confidentialité</Link>.  
+                    <span>En appuyant sur "Valider", vous avez lu et vous acceptez les <Link to="/cgu">CGU</Link> et la <Link to="/privacy-policy">Politique de Confidentialité</Link>.  
                     </span>
                 </div>
                 <button disabled={password.length < 12 || email === ""} type="submit">Valider</button>
