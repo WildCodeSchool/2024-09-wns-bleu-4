@@ -29,7 +29,10 @@ class CommentResolver {
     async getCommentsByUser(
         @Arg('id', () => ID) id: User['id'],
     ): Promise<Comment[]> {
-        const comments = await Comment.findBy({ user: { id: id } });
+        const comments = await Comment.find({
+            where: { user: { id: id } },
+            relations: ['user', 'resource'],
+        });
         return comments;
     }
 
@@ -37,7 +40,10 @@ class CommentResolver {
     async getCommentsByResource(
         @Arg('id', () => ID) id: Resource['id'],
     ): Promise<Comment[]> {
-        const comments = await Comment.findBy({ resource: { id: id } });
+        const comments = await Comment.find({
+            where: { resource: { id: id } },
+            relations: ['user', 'resource'],
+        });
         return comments;
     }
 
@@ -51,9 +57,12 @@ class CommentResolver {
     }
 
     @Mutation(() => String)
-    async deleteComment(@Arg("commentToDelete", () => CommentInput) commentToDelete: CommentInput): Promise<string> {
+    async deleteComment(
+        @Arg('commentToDelete', () => CommentInput)
+        commentToDelete: CommentInput,
+    ): Promise<string> {
         await Comment.delete(commentToDelete);
-        return "Commentaire supprimé";
+        return 'Commentaire supprimé';
     }
 }
 

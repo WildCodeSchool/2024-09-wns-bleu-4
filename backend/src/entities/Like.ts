@@ -1,10 +1,17 @@
 import { Resource } from '@/entities/Resource';
 import { User } from '@/entities/User';
 import { Field, ID, ObjectType } from 'type-graphql';
-import { BaseEntity, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+    BaseEntity,
+    Entity,
+    ManyToOne,
+    PrimaryGeneratedColumn,
+    Unique,
+} from 'typeorm';
 
 @ObjectType()
 @Entity()
+@Unique(['user', 'resource'])
 export class Like extends BaseEntity {
     @Field(() => ID)
     @PrimaryGeneratedColumn()

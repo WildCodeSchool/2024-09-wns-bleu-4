@@ -7,7 +7,6 @@ import {
     Column,
     CreateDateColumn,
     Entity,
-    ManyToMany,
     ManyToOne,
     PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -19,7 +18,7 @@ export class Comment extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToMany(() => User)
+    @ManyToOne(() => User, (user) => user.comments)
     @Field(() => User)
     user: User;
 

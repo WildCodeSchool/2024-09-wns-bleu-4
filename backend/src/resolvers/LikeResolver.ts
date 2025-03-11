@@ -32,6 +32,17 @@ class LikeResolver {
         return likes;
     }
 
+    @Query(() => [Like])
+    async getLikesByResource(
+        @Arg('id', () => ID) id: Resource['id'],
+    ): Promise<Like[]> {
+        const likes = await Like.find({
+            where: { resource: { id: id } },
+            relations: ['user', 'resource'],
+        });
+        return likes;
+    }
+
     @Mutation(() => Like)
     async createLike(@Arg('data', () => LikeInput) data: Like): Promise<Like> {
         const like = Like.create(data);

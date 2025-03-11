@@ -1,4 +1,7 @@
+import { Comment } from '@/entities/Comment';
 import { Resource } from '@/entities/Resource';
+import { Subscription } from '@/entities/Subscription';
+import { IsDate, IsEmail, IsEnum, Length } from 'class-validator';
 import { Field, ID, ObjectType } from 'type-graphql';
 import {
     BaseEntity,
@@ -7,11 +10,10 @@ import {
     Entity,
     JoinColumn,
     ManyToMany,
+    OneToMany,
     OneToOne,
     PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Subscription } from '@/entities/Subscription';
-import { IsDate, IsEmail, IsEnum, Length } from 'class-validator';
 
 export enum UserRole {
     USER = 'user',
@@ -42,7 +44,7 @@ export class User extends BaseEntity {
 
     @Field(() => String)
     @IsEmail()
-    @Length(5, 150, { message: "Email must be between 5 and 150 caracters."})
+    @Length(5, 150, { message: 'Email must be between 5 and 150 caracters.' })
     @Column({
         type: 'varchar',
         length: 150,
@@ -50,7 +52,9 @@ export class User extends BaseEntity {
     })
     email: string;
 
-    @Length(5, 150, { message: "Password must be between 5 and 150 caracters."})
+    @Length(5, 150, {
+        message: 'Password must be between 5 and 150 caracters.',
+    })
     @Column({
         type: 'varchar',
         length: 150,
@@ -68,6 +72,9 @@ export class User extends BaseEntity {
         default: UserRole.USER,
     })
     role: UserRole;
+
+    @OneToMany(() => Comment, (comment) => comment.user)
+    comments: Comment[];
 
     @ManyToMany(() => Resource, (Resource) => Resource.usersWithAccess, {
         nullable: true,
