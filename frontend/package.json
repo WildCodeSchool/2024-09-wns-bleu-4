@@ -4,7 +4,7 @@
     "version": "0.0.0",
     "type": "module",
     "scripts": {
-        "start": "vite && build:sass",
+        "start": "vite",
         "build": "tsc -b && vite build",
         "lint": "eslint .",
         "preview": "vite preview",
@@ -14,6 +14,7 @@
     "dependencies": {
         "@tailwindcss/postcss": "^4.0.6",
         "@tailwindcss/vite": "^4.0.6",
+        "lucide-react": "^0.479.0",
         "motion": "^12.4.2",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
@@ -41,7 +42,8 @@
         "jest-fixed-jsdom": "^0.0.9",
         "jest-transformer-svg": "^2.1.0",
         "postcss": "^8.5.2",
-        "sass-embedded": "^1.83.4",
+        "sass": "^1.85.0",
+        "sass-embedded": "^1.85.0",
         "tailwindcss": "^4.0.6",
         "ts-jest": "^29.2.6",
         "ts-node": "^10.9.2",
