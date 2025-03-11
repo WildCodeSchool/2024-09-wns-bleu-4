@@ -15,20 +15,32 @@
 ### A. Installation des dépendances  
 Pour le développement local, vous devez installer les dépendances dans chaque dossier :  
   
-Dans le dossier frontend :  
-cd frontend  
-npm install  
+Dans le dossier frontend :
+```
+  cd frontend
+```
+```
+  npm install
+```
   
 Dans le dossier backend :  
-cd ../backend  
-npm install  
+```
+  cd ../backend
+```
+```
+  npm install
+```
 
 Dans le dossier storage-api :  
-cd ../storage-api  
-npm install  
+```
+  cd ../storage-api
+```  
+```
+  npm install
+```  
 
 ### B. Configuration requise :  
-Créer un fichier .env à la racine du projet 
+Créer un fichier .env dans le dossier 'backend'
 
 
 # 3 - Pour lancer le projet :
@@ -37,21 +49,35 @@ Vous avez deux options :
 
 ### A. Avec Docker (à la racine) :
 
-docker-compose up --build
+```
+  docker-compose up --build
+```
 
 ### B. En développement local (dans 3 terminaux différents) :
 
 ### Terminal 1 - Frontend
-cd frontend
-npm run dev
+```
+  cd frontend
+```
+```
+  npm run dev
+```
 
 ### Terminal 2 - Backend
-cd backend
-npm run dev
+```
+  cd backend
+```
+```
+  npm run dev
+```
 
 ### Terminal 3 - Storage API
-cd storage-api
-npm run dev
+```
+  cd storage-api
+```
+```
+  npm run dev
+```
 
 # 4 - Ports et accès :  
 L'application est accessible sur le port 7000 en utilisant Docker    
