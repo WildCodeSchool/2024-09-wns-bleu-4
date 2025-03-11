@@ -1,0 +1,42 @@
+@import  "tailwindcss";
+
+:root {
+    /* Colors */
+    --primary: #FF934F;
+    --primary75: rgba(255, 147, 79, .75);
+    --primary50: rgba(255, 147, 79, .50);
+    --secondary: #F5ED31;
+    --secondary75: rgba(245, 237, 49, .75);
+    --secondary50: rgba(245, 237, 49, .50);
+    --dark: #080708;
+    --grey: #403E3B;
+    --grey75: rgba(64, 62, 59, .75);
+    --grey60: rgba(64, 62, 59, .6);
+    --gradient: linear-gradient(43deg, rgba(64,62,59,1) -10%, rgba(255,170,79,1) 50%);
+
+    /*Radius*/
+    --radius: 100px;
+
+    /*Fonts*/
+    --fz-h1: clamp(2.5rem, 2.1538rem + 1.5385vw, 4rem);
+    --fz-h2: clamp(1.5rem, 1.3846rem + 0.5128vw, 2rem);
+    --fz-menus: clamp(1.125rem, 1.0385rem + 0.3846vw, 1.5rem);
+    --fz-text: 1rem;
+    --fz-small: .875rem;
+
+    /*Font weight*/
+    --bold: 800;
+    --semi-bold: 600;
+    --regular: 400;
+    --light: 200;
+
+    /* Polices */
+    --title: 'Poppins', sans-serif;
+    --text: 'Railway', sans-serif;
+
+    /*Transition*/
+    --transition : all .3s ease-in-out;
+
+    /*Box shadow*/
+    --shadow: 0 0 10px 0px var(--primary)
+}
