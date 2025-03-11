@@ -36,6 +36,22 @@
                 box-shadow: var(--shadow);
                 outline: none;
             }
+
+            &:last-of-type {
+                position: relative;
+
+                button {
+                    position: absolute;
+                    top: 4px;
+                    right: 0;
+                    background-color: transparent;
+
+                    &:hover, &:focus {
+                        background-color: transparent;
+                        color: var(--primary);
+                    }
+                }
+            }
         }
 
         button {
