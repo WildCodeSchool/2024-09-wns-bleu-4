@@ -1,15 +1,27 @@
-import { BaseEntity, Entity, ManyToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { User } from '@/entities/User';
 import { Resource } from '@/entities/Resource';
+import { User } from '@/entities/User';
+import { Field, ID, ObjectType } from 'type-graphql';
+import {
+    BaseEntity,
+    Entity,
+    ManyToOne,
+    PrimaryGeneratedColumn,
+    Unique,
+} from 'typeorm';
 
+@ObjectType()
 @Entity()
-export class Comment extends BaseEntity {
+@Unique(['user', 'resource'])
+export class Like extends BaseEntity {
+    @Field(() => ID)
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToMany(() => User)
+    @Field(() => User, { nullable: false })
+    @ManyToOne(() => User, { onDelete: 'CASCADE' })
     user: User;
 
-    @OneToOne(() => Resource)
+    @Field(() => Resource, { nullable: false })
+    @ManyToOne(() => Resource, (resource) => resource.likes)
     resource: Resource;
 }

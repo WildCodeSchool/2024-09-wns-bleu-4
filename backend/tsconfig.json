@@ -4,7 +4,7 @@
             "@/*": ["./src/*"],
         },
         "target": "es2017",
-        "module": "commonjs",
+        "module": "CommonJS",
         "lib": ["dom", "es6", "es2017", "esnext.asynciterable"],
         "skipLibCheck": true,
         "sourceMap": true,
