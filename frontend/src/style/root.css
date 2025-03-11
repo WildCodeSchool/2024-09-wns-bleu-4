@@ -22,6 +22,7 @@
     --fz-h2: clamp(1.5rem, 1.3846rem + 0.5128vw, 2rem);
     --fz-menus: clamp(1.125rem, 1.0385rem + 0.3846vw, 1.5rem);
     --fz-text: 1rem;
+    --fz-small: .875rem;
 
     /*Font weight*/
     --bold: 800;

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Login = () => {
 
@@ -36,6 +37,10 @@ const Login = () => {
                         {showPassword ? <EyeOff /> : <Eye />}
                     </button>
                 </label>
+                <div className="links-supp">
+                    <Link to="/">Mot de passe oublié ?</Link>
+                    <Link to="/">Pas encore de compte ? Inscrivez-vous !</Link>
+                </div>
                 <button disabled={password.length < 12 || email === ""} type="submit">Valider</button>
             </form>
         </div>
