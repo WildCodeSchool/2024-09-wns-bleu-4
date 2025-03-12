@@ -86,3 +86,19 @@ Backend : port 4000
 Base de données PostgreSQL incluse  
 Adminer pour la gestion de la base de données : port 8080
 
+# 5 - Tester le projet :
+## Tests unitaires :
+### Terminal 1 - Frontend
+```
+  npm test
+```
+
+### Terminal 2 - Backend
+```
+  npm test
+```
+
+### Terminal 3 - Storage API
+```
+  npm test
+```
