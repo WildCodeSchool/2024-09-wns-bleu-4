@@ -4,13 +4,12 @@
     "version": "0.0.0",
     "type": "module",
     "scripts": {
-        "start": "vite",
+        "start": "graphql-codegen --config codegen.ts && vite",
         "build": "tsc -b && vite build",
         "lint": "eslint .",
         "preview": "vite preview",
         "test": "vitest",
-        "build:sass": "sass --watch src/style/index.scss:css/index.css",
-        "generate": "graphql-codegen"
+        "build:sass": "sass --watch src/style/index.scss:css/index.css"
     },
     "dependencies": {
         "@apollo/client": "^3.13.4",
@@ -29,6 +28,7 @@
         "@graphql-codegen/client-preset": "^4.7.0",
         "@graphql-codegen/typescript": "^4.1.5",
         "@graphql-codegen/typescript-operations": "^4.5.1",
+        "@graphql-codegen/typescript-react-apollo": "^4.3.2",
         "@testing-library/jest-dom": "^6.6.3",
         "@testing-library/react": "^16.2.0",
         "@types/react": "^19.0.8",
