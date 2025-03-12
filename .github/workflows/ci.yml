@@ -1,32 +1,40 @@
 name: CI Pipeline
 
 on:
-  pull_request:
-    branches:
-      - dev
+    pull_request:
+        branches:
+            - dev
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
+    test:
+        runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
 
-      - name: Create .env
-        run: |
-          cd backend
-          touch .env
+            - name: Create .env with required variables
+              run: |
+                  cd backend
+                  echo "JWT_SECRET_KEY=ci-test-secret-key" >> .env
+                  echo "RESEND_API_KEY=test-api-key" >> .env
+                  echo "RESEND_EMAIL_SENDER=onboarding@resend.dev" >> .env
 
-      - name: Set up Docker
-        run: |
-          docker --version
+            - name: Set up Docker
+              run: |
+                  docker --version
 
-      - name: Build Docker container
-        run: |
-          docker compose up --build -d
-        continue-on-error: false
+            - name: Build Docker container
+              run: |
+                  docker compose up --build -d
+              continue-on-error: false
 
-      - name: Stop Docker
-        run: docker compose down
-        
+            - name: Check container logs
+              if: always()
+              run: |
+                  sleep 10
+                  docker compose logs backend
+
+            - name: Stop Docker
+              if: always()
+              run: docker compose down

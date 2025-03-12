@@ -1,3 +1,32 @@
+@keyframes moveParticlesOrange {
+    0% {
+        transform: translate(0px, 0px);
+    }
+
+    50% {
+        transform: translate(-200px, 100px);
+    }
+
+    100% {
+        transform: translate(0px, 0px);
+    }
+}
+
+@keyframes moveParticlesYellow {
+    0% {
+        transform: translate(0px, 0px);
+
+    }
+
+    50% {
+        transform: translateY(-150px, 100px);
+    }
+
+    100% {
+        transform: translateY(0px, 0px);
+    }
+}
+
 .blur {
     position: absolute;
     top: -50px;
@@ -16,6 +45,7 @@
     border-radius: 200px;
     top: 5%;
     left: 10%;
+    animation: moveParticles 15s infinite;
 }
 
 .orange {
@@ -26,4 +56,5 @@
     border-radius: 200px;
     top: 20%;
     left: 30%;
+    animation: moveParticlesOrange 15s infinite;
 }
