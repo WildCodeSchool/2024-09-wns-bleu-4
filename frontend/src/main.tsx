@@ -7,7 +7,7 @@ import ReactDOM from 'react-dom/client';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 
 const client = new ApolloClient({
-    uri: 'http://localhost:7000/api',
+    uri: 'http://localhost:7007/api',
     cache: new InMemoryCache(),
 });
 
