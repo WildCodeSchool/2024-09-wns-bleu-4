@@ -66,7 +66,11 @@ class UserResolver {
     async createUser(
         @Arg('user', () => UserInput) newUser: User,
     ): Promise<User> {
-        const user = User.create(newUser);
+        const hashedPassword = await argon2.hash(newUser.password);
+        const user = User.create({
+            ...newUser,
+            password: hashedPassword,
+        });
         await user.save();
         return user;
     }

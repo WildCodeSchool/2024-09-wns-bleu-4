@@ -7,7 +7,7 @@ import App from '@/App';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 
 const client = new ApolloClient({
-    uri: 'http://backend:4000/',
+    uri: 'http://localhost:7007/api',
     cache: new InMemoryCache(),
 });
 
@@ -19,6 +19,6 @@ root.render(
     <ApolloProvider client={client}>
         <React.StrictMode>
             <App />
-        </React.StrictMode>,
+        </React.StrictMode>
     </ApolloProvider>
 );
