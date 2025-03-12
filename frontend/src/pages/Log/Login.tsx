@@ -32,7 +32,7 @@ const Login = () => {
                             onChange={handlePasswordChange} 
                             placeholder="Votre mot de passe" 
                             required 
-                        />
+                    />
                     <button type="button" className="show-password" onClick={() => setShowPassword(!showPassword)}>
                         {showPassword ? <EyeOff /> : <Eye />}
                     </button>

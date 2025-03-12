@@ -1,21 +1,11 @@
-import { motion } from "motion/react";
+interface AnimatedDivProps {
+  className?: string;
+}
 
-const startPosition =  { x: 0, y: 0 }
-const getRandomValue = () => Math.random() * 300 - 150;
-
-const AnimatedDiv = ({ className }) => {
+const AnimatedDiv: React.FC<AnimatedDivProps> = ({ className }) => {
   return (
-    <motion.div
+    <div
       className={className}
-      animate={{
-        x: [ startPosition.x, getRandomValue(), getRandomValue(), getRandomValue(), getRandomValue(), getRandomValue(), getRandomValue(), startPosition.x],
-        y: [ startPosition.y, getRandomValue(), getRandomValue(), getRandomValue(), getRandomValue(), getRandomValue(), getRandomValue(), startPosition.y],
-      }}
-      transition={{
-        duration: 40,
-        ease: "linear",
-        repeat: Infinity,
-      }}
     />
   );
 };
