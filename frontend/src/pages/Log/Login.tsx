@@ -39,7 +39,7 @@ const Login = () => {
                 </label>
                 <div className="links-supp">
                     <Link to="/forgot-password">Mot de passe oublié ?</Link>
-                    <Link to="/login">Pas encore de compte ? Inscrivez-vous !</Link>
+                    <Link to="/sign">Pas encore de compte ? Inscrivez-vous !</Link>
                 </div>
                 <button disabled={password.length < 12 || email === ""} type="submit">Valider</button>
             </form>
