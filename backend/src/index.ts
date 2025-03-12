@@ -5,6 +5,8 @@ import LikeResolver from '@/resolvers/LikeResolver';
 import ReportResolver from '@/resolvers/ReportResolver';
 import ResourceResolver from '@/resolvers/ResourceResolver';
 import SubscriptionResolver from '@/resolvers/SubscriptionResolver';
+import jwt, { Secret } from 'jsonwebtoken';
+import * as cookie from 'cookie';
 import UserResolver from '@/resolvers/UserResolver';
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
@@ -49,6 +51,29 @@ const start = async () => {
     const server = new ApolloServer({ schema });
     const { url } = await startStandaloneServer(server, {
         listen: { port: 4000 },
+        context: async ({ req, res }) => {
+            if (req.headers.cookie) {
+                const cookies = cookie.parse(req.headers.cookie as string);
+                if (cookies.token !== undefined) {
+                    const payload: any = jwt.verify(
+                        cookies.token,
+                        process.env.JWT_SECRET_KEY as Secret,
+                    );
+                    console.log('payload in context', payload);
+                    if (payload) {
+                        console.log(
+                            'payload was found and returned to resolver',
+                        );
+                        return {
+                            email: payload.email,
+                            userRole: payload.userRole,
+                            res: res,
+                        };
+                    }
+                }
+            }
+            return { res: res };
+        },
     });
     console.log(`🚀  Server ready at: ${url}`);
 };

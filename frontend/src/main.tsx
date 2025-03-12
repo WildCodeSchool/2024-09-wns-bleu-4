@@ -1,13 +1,13 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+import App from '@/App';
 import '@/style/index.scss';
 import '@/style/root.css';
-import App from '@/App';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
 
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 
 const client = new ApolloClient({
-    uri: 'http://localhost:7007/api',
+    uri: 'http://localhost:7000/api',
     cache: new InMemoryCache(),
 });
 
@@ -20,5 +20,5 @@ root.render(
         <React.StrictMode>
             <App />
         </React.StrictMode>
-    </ApolloProvider>
+    </ApolloProvider>,
 );
