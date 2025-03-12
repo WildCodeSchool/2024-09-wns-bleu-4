@@ -8,6 +8,18 @@ const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState('');
 
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.prenventDefault();
+        try {
+            const response = await Login({
+                variables:{
+                    email,
+                    password
+                }
+            })
+        }
+    }
+
     const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setPassword(event.target.value);
     };
