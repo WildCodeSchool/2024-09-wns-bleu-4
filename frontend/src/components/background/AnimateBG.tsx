@@ -3,7 +3,7 @@ import { motion } from "motion/react";
 const startPosition =  { x: 0, y: 0 }
 const getRandomValue = () => Math.random() * 300 - 150;
 
-const AnimatedDiv = ({ className }) => {
+const AnimatedDiv = ({ className }: { className: string }) => {
   return (
     <motion.div
       className={className}

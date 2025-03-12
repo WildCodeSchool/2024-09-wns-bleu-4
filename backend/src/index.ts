@@ -6,11 +6,11 @@ import { startStandaloneServer } from '@apollo/server/standalone';
 import 'dotenv/config';
 import 'reflect-metadata';
 import { buildSchema } from 'type-graphql';
-import ResourceResolver from './resolvers/ResourceResolver';
-import SubscriptionResolver from './resolvers/SubscriptionResolver';
-import CommentResolver from './resolvers/CommentResolver';
-import ReportResolver from './resolvers/ReportResolver';
-import ContactResolver from './resolvers/ContactResolver';
+import ResourceResolver from '@/resolvers/ResourceResolver';
+import SubscriptionResolver from '@/resolvers/SubscriptionResolver';
+import CommentResolver from '@/resolvers/CommentResolver';
+import ReportResolver from '@/resolvers/ReportResolver';
+import ContactResolver from '@/resolvers/ContactResolver';
 
 const start = async () => {
     await dataSource.initialize();

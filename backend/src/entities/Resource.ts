@@ -10,9 +10,9 @@ import {
     OneToMany,
     PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Comment } from './Comment';
-import { Like } from './Like';
-import { Report } from './Report';
+import { Comment } from '@/entities/Comment';
+import { Like } from '@/entities/Like';
+import { Report } from '@/entities/Report';
 import { IsDate, IsEnum, Length, MaxLength } from 'class-validator';
 
 export enum FileVisibility {
