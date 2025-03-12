@@ -1,9 +1,9 @@
-@use '../pages/home/home' as home;
-@use '../pages/Log/log' as log;
+@use '@/pages/Home/home.scss' as home;
+@use '@/pages/Log/log' as log;
 
-@use '../components/sidebar/sidebar' as sidebar;
-@use '../components/header/header' as header;
-@use '../components/background/background' as background;
+@use '@/components/sidebar/sidebar' as sidebar;
+@use '@/components/header/header' as header;
+@use '@/components/background/background' as background;
 
 .body {
     position: relative;
