@@ -2,6 +2,8 @@ services:
     db:
         image: postgres
         environment:
+            POSTGRES_DB: postgres
+            POSTGRES_USER: postgres
             POSTGRES_PASSWORD: example
         healthcheck:
             test: ['CMD-SHELL', 'pg_isready -d postgres -U postgres']
@@ -23,7 +25,7 @@ services:
             timeout: 10s
             retries: 100
         env_file:
-            - .env
+            - ./backend/.env
         depends_on:
             db:
                 condition: service_healthy
