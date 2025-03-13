@@ -1,14 +1,13 @@
 import { useRegisterMutation } from '@/generated/graphql-types';
 import { Eye, EyeOff } from 'lucide-react';
 import { FormEvent, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const Sign = () => {
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState('');
-    const navigate = useNavigate();
 
     const [register, { loading }] = useRegisterMutation();
 
@@ -22,7 +21,6 @@ const Sign = () => {
                 toast.info(
                     'Veuillez vérifier votre email pour confirmer votre compte.',
                 );
-                navigate(`/verification?email=${encodeURIComponent(email)}`);
             }
         } catch (error) {
             toast.error("Erreur lors de l'inscription");
