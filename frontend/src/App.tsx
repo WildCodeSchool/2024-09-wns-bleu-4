@@ -1,8 +1,8 @@
 import Home from '@/pages/home/Home';
 import Layout from '@/pages/Layout';
 import Login from '@/pages/Log/Login';
+import Sign from '@/pages/Sign/Sign';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Sign from './pages/Sign/sign';
 
 const App = () => {
     return (

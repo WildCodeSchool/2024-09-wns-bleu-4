@@ -1,4 +1,4 @@
-import Form from '@/components/Form';
+import Form from '@/components/form/Form';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useLoginMutation } from '../../generated/graphql-types';
