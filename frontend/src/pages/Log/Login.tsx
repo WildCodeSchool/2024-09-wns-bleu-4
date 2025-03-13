@@ -77,6 +77,7 @@ const Login = () => {
                 <button
                     disabled={password.length < 12 || email === ''}
                     type="submit"
+                    className='btn'
                 >
                     {loading ? 'Connexion ...' : 'Valider'}
                 </button>

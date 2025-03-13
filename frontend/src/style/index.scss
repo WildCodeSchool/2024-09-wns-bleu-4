@@ -4,6 +4,7 @@
 @use '@/components/sidebar/sidebar' as sidebar;
 @use '@/components/header/header' as header;
 @use '@/components/background/background' as background;
+@use 'btn' as btn;
 
 .body {
     position: relative;
@@ -19,6 +20,24 @@
         "sidebar main "
         "sidebar main ";
     overflow: hidden;
+
+    @media (min-width: 999px) {
+        .onlyMobile {
+            display: none;
+        }
+    }
+
+    @media (max-width: 999px) {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr ;
+        grid-template-areas:
+            "header"
+            "main";
+    }
+}
+
+.logo {
+    width: clamp(5rem, 4.5673rem + 1.9231vw, 6.875rem);
 }
 
 main {
