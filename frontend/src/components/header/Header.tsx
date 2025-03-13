@@ -5,7 +5,7 @@ const Header = () => {
     return (
         <div className="header">
             <Logo />
-            <div className="log">
+            <div className="log" data-testid="log-container">
                 <Link to="/login">Connexion</Link>
                 <Link className='active' to="/sign">Inscription</Link>
             </div>
