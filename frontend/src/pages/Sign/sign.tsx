@@ -1,5 +1,12 @@
 import Form from '@/components/Form';
+import {
+    InputOTP,
+    InputOTPGroup,
+    InputOTPSeparator,
+    InputOTPSlot,
+} from '@/components/ui/input-otp';
 import { useRegisterMutation } from '@/generated/graphql-types';
+import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -28,14 +35,26 @@ const Sign = () => {
     return (
         <>
             {isSubmitted ? (
-                <div className="form-log">
+                <div className={cn('form-log')}>
                     <b>Vérification inscription</b>
                     <p>
                         veuillez vérifier votre boite mail afin de finaliser
                         l’inscription
                     </p>
                     <button className="">Renvoyer un email</button>
-                    <div className="otp"></div>
+                    <InputOTP maxLength={6}>
+                        <InputOTPGroup>
+                            <InputOTPSlot index={0} />
+                            <InputOTPSlot index={1} />
+                            <InputOTPSlot index={2} />
+                        </InputOTPGroup>
+                        <InputOTPSeparator />
+                        <InputOTPGroup>
+                            <InputOTPSlot index={3} />
+                            <InputOTPSlot index={4} />
+                            <InputOTPSlot index={5} />
+                        </InputOTPGroup>
+                    </InputOTP>
                 </div>
             ) : (
                 <Form
