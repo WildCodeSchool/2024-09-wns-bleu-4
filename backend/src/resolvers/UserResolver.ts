@@ -1,5 +1,6 @@
 import { TempUser, User } from '@/entities/User';
 import * as argon2 from 'argon2';
+import { IsEmail, Length, Matches } from 'class-validator';
 import jwt, { Secret } from 'jsonwebtoken';
 import { Resend } from 'resend';
 import {
@@ -16,10 +17,16 @@ import { v4 as uuidv4 } from 'uuid';
 
 @InputType()
 export class UserInput implements Partial<User> {
+    @IsEmail({}, { message: 'Please enter a valid email address' })
+    @Length(5, 150, { message: 'Email must be between 5 and 150 characters.' })
     @Field(() => String)
     email: string;
 
     @Field(() => String)
+    @Matches(/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{12,}$/, {
+        message:
+            '🔒 Password must include an uppercase, lowercase, number & special character.',
+    })
     password: string;
 }
 
