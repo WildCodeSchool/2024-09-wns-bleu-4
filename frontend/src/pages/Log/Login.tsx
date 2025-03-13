@@ -1,6 +1,7 @@
 import { Eye, EyeOff } from 'lucide-react';
 import { FormEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { useLoginMutation } from '../../generated/graphql-types';
 
 const Login = () => {
@@ -20,9 +21,11 @@ const Login = () => {
 
             if (response.data?.login) {
                 localStorage.setItem('token', response.data.login);
+                toast.success('Connexion réussie');
             }
         } catch (err) {
             console.error('Erreur de connexion :', err);
+            toast.error('Erreur de connexion');
         }
     };
 

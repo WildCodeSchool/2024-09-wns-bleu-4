@@ -20,7 +20,8 @@
         "motion": "^12.4.2",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
-        "react-router-dom": "^7.1.5"
+        "react-router-dom": "^7.1.5",
+        "react-toastify": "^11.0.5"
     },
     "devDependencies": {
         "@eslint/js": "^9.19.0",
@@ -31,6 +32,7 @@
         "@graphql-codegen/typescript-react-apollo": "^4.3.2",
         "@testing-library/jest-dom": "^6.6.3",
         "@testing-library/react": "^16.2.0",
+        "@types/node": "^22.13.10",
         "@types/react": "^19.0.8",
         "@types/react-dom": "^19.0.3",
         "@vitejs/plugin-react": "^4.3.4",
