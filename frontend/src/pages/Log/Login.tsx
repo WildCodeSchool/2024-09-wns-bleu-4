@@ -1,7 +1,7 @@
 import { Eye, EyeOff } from 'lucide-react';
 import { FormEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useLoginMutation } from '../../generated/graphql-types';
+import { useLoginMutation } from '@/generated/graphql-types';
 
 const Login = () => {
     const [password, setPassword] = useState('');
