@@ -10,8 +10,6 @@ import upload from '../middlewares/multerConfig.ts';
 const router = express.Router();
 
 const getDockerPrefix = () => { return (process.env.IS_DOCKER ? '/storage' : '') }
-console.log(process.env.IS_DOCKER)
-console.log(getDockerPrefix())
 
 // Pour afficher la page HTML d'upload et des fichiers stockés
 router.get('/', (req, res) => {
