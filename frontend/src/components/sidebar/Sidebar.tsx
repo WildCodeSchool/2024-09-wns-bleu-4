@@ -4,7 +4,6 @@ const Sidebar = () => {
 
     return (
         <aside className="sidebar">
-            <span>Fr</span>
             <nav data-testid="sidebar-nav">
                 <Link to="/" className='sidebar-dashboard'>
                     Transférez vos fichiers
