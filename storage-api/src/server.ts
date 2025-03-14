@@ -1,5 +1,6 @@
+import "dotenv/config.js";
 import app from './app.ts';
 
-app.listen(8080, () => {
-    console.log(`Serveur lancé sur http://localhost:8080`);
+app.listen(3000, () => {
+    console.log(`Serveur lancé sur http://localhost:3000`);
 });

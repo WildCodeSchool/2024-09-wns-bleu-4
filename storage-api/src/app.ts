@@ -10,7 +10,7 @@ const app = express();
 
 // Middleware pour servir les fichiers statiques
 app.use(express.static('public'));
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+app.use('/uploads', express.static(path.resolve(__dirname, '..', 'uploads')));
 
 // Utilisation du router à `/`
 app.use('/', fileRoutes);
