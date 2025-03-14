@@ -7,6 +7,7 @@
     "dev": "tsx src/server.ts"
   },
   "dependencies": {
+    "dotenv": "^16.4.7",
     "express": "^4.18.2",
     "multer": "^1.4.5-lts.1"
   },
