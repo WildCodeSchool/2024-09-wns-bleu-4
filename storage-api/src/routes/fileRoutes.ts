@@ -51,7 +51,7 @@ router.get('/', (req, res) => {
                 formData.append("file", fileInput.files[0]);
 
                 try {
-                    const response = await fetch("/upload", {
+                    const response = await fetch("/storage/upload", {
                         method: "POST",
                         body: formData
                     });
@@ -65,7 +65,7 @@ router.get('/', (req, res) => {
 
             async function fetchFiles() {
                 try {
-                    const response = await fetch("/files");
+                    const response = await fetch("/storage/files");
                     const data = await response.json();
                     const fileList = document.getElementById("fileList");
                     fileList.innerHTML = "";
