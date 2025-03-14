@@ -76,9 +76,9 @@ router.get('/', (req, res) => {
 
                         // ✅ Vérifie si c'est une image pour afficher un aperçu
                         if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext)) {
-                            preview = \`<img src="/uploads/\${file}" style="max-width: 100px; display: block; margin-top: 5px;">\`;
+                            preview = \`<img src="/storage/uploads/\${file}" style="max-width: 100px; display: block; margin-top: 5px;">\`;
                         } else {
-                            preview = \`<a href="/uploads/\${file}" target="_blank">\${file}</a>\`;
+                            preview = \`<a href="/storage/uploads/\${file}" target="_blank">\${file}</a>\`;
                         }
 
                         const listItem = document.createElement("li");
@@ -98,7 +98,7 @@ router.get('/', (req, res) => {
 
             async function deleteFile(filename) {
                 try {
-                    const response = await fetch("/delete/" + filename, { method: "DELETE" });
+                    const response = await fetch("/storage/delete/" + filename, { method: "DELETE" });
                     const data = await response.json();
 
                     fetchFiles(); // 🔄 Rafraîchir la liste après suppression
