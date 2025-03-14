@@ -29,6 +29,11 @@
         text-align: center;
     }
 
+    @media (max-width: 599px) {
+        transform: translateY(20%);
+        text-align: center;
+    }
+
     @media (max-width: 450px) {
         transform: translateY(10%);
         text-align: center;

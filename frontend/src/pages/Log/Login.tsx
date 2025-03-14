@@ -65,7 +65,7 @@ const Login = () => {
                         value={password}
                         onClick={() => setShowPassword(!showPassword)}
                     >
-                        {showPassword ? <EyeOff /> : <Eye />}
+                        {showPassword ? <EyeOff /> : <Eye stroke='#FF934F'/>}
                     </button>
                 </label>
                 <div className="links-supp">
@@ -82,7 +82,7 @@ const Login = () => {
                     {loading ? 'Connexion ...' : 'Valider'}
                 </button>
                 {error && (
-                    <p style={{ color: 'red' }}>
+                    <p className='error'>
                         Une erreur est survenue lors de la connexion
                     </p>
                 )}

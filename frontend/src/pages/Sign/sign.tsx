@@ -33,7 +33,7 @@ const Sign = () => {
                             required 
                         />
                     <button type="button" className="show-password" onClick={() => setShowPassword(!showPassword)}>
-                        {showPassword ? <EyeOff /> : <Eye />}
+                        {showPassword ? <EyeOff /> : <Eye stroke="#FF934F"/>}
                     </button>
                 </label>
                 <div className="links-supp">

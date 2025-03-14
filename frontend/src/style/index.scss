@@ -5,42 +5,4 @@
 @use '@/components/header/header' as header;
 @use '@/components/background/background' as background;
 @use 'btn' as btn;
-
-.body {
-    position: relative;
-    height: 100vh;
-    width: 100vw;
-    background-color: var(--dark);
-    font-family: var(--text);
-    display: grid;
-    grid-template-columns: auto 1fr;
-    grid-template-rows: auto 1fr 200px;
-    grid-template-areas:
-        "sidebar header "
-        "sidebar main "
-        "sidebar main ";
-    overflow: hidden;
-
-    @media (min-width: 999px) {
-        .onlyMobile {
-            display: none;
-        }
-    }
-
-    @media (max-width: 999px) {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto 1fr ;
-        grid-template-areas:
-            "header"
-            "main";
-    }
-}
-
-.logo {
-    width: clamp(5rem, 4.5673rem + 1.9231vw, 6.875rem);
-}
-
-main {
-    z-index: 1;
-    height: 100%;
-}
+@use 'global' as global;
