@@ -57,13 +57,14 @@ const Form = ({ title, onSubmit, loading, links }: FormProps) => {
                         className="show-password"
                         onClick={() => setShowPassword(!showPassword)}
                     >
-                        {showPassword ? <EyeOff /> : <Eye />}
+                        {showPassword ? <EyeOff /> : <Eye stroke='#FF934F'/>}
                     </button>
                 </label>
                 {links && <div className="links-supp">{links}</div>}
                 <button
                     disabled={password.length < 12 || email === ''}
                     type="submit"
+                    className='btn'
                 >
                     {loading ? `${title} ...` : 'Valider'}
                 </button>
