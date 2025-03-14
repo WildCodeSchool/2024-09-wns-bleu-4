@@ -33,14 +33,14 @@ const Sign = () => {
                             required 
                         />
                     <button type="button" className="show-password" onClick={() => setShowPassword(!showPassword)}>
-                        {showPassword ? <EyeOff /> : <Eye />}
+                        {showPassword ? <EyeOff /> : <Eye stroke="#FF934F"/>}
                     </button>
                 </label>
                 <div className="links-supp">
                     <span>En appuyant sur "Valider", vous avez lu et vous acceptez les <Link to="/cgu">CGU</Link> et la <Link to="/privacy-policy">Politique de Confidentialité</Link>.  
                     </span>
                 </div>
-                <button disabled={password.length < 12 || email === ""} type="submit">Valider</button>
+                <button className="btn" disabled={password.length < 12 || email === ""} type="submit">Valider</button>
             </form>
         </div>
     )

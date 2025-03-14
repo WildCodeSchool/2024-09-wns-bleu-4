@@ -1,0 +1,24 @@
+.btn {
+    --colorBtn: var(--primary);
+    margin-top: 2rem;
+    background-color: var(--colorBtn);
+    place-self: center;
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius);
+    font-size: var(--fz-menu);
+    font-weight: var(--semi-bold);
+    transition: var(--transition);
+
+    &:disabled {
+        background-color: var(--grey);
+        color: rgba(255, 255, 255, 0.651);
+    }
+
+    &:hover:not(:disabled),
+    &:focus:not(:disabled) {
+        background-color: var(--secondary);
+        color: var(--grey);
+        cursor: pointer;
+        ;
+    }
+}

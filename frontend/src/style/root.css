@@ -5,10 +5,11 @@
     --primary: #FF934F;
     --primary75: rgba(255, 147, 79, .75);
     --primary50: rgba(255, 147, 79, .50);
-    --secondary: #F5ED31;
+    --text-color: rgb(255, 236, 196)
+;    --secondary: rgb(255, 251, 134);
     --secondary75: rgba(245, 237, 49, .75);
     --secondary50: rgba(245, 237, 49, .50);
-    --dark: #080708;
+    --dark: #161416;
     --grey: #403E3B;
     --grey75: rgba(64, 62, 59, .75);
     --grey60: rgba(64, 62, 59, .6);

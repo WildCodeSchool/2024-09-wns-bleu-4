@@ -4,19 +4,20 @@
     background-color: var(--grey75);
     padding: 2rem;
     display: grid;
-    color: white;
+    color: var(--text-color);
     font-size: var(--fz-menus);
     gap: 2rem;
     place-content: baseline;
     gap: 4.5rem;
-    
-    span {
-        height: fit-content;
+
+    @media (max-width: 999.98px) {
+        display: none;
     }
     
     nav {
         display: grid;
         gap: 4rem;
+        margin-top: 3rem;
     }
 }
 

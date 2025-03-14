@@ -3,13 +3,39 @@
     font-size: var(--fz-h1);
     font-weight: var(--semi-bold);
     background: var(--gradient);
-    -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     transform: translateY(100%);
     margin-left: 8rem;
     
     @media (max-width: 1199.98px) {
-        margin-left: 2rem;
+        transform: translateY(50%);
+        margin: 0 2rem;
+    }
+
+    @media (max-width: 999px) {
+        transform: translateY(0);
+    }
+}
+
+.home-wrapper {
+    display: grid;
+    gap: 2rem;
+    justify-items: center;
+    align-items: center;
+
+    @media (max-width: 999px) {
+        transform: translateY(50%);
+        text-align: center;
+    }
+
+    @media (max-width: 599px) {
+        transform: translateY(20%);
+        text-align: center;
+    }
+
+    @media (max-width: 450px) {
+        transform: translateY(10%);
+        text-align: center;
     }
 }

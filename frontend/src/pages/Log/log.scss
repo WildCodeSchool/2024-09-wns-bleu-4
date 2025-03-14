@@ -4,23 +4,18 @@
     place-items: center;
     place-self: center;
     color: white;
-    transform: translateY(40%);
+    transform: translateY(20%);
 
     b {
         font-size: var(--fz-h2);
         font-weight: var(--bold);
     }
 
-    p {
-        color: rgb(194, 5, 5);
-        font-size: var(--fz-text);
-        font-weight: var(--semi-bold);
-    }
-
     form {
         display: grid;
         gap: 1rem;
         width: 100%;
+        place-items: center;
         
         .form-label {
             display: grid;
@@ -40,6 +35,10 @@
                     color: white;
                     font-weight: var(--regular);
                 }
+
+                @media (max-width: 999px) {
+                    width: 300px;
+                }
             }
 
             &:last-of-type {
@@ -47,8 +46,8 @@
 
                 button {
                     position: absolute;
-                    top: 4px;
-                    right: 0;
+                    top: 52px;
+                    right: 20px;
                     background-color: transparent;
 
                     &:hover, &:focus {
@@ -56,28 +55,6 @@
                         color: var(--primary);
                     }
                 }
-            }
-        }
-
-        button {
-            margin-top: 2rem;
-            background-color: var(--primary);
-            place-self: center;
-            padding: 1rem 1.25rem;
-            border-radius: var(--radius);
-            font-size: var(--fz-menu);
-            font-weight: var(--semi-bold);
-            transition: var(--transition);
-
-            &:disabled {
-                background-color: var(--grey);
-                color: rgba(255, 255, 255, 0.651);
-            }
-
-            &:hover:not(:disabled), &:focus:not(:disabled) {
-                background-color: var(--secondary);
-                color: var(--grey);
-                cursor: pointer;;
             }
         }
 
@@ -101,6 +78,10 @@
                 &:hover, &:focus {
                     text-decoration-color: white;
                 }
+            }
+
+            @media (max-width: 999px) {
+                margin: 1rem;
             }
         }
     }
