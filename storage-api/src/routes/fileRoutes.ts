@@ -1,3 +1,4 @@
+import 'dotenv';
 import express from 'express';
 import {
     uploadFile,
@@ -7,6 +8,8 @@ import {
 import upload from '../middlewares/multerConfig.ts';
 
 const router = express.Router();
+
+const getDockerPrefix = () => { return (process.env.IS_DOCKER ? '/storage' : '') }
 
 // Pour afficher la page HTML d'upload et des fichiers stockés
 router.get('/', (req, res) => {
@@ -51,7 +54,7 @@ router.get('/', (req, res) => {
                 formData.append("file", fileInput.files[0]);
 
                 try {
-                    const response = await fetch("/storage/upload", {
+                    const response = await fetch("${getDockerPrefix()}/upload", {
                         method: "POST",
                         body: formData
                     });
@@ -65,7 +68,7 @@ router.get('/', (req, res) => {
 
             async function fetchFiles() {
                 try {
-                    const response = await fetch("/storage/files");
+                    const response = await fetch("${getDockerPrefix()}/files");
                     const data = await response.json();
                     const fileList = document.getElementById("fileList");
                     fileList.innerHTML = "";
@@ -76,9 +79,9 @@ router.get('/', (req, res) => {
 
                         // ✅ Vérifie si c'est une image pour afficher un aperçu
                         if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext)) {
-                            preview = \`<img src="/storage/uploads/\${file}" style="max-width: 100px; display: block; margin-top: 5px;">\`;
+                            preview = \`<img src="${getDockerPrefix()}/uploads/\${file}" style="max-width: 100px; display: block; margin-top: 5px;">\`;
                         } else {
-                            preview = \`<a href="/storage/uploads/\${file}" target="_blank">\${file}</a>\`;
+                            preview = \`<a href="${getDockerPrefix()}/uploads/\${file}" target="_blank">\${file}</a>\`;
                         }
 
                         const listItem = document.createElement("li");
@@ -98,7 +101,7 @@ router.get('/', (req, res) => {
 
             async function deleteFile(filename) {
                 try {
-                    const response = await fetch("/storage/delete/" + filename, { method: "DELETE" });
+                    const response = await fetch("${getDockerPrefix()}/delete/" + filename, { method: "DELETE" });
                     const data = await response.json();
 
                     fetchFiles(); // 🔄 Rafraîchir la liste après suppression
@@ -112,6 +115,7 @@ router.get('/', (req, res) => {
     `);
 });
 
+// @ts-expect-error
 router.post('/upload', upload.single('file'), uploadFile);
 router.delete('/delete/:filename', deleteFile);
 router.get('/files', getFiles);

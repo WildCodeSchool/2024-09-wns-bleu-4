@@ -1,3 +1,4 @@
+import "dotenv/config.js";
 import app from './app.ts';
 
 app.listen(3000, () => {
