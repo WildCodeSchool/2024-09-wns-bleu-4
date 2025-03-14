@@ -5,12 +5,12 @@ import LikeResolver from '@/resolvers/LikeResolver';
 import ReportResolver from '@/resolvers/ReportResolver';
 import ResourceResolver from '@/resolvers/ResourceResolver';
 import SubscriptionResolver from '@/resolvers/SubscriptionResolver';
-import jwt, { Secret } from 'jsonwebtoken';
-import * as cookie from 'cookie';
 import UserResolver from '@/resolvers/UserResolver';
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
+import * as cookie from 'cookie';
 import 'dotenv/config';
+import jwt, { Secret } from 'jsonwebtoken';
 import 'reflect-metadata';
 import { buildSchema } from 'type-graphql';
 
@@ -23,6 +23,7 @@ const start = async () => {
     }
     await dataSource.initialize();
     const schema = await buildSchema({
+        validate: true,
         resolvers: [
             UserResolver,
             ContactResolver,

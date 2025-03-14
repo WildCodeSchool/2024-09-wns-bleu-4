@@ -1,4 +1,4 @@
-import tailwindcss from '@tailwindcss/postcss';
+import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import { defineConfig, UserConfig } from 'vite';
@@ -11,7 +11,7 @@ export default defineConfig({
             '@public': path.resolve(__dirname, './public'),
         },
     },
-    plugins: [react()],
+    plugins: [react(), tailwindcss()],
     server: {
         host: true,
         hmr: { path: '/hmr' },
@@ -22,5 +22,4 @@ export default defineConfig({
         globals: true,
         setupFiles: './tests.setup.ts',
     },
-    css: { postcss: { plugins: [tailwindcss()] } },
 } as UserConfig);
