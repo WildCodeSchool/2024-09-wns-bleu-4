@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const Sign = () => {
-    const [register, { loading }] = useRegisterMutation();
+    const [register, { loading}] = useRegisterMutation();
     const [isSubmitted, setIsSubmitted] = useState(false);
 
     const handleSubmit = async (email: string, password: string) => {

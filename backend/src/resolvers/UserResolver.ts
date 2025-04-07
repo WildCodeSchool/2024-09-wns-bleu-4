@@ -13,7 +13,6 @@ import {
     Query,
     Resolver,
 } from 'type-graphql';
-import { v4 as uuidv4 } from 'uuid';
 
 @InputType()
 export class UserInput implements Partial<User> {
@@ -43,11 +42,11 @@ export class UserInfo {
 class UserResolver {
     @Mutation(() => String)
     async register(@Arg('data', () => UserInput) newUserData: User) {
-        const randomCode = uuidv4();
+        const codeToConfirm = Array.from({ length: 8 }, () => Math.floor(Math.random() * 10)).join('')
         await TempUser.save({
             email: newUserData.email,
             password: await argon2.hash(newUserData.password),
-            generatedCode: randomCode,
+            randomCode: codeToConfirm,
         });
         const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -57,10 +56,8 @@ class UserResolver {
                 to: [newUserData.email],
                 subject: 'Verify Email',
                 html: `
-            <p>Please click the link below to confirm your email address</p>
-            <a href="http://localhost:7000/confirm/${randomCode}">
-              http://localhost:7000/confirm/${randomCode}
-            </a>
+            <p>Veuillez rentrer le code secret dans la page de confirmation d'inscription</p>
+            p>Code secret: ${codeToConfirm}</p>
             `,
             });
         } catch (error) {
@@ -83,9 +80,9 @@ class UserResolver {
     }
 
     @Mutation(() => String)
-    async confirmEmail(@Arg('codeByUser', () => String) codeByUser: string) {
+    async confirmEmail(@Arg('codeByUser', () => Number) codeByUser: number) {
         const tempUser = await TempUser.findOneByOrFail({
-            generatedCode: codeByUser,
+            randomCode: codeByUser,
         });
         await User.save({
             email: tempUser.email,

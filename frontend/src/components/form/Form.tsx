@@ -57,7 +57,7 @@ const Form = ({ title, onSubmit, loading, links }: FormProps) => {
                         className="show-password"
                         onClick={() => setShowPassword(!showPassword)}
                     >
-                        {showPassword ? <EyeOff /> : <Eye stroke='#FF934F'/>}
+                        {showPassword ? <EyeOff aria-label='Show passord'/> : <Eye stroke='#FF934F' aria-label='Hidde password'/>}
                     </button>
                 </label>
                 {links && <div className="links-supp">{links}</div>}
