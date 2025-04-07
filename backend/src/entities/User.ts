@@ -31,8 +31,8 @@ export class TempUser extends BaseEntity {
     @Column('varchar')
     password: string;
 
-    @Column('integer')
-    randomCode: number;
+    @Column('varchar')
+    randomCode: string;
 }
 
 @ObjectType()

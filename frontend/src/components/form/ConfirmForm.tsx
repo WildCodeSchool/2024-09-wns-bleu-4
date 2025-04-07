@@ -6,40 +6,48 @@ import {
 } from '@/components/ui/input-otp';
 import { useConfirmEmailMutation } from '@/generated/graphql-types';
 import { cn } from '@/lib/utils';
-import { useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 // Fait toi plaisir Daniel pour custom c'est vraiment juste une base on pourrait peut etre meme faire un composant plus generique avec Form plus tard
 export const ConfirmForm: React.FC = () => {
-
-    const [formCode, setFormCode] = useState('');
     const [confirmEmail] = useConfirmEmailMutation();
+    const navigate = useNavigate();
+    const otpInputRef = useRef<HTMLInputElement>(null);
 
-    const handleSubmit = async () => {
-        try {
-            await confirmEmail({
-                variables: { codeByUser: formCode },
-            });
-            toast.success('Votre compte a été confirmé');
-            return <Navigate to="/login" />;
-        } catch (error) {
-            toast.error('Erreur lors de la confirmation du compte');
-            console.error('Erreur lors de la confirmation du compte :', error);
+    const handleOtpChange = async () => {
+        const otpValue = otpInputRef.current?.value;
+        if (otpValue && otpValue.length === 8) {
+            try {
+                await confirmEmail({ variables: { codeByUser: otpValue } });
+                toast.success(
+                    'Votre email a bien été confirmé, vous pouvez vous connecter !',
+                );
+                navigate('/');
+            } catch (error) {
+                toast.error(
+                    "Erreur lors de la confirmation de l'email. Veuillez réessayer.",
+                );
+                console.error('Email confirmation error:', error);
+            }
         }
     };
-
-    console.log('formCode', formCode);
-    
 
     return (
         <div className={cn('form-log')}>
             <b>Vérification inscription</b>
             <p>
-                Veuillez vérifier votre boîte mail afin de finaliser votre inscription.
+                Veuillez vérifier votre boîte mail afin de finaliser votre
+                inscription.
             </p>
             <button className="btn">Renvoyer un email</button>
-            <InputOTP maxLength={8} onChange={setFormCode} value={formCode} onSubmit={handleSubmit}>
+            <InputOTP
+                ref={otpInputRef}
+                onChange={handleOtpChange}
+                maxLength={8}
+                pattern="^[0-9]*$"
+            >
                 <InputOTPGroup>
                     <InputOTPSlot index={0} />
                     <InputOTPSlot index={1} />

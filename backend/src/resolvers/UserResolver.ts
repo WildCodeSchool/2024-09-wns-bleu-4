@@ -42,7 +42,9 @@ export class UserInfo {
 class UserResolver {
     @Mutation(() => String)
     async register(@Arg('data', () => UserInput) newUserData: User) {
-        const codeToConfirm = Array.from({ length: 8 }, () => Math.floor(Math.random() * 10)).join('')
+        const codeToConfirm = Array.from({ length: 8 }, () =>
+            Math.floor(Math.random() * 10),
+        ).join('');
         await TempUser.save({
             email: newUserData.email,
             password: await argon2.hash(newUserData.password),
@@ -57,7 +59,7 @@ class UserResolver {
                 subject: 'Verify Email',
                 html: `
             <p>Veuillez rentrer le code secret dans la page de confirmation d'inscription</p>
-            p>Code secret: ${codeToConfirm}</p>
+            <p>Code secret: ${codeToConfirm}</p>
             `,
             });
         } catch (error) {
@@ -80,10 +82,16 @@ class UserResolver {
     }
 
     @Mutation(() => String)
-    async confirmEmail(@Arg('codeByUser', () => Number) codeByUser: number) {
+    async confirmEmail(@Arg('codeByUser', () => String) codeByUser: string) {
         const tempUser = await TempUser.findOneByOrFail({
             randomCode: codeByUser,
         });
+
+        const existingUser = await User.findOneBy({ email: tempUser.email });
+
+        if (existingUser) {
+            throw new Error('A user with this email already exists');
+        }
         await User.save({
             email: tempUser.email,
             password: tempUser.password,
