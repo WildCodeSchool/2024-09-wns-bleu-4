@@ -14,16 +14,13 @@ const Header = () => {
                 onClick={() => setIsBurgerOpen(true)}
                 title="menu-burger-button"
             >
-                <Menu size={34} stroke="#ff934f" />
+                <Menu size={34} stroke='#ff934f' aria-label='Open the menu'/>
             </button>
 
             <div className={`menuBurger${isBurgerOpen ? '__open' : ''}`}>
-                <button
-                    className="closeButton"
-                    onClick={() => setIsBurgerOpen(false)}
-                    title="menu-burger-close-button"
-                >
-                    <X size={34} stroke="#FF934F" />
+                <button className="closeButton" aria-label='Close the menu' onClick={() => setIsBurgerOpen(false)}>
+                    <X size={34} stroke='#FF934F'/>
+
                 </button>
                 <nav className="menuBurger__nav">
                     <div className="menuBurger__menu">
@@ -79,7 +76,7 @@ const Header = () => {
                 onClick={() => setIsOpen(!isOpen)}
                 title="menu-burger-dropdown-button"
             >
-                <User size={34} stroke="#ff934f" />
+                <User size={34} stroke="#ff934f" aria-label='Choise login or sign'/>
                 {isOpen && (
                     <div className="dropDownButton__menu">
                         <Link to="/login">Connexion</Link>

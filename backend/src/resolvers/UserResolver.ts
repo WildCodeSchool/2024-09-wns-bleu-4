@@ -1,5 +1,6 @@
 import { TempUser, User } from '@/entities/User';
 import * as argon2 from 'argon2';
+import { IsEmail, Length, Matches } from 'class-validator';
 import jwt, { Secret } from 'jsonwebtoken';
 import { Resend } from 'resend';
 import {
@@ -12,14 +13,19 @@ import {
     Query,
     Resolver,
 } from 'type-graphql';
-import { v4 as uuidv4 } from 'uuid';
 
 @InputType()
 export class UserInput implements Partial<User> {
+    @IsEmail({}, { message: 'Please enter a valid email address' })
+    @Length(5, 150, { message: 'Email must be between 5 and 150 characters.' })
     @Field(() => String)
     email: string;
 
     @Field(() => String)
+    @Matches(/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{12,}$/, {
+        message:
+            '🔒 Password must include an uppercase, lowercase, number & special character.',
+    })
     password: string;
 }
 
@@ -36,11 +42,13 @@ export class UserInfo {
 class UserResolver {
     @Mutation(() => String)
     async register(@Arg('data', () => UserInput) newUserData: User) {
-        const randomCode = uuidv4();
+        const codeToConfirm = Array.from({ length: 8 }, () =>
+            Math.floor(Math.random() * 10),
+        ).join('');
         await TempUser.save({
             email: newUserData.email,
             password: await argon2.hash(newUserData.password),
-            generatedCode: randomCode,
+            randomCode: codeToConfirm,
         });
         const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -50,10 +58,8 @@ class UserResolver {
                 to: [newUserData.email],
                 subject: 'Verify Email',
                 html: `
-            <p>Please click the link below to confirm your email address</p>
-            <a href="http://localhost:7000/confirm/${randomCode}">
-              http://localhost:7000/confirm/${randomCode}
-            </a>
+            <p>Veuillez rentrer le code secret dans la page de confirmation d'inscription</p>
+            <p>Code secret: ${codeToConfirm}</p>
             `,
             });
         } catch (error) {
@@ -78,8 +84,14 @@ class UserResolver {
     @Mutation(() => String)
     async confirmEmail(@Arg('codeByUser', () => String) codeByUser: string) {
         const tempUser = await TempUser.findOneByOrFail({
-            generatedCode: codeByUser,
+            randomCode: codeByUser,
         });
+
+        const existingUser = await User.findOneBy({ email: tempUser.email });
+
+        if (existingUser) {
+            throw new Error('A user with this email already exists');
+        }
         await User.save({
             email: tempUser.email,
             password: tempUser.password,

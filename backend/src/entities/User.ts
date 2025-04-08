@@ -1,7 +1,7 @@
 import { Comment } from '@/entities/Comment';
 import { Resource } from '@/entities/Resource';
 import { Subscription } from '@/entities/Subscription';
-import { IsDate, IsEmail, IsEnum, Length } from 'class-validator';
+import { IsDate, IsEnum, Length } from 'class-validator';
 import { Field, ID, ObjectType } from 'type-graphql';
 import {
     BaseEntity,
@@ -32,7 +32,7 @@ export class TempUser extends BaseEntity {
     password: string;
 
     @Column('varchar')
-    generatedCode: string;
+    randomCode: string;
 }
 
 @ObjectType()
@@ -43,8 +43,6 @@ export class User extends BaseEntity {
     id: number;
 
     @Field(() => String)
-    @IsEmail()
-    @Length(5, 150, { message: 'Email must be between 5 and 150 caracters.' })
     @Column({
         type: 'varchar',
         length: 150,
