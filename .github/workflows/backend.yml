@@ -20,10 +20,12 @@ jobs:
 
             - name: Linting
               run: |
+                  cd backend
                   npm run lint
 
             - name: Unit testing
               run: |
+                  cd backend
                   npm run test
 
               
