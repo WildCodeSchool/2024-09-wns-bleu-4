@@ -2,30 +2,41 @@ name: CI Frontend
 
 on:
   push:
-      paths:
-          - 'frontend/**'
+    paths:
+      - 'frontend/**'
 
 jobs:
-    test:
-        runs-on: ubuntu-latest
 
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v4
+  lint:
 
-            - name: Install packages
-              run: |
-                  cd frontend
-                  npm ci
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupération du code
+        uses: actions/checkout@v4
 
-            - name: Linting
-              run: |
-                  cd frontend
-                  npm run lint
+      - name: Installation des dépendances
+        run: |
+          cd frontend
+          npm ci
 
-            - name: Unit testing
-              run: |
-                  cd frontend
-                  npm run test:run
+      - name: Analyse du code (lint)
+        run: |
+          cd frontend
+          npm run lint
 
-              
+  test:
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupération du code
+        uses: actions/checkout@v4
+
+      - name: Installation des dépendances
+        run: |
+          cd frontend
+          npm ci
+
+      - name: Lancement des tests unitaires
+        run: |
+          cd frontend
+          npm run test:run
