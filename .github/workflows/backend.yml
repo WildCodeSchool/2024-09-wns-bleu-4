@@ -26,6 +26,6 @@ jobs:
             - name: Unit testing
               run: |
                   cd backend
-                  npm run test --passWithNoTests
+                  npm run test
 
               
