@@ -9,6 +9,7 @@
         "lint": "eslint .",
         "preview": "vite preview",
         "test": "vitest",
+        "test:run": "vitest run",
         "build:sass": "sass --watch src/style/index.scss:css/index.css"
     },
     "dependencies": {

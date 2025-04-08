@@ -1,0 +1,36 @@
+name: CI Frontend
+
+on:
+  push:
+      paths:
+          - 'frontend/**'
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Install packages
+              run: |
+                  cd frontend
+                  npm ci
+
+            - name: Linting
+              run: |
+                  cd frontend
+                  npm run lint
+
+            - name: Unit testing
+              run: |
+                  cd frontend
+                  npm run test:run
+
+            - name: Build
+              run: |
+                  cd frontend
+                  npm run build
+
+              
