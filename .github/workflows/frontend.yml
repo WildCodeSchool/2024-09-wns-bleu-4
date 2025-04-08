@@ -1,9 +1,6 @@
 name: CI Frontend
 
-on:
-  push:
-      paths:
-          - 'frontend/**'
+on: push
 
 jobs:
     test:

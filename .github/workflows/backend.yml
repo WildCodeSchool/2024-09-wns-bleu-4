@@ -1,9 +1,6 @@
 name: CI Backend
 
-on:
-  push:
-      paths:
-          - 'backend/**'
+on: push
 
 jobs:
     test:
