@@ -80,7 +80,7 @@ Vous avez deux options :
 ```
 
 # 4 - Ports et accès :  
-L'application est accessible sur le port 7000 en utilisant Docker    
+L'application est accessible sur le port 7007 en utilisant Docker    
 Frontend : port 5173 en développement local  
 Backend : port 4000  
 Base de données PostgreSQL incluse  
