@@ -1,0 +1,29 @@
+name: CI Backend
+
+on:
+  push:
+      paths:
+          - 'backend/**'
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Install packages
+              run: |
+                  cd backend
+                  npm ci
+
+            - name: Linting
+              run: |
+                  npm run lint
+
+            - name: Unit testing
+              run: |
+                  npm run test
+
+              
