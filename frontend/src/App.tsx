@@ -2,6 +2,7 @@ import Home from '@/pages/home/Home';
 import Layout from '@/pages/Layout';
 import Login from '@/pages/Log/Login';
 import Sign from '@/pages/Sign/Sign';
+import FilesPage from '@/pages/Files/files';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 const App = () => {
@@ -16,6 +17,7 @@ const App = () => {
                     <Route index element={<Home />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/sign" element={<Sign />} />
+                    <Route path="/files" element={<FilesPage />} />
                     <Route
                         path="/forgot-password"
                         element={<div>Mot de passe oublié</div>}

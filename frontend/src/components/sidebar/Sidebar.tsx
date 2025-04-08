@@ -9,6 +9,7 @@ const Sidebar = () => {
                 </Link>
                 <div className="sidebar-menu">
                     <Link to="/">Possibilités</Link>
+                    <Link to="/files">Mes fichiers</Link>
                     <Link to="/subscription">Abonnements</Link>
                     <Link to="/">Cas d'utilisation</Link>
                     <Link to="/about">À propos</Link>

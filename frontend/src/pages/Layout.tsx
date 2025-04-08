@@ -12,7 +12,7 @@ const Layout = () => {
             <div className="blur"></div>
             <Header />
             <Sidebar />
-            <main>
+            <main className="flex-1 overflow-auto min-h-0" style={{ gridArea: 'main' }}>
                 <Outlet />
             </main>
             <ToastContainer position="bottom-right" theme="dark" />
