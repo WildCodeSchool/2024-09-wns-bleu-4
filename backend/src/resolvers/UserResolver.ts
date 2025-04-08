@@ -68,6 +68,33 @@ class UserResolver {
         return 'The user has been created!';
     }
 
+    @Mutation(() => String)
+    async resetSendCode(@Arg('email', () => String) email: string) {
+        const user = await TempUser.findOneBy({ email });
+        if (!user) {
+            throw new Error('User not found');
+        }
+        const resetCode = Array.from({ length: 8 }, () =>
+            Math.floor(Math.random() * 10),
+        ).join('');
+        await TempUser.update({ email }, { randomCode: resetCode });
+        const resend = new Resend(process.env.RESEND_API_KEY);
+        try {
+            await resend.emails.send({
+                from: `${process.env.RESEND_EMAIL_SENDER}`,
+                to: [email],
+                subject: 'Reset Password',
+                html: `
+            <p>Veuillez consulter votre boîte mail pour réinitialiser votre mot de passe</p>
+            <p>Code de réinitialisation: ${resetCode}</p>
+            `,
+            });
+            return 'Un code de réinitialisation a été envoyé à votre adresse email';
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
+
     @Mutation(() => User)
     async createUser(
         @Arg('user', () => UserInput) newUser: User,
