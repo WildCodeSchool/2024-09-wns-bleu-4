@@ -141,8 +141,12 @@ class UserResolver {
     ) {
         const user = await User.findOneBy({ email: loginUserData.email });
 
+        if (!user) {
+            throw new Error("Aucun compte n'existe avec cette adresse email");
+        }
+
         try {
-            if (user && (await this.isPasswordCorrect(user, loginUserData))) {
+            if (await this.isPasswordCorrect(user, loginUserData)) {
                 const token = jwt.sign(
                     { email: user.email, userRole: user.role },
                     process.env.JWT_SECRET_KEY as Secret,
@@ -153,11 +157,12 @@ class UserResolver {
                 );
 
                 return 'The user has been logged in!';
+            } else {
+                throw new Error('Mot de passe incorrect');
             }
         } catch (error) {
-            throw new Error(error);
+            throw new Error(error.message || 'Erreur lors de la connexion');
         }
-        return 'There was an error during login.';
     }
 
     @Mutation(() => String)
