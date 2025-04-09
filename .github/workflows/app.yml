@@ -30,9 +30,9 @@ jobs:
               continue-on-error: false
 
             # - name: Build Frontend
-              # run: |
-                  # cd frontend
-                  # npm run build
+            # run: |
+            # cd frontend
+            # npm run build
 
             - name: Check container logs
               if: always()
