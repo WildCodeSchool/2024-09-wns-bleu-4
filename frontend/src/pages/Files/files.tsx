@@ -12,12 +12,21 @@ const fetcher = (url: string) => axios.get(url).then(res => res.data);
 
 // React.FR fait un typage automatique des props
 const FilesPage: React.FC = () => {
-  const { data } = useSWR('/storage/files', fetcher);
+  const { data, mutate } = useSWR('/storage/files', fetcher);
 
   const files: File[] = data?.files.map((filename: string) => ({
     name: filename,
     url: `/storage/uploads/${filename}`,
   })) || [];
+
+  const handleDelete = async (filename: string) => {
+    try {
+      await axios.delete(`/storage/delete/${filename}`);
+      mutate(); // Rafraîchir la liste des fichiers
+    } catch (error) {
+      console.error('Erreur lors de la suppression du fichier:', error);
+    }
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -30,6 +39,7 @@ const FilesPage: React.FC = () => {
             key={file.name}
             name={file.name}
             url={file.url}
+            onDelete={handleDelete}
           />
         ))}
       </div>
