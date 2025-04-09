@@ -25,6 +25,7 @@
         "motion": "^12.4.2",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
+        "react-dropzone": "^14.3.8",
         "react-hook-form": "^7.55.0",
         "react-router-dom": "^7.1.5",
         "react-toastify": "^11.0.5",
