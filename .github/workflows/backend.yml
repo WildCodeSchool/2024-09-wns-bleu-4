@@ -1,39 +1,39 @@
 name: CI Backend
 
 on:
-  push:
-    paths:
-      - 'backend/**'
+    push:
+        paths:
+            - 'backend/**'
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Récupération du code
-        uses: actions/checkout@v4
+    lint:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Récupération du code
+              uses: actions/checkout@v4
 
-      - name: Installation des dépendances
-        run: |
-          cd backend
-          npm ci
+            - name: Installation des dépendances
+              run: |
+                  cd backend
+                  npm ci
 
-      - name: Linting
-        run: |
-          cd backend
-          npm run lint
+            - name: Linting
+              run: |
+                  cd backend
+                  npm run lint
 
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Récupération du code
-        uses: actions/checkout@v4
+    test:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Récupération du code
+              uses: actions/checkout@v4
 
-      - name: Installation des dépendances
-        run: |
-          cd backend
-          npm ci
+            - name: Installation des dépendances
+              run: |
+                  cd backend
+                  npm ci
 
-      - name: Lancement des tests unitaires
-        run: |
-          cd backend
-          npm run test:run
+            - name: Lancement des tests unitaires
+              run: |
+                  cd backend
+                  npm run test:ci
