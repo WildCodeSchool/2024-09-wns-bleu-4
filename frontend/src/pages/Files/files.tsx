@@ -10,7 +10,7 @@ interface File {
 
 const fetcher = (url: string) => axios.get(url).then(res => res.data);
 
-// React.FR fait un typage automatique des props
+// React.FR fait le typage automatiquement des props
 const FilesPage: React.FC = () => {
   const { data, mutate } = useSWR('/storage/files', fetcher);
 
@@ -20,12 +20,8 @@ const FilesPage: React.FC = () => {
   })) || [];
 
   const handleDelete = async (filename: string) => {
-    try {
       await axios.delete(`/storage/delete/${filename}`);
-      mutate(); // Rafraîchir la liste des fichiers
-    } catch (error) {
-      console.error('Erreur lors de la suppression du fichier:', error);
-    }
+      mutate(); // Rafraichi la liste 
   };
 
   return (
