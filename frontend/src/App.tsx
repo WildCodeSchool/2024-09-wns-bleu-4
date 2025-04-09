@@ -10,7 +10,7 @@ const App = () => {
             <Routes>
                 {/* 
                     Avec cette config la barre latérale "importé dans Layout" reste toujours visible à gauche.
-                */}
+                    */}
 
                 <Route path="/" element={<Layout />}>
                     <Route index element={<Home />} />
