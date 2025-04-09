@@ -3,6 +3,7 @@ import Logo from '@/components/Logo';
 import { User, Menu, X, LogOut } from 'lucide-react';
 import { useState } from 'react';
 import { useLogoutMutation } from '@/generated/graphql-types';
+import { toast } from 'react-toastify';
 
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -17,6 +18,7 @@ const Header = () => {
     const handleLogout = () => {
         logout();
         localStorage.removeItem('token');
+        toast.success('Déconnexion réussie');
         navigate('/');
     }
 
