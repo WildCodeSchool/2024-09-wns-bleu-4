@@ -55,7 +55,7 @@ class UserResolver {
 
         try {
             await resend.emails.send({
-                from: `${process.env.RESEND_EMAIL_SENDER}`,
+                from: `verify@${process.env.RESEND_EMAIL_DOMAIN}`,
                 to: [newUserData.email],
                 subject: 'Verify Account Creation',
                 react: VerifyAccountEmail({
@@ -81,13 +81,13 @@ class UserResolver {
         const resend = new Resend(process.env.RESEND_API_KEY);
         try {
             await resend.emails.send({
-                from: `${process.env.RESEND_EMAIL_SENDER}`,
+                from: `recovery@${process.env.RESEND_EMAIL_DOMAIN}`,
                 to: [email],
                 subject: 'Reset Password',
                 html: `
-            <p>Veuillez consulter votre boîte mail pour réinitialiser votre mot de passe</p>
-            <p>Code de réinitialisation: ${resetCode}</p>
-            `,
+                    <p>Veuillez consulter votre boîte mail pour réinitialiser votre mot de passe</p>
+                    <p>Code de réinitialisation: ${resetCode}</p>
+                `,
             });
             return 'Un code de réinitialisation a été envoyé à votre adresse email';
         } catch (error) {
