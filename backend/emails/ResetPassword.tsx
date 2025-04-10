@@ -4,13 +4,13 @@ import {
     Container,
     Head,
     Html,
-    Img,
     Link,
     Preview,
     Section,
     Tailwind,
     Text,
 } from '@react-email/components';
+//@ts-ignore
 import React from 'react';
 
 interface ResetPasswordEmailProps {
