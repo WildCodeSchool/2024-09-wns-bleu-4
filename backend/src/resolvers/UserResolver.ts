@@ -4,6 +4,7 @@ import { IsEmail, Length, Matches } from 'class-validator';
 import jwt, { Secret } from 'jsonwebtoken';
 import { Resend } from 'resend';
 import { VerifyAccountEmail } from '@/emails/VerifyAccount'
+import { ResetPasswordEmail } from '@/emails/ResetPassword'
 import {
     Arg,
     Ctx,
@@ -84,10 +85,10 @@ class UserResolver {
                 from: `recovery@${process.env.RESEND_EMAIL_DOMAIN}`,
                 to: [email],
                 subject: 'Reset Password',
-                html: `
-                    <p>Veuillez consulter votre boîte mail pour réinitialiser votre mot de passe</p>
-                    <p>Code de réinitialisation: ${resetCode}</p>
-                `,
+                react: ResetPasswordEmail({
+                    userEmail: email,
+                    resetPasswordLink: "#" // TODO: Replacer par le vrai lien une fois la feature en place + Supprimer ce commentaire
+                }),
             });
             return 'Un code de réinitialisation a été envoyé à votre adresse email';
         } catch (error) {

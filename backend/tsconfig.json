@@ -2,6 +2,8 @@
     "compilerOptions": {
         "paths": {
             "@/*": ["./src/*"],
+            "@/public/*": ["./public/*"],
+            "@/emails/*": ["./emails/*"]
         },
         "target": "es2017",
         "module": "CommonJS",
