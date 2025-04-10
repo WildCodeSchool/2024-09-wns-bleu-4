@@ -4,5 +4,7 @@
 @use '@/components/sidebar/sidebar' as sidebar;
 @use '@/components/header/header' as header;
 @use '@/components/background/background' as background;
+@use '@/pages/Upload/uploadPage' as upload;
+
 @use 'btn' as btn;
 @use 'global' as global;

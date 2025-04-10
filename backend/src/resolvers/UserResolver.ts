@@ -40,27 +40,39 @@ export class UserInfo {
 
 @Resolver(User)
 class UserResolver {
-    @Mutation(() => String)
-    async register(@Arg('data', () => UserInput) newUserData: User) {
-        const codeToConfirm = Array.from({ length: 8 }, () =>
+
+
+    async createVerificationCode(email: string, code: string) {
+        return jwt.sign(
+            { email, code },
+            process.env.JWT_SECRET_KEY as Secret,
+            { expiresIn: '10m' },
+        );
+    }
+
+    async codeToVerify(): Promise<string> {
+        return Array.from({ length: 8 }, () =>
             Math.floor(Math.random() * 10),
         ).join('');
+    }
 
-        const token = jwt.sign(
-            { email: newUserData.email, randomCode: codeToConfirm },
-            process.env.JWT_SECRET_KEY as Secret,
-            { expiresIn: '10min' },
-        );
+    @Mutation(() => String)
+    async register(@Arg('data', () => UserInput) newUserData: User) {
 
-        if (typeof window !== 'undefined') {
-            localStorage.setItem('emailVerificationToken', token);
-        }
+        const codeToConfirm = await this.codeToVerify();
 
         await TempUser.save({
             email: newUserData.email,
             password: await argon2.hash(newUserData.password),
             randomCode: codeToConfirm,
         });
+
+
+        const token = this.createVerificationCode(
+            newUserData.email,
+            codeToConfirm
+        );
+
         const resend = new Resend(process.env.RESEND_API_KEY);
 
         try {
@@ -71,14 +83,16 @@ class UserResolver {
                 html: `
             <p>Veuillez rentrer le code secret dans la page de confirmation d'inscription</p>
             <p>Code secret: ${codeToConfirm}</p>
-            <p>Le code expire au bout de 10 minutes</p>
+            <p>Le code expire après 10 minutes</p>
             `,
             });
         } catch (error) {
             throw new Error(error);
         }
-        return 'The user has been created!';
+        return {token};
     }
+
+
 
     @Mutation(() => String)
     async resetSendCode(@Arg('email', () => String) email: string) {
@@ -86,25 +100,30 @@ class UserResolver {
         if (!user) {
             throw new Error('User not found');
         }
-        const resetCode = Array.from({ length: 8 }, () =>
-            Math.floor(Math.random() * 10),
-        ).join('');
+
+        const resetCode = await this.codeToVerify();
+        const token = await this.createVerificationCode(
+            email,
+            resetCode
+        );
+
         await TempUser.update({ email }, { randomCode: resetCode });
         const resend = new Resend(process.env.RESEND_API_KEY);
         try {
             await resend.emails.send({
-                from: `recovery@${process.env.RESEND_EMAIL_DOMAIN}`,
+                from: `${process.env.RESEND_EMAIL_SENDER}`,
                 to: [email],
                 subject: 'Reset Password',
                 html: `
-                    <p>Veuillez consulter votre boîte mail pour réinitialiser votre mot de passe</p>
-                    <p>Code de réinitialisation: ${resetCode}</p>
-                `,
+            <p>Veuillez consulter votre boîte mail pour réinitialiser votre mot de passe</p>
+            <p>Code de réinitialisation: ${resetCode}</p>
+            `,
             });
-            return 'Un code de réinitialisation a été envoyé à votre adresse email';
+            return token;
         } catch (error) {
             throw new Error(error.message);
         }
+        
     }
 
     @Mutation(() => User)
@@ -125,16 +144,27 @@ class UserResolver {
         const tempUser = await TempUser.findOneByOrFail({
             randomCode: codeByUser,
         });
+        const token = tempUser.randomCode;
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY as Secret);
+            if (decoded !== token) {
+                return { success: false, message: 'Code incorrect' };
+            }
+        } catch (err) {
+            return { success: false, message: err };
+        }
 
         const existingUser = await User.findOneBy({ email: tempUser.email });
 
         if (existingUser) {
             throw new Error('A user with this email already exists');
         }
+
         await User.save({
             email: tempUser.email,
             password: tempUser.password,
         });
+
         tempUser.remove();
         return 'ok';
     }
@@ -153,12 +183,8 @@ class UserResolver {
     ) {
         const user = await User.findOneBy({ email: loginUserData.email });
 
-        if (!user) {
-            throw new Error("Aucun compte n'existe avec cette adresse email");
-        }
-
         try {
-            if (await this.isPasswordCorrect(user, loginUserData)) {
+            if (user && (await this.isPasswordCorrect(user, loginUserData))) {
                 const token = jwt.sign(
                     { email: user.email, userRole: user.role },
                     process.env.JWT_SECRET_KEY as Secret,
@@ -169,24 +195,11 @@ class UserResolver {
                 );
 
                 return 'The user has been logged in!';
-            } else {
-                throw new Error('Mot de passe incorrect');
             }
         } catch (error) {
-            throw new Error(error.message || 'Erreur lors de la connexion');
+            throw new Error(error);
         }
         return 'There was an error during login.';
-    }
-
-    @Mutation(() => Boolean)
-    async validateToken(@Arg('token', () => String) token: string): Promise<boolean> {
-        try {
-            const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY as Secret);
-            return !!decoded; // Si le token est valide, renvoyer true
-        } catch (error) {
-            console.error('Erreur lors de la validation du token :', error);
-            return false; // Si le token est invalide ou expiré
-        }
     }
 
     @Mutation(() => String)
