@@ -73,6 +73,7 @@ export type Mutation = {
   login: Scalars['String']['output'];
   logout: Scalars['String']['output'];
   register: Scalars['String']['output'];
+  resetSendCode: Scalars['String']['output'];
 };
 
 
@@ -148,6 +149,11 @@ export type MutationLoginArgs = {
 
 export type MutationRegisterArgs = {
   data: UserInput;
+};
+
+
+export type MutationResetSendCodeArgs = {
+  email: Scalars['String']['input'];
 };
 
 export type Query = {

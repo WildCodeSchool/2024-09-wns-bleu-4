@@ -6,11 +6,32 @@ import {
 } from '@/components/ui/input-otp';
 import { useConfirmEmailMutation } from '@/generated/graphql-types';
 import { cn } from '@/lib/utils';
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-// Fait toi plaisir Daniel pour custom c'est vraiment juste une base on pourrait peut etre meme faire un composant plus generique avec Form plus tard
+const validateToken = async (token: string): Promise<boolean> => {
+    try {
+        const response = await fetch('/api/validate-token', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ token }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Erreur lors de la validation du token');
+        }
+
+        const data = await response.json();
+        return data.isValid; // Le back-end retourne si le token est valide
+    } catch (error) {
+        console.error('Erreur lors de la validation du token :', error);
+        return false;
+    }
+};
+
 export const ConfirmForm: React.FC = () => {
     const [confirmEmail] = useConfirmEmailMutation();
     const navigate = useNavigate();
@@ -33,6 +54,24 @@ export const ConfirmForm: React.FC = () => {
             }
         }
     };
+
+    const handleTokenVerification = async () => {
+        const token = localStorage.getItem('emailVerificationToken');
+        if (token) {
+            const isValid = await validateToken(token);
+            if (isValid) {
+                toast.success('Token valide, vous pouvez continuer.');
+            } else {
+                toast.error('Token invalide ou expiré.');
+            }
+        } else {
+            toast.error('Aucun token trouvé.');
+        }
+    };
+
+    useEffect(() => {
+        handleTokenVerification();
+    }, []);
 
     return (
         <div className={cn('form-log')}>

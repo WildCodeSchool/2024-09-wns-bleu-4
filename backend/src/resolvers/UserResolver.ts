@@ -45,6 +45,17 @@ class UserResolver {
         const codeToConfirm = Array.from({ length: 8 }, () =>
             Math.floor(Math.random() * 10),
         ).join('');
+
+        const token = jwt.sign(
+            { email: newUserData.email, randomCode: codeToConfirm },
+            process.env.JWT_SECRET_KEY as Secret,
+            { expiresIn: '10min' },
+        );
+
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('emailVerificationToken', token);
+        }
+
         await TempUser.save({
             email: newUserData.email,
             password: await argon2.hash(newUserData.password),
@@ -60,6 +71,7 @@ class UserResolver {
                 html: `
             <p>Veuillez rentrer le code secret dans la page de confirmation d'inscription</p>
             <p>Code secret: ${codeToConfirm}</p>
+            <p>Le code expire au bout de 10 minutes</p>
             `,
             });
         } catch (error) {
@@ -158,6 +170,17 @@ class UserResolver {
             throw new Error(error);
         }
         return 'There was an error during login.';
+    }
+
+    @Mutation(() => Boolean)
+    async validateToken(@Arg('token', () => String) token: string): Promise<boolean> {
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY as Secret);
+            return !!decoded; // Si le token est valide, renvoyer true
+        } catch (error) {
+            console.error('Erreur lors de la validation du token :', error);
+            return false; // Si le token est invalide ou expiré
+        }
     }
 
     @Mutation(() => String)

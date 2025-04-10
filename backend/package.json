@@ -18,6 +18,7 @@
         "argon2": "^0.41.1",
         "class-validator": "^0.14.1",
         "cookie": "^1.0.2",
+        "date-fns": "^4.1.0",
         "dotenv": "^16.4.7",
         "graphql": "^16.10.0",
         "jsonwebtoken": "^9.0.2",

@@ -26,3 +26,9 @@ export const CONFIRM_EMAIL = gql`
         confirmEmail(codeByUser: $codeByUser)
     }
 `;
+
+export const VERIFY_TOKEN = gql`
+    mutation ValidateToken($token: String!) {
+        validateToken(token: $token)
+    }
+`;
