@@ -9,6 +9,7 @@ import {
     Tailwind,
     Text,
 } from '@react-email/components';
+//@ts-ignore
 import React from 'react';
 
 interface VerifyAccountEmailProps {
