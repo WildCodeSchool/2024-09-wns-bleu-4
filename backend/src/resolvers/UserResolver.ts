@@ -3,6 +3,8 @@ import * as argon2 from 'argon2';
 import { IsEmail, Length, Matches } from 'class-validator';
 import jwt, { Secret } from 'jsonwebtoken';
 import { Resend } from 'resend';
+import { VerifyAccountEmail } from '@/emails/VerifyAccount'
+import { ResetPasswordEmail } from '@/emails/ResetPassword'
 import {
     Arg,
     Ctx,
@@ -56,11 +58,10 @@ class UserResolver {
             await resend.emails.send({
                 from: `verify@${process.env.RESEND_EMAIL_DOMAIN}`,
                 to: [newUserData.email],
-                subject: 'Verify Email',
-                html: `
-                    <p>Veuillez rentrer le code secret dans la page de confirmation d'inscription</p>
-                    <p>Code secret: ${codeToConfirm}</p>
-                `,
+                subject: 'Verify Account Creation',
+                react: VerifyAccountEmail({
+                    validationCode: codeToConfirm
+                }),
             });
         } catch (error) {
             throw new Error(error);
@@ -84,10 +85,10 @@ class UserResolver {
                 from: `recovery@${process.env.RESEND_EMAIL_DOMAIN}`,
                 to: [email],
                 subject: 'Reset Password',
-                html: `
-                    <p>Veuillez consulter votre boîte mail pour réinitialiser votre mot de passe</p>
-                    <p>Code de réinitialisation: ${resetCode}</p>
-                `,
+                react: ResetPasswordEmail({
+                    userEmail: email,
+                    resetPasswordLink: "#" // TODO: Replacer par le vrai lien une fois la feature en place + Supprimer ce commentaire
+                }),
             });
             return 'Un code de réinitialisation a été envoyé à votre adresse email';
         } catch (error) {
