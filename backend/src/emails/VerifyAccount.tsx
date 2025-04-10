@@ -9,6 +9,7 @@ import {
     Tailwind,
     Text,
 } from '@react-email/components';
+//@ts-expect-error
 import React from 'react';
 
 interface VerifyAccountEmailProps {
@@ -72,7 +73,7 @@ export const VerifyAccountEmail = ({
                     <Text className="text-[#444] text-[15px] leading-[23px] px-10 m-0 text-center">
                         Contact{' '}
                         <Link
-                            href="mailto:login@plaid.com"
+                            href="mailto:contact@wildtransfer.cloud"
                             className="text-[#444] underline"
                         >
                             contact@wildtransfer.cloud
