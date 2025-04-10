@@ -4,14 +4,15 @@ const Sidebar = () => {
     return (
         <aside className="sidebar">
             <nav data-testid="sidebar-nav">
-                <Link to="/" className="sidebar-dashboard">
+                <Link to="/upload" className="sidebar-dashboard">
                     Transférez vos fichiers
                 </Link>
                 <div className="sidebar-menu">
                     <Link to="/">Possibilités</Link>
+                    <Link to="/files">Mes fichiers</Link>
                     <Link to="/subscription">Abonnements</Link>
-                    <Link to="/">Cas d'utilisation</Link>
-                    <Link to="/about">À propos</Link>
+                    {/* <Link to="/">Cas d'utilisation</Link>
+                    <Link to="/about">À propos</Link> */}
                 </div>
                 <div className="sidebar-footer">
                     <Link to="/cgu">CGU</Link>

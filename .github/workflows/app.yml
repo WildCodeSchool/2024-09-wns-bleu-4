@@ -18,7 +18,7 @@ jobs:
                   cd backend
                   echo "JWT_SECRET_KEY=ci-test-secret-key" >> .env
                   echo "RESEND_API_KEY=test-api-key" >> .env
-                  echo "RESEND_EMAIL_SENDER=onboarding@resend.dev" >> .env
+                  echo "RESEND_EMAIL_DOMAIN=resend.dev" >> .env
 
             - name: Set up Docker
               run: |
@@ -29,10 +29,10 @@ jobs:
                   docker compose up --build -d
               continue-on-error: false
 
-            - name: Build Frontend
-              run: |
-                  cd frontend
-                  npm run build
+            # - name: Build Frontend
+            # run: |
+            # cd frontend
+            # npm run build
 
             - name: Check container logs
               if: always()

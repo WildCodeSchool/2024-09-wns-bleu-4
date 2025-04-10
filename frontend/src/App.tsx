@@ -2,6 +2,8 @@ import Home from '@/pages/home/Home';
 import Layout from '@/pages/Layout';
 import Login from '@/pages/Log/Login';
 import Sign from '@/pages/Sign/Sign';
+import FilesPage from '@/pages/Files/files';
+import UploadPage from '@/pages/Upload/UploadPage';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 const App = () => {
@@ -10,12 +12,14 @@ const App = () => {
             <Routes>
                 {/* 
                     Avec cette config la barre latérale "importé dans Layout" reste toujours visible à gauche.
-                */}
+                    */}
 
                 <Route path="/" element={<Layout />}>
                     <Route index element={<Home />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/sign" element={<Sign />} />
+                    <Route path="/files" element={<FilesPage />} />
+                    <Route path="/upload" element={<UploadPage />} />
                     <Route
                         path="/forgot-password"
                         element={<div>Mot de passe oublié</div>}

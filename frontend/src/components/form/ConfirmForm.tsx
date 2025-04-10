@@ -27,7 +27,7 @@ export const ConfirmForm: React.FC = () => {
                 navigate('/');
             } catch (error) {
                 toast.error(
-                    "Erreur lors de la confirmation de l'email. Veuillez réessayer.",
+                    'Le code saisie est incorrect ou a expiré, veuillez réessayer.',
                 );
                 console.error('Email confirmation error:', error);
             }
