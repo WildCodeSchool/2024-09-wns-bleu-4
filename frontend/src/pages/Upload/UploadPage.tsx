@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { mutate } from 'swr';
+import ContactList from '../../components/contactList/ContactList';
 import './uploadPage.scss';
 
 const UploadPage = () => {
@@ -52,53 +53,62 @@ const UploadPage = () => {
     return (
         <div className="upload-container">
             <h1>Transférez vos fichiers</h1>
-            <form onSubmit={handleSubmit} className="upload-form">
-                <div 
-                    {...getRootProps()} 
-                    className={`dropzone ${isDragActive ? 'active' : ''}`}
-                >
-                    <input {...getInputProps()} />
-                    {isDragActive ? (
-                        <p>Déposez les fichiers ici...</p>
-                    ) : (
-                        <p>Glissez-déposez vos fichiers ici ou cliquez pour sélectionner</p>
-                    )}
+            
+            <div className="page-layout">
+                <div className="upload-section">
+                    <form onSubmit={handleSubmit} className="upload-form">
+                        <div 
+                            {...getRootProps()} 
+                            className={`dropzone ${isDragActive ? 'active' : ''}`}
+                        >
+                            <input {...getInputProps()} />
+                            {isDragActive ? (
+                                <p>Déposez les fichiers ici...</p>
+                            ) : (
+                                <p>Glissez-déposez vos fichiers ici ou cliquez pour sélectionner</p>
+                            )}
+                        </div>
+
+                        {files.length > 0 && (
+                            <div className="files-list">
+                                <h2>Fichiers sélectionnés :</h2>
+                                <ul>
+                                    {files.map((file, index) => (
+                                        <li key={index} className="file-item">
+                                            <span className="file-name">{file.name}</span>
+                                            <button 
+                                                type="button"
+                                                onClick={() => removeFile(index)}
+                                                className="remove-file"
+                                            >
+                                                ×
+                                            </button>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+
+                        {successMessage && (
+                            <div className="success-message">
+                                {successMessage}
+                            </div>
+                        )}
+
+                        <button 
+                            type="submit" 
+                            className="submit-button"
+                            disabled={files.length === 0 || isUploading}
+                        >
+                            {isUploading ? 'Envoi en cours...' : 'Envoyer les fichiers'}
+                        </button>
+                    </form>
                 </div>
-
-                {files.length > 0 && (
-                    <div className="files-list">
-                        <h2>Fichiers sélectionnés :</h2>
-                        <ul>
-                            {files.map((file, index) => (
-                                <li key={index} className="file-item">
-                                    <span className="file-name">{file.name}</span>
-                                    <button 
-                                        type="button"
-                                        onClick={() => removeFile(index)}
-                                        className="remove-file"
-                                    >
-                                        ×
-                                    </button>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                )}
-
-                {successMessage && (
-                    <div className="success-message">
-                        {successMessage}
-                    </div>
-                )}
-
-                <button 
-                    type="submit" 
-                    className="submit-button"
-                    disabled={files.length === 0 || isUploading}
-                >
-                    {isUploading ? 'Envoi en cours...' : 'Envoyer les fichiers'}
-                </button>
-            </form>
+                
+                <div className="contacts-section">
+                    <ContactList />
+                </div>
+            </div>
         </div>
     );
 };

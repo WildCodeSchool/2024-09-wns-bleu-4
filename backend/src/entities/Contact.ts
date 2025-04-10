@@ -21,11 +21,11 @@ export class Contact extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Field(() => ID)
+  @Field(() => User)
   @ManyToOne(() => User)
   sourceUser: User;
-
-  @Field(() => ID)
+  
+  @Field(() => User)
   @ManyToOne(() => User)
   targetUser: User;
 
