@@ -42,6 +42,16 @@ class ResourceResolver {
         return await Resource.findOne({ where: { id } });
     }
 
+    @Query(() => [Resource])
+    async getResourcesByUserId(
+        @Arg('userId', () => ID) userId: number,
+    ): Promise<Resource[]> {
+        return await Resource.find({
+            where: { user: { id: userId } },
+            relations: ['user'],
+        });
+    }
+
     @Mutation(() => Resource)
     async createResource(
         @Arg('data', () => ResourceInput) data: ResourceInput,

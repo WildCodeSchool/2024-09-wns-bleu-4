@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import path from 'path';
 import fs from 'fs';
+import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -19,7 +19,7 @@ export const uploadFile = (req: Request, res: Response) => {
     res.json({
         message: 'Fichier uploadé avec succès !',
         filename: req.file.filename,
-        path: `/uploads/${req.file.filename}`,
+        path: `/storage/uploads/${req.file.filename}`,
     });
 };
 
