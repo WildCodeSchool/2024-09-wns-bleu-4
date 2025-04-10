@@ -2,6 +2,8 @@
     "compilerOptions": {
         "paths": {
             "@/*": ["./src/*"],
+            "@/public/*": ["./public/*"],
+            "@/emails/*": ["./emails/*"]
         },
         "target": "es2017",
         "module": "CommonJS",
@@ -24,7 +26,8 @@
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "resolveJsonModule": true,
-        "baseUrl": "."
+        "baseUrl": ".",
+        "jsx": "react-jsx",
     },
     "exclude": ["node_modules"],
     "include": ["./src/**/*.ts"]

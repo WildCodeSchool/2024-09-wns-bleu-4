@@ -34,14 +34,23 @@ export type CommentInput = {
 
 export type Contact = {
   __typename?: 'Contact';
+  createdAt: Scalars['DateTimeISO']['output'];
+  id: Scalars['ID']['output'];
   sourceUser: Scalars['ID']['output'];
+  status: ContactStatus;
   targetUser: Scalars['ID']['output'];
 };
 
 export type ContactInput = {
-  sourceUser: Scalars['ID']['input'];
-  targetUser: Scalars['ID']['input'];
+  targetUserId: Scalars['ID']['input'];
 };
+
+/** Le statut d'un contact : en attente, accepté ou refusé */
+export enum ContactStatus {
+  Accepted = 'ACCEPTED',
+  Pending = 'PENDING',
+  Refused = 'REFUSED'
+}
 
 export type Like = {
   __typename?: 'Like';
@@ -57,9 +66,9 @@ export type LikeInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  acceptContactRequest: Contact;
   confirmEmail: Scalars['String']['output'];
   createComment: Comment;
-  createContact: Contact;
   createLike: Like;
   createReport: Report;
   createResource: Resource;
@@ -72,8 +81,16 @@ export type Mutation = {
   deleteSubscription: Scalars['String']['output'];
   login: Scalars['String']['output'];
   logout: Scalars['String']['output'];
+  refuseContactRequest: Contact;
   register: Scalars['String']['output'];
+  removeContact: Scalars['Boolean']['output'];
   resetSendCode: Scalars['String']['output'];
+  sendContactRequest: Contact;
+};
+
+
+export type MutationAcceptContactRequestArgs = {
+  contactId: Scalars['ID']['input'];
 };
 
 
@@ -84,11 +101,6 @@ export type MutationConfirmEmailArgs = {
 
 export type MutationCreateCommentArgs = {
   newComment: CommentInput;
-};
-
-
-export type MutationCreateContactArgs = {
-  contactToCreate: ContactInput;
 };
 
 
@@ -147,8 +159,18 @@ export type MutationLoginArgs = {
 };
 
 
+export type MutationRefuseContactRequestArgs = {
+  contactId: Scalars['ID']['input'];
+};
+
+
 export type MutationRegisterArgs = {
   data: UserInput;
+};
+
+
+export type MutationRemoveContactArgs = {
+  contactId: Scalars['ID']['input'];
 };
 
 
@@ -156,24 +178,25 @@ export type MutationResetSendCodeArgs = {
   email: Scalars['String']['input'];
 };
 
+
+export type MutationSendContactRequestArgs = {
+  contactToCreate: ContactInput;
+};
+
 export type Query = {
   __typename?: 'Query';
-  getAllContactsFromUser: Array<Contact>;
   getAllResources: Array<Resource>;
   getAllUsers: Array<User>;
   getCommentsByResource: Array<Comment>;
   getCommentsByUser: Array<Comment>;
   getLikesByResource: Array<Like>;
   getLikesByUser: Array<Like>;
+  getMyContacts: Array<Contact>;
+  getPendingContactRequests: Array<Contact>;
   getReportsByResource: Array<Report>;
   getReportsByUser: Array<Report>;
   getResourceById?: Maybe<Resource>;
   getUserInfo: UserInfo;
-};
-
-
-export type QueryGetAllContactsFromUserArgs = {
-  userId: Scalars['ID']['input'];
 };
 
 
