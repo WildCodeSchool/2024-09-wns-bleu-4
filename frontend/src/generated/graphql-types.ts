@@ -36,9 +36,9 @@ export type Contact = {
   __typename?: 'Contact';
   createdAt: Scalars['DateTimeISO']['output'];
   id: Scalars['ID']['output'];
-  sourceUser: Scalars['ID']['output'];
+  sourceUser: User;
   status: ContactStatus;
-  targetUser: Scalars['ID']['output'];
+  targetUser: User;
 };
 
 export type ContactInput = {
@@ -303,6 +303,11 @@ export type UserInput = {
   password: Scalars['String']['input'];
 };
 
+export type GetMyContactsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetMyContactsQuery = { __typename?: 'Query', getMyContacts: Array<{ __typename?: 'Contact', id: string, status: ContactStatus, createdAt: any, sourceUser: { __typename?: 'User', id: string, email: string }, targetUser: { __typename?: 'User', id: string, email: string } }> };
+
 export type LoginMutationVariables = Exact<{
   data: UserInput;
 }>;
@@ -335,6 +340,55 @@ export type GetAllUsersQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetAllUsersQuery = { __typename?: 'Query', getAllUsers: Array<{ __typename?: 'User', id: string, email: string }> };
 
 
+export const GetMyContactsDocument = gql`
+    query GetMyContacts {
+  getMyContacts {
+    id
+    status
+    createdAt
+    sourceUser {
+      id
+      email
+    }
+    targetUser {
+      id
+      email
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetMyContactsQuery__
+ *
+ * To run a query within a React component, call `useGetMyContactsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMyContactsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMyContactsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetMyContactsQuery(baseOptions?: Apollo.QueryHookOptions<GetMyContactsQuery, GetMyContactsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetMyContactsQuery, GetMyContactsQueryVariables>(GetMyContactsDocument, options);
+      }
+export function useGetMyContactsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMyContactsQuery, GetMyContactsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetMyContactsQuery, GetMyContactsQueryVariables>(GetMyContactsDocument, options);
+        }
+export function useGetMyContactsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetMyContactsQuery, GetMyContactsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetMyContactsQuery, GetMyContactsQueryVariables>(GetMyContactsDocument, options);
+        }
+export type GetMyContactsQueryHookResult = ReturnType<typeof useGetMyContactsQuery>;
+export type GetMyContactsLazyQueryHookResult = ReturnType<typeof useGetMyContactsLazyQuery>;
+export type GetMyContactsSuspenseQueryHookResult = ReturnType<typeof useGetMyContactsSuspenseQuery>;
+export type GetMyContactsQueryResult = Apollo.QueryResult<GetMyContactsQuery, GetMyContactsQueryVariables>;
 export const LoginDocument = gql`
     mutation Login($data: UserInput!) {
   login(data: $data)
