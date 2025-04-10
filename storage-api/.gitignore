@@ -1,5 +1,7 @@
 # Node.js dependencies
 node_modules/
 
+uploads/
+
 # Package lock file
 package-lock.json

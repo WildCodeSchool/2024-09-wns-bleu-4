@@ -1,10 +1,11 @@
 import Form from '@/components/form/Form';
-import { Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { useLoginMutation } from '@/generated/graphql-types';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const Login = () => {
     const [login, { loading }] = useLoginMutation();
+    const navigate = useNavigate();
 
     const handleSubmit = async (email: string, password: string) => {
         try {
@@ -15,6 +16,7 @@ const Login = () => {
             if (response.data?.login) {
                 localStorage.setItem('token', response.data.login);
                 toast.success('Connexion réussie');
+                navigate('/');
             }
         } catch (err) {
             console.error('Erreur de connexion :', err);

@@ -2,7 +2,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 
 const formSchema = z.object({
@@ -28,8 +27,6 @@ interface FormProps {
 const Form = ({ title, onSubmit, loading, links, error }: FormProps) => {
     const [showPassword, setShowPassword] = useState(false);
 
-    const navigate = useNavigate();
-
     const {
         register,
         handleSubmit,
@@ -41,7 +38,6 @@ const Form = ({ title, onSubmit, loading, links, error }: FormProps) => {
 
     const submitForm = async (data: FormData) => {
         await onSubmit(data.email, data.password);
-        navigate("/");
     };
 
     return (
