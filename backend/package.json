@@ -9,13 +9,16 @@
         "start": "tsx ./src/index.ts",
         "lint": "eslint .",
         "test": "jest --passWithNoTests",
-        "test:ci": "jest --ci --passWithNoTests"
+        "test:ci": "jest --ci --passWithNoTests",
+        "email": "email dev"
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "dependencies": {
         "@apollo/server": "^4.11.3",
+        "@react-email/components": "0.0.36",
+        "@react-email/tailwind": "1.0.4",
         "argon2": "^0.41.1",
         "class-validator": "^0.14.1",
         "cookie": "^1.0.2",
@@ -23,6 +26,7 @@
         "graphql": "^16.10.0",
         "jsonwebtoken": "^9.0.2",
         "pg": "^8.13.3",
+        "react-email": "4.0.7",
         "reflect-metadata": "^0.2.2",
         "resend": "^4.1.2",
         "type-graphql": "^2.0.0-rc.2",

@@ -3,6 +3,7 @@ import * as argon2 from 'argon2';
 import { IsEmail, Length, Matches } from 'class-validator';
 import jwt, { Secret } from 'jsonwebtoken';
 import { Resend } from 'resend';
+import { VerifyAccountEmail } from '@/emails/VerifyAccount'
 import {
     Arg,
     Ctx,
@@ -56,11 +57,10 @@ class UserResolver {
             await resend.emails.send({
                 from: `${process.env.RESEND_EMAIL_SENDER}`,
                 to: [newUserData.email],
-                subject: 'Verify Email',
-                html: `
-            <p>Veuillez rentrer le code secret dans la page de confirmation d'inscription</p>
-            <p>Code secret: ${codeToConfirm}</p>
-            `,
+                subject: 'Verify Account Creation',
+                react: VerifyAccountEmail({
+                    validationCode: codeToConfirm
+                }),
             });
         } catch (error) {
             throw new Error(error);
