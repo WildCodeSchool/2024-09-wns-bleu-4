@@ -1,8 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import useSWR from 'swr';
-import FileCard from '../../components/FileCard';
-import HeadMeta from '@/components/HeadMeta';
+import FileCard from '@/components/FileCard';
 
 interface File {
     name: string;
@@ -28,10 +27,6 @@ const FilesPage: React.FC = () => {
 
     return (
         <>
-            <HeadMeta
-                title="Mes fichiers"
-                description="Liste de tous vos fichiers"
-            />
             <div className="container mx-auto px-4 py-8">
                 <h1 className="text-3xl font-bold text-white mb-8 text-center">
                     Liste des fichiers disponibles
