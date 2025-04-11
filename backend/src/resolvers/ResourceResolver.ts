@@ -11,7 +11,7 @@ import {
 } from 'type-graphql';
 
 @InputType()
-export class ResourceInput implements Partial<ResourceInput> {
+export class ResourceInput implements Partial<Resource> {
     @Field(() => ID)
     userId: number;
 
@@ -69,8 +69,17 @@ class ResourceResolver {
     }
 
     @Mutation(() => String)
-    async deleteResource(@Arg('id', () => ID) id: User['id']): Promise<String> {
-        const resource = await Resource.findOne({ where: { id } });
+    async deleteResource(@Arg('id', () => ID) id: string): Promise<String> {
+        const resource = await Resource.findOne({
+            where: { id: parseInt(id) },
+            relations: [
+                'user',
+                'usersWithAccess',
+                'likes',
+                'comments',
+                'reports',
+            ],
+        });
 
         if (!resource) {
             throw new Error('Resource not found');

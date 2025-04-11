@@ -10,7 +10,6 @@ import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-// Fait toi plaisir Daniel pour custom c'est vraiment juste une base on pourrait peut etre meme faire un composant plus generique avec Form plus tard
 export const ConfirmForm: React.FC = () => {
     const [confirmEmail] = useConfirmEmailMutation();
     const navigate = useNavigate();

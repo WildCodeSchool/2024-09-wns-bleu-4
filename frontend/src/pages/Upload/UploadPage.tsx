@@ -1,8 +1,8 @@
+import { CREATE_RESOURCE } from '@/graphql/Resource/mutations';
 import { useMutation } from '@apollo/client';
 import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { mutate } from 'swr';
-import { CREATE_RESOURCE } from '../../graphql/Resource/mutations';
 import './uploadPage.scss';
 
 const UploadPage = () => {
@@ -49,26 +49,15 @@ const UploadPage = () => {
         setErrorMessage(null);
 
         try {
-            const formData = new FormData();
-            formData.append('file', file);
+            const secureName = file.name.replace(/\s+/g, '_');
+            const fileUrl = `/storage/uploads/${secureName}`;
 
-            const storageResponse = await fetch('/storage/upload', {
-                method: 'POST',
-                body: formData,
-            });
-
-            if (!storageResponse.ok) {
-                throw new Error("Erreur lors de l'upload du fichier");
-            }
-
-            const storageResult = await storageResponse.json();
-
-            await createResource({
+            const resourceResponse = await createResource({
                 variables: {
                     data: {
                         name: file.name,
-                        path: storageResult.path,
-                        url: storageResult.path,
+                        path: fileUrl,
+                        url: fileUrl,
                         description:
                             description || `Fichier uploadé : ${file.name}`,
                         userId: 1,
@@ -76,12 +65,29 @@ const UploadPage = () => {
                 },
             });
 
-            setFile(null);
-            setDescription('');
-            mutate('/storage/files');
-            setSuccessMessage(
-                '✅ Le fichier a été envoyé et enregistré avec succès !',
-            );
+            if (resourceResponse.data) {
+                const formData = new FormData();
+                formData.append('file', file);
+
+                const storageUrl = `/storage/upload?filename=${encodeURIComponent(
+                    secureName,
+                )}`;
+                const storageResponse = await fetch(storageUrl, {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (!storageResponse.ok) {
+                    throw new Error("Erreur lors de l'upload du fichier");
+                }
+
+                setFile(null);
+                setDescription('');
+                mutate('/storage/files');
+                setSuccessMessage(
+                    '✅ Le fichier a été envoyé et enregistré avec succès !',
+                );
+            }
         } catch (error) {
             console.error("Erreur lors de l'upload:", error);
             setErrorMessage(
@@ -139,6 +145,7 @@ const UploadPage = () => {
                                 type="button"
                                 onClick={removeFile}
                                 className="remove-file"
+                                aria-label="Supprimer le fichier"
                             >
                                 ×
                             </button>

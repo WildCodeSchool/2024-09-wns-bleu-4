@@ -10,3 +10,8 @@ export const CREATE_RESOURCE = gql`
         }
     }
 `;
+export const DELETE_RESOURCE = gql`
+    mutation DeleteResource($deleteResourceId: ID!) {
+        deleteResource(id: $deleteResourceId)
+    }
+`;

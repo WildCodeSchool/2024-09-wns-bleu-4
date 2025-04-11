@@ -7,7 +7,7 @@ const Home = () => {
                 La solution simple et rapide pour tous vos transferts de
                 fichiers
             </h1>
-            <Link className="onlyMobile btn" to="/dashboard">
+            <Link className="onlyMobile btn" to="/upload">
                 Transférez vos fichiers
             </Link>
         </div>

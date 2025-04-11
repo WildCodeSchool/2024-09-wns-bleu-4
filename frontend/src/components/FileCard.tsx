@@ -3,10 +3,11 @@ import React from 'react';
 interface FileCardProps {
     name: string;
     url: string;
-    onDelete: (name: string) => void;
+    id: number;
+    onDelete: (id: number, name: string) => void;
 }
 
-const FileCard: React.FC<FileCardProps> = ({ name, url, onDelete }) => {
+const FileCard: React.FC<FileCardProps> = ({ name, url, id, onDelete }) => {
     const isImage = name.match(/\.(jpg|jpeg|png|gif|webp)$/i);
 
     return (
@@ -72,7 +73,7 @@ const FileCard: React.FC<FileCardProps> = ({ name, url, onDelete }) => {
                         Ouvrir
                     </a>
                     <button
-                        onClick={() => onDelete(name)}
+                        onClick={() => onDelete(id, name)}
                         className="inline-flex items-center px-3 py-1.5 bg-red-500 text-white text-sm rounded-md hover:bg-red-600 transition duration-300"
                     >
                         <svg

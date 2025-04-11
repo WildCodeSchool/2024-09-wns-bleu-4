@@ -1,19 +1,20 @@
+import { Comment } from '@/entities/Comment';
+import { Like } from '@/entities/Like';
+import { Report } from '@/entities/Report';
 import { User } from '@/entities/User';
+import { IsDate, IsEnum, Length, MaxLength } from 'class-validator';
 import { Field, ObjectType } from 'type-graphql';
 import {
     BaseEntity,
     Column,
     CreateDateColumn,
     Entity,
+    JoinTable,
     ManyToMany,
     ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Comment } from '@/entities/Comment';
-import { Like } from '@/entities/Like';
-import { Report } from '@/entities/Report';
-import { IsDate, IsEnum, Length, MaxLength } from 'class-validator';
 
 export enum FileVisibility {
     PRIVATE = 'private',
@@ -27,11 +28,11 @@ export class Resource extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => User)
+    @ManyToOne(() => User, { onDelete: 'CASCADE' })
     user: User;
 
     @Field(() => String)
-    @MaxLength(150, { message: "The file name can't exceed 150 caracters."})
+    @MaxLength(150, { message: "The file name can't exceed 150 characters." })
     @Column({
         type: 'varchar',
         length: 150,
@@ -40,7 +41,7 @@ export class Resource extends BaseEntity {
     name: string;
 
     @Field(() => String)
-    @MaxLength(100, { message: "The path name can't exceed 100 caracters."})
+    @MaxLength(100, { message: "The path name can't exceed 100 caracters." })
     @Column({
         type: 'varchar',
         length: 100,
@@ -48,7 +49,7 @@ export class Resource extends BaseEntity {
     path: string;
 
     @Field(() => String)
-    @MaxLength(150, { message: "The url length can't exceed 255 caracters."})
+    @MaxLength(150, { message: "The url length can't exceed 150 caracters." })
     @Column({
         type: 'varchar',
         length: 255,
@@ -65,7 +66,10 @@ export class Resource extends BaseEntity {
     visibility: FileVisibility;
 
     @Field(() => String)
-    @Length(30, 320, { message: "File description length must be between 30 and 320 caracters."})
+    @Length(30, 320, {
+        message:
+            'File description length must be between 30 and 320 caracters.',
+    })
     @Column({
         type: 'varchar',
         length: 320,
@@ -75,6 +79,7 @@ export class Resource extends BaseEntity {
 
     @Field(() => [User])
     @ManyToMany(() => User, (User) => User.resourceAccess)
+    @JoinTable()
     usersWithAccess: User[];
 
     @Field(() => [Like])

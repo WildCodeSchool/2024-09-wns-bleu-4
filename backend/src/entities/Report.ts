@@ -34,7 +34,9 @@ export class Report extends BaseEntity {
     @ManyToOne(() => User)
     user: User;
 
-    @ManyToOne(() => Resource, (resource) => resource.reports)
+    @ManyToOne(() => Resource, (resource) => resource.reports, {
+        onDelete: 'CASCADE',
+    })
     resource: Resource;
 
     @Field(() => String)

@@ -293,6 +293,13 @@ export type CreateResourceMutationVariables = Exact<{
 
 export type CreateResourceMutation = { __typename?: 'Mutation', createResource: { __typename?: 'Resource', name: string, description: string, path: string, url: string } };
 
+export type DeleteResourceMutationVariables = Exact<{
+  deleteResourceId: Scalars['ID']['input'];
+}>;
+
+
+export type DeleteResourceMutation = { __typename?: 'Mutation', deleteResource: string };
+
 export type GetAllResourcesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -378,6 +385,37 @@ export function useCreateResourceMutation(baseOptions?: Apollo.MutationHookOptio
 export type CreateResourceMutationHookResult = ReturnType<typeof useCreateResourceMutation>;
 export type CreateResourceMutationResult = Apollo.MutationResult<CreateResourceMutation>;
 export type CreateResourceMutationOptions = Apollo.BaseMutationOptions<CreateResourceMutation, CreateResourceMutationVariables>;
+export const DeleteResourceDocument = gql`
+    mutation DeleteResource($deleteResourceId: ID!) {
+  deleteResource(id: $deleteResourceId)
+}
+    `;
+export type DeleteResourceMutationFn = Apollo.MutationFunction<DeleteResourceMutation, DeleteResourceMutationVariables>;
+
+/**
+ * __useDeleteResourceMutation__
+ *
+ * To run a mutation, you first call `useDeleteResourceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteResourceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteResourceMutation, { data, loading, error }] = useDeleteResourceMutation({
+ *   variables: {
+ *      deleteResourceId: // value for 'deleteResourceId'
+ *   },
+ * });
+ */
+export function useDeleteResourceMutation(baseOptions?: Apollo.MutationHookOptions<DeleteResourceMutation, DeleteResourceMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteResourceMutation, DeleteResourceMutationVariables>(DeleteResourceDocument, options);
+      }
+export type DeleteResourceMutationHookResult = ReturnType<typeof useDeleteResourceMutation>;
+export type DeleteResourceMutationResult = Apollo.MutationResult<DeleteResourceMutation>;
+export type DeleteResourceMutationOptions = Apollo.BaseMutationOptions<DeleteResourceMutation, DeleteResourceMutationVariables>;
 export const GetAllResourcesDocument = gql`
     query GetAllResources {
   getAllResources {
