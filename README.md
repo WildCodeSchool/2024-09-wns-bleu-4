@@ -9,7 +9,6 @@
 - Configuration Docker avec nginx comme reverse proxy à la racine
 
 
-
 # 2 - Pour initialiser le projet :
 
 ### A. Installation des dépendances  
@@ -40,7 +39,12 @@ Dans le dossier storage-api :
 ```  
 
 ### B. Configuration requise :  
-Créer un fichier .env dans le dossier 'backend'
+Créer un fichier .env dans le dossier '/backend' avec ces champs :
+```
+JWT_SECRET_KEY=<Entrer une chaine de caractères>
+RESEND_API_KEY=<Voir section 'api-keys' dans le Discord>
+RESEND_EMAIL_DOMAIN=wildtransfer.cloud
+```
 
 
 # 3 - Pour lancer le projet :
@@ -80,7 +84,14 @@ Vous avez deux options :
 ```
 
 # 4 - Ports et accès :  
-L'application est accessible sur le port 7007 en utilisant Docker    
+
+Via Docker :
+L'application est accessible sur le port 7007 
+Un compte administrateur sera crée via Faker automatiquement avec Docker :
+email: admin@example.com
+mdp : Admin@123456
+
+En développement local :
 Frontend : port 5173 en développement local  
 Backend : port 4000  
 Base de données PostgreSQL incluse  
@@ -101,4 +112,9 @@ Adminer pour la gestion de la base de données : port 8080
 ### Terminal 3 - Storage API
 ```
   npm test
+```
+## Interface de test d'emails :
+### Terminal - Backend
+```
+  npm email
 ```

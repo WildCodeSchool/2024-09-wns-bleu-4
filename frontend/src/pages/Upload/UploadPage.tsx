@@ -1,3 +1,4 @@
+import ContactList from '@/components/ContactList/ContactList';
 import { CREATE_RESOURCE } from '@/graphql/Resource/mutations';
 import { useMutation } from '@apollo/client';
 import { useCallback, useState } from 'react';
@@ -105,70 +106,88 @@ const UploadPage = () => {
     return (
         <div className="upload-container">
             <h1>Transférez votre fichier</h1>
-            <form onSubmit={handleSubmit} className="upload-form">
-                {!file && (
-                    <div
-                        {...getRootProps()}
-                        className={`dropzone ${isDragActive ? 'active' : ''}`}
-                    >
-                        <input {...getInputProps()} />
-                        {isDragActive ? (
-                            <p>Déposez le fichier ici...</p>
-                        ) : (
-                            <p>
-                                Glissez-déposez votre fichier ici ou cliquez
-                                pour le sélectionner
-                            </p>
-                        )}
-                    </div>
-                )}
 
-                {file && (
-                    <div className="files-list">
-                        <h2>Fichier sélectionné :</h2>
-                        <div className="file-item">
-                            <span className="file-name">{file.name}</span>
-                            <div className="file-description">
-                                <textarea
-                                    placeholder="Description du fichier (minimum 30 caractères)"
-                                    value={description}
-                                    onChange={(e) =>
-                                        setDescription(e.target.value)
-                                    }
-                                    className="description-input"
-                                    rows={4}
-                                    minLength={10}
-                                    required
-                                />
-                            </div>
-                            <button
-                                type="button"
-                                onClick={removeFile}
-                                className="remove-file"
-                                aria-label="Supprimer le fichier"
+            <div className="page-layout">
+                <div className="upload-section">
+                    <form onSubmit={handleSubmit} className="upload-form">
+                        {!file && (
+                            <div
+                                {...getRootProps()}
+                                className={`dropzone ${
+                                    isDragActive ? 'active' : ''
+                                }`}
                             >
-                                ×
-                            </button>
-                        </div>
-                    </div>
-                )}
+                                <input {...getInputProps()} />
+                                {isDragActive ? (
+                                    <p>Déposez le fichier ici...</p>
+                                ) : (
+                                    <p>
+                                        Glissez-déposez votre fichier ici ou
+                                        cliquez pour le sélectionner
+                                    </p>
+                                )}
+                            </div>
+                        )}
 
-                {successMessage && (
-                    <div className="success-message">{successMessage}</div>
-                )}
+                        {file && (
+                            <div className="files-list">
+                                <h2>Fichier sélectionné :</h2>
+                                <div className="file-item">
+                                    <span className="file-name">
+                                        {file.name}
+                                    </span>
+                                    <div className="file-description">
+                                        <textarea
+                                            placeholder="Description du fichier (minimum 30 caractères)"
+                                            value={description}
+                                            onChange={(e) =>
+                                                setDescription(e.target.value)
+                                            }
+                                            className="description-input"
+                                            rows={4}
+                                            minLength={10}
+                                            required
+                                        />
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={removeFile}
+                                        className="remove-file"
+                                        aria-label="Supprimer le fichier"
+                                    >
+                                        ×
+                                    </button>
+                                </div>
+                            </div>
+                        )}
 
-                {errorMessage && (
-                    <div className="error-message">{errorMessage}</div>
-                )}
+                        {successMessage && (
+                            <div className="success-message">
+                                {successMessage}
+                            </div>
+                        )}
+                        {errorMessage && (
+                            <div className="error-message">{errorMessage}</div>
+                        )}
 
-                <button
-                    type="submit"
-                    className="submit-button"
-                    disabled={!file || isUploading || description.length < 30}
-                >
-                    {isUploading ? 'Envoi en cours...' : 'Envoyer le fichier'}
-                </button>
-            </form>
+                        <button
+                            type="submit"
+                            className="submit-button"
+                            disabled={
+                                !file || isUploading || description.length < 30
+                            }
+                        >
+                            {isUploading
+                                ? 'Envoi en cours...'
+                                : 'Envoyer le fichier'}
+                        </button>
+                    </form>
+                </div>
+
+                <div className="contacts-section">
+                    <ContactList />
+                </div>
+            </div>
         </div>
     );
 };

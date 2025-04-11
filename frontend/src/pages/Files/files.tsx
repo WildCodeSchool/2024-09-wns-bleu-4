@@ -4,7 +4,7 @@ import { GET_RESOURCES_BY_USER_ID } from '@/graphql/Resource/queries';
 import { useMutation, useQuery } from '@apollo/client';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import FileCard from '../../components/FileCard';
+import FileCard from '@/components/FileCard';
 
 type Resource = {
     id: number;
@@ -102,7 +102,7 @@ const FilesPage: React.FC = () => {
             <div className="flex flex-col items-center mb-8">
                 <h1 className="text-3xl font-bold text-white mb-4 text-center">
                     {graphqlData?.getResourcesByUserId?.length
-                        ? 'Mes fichiers'
+                        ? 'Liste des fichiers disponibles'
                         : "Vous n'avez pas encore de fichiers"}
                 </h1>
                 <Link
