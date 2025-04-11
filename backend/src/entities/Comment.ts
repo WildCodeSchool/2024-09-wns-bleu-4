@@ -22,7 +22,9 @@ export class Comment extends BaseEntity {
     @Field(() => User)
     user: User;
 
-    @ManyToOne(() => Resource, (resource) => resource.comments)
+    @ManyToOne(() => Resource, (resource) => resource.comments, {
+        onDelete: 'CASCADE',
+    })
     @Field(() => Resource)
     resource: Resource;
 
