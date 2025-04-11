@@ -8,3 +8,12 @@ export const GET_ALL_USERS = gql`
         }
     }
 `;
+
+export const GET_USER_INFO = gql`
+    query GetUserInfo {
+        getUserInfo {
+            email
+            isLoggedIn
+        }
+    }
+`;

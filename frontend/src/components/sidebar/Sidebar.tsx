@@ -1,6 +1,10 @@
+import { useAuth } from '@/hooks/useAuth';
 import { Link } from 'react-router-dom';
 
 const Sidebar = () => {
+
+    const { authCheck } = useAuth();
+
     return (
         <aside className="sidebar">
             <nav data-testid="sidebar-nav">
@@ -9,7 +13,9 @@ const Sidebar = () => {
                 </Link>
                 <div className="sidebar-menu">
                     <Link to="/">Possibilités</Link>
-                    <Link to="/files">Mes fichiers</Link>
+                    {authCheck() &&
+                        <Link to="/files">Mes fichiers</Link>
+                    }
                     <Link to="/subscription">Abonnements</Link>
                     {/* <Link to="/">Cas d'utilisation</Link>
                     <Link to="/about">À propos</Link> */}

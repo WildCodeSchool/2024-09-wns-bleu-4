@@ -4,23 +4,27 @@ import { User, Menu, X, LogOut } from 'lucide-react';
 import { useState } from 'react';
 import { useLogoutMutation } from '@/generated/graphql-types';
 import { toast } from 'react-toastify';
+import { useAuth } from '@/hooks/useAuth';
 
 const Header = () => {
+
     const [isOpen, setIsOpen] = useState(false);
     const [isBurgerOpen, setIsBurgerOpen] = useState(false);
 
     const [logout] = useLogoutMutation();
 
-    const token = localStorage.getItem('token');
+    const { authLogout, authCheck } = useAuth();
+
+    //const loggedUser = localStorage.getItem('user');
 
     const navigate = useNavigate();
 
     const handleLogout = () => {
         logout();
-        localStorage.removeItem('token');
+        authLogout();
         toast.success('Déconnexion réussie');
         navigate('/');
-    }
+    };
 
     return (
         <div className="header">
@@ -83,7 +87,7 @@ const Header = () => {
 
             <Logo />
             <div className="log" data-testid="log-container">
-                {token ? (
+                {authCheck() ? (
                     <button
                         name="logout"
                         className="cursor-pointer text-white"
@@ -101,17 +105,13 @@ const Header = () => {
                 )}
             </div>
 
-            {token ? (
+            {authCheck() ? (
                 <button
                     className="onlyMobile cursor-pointer"
                     onClick={handleLogout}
                     title="Log out"
                 >
-                    <LogOut
-                        size={34}
-                        stroke="#ff934f"
-                        aria-label="Log out"
-                    />
+                    <LogOut size={34} stroke="#ff934f" aria-label="Log out" />
                 </button>
             ) : (
                 <button
