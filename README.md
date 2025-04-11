@@ -84,7 +84,14 @@ Vous avez deux options :
 ```
 
 # 4 - Ports et accès :  
-L'application est accessible sur le port 7007 en utilisant Docker    
+
+Via Docker :
+L'application est accessible sur le port 7007 
+Un compte administrateur sera crée via Faker automatiquement avec Docker :
+email: admin@example.com
+mdp : Admin@123456
+
+En développement local :
 Frontend : port 5173 en développement local  
 Backend : port 4000  
 Base de données PostgreSQL incluse  
