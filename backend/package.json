@@ -6,11 +6,12 @@
     "type": "module",
     "scripts": {
         "compile": "tsc",
-        "start": "tsx ./src/index.ts",
+        "seed": "tsx ./src/seeds/index.ts",
+        "start": "npm run seed && tsx ./src/index.ts",
         "lint": "eslint .",
         "test": "jest --passWithNoTests",
         "test:ci": "jest --ci --passWithNoTests",
-        "email": "email dev"
+        "email": "email dev"    
     },
     "keywords": [],
     "author": "",
@@ -36,6 +37,7 @@
         "uuid": "^11.0.5"
     },
     "devDependencies": {
+        "@faker-js/faker": "^9.6.0",
         "@types/jsonwebtoken": "^9.0.8",
         "@types/node": "^22.13.2",
         "@types/react": "^19.1.0",
