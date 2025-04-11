@@ -34,14 +34,23 @@ export type CommentInput = {
 
 export type Contact = {
   __typename?: 'Contact';
-  sourceUser: Scalars['ID']['output'];
-  targetUser: Scalars['ID']['output'];
+  createdAt: Scalars['DateTimeISO']['output'];
+  id: Scalars['ID']['output'];
+  sourceUser: User;
+  status: ContactStatus;
+  targetUser: User;
 };
 
 export type ContactInput = {
-  sourceUser: Scalars['ID']['input'];
-  targetUser: Scalars['ID']['input'];
+  targetUserId: Scalars['ID']['input'];
 };
+
+/** Le statut d'un contact : en attente, accepté ou refusé */
+export enum ContactStatus {
+  Accepted = 'ACCEPTED',
+  Pending = 'PENDING',
+  Refused = 'REFUSED'
+}
 
 export type Like = {
   __typename?: 'Like';
@@ -57,9 +66,9 @@ export type LikeInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  acceptContactRequest: Contact;
   confirmEmail: Scalars['String']['output'];
   createComment: Comment;
-  createContact: Contact;
   createLike: Like;
   createReport: Report;
   createResource: Resource;
@@ -72,8 +81,16 @@ export type Mutation = {
   deleteSubscription: Scalars['String']['output'];
   login: Scalars['String']['output'];
   logout: Scalars['String']['output'];
+  refuseContactRequest: Contact;
   register: Scalars['String']['output'];
+  removeContact: Scalars['Boolean']['output'];
   resetSendCode: Scalars['String']['output'];
+  sendContactRequest: Contact;
+};
+
+
+export type MutationAcceptContactRequestArgs = {
+  contactId: Scalars['ID']['input'];
 };
 
 
@@ -84,11 +101,6 @@ export type MutationConfirmEmailArgs = {
 
 export type MutationCreateCommentArgs = {
   newComment: CommentInput;
-};
-
-
-export type MutationCreateContactArgs = {
-  contactToCreate: ContactInput;
 };
 
 
@@ -147,8 +159,18 @@ export type MutationLoginArgs = {
 };
 
 
+export type MutationRefuseContactRequestArgs = {
+  contactId: Scalars['ID']['input'];
+};
+
+
 export type MutationRegisterArgs = {
   data: UserInput;
+};
+
+
+export type MutationRemoveContactArgs = {
+  contactId: Scalars['ID']['input'];
 };
 
 
@@ -156,25 +178,26 @@ export type MutationResetSendCodeArgs = {
   email: Scalars['String']['input'];
 };
 
+
+export type MutationSendContactRequestArgs = {
+  contactToCreate: ContactInput;
+};
+
 export type Query = {
   __typename?: 'Query';
-  getAllContactsFromUser: Array<Contact>;
   getAllResources: Array<Resource>;
   getAllUsers: Array<User>;
   getCommentsByResource: Array<Comment>;
   getCommentsByUser: Array<Comment>;
   getLikesByResource: Array<Like>;
   getLikesByUser: Array<Like>;
+  getMyContacts: Array<Contact>;
+  getPendingContactRequests: Array<Contact>;
   getReportsByResource: Array<Report>;
   getReportsByUser: Array<Report>;
   getResourceById?: Maybe<Resource>;
   getResourcesByUserId: Array<Resource>;
   getUserInfo: UserInfo;
-};
-
-
-export type QueryGetAllContactsFromUserArgs = {
-  userId: Scalars['ID']['input'];
 };
 
 
@@ -286,6 +309,11 @@ export type UserInput = {
   password: Scalars['String']['input'];
 };
 
+export type GetMyContactsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetMyContactsQuery = { __typename?: 'Query', getMyContacts: Array<{ __typename?: 'Contact', id: string, status: ContactStatus, createdAt: any, sourceUser: { __typename?: 'User', id: string, email: string }, targetUser: { __typename?: 'User', id: string, email: string } }> };
+
 export type CreateResourceMutationVariables = Exact<{
   data: ResourceInput;
 }>;
@@ -349,6 +377,55 @@ export type GetUserInfoQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetUserInfoQuery = { __typename?: 'Query', getUserInfo: { __typename?: 'UserInfo', email?: string | null, isLoggedIn: boolean } };
 
 
+export const GetMyContactsDocument = gql`
+    query GetMyContacts {
+  getMyContacts {
+    id
+    status
+    createdAt
+    sourceUser {
+      id
+      email
+    }
+    targetUser {
+      id
+      email
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetMyContactsQuery__
+ *
+ * To run a query within a React component, call `useGetMyContactsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMyContactsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMyContactsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetMyContactsQuery(baseOptions?: Apollo.QueryHookOptions<GetMyContactsQuery, GetMyContactsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetMyContactsQuery, GetMyContactsQueryVariables>(GetMyContactsDocument, options);
+      }
+export function useGetMyContactsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMyContactsQuery, GetMyContactsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetMyContactsQuery, GetMyContactsQueryVariables>(GetMyContactsDocument, options);
+        }
+export function useGetMyContactsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetMyContactsQuery, GetMyContactsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetMyContactsQuery, GetMyContactsQueryVariables>(GetMyContactsDocument, options);
+        }
+export type GetMyContactsQueryHookResult = ReturnType<typeof useGetMyContactsQuery>;
+export type GetMyContactsLazyQueryHookResult = ReturnType<typeof useGetMyContactsLazyQuery>;
+export type GetMyContactsSuspenseQueryHookResult = ReturnType<typeof useGetMyContactsSuspenseQuery>;
+export type GetMyContactsQueryResult = Apollo.QueryResult<GetMyContactsQuery, GetMyContactsQueryVariables>;
 export const CreateResourceDocument = gql`
     mutation CreateResource($data: ResourceInput!) {
   createResource(data: $data) {
