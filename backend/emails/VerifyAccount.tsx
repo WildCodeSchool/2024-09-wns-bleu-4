@@ -56,11 +56,11 @@ export const VerifyAccountEmail = ({
                         </svg>
                     </div>
                     <Text className="text-[#0a85ea] text-[11px] font-bold h-[16px] leading-[16px] mt-4 mb-2 mx-2 uppercase text-center">
-                        Verify Your Email
+                        Vérifiez votre email
                     </Text>
-                    <Heading className="text-black text-[20px] font-medium leading-[24px] my-0 text-center max-w-10/12">
-                        Enter the following code on website to finish the
-                        creation of your Wild Transfer account.
+                    <Heading className="text-black text-[20px] font-medium leading-[24px] my-0 text-center max-w-10/12 px-4">
+                        Entrez le code suivant sur le site web pour finaliser la
+                        création de votre compte Wild Transfer.
                     </Heading>
                     <Section className="bg-black/5 rounded w-[280px] my-4 mx-auto align-middle">
                         <Text className="text-black text-[32px] font-bold leading-[40px] tracking-[6px] py-2 m-0 block text-center">
@@ -68,21 +68,21 @@ export const VerifyAccountEmail = ({
                         </Text>
                     </Section>
                     <Text className="text-[#444] text-[15px] leading-[23px] px-10 m-0 text-center">
-                        Not expecting this email?
-                    </Text>
-                    <Text className="text-[#444] text-[15px] leading-[23px] px-10 m-0 text-center">
-                        Contact{' '}
+                        Contactez{' '}
                         <Link
                             href="mailto:contact@wildtransfer.cloud"
                             className="text-[#444] underline"
                         >
                             contact@wildtransfer.cloud
                         </Link>{' '}
-                        if you did not request this code.
+                        si vous n'avez pas demandé ce code.
+                    </Text>
+                    <Text className="text-[#444] text-[15px] leading-[23px] px-10 m-0 text-center font-bold">
+                        Ce code va expirer dans 10 minutes.
                     </Text>
                 </Container>
                 <Text className="text-black text-[12px] font-extrabold leading-[23px] mt-5 m-0 text-center uppercase">
-                    Securely powered by WCS.
+                    Tout droits réservés WCS.
                 </Text>
             </Body>
         </Html>

@@ -62,37 +62,36 @@ export const ResetPasswordEmail = ({
                         </div>
                         <Section>
                             <Text className="text-[#404040] text-[16px] font-light leading-[26px]">
-                                Hi {userEmail},
+                                Bonjour {userEmail},
                             </Text>
                             <Text className="text-[#404040] text-[16px] font-light leading-[26px]">
-                                Someone recently requested a password change for
-                                your Wild Transfer account. If this was you, you
-                                can set a new password here:
+                                Quelqu'un a récemment demandé un changement de mot de passe pour
+                                votre compte Wild Transfer. Si c'était vous, vous pouvez définir un nouveau mot de passe ici :
                             </Text>
                             <Button
                                 href={resetPasswordLink}
                                 className="bg-[#007ee6] text-white text-[15px] font-normal text-center no-underline rounded w-[210px] py-[14px] px-[7px] block mt-4"
                             >
-                                Reset password
+                                Réinitialiser le mot de passe
                             </Button>
                             <Text className="text-[#404040] text-[16px] font-light leading-[26px] mt-4">
-                                If you don't want to change your password or
-                                didn't request this, just ignore and delete this
-                                message.
+                                Si vous ne souhaitez pas changer votre mot de passe ou
+                                si vous n'avez pas fait cette demande, ignorez et supprimez
+                                ce message.
                             </Text>
                             <Text className="text-[#404040] text-[16px] font-light leading-[26px] mt-4">
-                                To keep your account secure, please don't
-                                forward this email to anyone. See{' '}
+                                Pour sécuriser votre compte, veuillez ne pas
+                                transférer cet email à qui que ce soit. Consultez{' '}
                                 <Link
                                     href="https://it.ucsb.edu/general-security-resources/password-best-practices"
                                     className="underline text-[#404040]"
                                 >
-                                    this page
+                                    cette page
                                 </Link>
-                                {' '}for more security tips.
+                                {' '}pour plus de conseils sur la sécurité.
                             </Text>
                             <Text className="text-[#404040] text-[16px] font-light leading-[26px] mt-4">
-                                See you on the website!
+                                A bientot sur WildTranfer
                             </Text>
                         </Section>
                     </Container>

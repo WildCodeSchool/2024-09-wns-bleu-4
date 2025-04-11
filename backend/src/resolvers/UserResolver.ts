@@ -62,18 +62,16 @@ class UserResolver {
     async register(@Arg('data', () => UserInput) newUserData: User) {
 
         const codeToConfirm = await this.codeToVerify();
-
+        
+        const token = this.createVerificationCode(
+            newUserData.email,
+            codeToConfirm
+        );
         await TempUser.save({
             email: newUserData.email,
             password: await argon2.hash(newUserData.password),
             randomCode: codeToConfirm,
         });
-
-
-        const token = this.createVerificationCode(
-            newUserData.email,
-            codeToConfirm
-        );
 
         const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -89,7 +87,7 @@ class UserResolver {
         } catch (error) {
             throw new Error(error);
         }
-        return {token};
+        return token;
     }
 
 
@@ -144,7 +142,10 @@ class UserResolver {
         const tempUser = await TempUser.findOneByOrFail({
             randomCode: codeByUser,
         });
-        const token = tempUser.randomCode;
+        const token = await this.createVerificationCode(
+            tempUser.email,
+            tempUser.randomCode,
+        );
         try {
             const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY as Secret);
             if (decoded !== token) {
