@@ -4,14 +4,10 @@ import {
     deleteFile,
     getFiles,
     uploadFile,
-} from '../controllers/fileController.ts';
-import upload from '../middlewares/multerConfig.ts';
+} from '../controllers/fileController';
+import upload from '../middlewares/multerConfig';
 
 const router = express.Router();
-
-const getDockerPrefix = () => {
-    return process.env.IS_DOCKER ? '/storage' : '';
-};
 
 // @ts-expect-error
 router.post('/upload', upload.single('file'), uploadFile);

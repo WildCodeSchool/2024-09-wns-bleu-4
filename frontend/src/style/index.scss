@@ -1,8 +1,10 @@
-@use '@/pages/Home/home.scss' as home;
-@use '@/pages/Log/log' as log;
+@use '../pages/Home/home';
+@use '../pages/Log/log';
+@use '../pages/Upload/uploadPage';
 
-@use '@/components/sidebar/sidebar' as sidebar;
-@use '@/components/header/header' as header;
-@use '@/components/background/background' as background;
+@use '../components/sidebar/sidebar';
+@use '../components/header/header';
+@use '../components/background/background';
+@use '../components/contactList/contactList';
 @use 'btn' as btn;
 @use 'global' as global;
