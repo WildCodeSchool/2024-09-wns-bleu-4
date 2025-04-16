@@ -5,13 +5,14 @@
     "main": "index.js",
     "type": "module",
     "scripts": {
-        "compile": "tsc",
+        "build": "tsc",
         "seed": "tsx ./src/seeds/index.ts",
         "start": "npm run seed && tsx ./src/index.ts",
+        "start:prod": "node ./dist/src/index.js",
         "lint": "eslint .",
         "test": "jest --passWithNoTests",
         "test:ci": "jest --ci --passWithNoTests",
-        "email": "email dev"    
+        "email": "email dev"
     },
     "keywords": [],
     "author": "",

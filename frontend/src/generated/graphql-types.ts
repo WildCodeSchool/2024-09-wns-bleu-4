@@ -312,7 +312,7 @@ export type UserInput = {
 export type GetMyContactsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetMyContactsQuery = { __typename?: 'Query', getMyContacts: Array<{ __typename?: 'Contact', id: string, status: ContactStatus, createdAt: any, sourceUser: { __typename?: 'User', id: string, email: string }, targetUser: { __typename?: 'User', id: string, email: string } }> };
+export type GetMyContactsQuery = { __typename?: 'Query', getMyContacts: Array<{ __typename?: 'Contact', id: string, status: ContactStatus, createdAt: any, sourceUser: { __typename?: 'User', email: string }, targetUser: { __typename?: 'User', email: string } }> };
 
 export type CreateResourceMutationVariables = Exact<{
   data: ResourceInput;
@@ -384,11 +384,9 @@ export const GetMyContactsDocument = gql`
     status
     createdAt
     sourceUser {
-      id
       email
     }
     targetUser {
-      id
       email
     }
   }

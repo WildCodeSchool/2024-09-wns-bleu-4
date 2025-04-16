@@ -18,6 +18,8 @@ export const uploadFile = (req: Request, res: Response) => {
         filename: req.file.filename,
         path: `/storage/uploads/${req.file.filename}`,
     });
+
+    return;
 };
 
 export const deleteFile = (req: Request, res: Response) => {
@@ -37,10 +39,11 @@ export const deleteFile = (req: Request, res: Response) => {
             });
         }
         res.json({ message: 'Fichier supprimé avec succès', filename });
+        return;
     });
 };
 
-export const getFiles = (req: Request, res: Response) => {
+export const getFiles = (res: Response) => {
     fs.readdir(uploadDir, (err, files) => {
         if (err) {
             return res
@@ -48,5 +51,6 @@ export const getFiles = (req: Request, res: Response) => {
                 .json({ message: 'Erreur lors de la lecture des fichiers' });
         }
         res.json({ files });
+        return;
     });
 };

@@ -7,11 +7,9 @@ export const GET_MY_CONTACTS = gql`
       status
       createdAt
       sourceUser {
-        id
         email
       }
       targetUser {
-        id
         email
       }
     }

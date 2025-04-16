@@ -7,10 +7,14 @@ WORKDIR /app
 COPY package.json package.json
 COPY package-lock.json package-lock.json
 
-RUN npm ci
+RUN npm i
 
 COPY . .
 
+COPY tsconfig.json tsconfig.json
+
 RUN npm run build
 
-CMD npm start
+COPY dist dist
+
+CMD npm run start:prod
