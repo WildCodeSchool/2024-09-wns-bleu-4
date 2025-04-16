@@ -1,0 +1,29 @@
+FROM node:lts-alpine as builder
+
+WORKDIR /app
+
+COPY package.json package.json
+RUN npm install
+
+COPY public public
+COPY src src
+COPY codegen.ts codegen.ts
+COPY index.html index.html
+COPY tsconfig.app.json tsconfig.app.json
+COPY tsconfig.json tsconfig.json
+COPY tsconfig.node.json tsconfig.node.json
+COPY vite.config.ts vite.config.ts
+
+RUN npm run build
+
+FROM nginx:1.27.4-alpine-slim as runner
+
+RUN apk --no-cache add curl
+
+WORKDIR /app
+
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+CMD ["nginx", "-g", "daemon off;"]

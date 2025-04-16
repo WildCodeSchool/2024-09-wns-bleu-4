@@ -30,9 +30,10 @@ services:
             db:
                 condition: service_healthy
     frontend:
-        build: ./frontend
-        volumes:
-            - ./frontend/src:/app/src
+        build: 
+            context: ./frontend
+            dockerfile: Dockerfile.prod
+        
         depends_on:
             backend:
                 condition: service_healthy
