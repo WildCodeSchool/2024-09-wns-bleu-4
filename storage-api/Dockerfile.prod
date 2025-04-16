@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:lts-alpine
 
 WORKDIR /app
 
@@ -12,12 +12,10 @@ COPY . .
 
 RUN npm run build
 
-COPY dist dist
-
 RUN touch .env
 ENV IS_DOCKER=true
 
 EXPOSE 3000
 
 # Utilisation de tsx pour exécuter le serveur directement
-CMD npm run start:prod
+CMD ["npm", "run", "start:prod"]

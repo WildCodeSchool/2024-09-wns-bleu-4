@@ -1,7 +1,6 @@
 import { useQuery } from '@apollo/client';
 import React from 'react';
 import { GET_MY_CONTACTS } from '../../graphql/Contact/queries';
-import './ContactList.scss';
 
 interface Contact {
     id: number;
