@@ -16,4 +16,4 @@ ENV IS_DOCKER=true
 EXPOSE 3000
 
 # Utilisation de tsx pour exécuter le serveur directement
-CMD npm run dev
+CMD ["npm", "run", "dev"]
