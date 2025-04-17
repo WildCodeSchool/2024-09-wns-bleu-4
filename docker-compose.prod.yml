@@ -30,15 +30,14 @@ services:
             db:
                 condition: service_healthy
     frontend:
-        build: 
+        build:
             context: ./frontend
             dockerfile: Dockerfile.prod
-        
         depends_on:
             backend:
                 condition: service_healthy
         healthcheck:
-            test: "curl --fail --request GET --url 'http://localhost:5173' || exit 1"
+            test: "curl --fail --request GET --url 'http://wildtransfer.cloud' || exit 1"
             interval: 1s
             timeout: 10s
             retries: 100
