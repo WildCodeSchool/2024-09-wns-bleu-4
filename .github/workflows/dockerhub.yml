@@ -1,6 +1,9 @@
-name: build and push docker images
+name: CD Build and Push Docker Images
 
-on: push
+on:
+  push:
+    branches:
+      - dev
 
 jobs:
   docker:
