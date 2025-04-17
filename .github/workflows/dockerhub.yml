@@ -39,3 +39,10 @@ jobs:
           context: "{{defaultContext}}:backend"
           file: Dockerfile.prod
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/backend:latest, ${{ secrets.DOCKERHUB_USERNAME }}/backend:${{ env.COMMIT_SHORT_SHA }}
+      - name: Build and push storage-api
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          context: "{{defaultContext}}:storage-api"
+          file: Dockerfile.prod
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/storage-api:latest, ${{ secrets.DOCKERHUB_USERNAME }}/storage-api:${{ env.COMMIT_SHORT_SHA }}
