@@ -1,9 +1,6 @@
 name: CD Build and Push Docker Images
 
-on:
-  push:
-    branches:
-      - dev
+on: push
 
 jobs:
   docker:
