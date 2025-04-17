@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:lts-alpine
 
 WORKDIR /app
 
@@ -16,4 +16,4 @@ ENV IS_DOCKER=true
 EXPOSE 3000
 
 # Utilisation de tsx pour exécuter le serveur directement
-CMD npm run dev
+CMD ["npm", "run", "dev"]

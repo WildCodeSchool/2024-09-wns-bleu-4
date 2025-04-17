@@ -7,8 +7,8 @@
     "scripts": {
         "build": "tsc",
         "seed": "tsx ./src/seeds/index.ts",
-        "start": "npm run seed && tsx ./src/index.ts",
-        "start:prod": "node ./dist/src/index.js",
+        "start:dev": "npm run seed && tsx ./src/index.ts",
+        "start:prod": "tsx ./src/index.ts",
         "lint": "eslint .",
         "test": "jest --passWithNoTests",
         "test:ci": "jest --ci --passWithNoTests",

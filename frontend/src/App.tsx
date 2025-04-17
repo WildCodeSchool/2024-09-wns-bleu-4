@@ -11,7 +11,7 @@ const App = () => {
     return (
         <BrowserRouter>
             <Routes>
-                {/* 
+                {/*
                     Avec cette config la barre latérale "importé dans Layout" reste toujours visible à gauche.
                 */}
 

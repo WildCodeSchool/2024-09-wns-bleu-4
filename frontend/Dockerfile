@@ -15,4 +15,6 @@ RUN npm ci
 
 COPY . .
 
-CMD npm start
+EXPOSE 5173
+
+CMD ["npm", "start"]
