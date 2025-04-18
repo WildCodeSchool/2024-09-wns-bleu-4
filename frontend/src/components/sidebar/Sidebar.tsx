@@ -2,8 +2,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Link } from 'react-router-dom';
 
 const Sidebar = () => {
-
-    const { authCheck } = useAuth();
+    const { isAuth } = useAuth();
 
     return (
         <aside className="sidebar">
@@ -13,7 +12,7 @@ const Sidebar = () => {
                 </Link>
                 <div className="sidebar-menu">
                     <Link to="/">Possibilités</Link>
-                    {authCheck() &&
+                    {isAuth &&
                         <Link to="/files">Mes fichiers</Link>
                     }
                     <Link to="/subscription">Abonnements</Link>

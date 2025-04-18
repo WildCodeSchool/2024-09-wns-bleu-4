@@ -13,7 +13,7 @@ const Header = () => {
 
     const [logout] = useLogoutMutation();
 
-    const { authLogout, authCheck } = useAuth();
+    const { authLogout, isAuth } = useAuth();
 
     //const loggedUser = localStorage.getItem('user');
 
@@ -87,7 +87,7 @@ const Header = () => {
 
             <Logo />
             <div className="log" data-testid="log-container">
-                {authCheck() ? (
+                {isAuth ? (
                     <button
                         name="logout"
                         className="cursor-pointer text-white"
@@ -105,7 +105,7 @@ const Header = () => {
                 )}
             </div>
 
-            {authCheck() ? (
+            {isAuth ? (
                 <button
                     className="onlyMobile cursor-pointer"
                     onClick={handleLogout}
