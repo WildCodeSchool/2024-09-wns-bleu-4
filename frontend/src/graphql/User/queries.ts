@@ -17,3 +17,12 @@ export const GET_USER_INFO = gql`
         }
     }
 `;
+
+export const GET_USER_ID = gql`
+    query GetUserId {
+        getUserInfo {
+            id
+            email
+        }
+    }
+`;

@@ -1,6 +1,7 @@
 import ContactList from '@/components/contactList/ContactList';
 import { CREATE_RESOURCE } from '@/graphql/Resource/mutations';
-import { useMutation } from '@apollo/client';
+import { GET_USER_ID } from '@/graphql/User/queries';
+import { useMutation, useQuery } from '@apollo/client';
 import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { mutate } from 'swr';
@@ -14,6 +15,7 @@ const UploadPage = () => {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     const [createResource] = useMutation(CREATE_RESOURCE);
+    const { data: userData } = useQuery(GET_USER_ID);
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
         if (acceptedFiles.length > 0) {
@@ -43,7 +45,7 @@ const UploadPage = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!file) return;
+        if (!file || !userData?.getUserInfo?.id) return;
 
         setIsUploading(true);
         setSuccessMessage(null);
@@ -61,7 +63,7 @@ const UploadPage = () => {
                         url: fileUrl,
                         description:
                             description || `Fichier uploadé : ${file.name}`,
-                        userId: 1,
+                        userId: userData.getUserInfo.id,
                     },
                 },
             });
