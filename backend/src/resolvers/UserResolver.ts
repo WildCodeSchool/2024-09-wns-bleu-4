@@ -184,7 +184,7 @@ class UserResolver {
     }
 
     @Query(() => UserInfo)
-    async getUserInfo(@Ctx() context: any) {
+    async getUserInfo(@Ctx() context: any): Promise<UserInfo> {
         if (context.email) {
             return { isLoggedIn: true, email: context.email };
         } else {
