@@ -1,5 +1,4 @@
 import App from '@/App';
-import '@/style/index.scss';
 import '@/style/root.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';

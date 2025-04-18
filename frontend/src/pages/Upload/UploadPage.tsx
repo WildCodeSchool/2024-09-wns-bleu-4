@@ -4,7 +4,6 @@ import { useMutation } from '@apollo/client';
 import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { mutate } from 'swr';
-import './uploadPage.scss';
 
 const UploadPage = () => {
     const [file, setFile] = useState<File | null>(null);

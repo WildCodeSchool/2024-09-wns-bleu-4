@@ -1,22 +1,20 @@
-import AnimatedDiv from '@/components/background/AnimateBG';
 import Header from '@/components/header/Header';
-import Sidebar from '@/components/sidebar/Sidebar';
+import { ThemeProvider } from '@/components/theme-provider';
 import { Outlet } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
 const Layout = () => {
     return (
-        <div className="body">
-            <AnimatedDiv className={'yellow'} />
-            <AnimatedDiv className={'orange'} />
-            <div className="blur"></div>
-            <Header />
-            <Sidebar />
-            <main className="flex-1 overflow-auto min-h-0" style={{ gridArea: 'main' }}>
-                <Outlet />
+        <ThemeProvider>
+            <main className="bg-gray-100 dark:bg-gray-900 min-h-screen">
+                <Header />
+
+                <section>
+                    <Outlet />
+                </section>
+                <ToastContainer position="bottom-right" theme="dark" />
             </main>
-            <ToastContainer position="bottom-right" theme="dark" />
-        </div>
+        </ThemeProvider>
     );
 };
 
