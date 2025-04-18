@@ -1,6 +1,7 @@
 import { Loader } from '@/components/Loader';
 import { DELETE_RESOURCE } from '@/graphql/Resource/mutations';
 import { GET_RESOURCES_BY_USER_ID } from '@/graphql/Resource/queries';
+import { GET_USER_ID } from '@/graphql/User/queries';
 import { useMutation, useQuery } from '@apollo/client';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -15,15 +16,16 @@ type Resource = {
 };
 
 const FilesPage: React.FC = () => {
-    const userId = '1';
+    const { data: userData } = useQuery(GET_USER_ID);
     const {
         data: graphqlData,
         loading,
         error,
         refetch,
     } = useQuery(GET_RESOURCES_BY_USER_ID, {
-        variables: { userId: userId },
+        variables: { userId: userData?.getUserInfo?.id },
         fetchPolicy: 'cache-and-network',
+        skip: !userData?.getUserInfo?.id,
     });
 
     const [deleteResourceMutation] = useMutation(DELETE_RESOURCE);

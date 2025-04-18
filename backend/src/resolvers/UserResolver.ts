@@ -14,6 +14,7 @@ import {
     ObjectType,
     Query,
     Resolver,
+    ID,
 } from 'type-graphql';
 
 @InputType()
@@ -38,6 +39,9 @@ export class UserInfo {
 
     @Field(() => String, { nullable: true })
     email?: String;
+
+    @Field(() => ID, { nullable: true })
+    id?: number;
 }
 
 @Resolver(User)
@@ -186,10 +190,12 @@ class UserResolver {
     @Query(() => UserInfo)
     async getUserInfo(@Ctx() context: any): Promise<UserInfo> {
         if (context.email) {
-            return { isLoggedIn: true, email: context.email };
-        } else {
-            return { isLoggedIn: false };
+            const user = await User.findOne({ where: { email: context.email } });
+            if (user) {
+                return { isLoggedIn: true, email: context.email, id: user.id };
+            }
         }
+        return { isLoggedIn: false };
     }
 }
 

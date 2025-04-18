@@ -9,15 +9,14 @@ const storage = multer.diskStorage({
     ) => {
         cb(null, 'uploads/');
     },
-    filename: (
-        req: any,
-        file: { fieldname: string; originalname: string },
-        cb: (arg0: null, arg1: string) => void,
-    ) => {
+    filename: (req, file, cb) => {
+        console.log(req.query.filename);
+        console.log(file);
+    
         const apolloFilename = req.query.filename;
-
+    
         if (apolloFilename) {
-            cb(null, apolloFilename);
+            cb(null, apolloFilename as string);
         } else {
             cb(
                 null,
@@ -27,7 +26,8 @@ const storage = multer.diskStorage({
                     path.extname(file.originalname),
             );
         }
-    },
+    }
+    
 });
 
 const upload = multer({ storage });
