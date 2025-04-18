@@ -10,17 +10,18 @@ const Header = () => {
     return (
         <div className="header">
             <button
+                data-testid="burger-open-btn"
                 className='onlyMobile menuBurgerButton'
                 onClick={() => setIsBurgerOpen(true)}
             >
                 <Menu size={34} stroke='#ff934f' />
             </button>
 
-            <div className={`menuBurger${isBurgerOpen ? '__open' : ''}`}>
-                <button className="closeButton" onClick={() => setIsBurgerOpen(false)}>
+            <div className={`menuBurger${isBurgerOpen ? '__open' : ''}`} data-testid="burger-menu">
+                <button data-testid="burger-close-btn" className="closeButton" onClick={() => setIsBurgerOpen(false)}>
                     <X size={34} stroke='#FF934F'/>
                 </button>
-                <nav className='menuBurger__nav'>
+                <nav className='menuBurger__nav' data-testid="burger-nav">
                     <div className='menuBurger__menu'>
                         <Link to="/" onClick={() => setIsBurgerOpen(false)}>Possibilités</Link>
                         <Link to="/subscription" onClick={() => setIsBurgerOpen(false)}>Abonnements</Link>

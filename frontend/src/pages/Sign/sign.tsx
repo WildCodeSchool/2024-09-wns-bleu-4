@@ -18,14 +18,15 @@ const Sign = () => {
     return (
         <div className="form-log">
             <b>Inscription</b>
-            <form action="">
+            <form data-testid="signup-form" action="">
                 <label className="form-label" htmlFor="email">
                     Email
-                    <input type="email" placeholder="exemple@exemple.com" onChange={handleEmailChange} required/>
+                    <input role="textbox" type="email" placeholder="exemple@exemple.com" onChange={handleEmailChange} required/>
                 </label>
                 <label className="form-label" htmlFor="password">
                     Mot de passe
                     <input 
+                            role="textbox"
                             type={showPassword ? "text" : "password"} 
                             value={password} 
                             onChange={handlePasswordChange} 

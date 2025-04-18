@@ -5,9 +5,7 @@ const Sidebar = () => {
     return (
         <aside className="sidebar">
             <nav data-testid="sidebar-nav">
-                <Link to="/" className='sidebar-dashboard'>
-                    Transférez vos fichiers
-                </Link>
+                <Link to="/" className='sidebar-dashboard'>Transférez vos fichiers</Link>
                 <div className='sidebar-menu'>
                     <Link to="/">Possibilités</Link>
                     <Link to="/subscription">Abonnements</Link>

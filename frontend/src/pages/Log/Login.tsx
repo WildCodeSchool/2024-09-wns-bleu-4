@@ -43,6 +43,7 @@ const Login = () => {
                 <label className="form-label" htmlFor="email">
                     Email
                     <input
+                        role='textbox'
                         type="email"
                         placeholder="exemple@exemple.com"
                         value={email}
@@ -52,7 +53,8 @@ const Login = () => {
                 </label>
                 <label className="form-label" htmlFor="password">
                     Mot de passe
-                    <input
+                    <input 
+                        role='textbox'
                         type={showPassword ? 'text' : 'password'}
                         value={password}
                         onChange={handlePasswordChange}
@@ -68,7 +70,7 @@ const Login = () => {
                         {showPassword ? <EyeOff /> : <Eye stroke='#FF934F'/>}
                     </button>
                 </label>
-                <div className="links-supp">
+                <div className="links-supp" data-testid="links-supp">
                     <Link to="/forgot-password">Mot de passe oublié ?</Link>
                     <Link to="/sign">
                         Pas encore de compte ? Inscrivez-vous !
