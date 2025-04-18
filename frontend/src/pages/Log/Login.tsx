@@ -33,13 +33,14 @@ const Login = () => {
 
     return (
         <Form
+            data-testid="links-supp"
             title="Connexion"
             onSubmit={handleSubmit}
             loading={loading}
             links={
                 <>
-                    <Link to="/forgot-password">Mot de passe oublié ?</Link>
-                    <Link to="/sign">Vous avez déjà un compte ?</Link>
+                    <Link role="textbox" to="/forgot-password">Mot de passe oublié ?</Link>
+                    <Link role="textbox" to="/sign">Vous avez déjà un compte ?</Link>
                 </>
             }
         />
