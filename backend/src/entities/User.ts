@@ -1,4 +1,6 @@
 import { Comment } from '@/entities/Comment';
+import { Like } from '@/entities/Like';
+import { Report } from '@/entities/Report';
 import { Resource } from '@/entities/Resource';
 import { Subscription } from '@/entities/Subscription';
 import { IsDate, IsEnum, Length } from 'class-validator';
@@ -70,6 +72,12 @@ export class User extends BaseEntity {
         default: UserRole.USER,
     })
     role: UserRole;
+
+    @OneToMany(() => Like, (like) => like.user)
+    likes: Like[];
+
+    @OneToMany(() => Report, (report) => report.user)
+    reports: Report[];
 
     @OneToMany(() => Comment, (comment) => comment.user)
     comments: Comment[];

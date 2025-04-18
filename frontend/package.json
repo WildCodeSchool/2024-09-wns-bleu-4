@@ -5,12 +5,11 @@
     "type": "module",
     "scripts": {
         "start": "graphql-codegen --config codegen.ts && vite",
-        "build": "tsc -b && vite build",
+        "build": "tsc -b && vite build && sass src/style/index.scss src/index.css",
         "lint": "eslint .",
         "preview": "vite preview",
         "test": "vitest",
-        "test:run": "vitest run",
-        "build:sass": "sass --watch src/style/index.scss:css/index.css"
+        "test:run": "vitest run"
     },
     "dependencies": {
         "@apollo/client": "^3.13.4",
@@ -59,7 +58,7 @@
         "postcss": "^8.5.2",
         "sass": "^1.85.0",
         "sass-embedded": "^1.85.0",
-        "ts-node": "^10.9.2",
+        "tsx": "^4.19.3",
         "typescript": "^5.8.2",
         "typescript-eslint": "^8.22.0",
         "vite": "^6.1.0",
