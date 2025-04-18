@@ -6,7 +6,7 @@ import { ToastContainer } from 'react-toastify';
 const Layout = () => {
     return (
         <ThemeProvider>
-            <main className="bg-gray-100 dark:bg-gray-900 min-h-screen">
+            <main>
                 <Header />
 
                 <section>
