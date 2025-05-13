@@ -6,12 +6,12 @@ import { ToastContainer } from 'react-toastify';
 const Layout = () => {
     return (
         <ThemeProvider>
-            <main>
+            <main className="">
                 <Header />
 
-                <section>
+                <div className="">
                     <Outlet />
-                </section>
+                </div>
                 <ToastContainer position="bottom-right" theme="dark" />
             </main>
         </ThemeProvider>

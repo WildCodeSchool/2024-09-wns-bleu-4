@@ -32,17 +32,19 @@ const Login = () => {
     };
 
     return (
-        <Form
-            title="Connexion"
-            onSubmit={handleSubmit}
-            loading={loading}
-            links={
-                <>
-                    <Link to="/forgot-password">Mot de passe oublié ?</Link>
-                    <Link to="/sign">Vous avez déjà un compte ?</Link>
-                </>
-            }
-        />
+        <section className="mx-auto w-[80%] mt-10">
+            <Form
+                title="Connexion"
+                onSubmit={handleSubmit}
+                loading={loading}
+                links={
+                    <>
+                        <Link to="/forgot-password">Mot de passe oublié ?</Link>
+                        <Link to="/sign">Vous avez déjà un compte ?</Link>
+                    </>
+                }
+            />
+        </section>
     );
 };
 

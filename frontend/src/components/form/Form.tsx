@@ -3,6 +3,10 @@ import { Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { Button } from '../ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Input } from '../ui/input';
+import { Label } from '../ui/label';
 
 const formSchema = z.object({
     email: z.string().email('Veuillez saisir une adresse email valide'),
@@ -41,53 +45,82 @@ const Form = ({ title, onSubmit, loading, links, error }: FormProps) => {
     };
 
     return (
-        <div className="form-log">
-            <b>{title}</b>
-            <form onSubmit={handleSubmit(submitForm)}>
-                <label className="form-label" htmlFor="email">
-                    Email
-                    <input
-                        type="email"
-                        placeholder="exemple@exemple.com"
-                        {...register('email')}
-                    />
-                    {errors.email && (
-                        <span className="error-message">
-                            {errors.email.message}
-                        </span>
-                    )}
-                </label>
-                <label className="form-label" htmlFor="password">
-                    Mot de passe
-                    <input
-                        type={showPassword ? 'text' : 'password'}
-                        placeholder="Votre mot de passe"
-                        {...register('password')}
-                    />
-                    <button
-                        type="button"
-                        className="show-password"
-                        onClick={() => setShowPassword(!showPassword)}
-                    >
-                        {showPassword ? (
-                            <EyeOff aria-label="Show password" />
-                        ) : (
-                            <Eye stroke="#FF934F" aria-label="Hide password" />
+        <Card className="w-full sm:w-[50%] mx-auto">
+            <CardHeader>
+                <CardTitle className="text-2xl">{title}</CardTitle>
+                <CardTitle className="text-sm font-normal text-muted-foreground">
+                    Veuillez vous connecter pour continuer
+                </CardTitle>
+            </CardHeader>
+            <CardContent className="grid gap-y-4">
+                <form
+                    onSubmit={handleSubmit(submitForm)}
+                    className="grid gap-4"
+                >
+                    <div className="space-y-2">
+                        <Label htmlFor="email">Email</Label>
+                        <Input
+                            id="email"
+                            type="email"
+                            placeholder="exemple@exemple.com"
+                            {...register('email')}
+                        />
+                        {errors.email && (
+                            <span className="text-sm text-red-500">
+                                {errors.email.message}
+                            </span>
                         )}
-                    </button>
-                    {errors.password && (
-                        <span className="error-message">
-                            {errors.password.message}
-                        </span>
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="password">Mot de passe</Label>
+                        <div className="relative">
+                            <Input
+                                id="password"
+                                type={showPassword ? 'text' : 'password'}
+                                placeholder="Votre mot de passe"
+                                className="pr-10"
+                                {...register('password')}
+                            />
+                            <Button
+                                type="button"
+                                variant="ghost"
+                                size="icon"
+                                className="absolute right-0 top-0 h-full px-3"
+                                onClick={() => setShowPassword(!showPassword)}
+                            >
+                                {showPassword ? (
+                                    <EyeOff
+                                        className="h-4 w-4"
+                                        aria-label="Hide password"
+                                    />
+                                ) : (
+                                    <Eye
+                                        className="h-4 w-4"
+                                        aria-label="Show password"
+                                    />
+                                )}
+                            </Button>
+                        </div>
+                        {errors.password && (
+                            <span className="text-sm text-red-500">
+                                {errors.password.message}
+                            </span>
+                        )}
+                    </div>
+
+                    {error && (
+                        <div className="text-sm text-red-500">{error}</div>
                     )}
-                </label>
-                {error && <div className="form-error">{error}</div>}
-                {links && <div className="links-supp">{links}</div>}
-                <button disabled={!isValid} type="submit" className="btn">
-                    {loading ? `${title} ...` : 'Valider'}
-                </button>
-            </form>
-        </div>
+
+                    <Button disabled={!isValid} type="submit" className="mt-2">
+                        {loading ? `${title} ...` : 'Valider'}
+                    </Button>
+
+                    {links && <div className="mt-2 flex gap-5">{links}</div>}
+                </form>
+            </CardContent>
+        </Card>
     );
 };
 

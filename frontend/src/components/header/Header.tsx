@@ -33,7 +33,7 @@ const Header = () => {
     };
 
     return (
-        <header className="flex justify-between items-center px-4 py-4 bg-white dark:bg-gray-800">
+        <header className="flex lg:w-[80%] mx-auto justify-between items-center px-4 py-4 bg-white dark:bg-gray-800">
             <Logo />
 
             <NavigationMenu>
