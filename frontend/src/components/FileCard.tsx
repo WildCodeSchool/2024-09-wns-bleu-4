@@ -23,7 +23,6 @@ const FileCard: React.FC<FileCardProps> = ({
     return (
         <>
             <div className="flex items-center justify-between bg-white rounded-lg shadow p-4 gap-4 w-full max-w-4xl">
-                {/* Image ou icône */}
                 <div
                     className="w-28 h-28 flex-shrink-0 rounded overflow-hidden bg-gray-100 flex items-center justify-center cursor-pointer"
                     onClick={() => isImage && setIsModalOpen(true)}
@@ -38,8 +37,6 @@ const FileCard: React.FC<FileCardProps> = ({
                         <FileIcon className="w-12 h-12 text-gray-400" />
                     )}
                 </div>
-
-                {/* Nom uniquement */}
                 <div className="flex flex-col flex-grow overflow-hidden">
                     <h3
                         className="font-semibold text-base truncate"
@@ -48,8 +45,6 @@ const FileCard: React.FC<FileCardProps> = ({
                         {name}
                     </h3>
                 </div>
-
-                {/* Actions */}
                 <div className="flex flex-col gap-2 items-end">
                     <Link
                         to={url}
@@ -67,18 +62,15 @@ const FileCard: React.FC<FileCardProps> = ({
                     </button>
                 </div>
             </div>
-
-            {/* Modal */}
             {isModalOpen && (
                 <div
                     className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-[2px]"
-                    onClick={() => setIsModalOpen(false)} // Ferme la modale quand on clique en dehors
+                    onClick={() => setIsModalOpen(false)}
                 >
                     <div
                         className="bg-white rounded-lg overflow-hidden max-w-3xl w-full relative"
-                        onClick={(e) => e.stopPropagation()} // Empêche la fermeture si on clique sur la modale elle-même
+                        onClick={(e) => e.stopPropagation()}
                     >
-                        {/* Close button */}
                         <button
                             onClick={() => setIsModalOpen(false)}
                             className="absolute top-2 right-2 text-white hover:text-black"
@@ -91,7 +83,6 @@ const FileCard: React.FC<FileCardProps> = ({
                             alt={name}
                             className="w-full max-h-[70vh] object-contain"
                         />
-                        {/* Titre du fichier */}
                         <div className="p-4 pb-0">
                             <h2
                                 className="text-lg font-semibold text-gray-800 truncate"
