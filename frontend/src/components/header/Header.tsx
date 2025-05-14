@@ -13,11 +13,6 @@ import {
 } from '../ui/menubar';
 import {
     NavigationMenu,
-    NavigationMenuContent,
-    NavigationMenuItem,
-    NavigationMenuLink,
-    NavigationMenuList,
-    NavigationMenuTrigger,
 } from '../ui/navigation-menu';
 
 const Header = () => {
@@ -33,63 +28,34 @@ const Header = () => {
     };
 
     return (
-        <header className="flex lg:w-[80%] mx-auto justify-between items-center px-4 py-4 bg-white dark:bg-gray-800">
+        <header className="flex lg:w-[80%] mx-auto justify-between items-center px-4 py-4 bg-white dark:bg-neutral-900 rounded-lg lg:mt-2">
             <Logo />
 
-            <NavigationMenu>
-                <NavigationMenuList>
-                    <NavigationMenuItem>
-                        <NavigationMenuTrigger>
-                            Possibilités
-                        </NavigationMenuTrigger>
-                        <NavigationMenuContent>
-                            <div className="p-4 md:w-[400px] lg:w-[500px] space-y-2">
-                                <NavigationMenuLink asChild>
-                                    <Link
-                                        to="/"
-                                        className="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
-                                    >
-                                        Toutes les possibilités
-                                    </Link>
-                                </NavigationMenuLink>
-                                <NavigationMenuLink asChild>
-                                    <Link
-                                        to="/files"
-                                        className="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
-                                    >
-                                        Explorer les fichiers
-                                    </Link>
-                                </NavigationMenuLink>
-                            </div>
-                        </NavigationMenuContent>
-                    </NavigationMenuItem>
-
-                    <NavigationMenuItem>
-                        <NavigationMenuTrigger>
-                            Ressources
-                        </NavigationMenuTrigger>
-                        <NavigationMenuContent>
-                            <div className="p-4 md:w-[400px] lg:w-[500px] space-y-2">
-                                <NavigationMenuLink asChild>
-                                    <Link
-                                        to="/subscription"
-                                        className="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
-                                    >
-                                        Abonnements
-                                    </Link>
-                                </NavigationMenuLink>
-                                <NavigationMenuLink asChild>
-                                    <Link
-                                        to="/about"
-                                        className="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
-                                    >
-                                        À propos
-                                    </Link>
-                                </NavigationMenuLink>
-                            </div>
-                        </NavigationMenuContent>
-                    </NavigationMenuItem>
-                </NavigationMenuList>
+            <NavigationMenu className="flex gap-4">
+                <Link
+                    to="/upload"
+                    className="block p-2 hover:bg-gray-200 dark:hover:bg-neutral-700 rounded-md"
+                >
+                    Transférez vos fichiers
+                </Link>
+                <Link
+                    to="/subscription"
+                    className="block p-2 hover:bg-gray-200 dark:hover:bg-neutral-700 rounded-md"
+                >
+                    Nos abonnements
+                </Link>
+                <Link
+                    to="/about"
+                    className="block p-2 hover:bg-gray-200 dark:hover:bg-neutral-700 rounded-md"
+                >
+                    Qui sommes nous ?
+                </Link>
+                <Link
+                    to="/how-work"
+                    className="block p-2 hover:bg-gray-200 dark:hover:bg-neutral-700 rounded-md"
+                >
+                   Comment ça marche
+                </Link>
             </NavigationMenu>
 
             <div className="flex items-center gap-4">
@@ -131,5 +97,7 @@ const Header = () => {
         </header>
     );
 };
+
+
 
 export default Header;

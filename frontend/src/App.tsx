@@ -99,6 +99,10 @@ const App = () => {
                             path="/privacy-policy"
                             element={<div>Politique de confidentialité</div>}
                         />
+                        <Route
+                            path="/how-work"
+                            element={<div>Comment ça marche</div>}
+                        />
                     </Route>
                 </Routes>
             </BrowserRouter>
