@@ -309,6 +309,13 @@ export type UserInput = {
   password: Scalars['String']['input'];
 };
 
+export type SendContactRequestMutationVariables = Exact<{
+  contactToCreate: ContactInput;
+}>;
+
+
+export type SendContactRequestMutation = { __typename?: 'Mutation', sendContactRequest: { __typename?: 'Contact', createdAt: any } };
+
 export type GetMyContactsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -377,6 +384,39 @@ export type GetUserInfoQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetUserInfoQuery = { __typename?: 'Query', getUserInfo: { __typename?: 'UserInfo', email?: string | null, isLoggedIn: boolean } };
 
 
+export const SendContactRequestDocument = gql`
+    mutation SendContactRequest($contactToCreate: ContactInput!) {
+  sendContactRequest(contactToCreate: $contactToCreate) {
+    createdAt
+  }
+}
+    `;
+export type SendContactRequestMutationFn = Apollo.MutationFunction<SendContactRequestMutation, SendContactRequestMutationVariables>;
+
+/**
+ * __useSendContactRequestMutation__
+ *
+ * To run a mutation, you first call `useSendContactRequestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSendContactRequestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [sendContactRequestMutation, { data, loading, error }] = useSendContactRequestMutation({
+ *   variables: {
+ *      contactToCreate: // value for 'contactToCreate'
+ *   },
+ * });
+ */
+export function useSendContactRequestMutation(baseOptions?: Apollo.MutationHookOptions<SendContactRequestMutation, SendContactRequestMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SendContactRequestMutation, SendContactRequestMutationVariables>(SendContactRequestDocument, options);
+      }
+export type SendContactRequestMutationHookResult = ReturnType<typeof useSendContactRequestMutation>;
+export type SendContactRequestMutationResult = Apollo.MutationResult<SendContactRequestMutation>;
+export type SendContactRequestMutationOptions = Apollo.BaseMutationOptions<SendContactRequestMutation, SendContactRequestMutationVariables>;
 export const GetMyContactsDocument = gql`
     query GetMyContacts {
   getMyContacts {
