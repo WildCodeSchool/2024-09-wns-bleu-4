@@ -1,10 +1,10 @@
 import HeadMeta from '@/components/HeadMeta';
 import { AuthProvider } from '@/context/AuthContext';
-import FilesPage from '@/pages/Files/Files';
+import FilesPage from '@/pages/Files/files';
 import Home from '@/pages/Home/Home';
 import Layout from '@/pages/Layout';
 import Login from '@/pages/Log/Login';
-import Sign from '@/pages/Sign/Sign';
+import Sign from '@/pages/Sign/sign';
 import UploadPage from '@/pages/Upload/UploadPage';
 import { useEffect } from 'react';
 import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
