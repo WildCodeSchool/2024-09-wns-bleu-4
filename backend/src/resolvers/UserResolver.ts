@@ -47,8 +47,6 @@ class UserResolver {
 
         const existingUser = await User.findOneBy({ email: newUserData.email });
 
-        console.log(newUserData);
-
         if (existingUser) {
             throw new Error('Un compte existe déjà avec cet email');
         }
