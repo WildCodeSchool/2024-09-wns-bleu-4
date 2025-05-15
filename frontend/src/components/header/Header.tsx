@@ -33,7 +33,7 @@ const Header = () => {
     };
 
     return (
-        <header className="flex lg:w-[80%] mx-auto justify-between items-center px-4 py-4 bg-white dark:bg-gray-800">
+        <header className="flex lg:w-[80%] mx-auto justify-between items-center px-4 py-4 ">
             <Logo />
 
             <NavigationMenu>
@@ -58,6 +58,14 @@ const Header = () => {
                                         className="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
                                     >
                                         Explorer les fichiers
+                                    </Link>
+                                </NavigationMenuLink>
+                                <NavigationMenuLink asChild>
+                                    <Link
+                                        to="/contact"
+                                        className="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+                                    >
+                                        Vos contacts
                                     </Link>
                                 </NavigationMenuLink>
                             </div>

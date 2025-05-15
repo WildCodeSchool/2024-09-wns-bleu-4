@@ -1,4 +1,4 @@
-import FileUploader from '@/components/FileUploader/FileUploader';
+import FileUploader from '@/components/fileUploader/FileUploader';
 import { CREATE_RESOURCE } from '@/graphql/Resource/mutations';
 import { useMutation } from '@apollo/client';
 import { useState } from 'react';
@@ -87,7 +87,7 @@ const UploadPage = () => {
     };
 
     return (
-        <div className="w-[80%] mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+        <div className="mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
             <div className="">
                 <h1 className="text-2xl font-bold my-8">
                     Transférez votre fichier

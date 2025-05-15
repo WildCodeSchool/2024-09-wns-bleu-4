@@ -1,4 +1,5 @@
-import AddContactDialog from '@/components/Contact/AddContactDialog';
+import AddContactDialog from '@/components/contact/AddContactDialog';
+import ContactRequestsList from '@/components/contact/ContactRequestsList';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const Contact = () => {
@@ -7,7 +8,7 @@ const Contact = () => {
     };
 
     return (
-        <section className="mx-auto my-8">
+        <section className="my-8">
             <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
                 <h1 className="text-2xl font-bold">Contacts</h1>
                 <AddContactDialog onContactAdded={handleContactAdded} />
@@ -17,16 +18,16 @@ const Contact = () => {
                 <TabsList className="mb-6">
                     <TabsTrigger value="all">Tous</TabsTrigger>
                     <TabsTrigger value="requests">Demandes</TabsTrigger>
-                    <TabsTrigger value="contacts">Mes contacts</TabsTrigger>
+                    <TabsTrigger value="contacts">Contacts</TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="all" className="space-y-8"></TabsContent>
-
-                <TabsContent value="requests">
-                    <div className="space-y-8"></div>
+                <TabsContent value="all" className="space-y-8">
+                    <ContactRequestsList
+                        onContactUpdated={function (): void {
+                            throw new Error('Function not implemented.');
+                        }}
+                    />
                 </TabsContent>
-
-                <TabsContent value="contacts"></TabsContent>
             </Tabs>
         </section>
     );

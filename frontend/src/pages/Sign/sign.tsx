@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const Sign = () => {
-    const [register, { loading}] = useRegisterMutation();
+    const [register, { loading }] = useRegisterMutation();
     const [isSubmitted, setIsSubmitted] = useState(false);
 
     const handleSubmit = async (email: string, password: string) => {
@@ -21,8 +21,11 @@ const Sign = () => {
                 setIsSubmitted(true);
             }
         } catch (error) {
-            toast.error(error as string);
-            throw new Error(error as string);
+            if (error instanceof Error) {
+                throw new Error(error.message);
+            } else {
+                throw new Error('Une erreur inconnue est survenue.');
+            }
         }
     };
 

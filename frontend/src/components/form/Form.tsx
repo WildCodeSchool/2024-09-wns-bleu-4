@@ -2,12 +2,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import { z } from 'zod';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
-import { toast } from 'react-toastify';
 
 const formSchema = z.object({
     email: z.string().email('Veuillez saisir une adresse email valide'),
@@ -53,7 +53,7 @@ const Form = ({ title, onSubmit, loading, links, error }: FormProps) => {
     };
 
     return (
-        <Card className="w-full sm:w-[50%] mx-auto">
+        <Card className="w-full mx-auto">
             <CardHeader>
                 <CardTitle className="text-2xl">{title}</CardTitle>
                 <CardTitle className="text-sm font-normal text-muted-foreground">
@@ -121,7 +121,11 @@ const Form = ({ title, onSubmit, loading, links, error }: FormProps) => {
                         <div className="text-sm text-red-500">{error}</div>
                     )}
 
-                    <Button disabled={!isValid} type="submit" className="mt-2">
+                    <Button
+                        disabled={!isValid}
+                        type="submit"
+                        className="mt-2 cursor-pointer"
+                    >
                         {loading ? `${title} ...` : 'Valider'}
                     </Button>
 

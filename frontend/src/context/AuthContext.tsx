@@ -1,39 +1,39 @@
-import { createContext, useContext, useState, useEffect } from "react";
-import { User } from "../hooks/useUser";
 import { useGetUserInfoQuery } from '@/generated/graphql-types';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { User } from '../hooks/useUser';
 
 interface AuthContext {
-  user: User | null;
-  isAuth: boolean;
-  setUser: (user: User | null) => void;
+    user: User | null;
+    isAuth: boolean;
+    setUser: (user: User | null) => void;
 }
 
 const AuthContext = createContext<AuthContext>({
-  user: null,
-  isAuth: false,
-  setUser: () => {},
+    user: null,
+    isAuth: false,
+    setUser: () => {},
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [isAuth, setisAuth] = useState(false);
-  const { data } = useGetUserInfoQuery();
+    const [user, setUser] = useState<User | null>(null);
+    const [isAuth, setisAuth] = useState(false);
+    const { data } = useGetUserInfoQuery();
 
-  useEffect(() => {
-    if (!user) {
-      setisAuth(false);
-      return;
-    }
+    useEffect(() => {
+        if (!user) {
+            setisAuth(false);
+            return;
+        }
 
-    const serverUser = data?.getUserInfo.email;
-    setisAuth(user.email === serverUser);
-  }, [user, data]);
+        const serverUser = data?.getUserInfo.email;
+        setisAuth(user.email === serverUser);
+    }, [user, data]);
 
-  return (
-    <AuthContext.Provider value={{ user, isAuth, setUser }}>
-      {children}
-    </AuthContext.Provider>
-  );
+    return (
+        <AuthContext.Provider value={{ user, isAuth, setUser }}>
+            {children}
+        </AuthContext.Provider>
+    );
 };
 
 // eslint-disable-next-line react-refresh/only-export-components
