@@ -4,6 +4,7 @@ import { AuthProvider } from '@/context/AuthContext';
 import Contact from '@/pages/Contact/contact';
 import FilesPage from '@/pages/Files/files';
 import Home from '@/pages/Home/Home';
+import Subscription from './pages/Subscription/subscription';
 import Layout from '@/pages/Layout';
 import Login from '@/pages/Log/Login';
 import Sign from '@/pages/Sign/sign';
@@ -106,10 +107,10 @@ const App = () => {
                                     title="Abonnement"
                                     description="Abonnement au service Wild Transfer"
                                 >
-                                    <div>Abonnement</div>
+                                    <Subscription />
                                 </PageWrapper>
                             }
-                        />
+                        />{' '}
                         <Route
                             path="/about"
                             element={
