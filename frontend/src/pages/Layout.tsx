@@ -9,7 +9,7 @@ const Layout = () => {
             <main className="">
                 <Header />
 
-                <div className="">
+                <div className="mt-10">
                     <Outlet />
                 </div>
                 <ToastContainer position="bottom-right" theme="dark" />
