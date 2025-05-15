@@ -1,5 +1,6 @@
 import HeadMeta from '@/components/HeadMeta';
 import { AuthProvider } from '@/context/AuthContext';
+import Contact from '@/pages/Contact/contact';
 import FilesPage from '@/pages/Files/files';
 import Home from '@/pages/Home/Home';
 import Layout from '@/pages/Layout';
@@ -75,6 +76,18 @@ const App = () => {
                             }
                         />
                         <Route
+                            path="/contact"
+                            element={
+                                <PageWrapper
+                                    title="Contact"
+                                    description="Page de contact"
+                                    protected
+                                >
+                                    <Contact />
+                                </PageWrapper>
+                            }
+                        />
+                        <Route
                             path="/forgot-password"
                             element={
                                 <PageWrapper
@@ -121,10 +134,7 @@ const App = () => {
                         <Route
                             path="/cgu"
                             element={
-                                <PageWrapper 
-                                    title="CGU"
-                                    description="CGU"
-                                >
+                                <PageWrapper title="CGU" description="CGU">
                                     <div>CGU</div>
                                 </PageWrapper>
                             }

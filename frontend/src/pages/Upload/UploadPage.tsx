@@ -1,4 +1,3 @@
-import ContactList from '@/components/contactList/ContactList';
 import FileUploader from '@/components/FileUploader/FileUploader';
 import { CREATE_RESOURCE } from '@/graphql/Resource/mutations';
 import { useMutation } from '@apollo/client';
@@ -106,8 +105,6 @@ const UploadPage = () => {
                     />
                 </form>
             </div>
-
-            <ContactList />
         </div>
     );
 };

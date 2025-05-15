@@ -42,12 +42,14 @@ const Form = ({ title, onSubmit, loading, links, error }: FormProps) => {
     });
 
     const submitForm = async (data: FormData) => {
-        await onSubmit(data.email, data.password).then((res) => {
-            console.log(res);
-        }).catch((error) => {
-            toast.error(error.message);
-            throw new Error(error.message);
-        });
+        await onSubmit(data.email, data.password)
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((error) => {
+                toast.error(error.message);
+                throw new Error(error.message);
+            });
     };
 
     return (
@@ -119,11 +121,15 @@ const Form = ({ title, onSubmit, loading, links, error }: FormProps) => {
                         <div className="text-sm text-red-500">{error}</div>
                     )}
 
-                    <Button disabled={!isValid} type="submit" className="mt-2 cursor-pointer">
+                    <Button disabled={!isValid} type="submit" className="mt-2">
                         {loading ? `${title} ...` : 'Valider'}
                     </Button>
 
-                    {links && <div className="mt-2 flex gap-5">{links}</div>}
+                    {links && (
+                        <div className="mt-2 flex gap-5 text-blue-500">
+                            {links}
+                        </div>
+                    )}
                 </form>
             </CardContent>
         </Card>
