@@ -9,6 +9,7 @@ import Layout from '@/pages/Layout';
 import Login from '@/pages/Log/Login';
 import Sign from '@/pages/Sign/sign';
 import UploadPage from '@/pages/Upload/UploadPage';
+import About from '@/pages/About/about';
 import { useEffect } from 'react';
 import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -116,9 +117,9 @@ const App = () => {
                             element={
                                 <PageWrapper
                                     title="À propos"
-                                    description="À propos"
+                                    description="En savoir plus sur Wild Transfer"
                                 >
-                                    <div>À propos</div>
+                                    <About />
                                 </PageWrapper>
                             }
                         />
