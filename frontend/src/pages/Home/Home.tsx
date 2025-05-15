@@ -1,16 +1,11 @@
-import { Link } from 'react-router-dom';
+import { BackgroundPaths } from '@/components/ui/background-paths';
 
 const Home = () => {
     return (
-        <div className="home-wrapper">
-            <h1 className="home-title">
-                La solution simple et rapide pour tous vos transferts de
-                fichiers
-            </h1>
-            <Link className="onlyMobile btn" to="/upload">
-                Transférez vos fichiers
-            </Link>
-        </div>
+        <BackgroundPaths
+            title="La solution simple et rapide pour tous vos
+                transferts de fichiers"
+        />
     );
 };
 

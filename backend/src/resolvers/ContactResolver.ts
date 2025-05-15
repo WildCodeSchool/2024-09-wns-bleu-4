@@ -13,8 +13,8 @@ import {
 
 @InputType()
 export class ContactInput {
-    @Field(() => ID)
-    targetUserId: number;
+    @Field(() => String)
+    targetUserEmail: string;
 }
 
 @Resolver(Contact)
@@ -72,12 +72,11 @@ class ContactResolver {
             throw new Error("Utilisateur source non trouvé");
         }
 
-        const targetUser = await User.findOne({ where: { id: contactToCreate.targetUserId } });
+        const targetUser = await User.findOne({ where: { email: contactToCreate.targetUserEmail } });
         if (!targetUser) {
             throw new Error("Utilisateur cible non trouvé");
         }
 
-        // Vérifier si le contact existe déjà
         const existingContact = await Contact.findOne({
             where: {
                 sourceUser: { id: sourceUser.id },
@@ -89,7 +88,6 @@ class ContactResolver {
             throw new Error("Ce contact existe déjà");
         }
 
-        // Créer et sauvegarder le nouveau contact
         const newContact = Contact.create({ 
             sourceUser: sourceUser,
             targetUser: targetUser,

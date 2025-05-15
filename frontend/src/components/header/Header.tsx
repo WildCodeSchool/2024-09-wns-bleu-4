@@ -1,139 +1,142 @@
-import { Link, useNavigate } from 'react-router-dom';
 import Logo from '@/components/Logo';
-import { User, Menu, X, LogOut } from 'lucide-react';
-import { useState } from 'react';
+import { useAuthContext } from '@/context/useAuthContext';
 import { useLogoutMutation } from '@/generated/graphql-types';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useAuth } from '@/hooks/useAuth';
+import { ModeToggle } from '../mode-toggle';
+import {
+    Menubar,
+    MenubarContent,
+    MenubarItem,
+    MenubarMenu,
+    MenubarSeparator,
+} from '../ui/menubar';
+import {
+    NavigationMenu,
+    NavigationMenuContent,
+    NavigationMenuItem,
+    NavigationMenuLink,
+    NavigationMenuList,
+    NavigationMenuTrigger,
+} from '../ui/navigation-menu';
 
 const Header = () => {
-
-    const [isOpen, setIsOpen] = useState(false);
-    const [isBurgerOpen, setIsBurgerOpen] = useState(false);
-
     const [logout] = useLogoutMutation();
-
-    const { authLogout, isAuth } = useAuth();
-
-    //const loggedUser = localStorage.getItem('user');
-
+    const { refreshAuth, isAuth } = useAuthContext();
     const navigate = useNavigate();
 
-    const handleLogout = () => {
-        logout();
-        authLogout();
+    const handleLogout = async () => {
+        await logout();
+        refreshAuth();
         toast.success('Déconnexion réussie');
         navigate('/');
     };
 
     return (
-        <div className="header">
-            <button
-                className="onlyMobile menuBurgerButton"
-                onClick={() => setIsBurgerOpen(true)}
-                title="menu-burger-button"
-            >
-                <Menu size={34} stroke="#ff934f" aria-label="Open the menu" />
-            </button>
-
-            <div className={`menuBurger${isBurgerOpen ? '__open' : ''}`}>
-                <button
-                    className="closeButton"
-                    aria-label="Close the menu"
-                    onClick={() => setIsBurgerOpen(false)}
-                >
-                    <X size={34} stroke="#FF934F" />
-                </button>
-                <nav className="menuBurger__nav">
-                    <div className="menuBurger__menu">
-                        <Link to="/" onClick={() => setIsBurgerOpen(false)}>
-                            Possibilités
-                        </Link>
-                        <Link
-                            to="/subscription"
-                            onClick={() => setIsBurgerOpen(false)}
-                        >
-                            Abonnements
-                        </Link>
-                        <Link to="/" onClick={() => setIsBurgerOpen(false)}>
-                            Cas d'utilisation
-                        </Link>
-                        <Link
-                            to="/about"
-                            onClick={() => setIsBurgerOpen(false)}
-                        >
-                            À propos
-                        </Link>
-                    </div>
-                    <div className="menuBurger__menu">
-                        <Link to="/cgu" onClick={() => setIsBurgerOpen(false)}>
-                            CGU
-                        </Link>
-                        <Link
-                            to="/privacy-policy"
-                            onClick={() => setIsBurgerOpen(false)}
-                        >
-                            Politique de confidentialité
-                        </Link>
-                        <Link
-                            to="/sitemap"
-                            onClick={() => setIsBurgerOpen(false)}
-                        >
-                            Plan du site
-                        </Link>
-                    </div>
-                </nav>
-            </div>
-
+        <header className="flex lg:w-[80%] mx-auto justify-between items-center px-4 py-4 ">
             <Logo />
-            <div className="log" data-testid="log-container">
+
+            <NavigationMenu>
+                <NavigationMenuList>
+                    <NavigationMenuItem>
+                        <NavigationMenuTrigger>
+                            Possibilités
+                        </NavigationMenuTrigger>
+                        <NavigationMenuContent>
+                            <div className="p-4 md:w-[400px] lg:w-[500px] space-y-2">
+                                <NavigationMenuLink asChild>
+                                    <Link
+                                        to="/"
+                                        className="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+                                    >
+                                        Toutes les possibilités
+                                    </Link>
+                                </NavigationMenuLink>
+                                <NavigationMenuLink asChild>
+                                    <Link
+                                        to="/files"
+                                        className="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+                                    >
+                                        Explorer les fichiers
+                                    </Link>
+                                </NavigationMenuLink>
+                                <NavigationMenuLink asChild>
+                                    <Link
+                                        to="/contact"
+                                        className="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+                                    >
+                                        Vos contacts
+                                    </Link>
+                                </NavigationMenuLink>
+                            </div>
+                        </NavigationMenuContent>
+                    </NavigationMenuItem>
+
+                    <NavigationMenuItem>
+                        <NavigationMenuTrigger>
+                            Ressources
+                        </NavigationMenuTrigger>
+                        <NavigationMenuContent>
+                            <div className="p-4 md:w-[400px] lg:w-[500px] space-y-2">
+                                <NavigationMenuLink asChild>
+                                    <Link
+                                        to="/subscription"
+                                        className="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+                                    >
+                                        Abonnements
+                                    </Link>
+                                </NavigationMenuLink>
+                                <NavigationMenuLink asChild>
+                                    <Link
+                                        to="/about"
+                                        className="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+                                    >
+                                        À propos
+                                    </Link>
+                                </NavigationMenuLink>
+                            </div>
+                        </NavigationMenuContent>
+                    </NavigationMenuItem>
+                </NavigationMenuList>
+            </NavigationMenu>
+
+            <div className="flex items-center gap-4">
                 {isAuth ? (
                     <button
                         name="logout"
-                        className="cursor-pointer text-white"
+                        className="cursor-pointer px-4 py-1 rounded-md"
                         onClick={handleLogout}
                     >
                         Déconnexion
                     </button>
                 ) : (
-                    <>
-                        <Link to="/login">Connexion</Link>
-                        <Link className="active" to="/sign">
-                            Inscription
-                        </Link>
-                    </>
+                    <Menubar className="border-none shadow-none bg-transparent">
+                        <MenubarMenu>
+                            <MenubarContent>
+                                <MenubarItem asChild>
+                                    <Link
+                                        to="/login"
+                                        className="cursor-pointer w-full"
+                                    >
+                                        Connexion
+                                    </Link>
+                                </MenubarItem>
+                                <MenubarSeparator />
+                                <MenubarItem asChild>
+                                    <Link
+                                        to="/sign"
+                                        className="cursor-pointer w-full"
+                                    >
+                                        Inscription
+                                    </Link>
+                                </MenubarItem>
+                            </MenubarContent>
+                        </MenubarMenu>
+                    </Menubar>
                 )}
+                <ModeToggle />
             </div>
-
-            {isAuth ? (
-                <button
-                    className="onlyMobile cursor-pointer"
-                    onClick={handleLogout}
-                    title="Log out"
-                >
-                    <LogOut size={34} stroke="#ff934f" aria-label="Log out" />
-                </button>
-            ) : (
-                <button
-                    className="onlyMobile dropDownButton cursor-pointer"
-                    onClick={() => setIsOpen(!isOpen)}
-                    title="Show log in or sign in"
-                >
-                    <User
-                        size={34}
-                        stroke="#ff934f"
-                        aria-label="Choose login or sign"
-                    />
-
-                    {isOpen && (
-                        <div className="dropDownButton__menu">
-                            <Link to="/login">Connexion</Link>
-                            <Link to="/sign">Inscription</Link>
-                        </div>
-                    )}
-                </button>
-            )}
-        </div>
+        </header>
     );
 };
 

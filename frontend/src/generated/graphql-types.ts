@@ -42,7 +42,7 @@ export type Contact = {
 };
 
 export type ContactInput = {
-  targetUserId: Scalars['ID']['input'];
+  targetUserEmail: Scalars['String']['input'];
 };
 
 /** Le statut d'un contact : en attente, accepté ou refusé */
@@ -310,10 +310,36 @@ export type UserInput = {
   password: Scalars['String']['input'];
 };
 
+export type SendContactRequestMutationVariables = Exact<{
+  contactToCreate: ContactInput;
+}>;
+
+
+export type SendContactRequestMutation = { __typename?: 'Mutation', sendContactRequest: { __typename?: 'Contact', createdAt: any } };
+
+export type AcceptContactRequestMutationVariables = Exact<{
+  contactId: Scalars['ID']['input'];
+}>;
+
+
+export type AcceptContactRequestMutation = { __typename?: 'Mutation', acceptContactRequest: { __typename?: 'Contact', id: string, status: ContactStatus } };
+
+export type RefuseContactRequestMutationVariables = Exact<{
+  contactId: Scalars['ID']['input'];
+}>;
+
+
+export type RefuseContactRequestMutation = { __typename?: 'Mutation', refuseContactRequest: { __typename?: 'Contact', id: string, status: ContactStatus } };
+
 export type GetMyContactsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetMyContactsQuery = { __typename?: 'Query', getMyContacts: Array<{ __typename?: 'Contact', id: string, status: ContactStatus, createdAt: any, sourceUser: { __typename?: 'User', email: string }, targetUser: { __typename?: 'User', email: string } }> };
+export type GetMyContactsQuery = { __typename?: 'Query', getMyContacts: Array<{ __typename?: 'Contact', id: string, status: ContactStatus, createdAt: any, sourceUser: { __typename?: 'User', id: string, email: string }, targetUser: { __typename?: 'User', id: string, email: string } }> };
+
+export type GetPendingContactRequestsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetPendingContactRequestsQuery = { __typename?: 'Query', getPendingContactRequests: Array<{ __typename?: 'Contact', id: string, status: ContactStatus, createdAt: any, sourceUser: { __typename?: 'User', id: string, email: string }, targetUser: { __typename?: 'User', id: string, email: string } }> };
 
 export type CreateResourceMutationVariables = Exact<{
   data: ResourceInput;
@@ -383,6 +409,107 @@ export type GetUserIdQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetUserIdQuery = { __typename?: 'Query', getUserInfo: { __typename?: 'UserInfo', id?: string | null, email?: string | null } };
 
 
+export const SendContactRequestDocument = gql`
+    mutation SendContactRequest($contactToCreate: ContactInput!) {
+  sendContactRequest(contactToCreate: $contactToCreate) {
+    createdAt
+  }
+}
+    `;
+export type SendContactRequestMutationFn = Apollo.MutationFunction<SendContactRequestMutation, SendContactRequestMutationVariables>;
+
+/**
+ * __useSendContactRequestMutation__
+ *
+ * To run a mutation, you first call `useSendContactRequestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSendContactRequestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [sendContactRequestMutation, { data, loading, error }] = useSendContactRequestMutation({
+ *   variables: {
+ *      contactToCreate: // value for 'contactToCreate'
+ *   },
+ * });
+ */
+export function useSendContactRequestMutation(baseOptions?: Apollo.MutationHookOptions<SendContactRequestMutation, SendContactRequestMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SendContactRequestMutation, SendContactRequestMutationVariables>(SendContactRequestDocument, options);
+      }
+export type SendContactRequestMutationHookResult = ReturnType<typeof useSendContactRequestMutation>;
+export type SendContactRequestMutationResult = Apollo.MutationResult<SendContactRequestMutation>;
+export type SendContactRequestMutationOptions = Apollo.BaseMutationOptions<SendContactRequestMutation, SendContactRequestMutationVariables>;
+export const AcceptContactRequestDocument = gql`
+    mutation AcceptContactRequest($contactId: ID!) {
+  acceptContactRequest(contactId: $contactId) {
+    id
+    status
+  }
+}
+    `;
+export type AcceptContactRequestMutationFn = Apollo.MutationFunction<AcceptContactRequestMutation, AcceptContactRequestMutationVariables>;
+
+/**
+ * __useAcceptContactRequestMutation__
+ *
+ * To run a mutation, you first call `useAcceptContactRequestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAcceptContactRequestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [acceptContactRequestMutation, { data, loading, error }] = useAcceptContactRequestMutation({
+ *   variables: {
+ *      contactId: // value for 'contactId'
+ *   },
+ * });
+ */
+export function useAcceptContactRequestMutation(baseOptions?: Apollo.MutationHookOptions<AcceptContactRequestMutation, AcceptContactRequestMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AcceptContactRequestMutation, AcceptContactRequestMutationVariables>(AcceptContactRequestDocument, options);
+      }
+export type AcceptContactRequestMutationHookResult = ReturnType<typeof useAcceptContactRequestMutation>;
+export type AcceptContactRequestMutationResult = Apollo.MutationResult<AcceptContactRequestMutation>;
+export type AcceptContactRequestMutationOptions = Apollo.BaseMutationOptions<AcceptContactRequestMutation, AcceptContactRequestMutationVariables>;
+export const RefuseContactRequestDocument = gql`
+    mutation RefuseContactRequest($contactId: ID!) {
+  refuseContactRequest(contactId: $contactId) {
+    id
+    status
+  }
+}
+    `;
+export type RefuseContactRequestMutationFn = Apollo.MutationFunction<RefuseContactRequestMutation, RefuseContactRequestMutationVariables>;
+
+/**
+ * __useRefuseContactRequestMutation__
+ *
+ * To run a mutation, you first call `useRefuseContactRequestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRefuseContactRequestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [refuseContactRequestMutation, { data, loading, error }] = useRefuseContactRequestMutation({
+ *   variables: {
+ *      contactId: // value for 'contactId'
+ *   },
+ * });
+ */
+export function useRefuseContactRequestMutation(baseOptions?: Apollo.MutationHookOptions<RefuseContactRequestMutation, RefuseContactRequestMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RefuseContactRequestMutation, RefuseContactRequestMutationVariables>(RefuseContactRequestDocument, options);
+      }
+export type RefuseContactRequestMutationHookResult = ReturnType<typeof useRefuseContactRequestMutation>;
+export type RefuseContactRequestMutationResult = Apollo.MutationResult<RefuseContactRequestMutation>;
+export type RefuseContactRequestMutationOptions = Apollo.BaseMutationOptions<RefuseContactRequestMutation, RefuseContactRequestMutationVariables>;
 export const GetMyContactsDocument = gql`
     query GetMyContacts {
   getMyContacts {
@@ -390,9 +517,11 @@ export const GetMyContactsDocument = gql`
     status
     createdAt
     sourceUser {
+      id
       email
     }
     targetUser {
+      id
       email
     }
   }
@@ -430,6 +559,55 @@ export type GetMyContactsQueryHookResult = ReturnType<typeof useGetMyContactsQue
 export type GetMyContactsLazyQueryHookResult = ReturnType<typeof useGetMyContactsLazyQuery>;
 export type GetMyContactsSuspenseQueryHookResult = ReturnType<typeof useGetMyContactsSuspenseQuery>;
 export type GetMyContactsQueryResult = Apollo.QueryResult<GetMyContactsQuery, GetMyContactsQueryVariables>;
+export const GetPendingContactRequestsDocument = gql`
+    query GetPendingContactRequests {
+  getPendingContactRequests {
+    id
+    status
+    createdAt
+    sourceUser {
+      id
+      email
+    }
+    targetUser {
+      id
+      email
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetPendingContactRequestsQuery__
+ *
+ * To run a query within a React component, call `useGetPendingContactRequestsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPendingContactRequestsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPendingContactRequestsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetPendingContactRequestsQuery(baseOptions?: Apollo.QueryHookOptions<GetPendingContactRequestsQuery, GetPendingContactRequestsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPendingContactRequestsQuery, GetPendingContactRequestsQueryVariables>(GetPendingContactRequestsDocument, options);
+      }
+export function useGetPendingContactRequestsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPendingContactRequestsQuery, GetPendingContactRequestsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPendingContactRequestsQuery, GetPendingContactRequestsQueryVariables>(GetPendingContactRequestsDocument, options);
+        }
+export function useGetPendingContactRequestsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetPendingContactRequestsQuery, GetPendingContactRequestsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetPendingContactRequestsQuery, GetPendingContactRequestsQueryVariables>(GetPendingContactRequestsDocument, options);
+        }
+export type GetPendingContactRequestsQueryHookResult = ReturnType<typeof useGetPendingContactRequestsQuery>;
+export type GetPendingContactRequestsLazyQueryHookResult = ReturnType<typeof useGetPendingContactRequestsLazyQuery>;
+export type GetPendingContactRequestsSuspenseQueryHookResult = ReturnType<typeof useGetPendingContactRequestsSuspenseQuery>;
+export type GetPendingContactRequestsQueryResult = Apollo.QueryResult<GetPendingContactRequestsQuery, GetPendingContactRequestsQueryVariables>;
 export const CreateResourceDocument = gql`
     mutation CreateResource($data: ResourceInput!) {
   createResource(data: $data) {
