@@ -1,14 +1,13 @@
 import Form from '@/components/form/Form';
+import { useAuthContext } from '@/context/useAuthContext';
 import { useLoginMutation } from '@/generated/graphql-types';
-import { useAuth } from '@/hooks/useAuth';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const Login = () => {
     const [login, { loading }] = useLoginMutation();
     const navigate = useNavigate();
-
-    const { authLogin } = useAuth();
+    const { refreshAuth } = useAuthContext();
 
     const handleSubmit = async (email: string, password: string) => {
         try {
@@ -17,11 +16,7 @@ const Login = () => {
             });
 
             if (response.data?.login) {
-                authLogin({
-                    email: email,
-                    role: 'USER',
-                    authToken: response.data.login,
-                });
+                await refreshAuth();
                 toast.success('Connexion réussie');
                 navigate('/');
             }

@@ -1,8 +1,10 @@
 import HeadMeta from '@/components/HeadMeta';
+import { Loader } from '@/components/Loader';
 import { AuthProvider } from '@/context/AuthContext';
 import Contact from '@/pages/Contact/contact';
 import FilesPage from '@/pages/Files/files';
 import Home from '@/pages/Home/Home';
+import Subscription from './pages/Subscription/subscription';
 import Layout from '@/pages/Layout';
 import Login from '@/pages/Log/Login';
 import Sign from '@/pages/Sign/sign';
@@ -105,10 +107,10 @@ const App = () => {
                                     title="Abonnement"
                                     description="Abonnement au service Wild Transfer"
                                 >
-                                    <div>Abonnement</div>
+                                    <Subscription />
                                 </PageWrapper>
                             }
-                        />
+                        />{' '}
                         <Route
                             path="/about"
                             element={
@@ -172,16 +174,17 @@ const PageWrapper = ({
     );
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-    const { isAuth } = useAuth();
+    const { isAuth, loading } = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!isAuth) {
+        if (!loading && !isAuth) {
             toast.error('Vous devez être connecté pour accéder à cette page');
             navigate('/login');
         }
-    }, [isAuth, navigate]);
+    }, [isAuth, loading, navigate]);
 
+    if (loading) return <Loader />;
     return isAuth ? children : null;
 };
 
