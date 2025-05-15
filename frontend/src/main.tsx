@@ -17,7 +17,7 @@ const root = ReactDOM.createRoot(rootElement);
 
 if (import.meta.env.VITE_ENVIRONMENT === 'DEV' || !import.meta.env.VITE_ENVIRONMENT) {
     console.log('App is running in DEV mode');
-}
+};
 
 root.render(
     <ApolloProvider client={client}>
