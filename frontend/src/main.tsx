@@ -19,6 +19,7 @@ if (import.meta.env.VITE_ENVIRONMENT === 'DEV' || !import.meta.env.VITE_ENVIRONM
     console.log('App is running in DEV mode');
 };
 
+
 root.render(
     <ApolloProvider client={client}>
         {import.meta.env.VITE_ENVIRONMENT === "PROD" ? (
