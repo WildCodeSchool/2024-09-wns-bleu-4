@@ -7,7 +7,6 @@ import { toast } from 'react-toastify';
 import FileCard from '@/components/FileCard';
 import { Button } from '@/components/ui/button';
 
-
 type Resource = {
     id: number;
     name: string;
@@ -100,58 +99,54 @@ const FilesPage: React.FC = () => {
     }
 
     return (
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto py-8">
             <div className="flex flex-col items-center mb-8">
                 <h1 className="text-3xl font-bold mb-6 text-center">
                     {graphqlData?.getResourcesByUserId?.length
-                        ? 'Mes fichiers disponibles' 
+                        ? 'Mes fichiers disponibles'
                         : "Vous n'avez pas encore de fichiers"}
                 </h1>
-    <Button
-      variant="ghost"
-      className="rounded-[1.15rem] px-8 py-6 text-lg font-semibold backdrop-blur-md 
+                <Button
+                    variant="ghost"
+                    className="rounded-[1.15rem] px-8 py-6 text-lg font-semibold backdrop-blur-md 
       bg-white/95 hover:bg-white/100 dark:bg-black/95 dark:hover:bg-black/100 
       text-black dark:text-white transition-all duration-300 
       group-hover:-translate-y-0.5 border border-black/10 dark:border-white/10
       hover:shadow-md dark:hover:shadow-neutral-800/50"
-    >
-      <Link
-        to="/upload"
-        className="flex items-center group"
-      >
-        <span className="opacity-90 group-hover:opacity-100 transition-opacity">
-          Ajouter des fichiers
-        </span>
-        <span
-          className="ml-3 opacity-70 group-hover:opacity-100 group-hover:translate-x-1.5 
+                >
+                    <Link to="/upload" className="flex items-center group">
+                        <span className="opacity-90 group-hover:opacity-100 transition-opacity">
+                            Ajouter des fichiers
+                        </span>
+                        <span
+                            className="ml-3 opacity-70 group-hover:opacity-100 group-hover:translate-x-1.5 
           transition-all duration-300"
-        >
-          →
-        </span>
-      </Link>
-    </Button>
-
+                        >
+                            →
+                        </span>
+                    </Link>
+                </Button>
             </div>
             {loading ? (
                 <div className="flex justify-center items-center">
                     <Loader size={50} />
                 </div>
             ) : (
-                <div className="w-4/5 mx-auto">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                    {graphqlData?.getResourcesByUserId?.map(
-                        (file: Resource) => (
-                            <FileCard
-                                key={file.id}
-                                id={file.id}
-                                name={file.name}
-                                url={file.url}
-                                description={file.description}
-                                onDelete={handleDelete}
-                            />
-                        ),
-                    )}
-                </div>
+                <div className="w-full">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                        {graphqlData?.getResourcesByUserId?.map(
+                            (file: Resource) => (
+                                <FileCard
+                                    key={file.id}
+                                    id={file.id}
+                                    name={file.name}
+                                    url={file.url}
+                                    description={file.description}
+                                    onDelete={handleDelete}
+                                />
+                            ),
+                        )}
+                    </div>
                 </div>
             )}
         </div>
