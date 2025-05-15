@@ -1,8 +1,9 @@
 import { Send, FileIcon, Trash2, X } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import music from '@/assets/images/music.png';
 import video from '@/assets/images/video.png'; // <-- nouveau logo vidéo
+import { getFormattedSizeFromUrl } from '@/lib/utils';
 
 interface FileCardProps {
     name: string;
@@ -23,6 +24,19 @@ const FileCard: React.FC<FileCardProps> = ({
     const isAudio = name.match(/\.mp3$/i);
     const isVideo = name.match(/\.mp4$/i); // <-- détection vidéo
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [size, setSize] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchSize = async () => {
+            try {
+                const fileSize = await getFormattedSizeFromUrl(url);
+                setSize(fileSize);
+            } catch (error) {
+                console.error('Error fetching file size:', error);
+            }
+        };
+        fetchSize();
+    }, [url]);
 
     return (
         <>
@@ -66,6 +80,12 @@ const FileCard: React.FC<FileCardProps> = ({
                     >
                         {name}
                     </h3>
+
+                    {size && (
+                        <i className="font-normal text-base mb-2">
+                            {size}
+                        </i>
+                    )}
 
                     {/* Boutons en bas */}
                     <div className="flex gap-2 items-end justify-end mt-auto">
