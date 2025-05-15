@@ -21,8 +21,8 @@ const Header = () => {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        logout();
         authLogout();
+        logout();
         toast.success('Déconnexion réussie');
         navigate('/');
     };
