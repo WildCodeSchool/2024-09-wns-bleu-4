@@ -1,8 +1,15 @@
 import ContactList from '@/components/contactList/ContactList';
 import FileUploader from '@/components/FileUploader/FileUploader';
 import { CREATE_RESOURCE } from '@/graphql/Resource/mutations';
+<<<<<<< HEAD
 import { useMutation } from '@apollo/client';
 import { useState } from 'react';
+=======
+import { GET_USER_ID } from '@/graphql/User/queries';
+import { useMutation, useQuery } from '@apollo/client';
+import { useCallback, useState } from 'react';
+import { useDropzone } from 'react-dropzone';
+>>>>>>> 23502952e62f3d0576005aff5d70602a72df7d04
 import { mutate } from 'swr';
 
 const UploadPage = () => {
@@ -13,6 +20,7 @@ const UploadPage = () => {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     const [createResource] = useMutation(CREATE_RESOURCE);
+    const { data: userData } = useQuery(GET_USER_ID);
 
     const acceptedFileTypes = {
         'application/pdf': ['.pdf'],
@@ -27,7 +35,7 @@ const UploadPage = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!file) return;
+        if (!file || !userData?.getUserInfo?.id) return;
 
         setIsUploading(true);
         setSuccessMessage(null);
@@ -45,7 +53,7 @@ const UploadPage = () => {
                         url: fileUrl,
                         description:
                             description || `Fichier uploadé : ${file.name}`,
-                        userId: 1,
+                        userId: userData.getUserInfo.id,
                     },
                 },
             });

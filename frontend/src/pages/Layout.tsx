@@ -1,4 +1,5 @@
 import Header from '@/components/header/Header';
+import HeaderMobile from '@/components/header/MobileHeader';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Outlet } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -7,8 +8,7 @@ const Layout = () => {
     return (
         <ThemeProvider>
             <main className="">
-                <Header />
-
+                {window.innerWidth < 999 ? <HeaderMobile/> : <Header />}
                 <div className="">
                     <Outlet />
                 </div>

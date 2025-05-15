@@ -1,7 +1,7 @@
 import Logo from '@/components/Logo';
 import { useLogoutMutation } from '@/generated/graphql-types';
 import { useAuth } from '@/hooks/useAuth';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { ModeToggle } from '../mode-toggle';
 import {
@@ -32,30 +32,30 @@ const Header = () => {
             <Logo />
 
             <NavigationMenu className="flex gap-4">
-                <Link
+                <NavLink
                     to="/upload"
                     className="block p-2 hover:bg-gray-200 dark:hover:bg-neutral-700 rounded-md"
                 >
                     Transférez vos fichiers
-                </Link>
-                <Link
+                </NavLink>
+                <NavLink
                     to="/subscription"
                     className="block p-2 hover:bg-gray-200 dark:hover:bg-neutral-700 rounded-md"
                 >
                     Nos abonnements
-                </Link>
-                <Link
+                </NavLink>
+                <NavLink
                     to="/about"
                     className="block p-2 hover:bg-gray-200 dark:hover:bg-neutral-700 rounded-md"
                 >
                     Qui sommes nous ?
-                </Link>
-                <Link
+                </NavLink>
+                <NavLink
                     to="/how-work"
                     className="block p-2 hover:bg-gray-200 dark:hover:bg-neutral-700 rounded-md"
                 >
                    Comment ça marche
-                </Link>
+                </NavLink>
             </NavigationMenu>
 
             <div className="flex items-center gap-4">
