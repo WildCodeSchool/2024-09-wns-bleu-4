@@ -1,40 +1,33 @@
 import { useGetUserInfoQuery } from '@/generated/graphql-types';
-import { createContext, useContext, useEffect, useState } from 'react';
-import { User } from '../hooks/useUser';
+import { createContext } from 'react';
 
 interface AuthContext {
-    user: User | null;
+    user: { email: string | null } | null;
     isAuth: boolean;
-    setUser: (user: User | null) => void;
+    loading: boolean;
+    refreshAuth: () => void;
 }
 
-const AuthContext = createContext<AuthContext>({
+export const AuthContext = createContext<AuthContext>({
     user: null,
     isAuth: false,
-    setUser: () => {},
+    loading: true,
+    refreshAuth: () => {},
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const [user, setUser] = useState<User | null>(null);
-    const [isAuth, setisAuth] = useState(false);
-    const { data } = useGetUserInfoQuery();
+    const { data, loading, refetch } = useGetUserInfoQuery();
 
-    useEffect(() => {
-        if (!user) {
-            setisAuth(false);
-            return;
-        }
+    const isAuth = !!data?.getUserInfo.isLoggedIn;
+    const user = isAuth ? { email: data?.getUserInfo.email ?? null } : null;
 
-        const serverUser = data?.getUserInfo.email;
-        setisAuth(user.email === serverUser);
-    }, [user, data]);
+    const refreshAuth = () => {
+        refetch();
+    };
 
     return (
-        <AuthContext.Provider value={{ user, isAuth, setUser }}>
+        <AuthContext.Provider value={{ user, isAuth, loading, refreshAuth }}>
             {children}
         </AuthContext.Provider>
     );
 };
-
-// eslint-disable-next-line react-refresh/only-export-components
-export const useAuthContext = () => useContext(AuthContext);

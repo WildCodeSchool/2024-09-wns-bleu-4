@@ -1,4 +1,5 @@
 import HeadMeta from '@/components/HeadMeta';
+import { Loader } from '@/components/Loader';
 import { AuthProvider } from '@/context/AuthContext';
 import Contact from '@/pages/Contact/contact';
 import FilesPage from '@/pages/Files/files';
@@ -172,16 +173,17 @@ const PageWrapper = ({
     );
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-    const { isAuth } = useAuth();
+    const { isAuth, loading } = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!isAuth) {
+        if (!loading && !isAuth) {
             toast.error('Vous devez être connecté pour accéder à cette page');
             navigate('/login');
         }
-    }, [isAuth, navigate]);
+    }, [isAuth, loading, navigate]);
 
+    if (loading) return <Loader />;
     return isAuth ? children : null;
 };
 
