@@ -21,8 +21,8 @@ const Sign = () => {
                 setIsSubmitted(true);
             }
         } catch (error) {
-            toast.error("Erreur lors de l'inscription");
-            console.error("Erreur lors de l'inscription :", error);
+            toast.error(error as string);
+            throw new Error(error as string);
         }
     };
 

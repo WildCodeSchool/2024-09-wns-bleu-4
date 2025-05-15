@@ -32,7 +32,7 @@ const Login = () => {
     };
 
     return (
-        <section className="mx-auto w-[80%] mt-10">
+        <section className="mx-auto w-[80%]">
             <Form
                 title="Connexion"
                 onSubmit={handleSubmit}
@@ -40,7 +40,7 @@ const Login = () => {
                 links={
                     <>
                         <Link to="/forgot-password">Mot de passe oublié ?</Link>
-                        <Link to="/sign">Vous avez déjà un compte ?</Link>
+                        <Link to="/sign">Créer un compte</Link>
                     </>
                 }
             />
