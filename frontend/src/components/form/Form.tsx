@@ -7,6 +7,7 @@ import { Button } from '../ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
+import { toast } from 'react-toastify';
 
 const formSchema = z.object({
     email: z.string().email('Veuillez saisir une adresse email valide'),
@@ -41,7 +42,14 @@ const Form = ({ title, onSubmit, loading, links, error }: FormProps) => {
     });
 
     const submitForm = async (data: FormData) => {
-        await onSubmit(data.email, data.password);
+        await onSubmit(data.email, data.password)
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((error) => {
+                toast.error(error.message);
+                throw new Error(error.message);
+            });
     };
 
     return (
@@ -117,7 +125,11 @@ const Form = ({ title, onSubmit, loading, links, error }: FormProps) => {
                         {loading ? `${title} ...` : 'Valider'}
                     </Button>
 
-                    {links && <div className="mt-2 flex gap-5">{links}</div>}
+                    {links && (
+                        <div className="mt-2 flex gap-5 text-blue-500">
+                            {links}
+                        </div>
+                    )}
                 </form>
             </CardContent>
         </Card>

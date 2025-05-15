@@ -1,5 +1,6 @@
 import HeadMeta from '@/components/HeadMeta';
 import { AuthProvider } from '@/context/AuthContext';
+import Contact from '@/pages/Contact/contact';
 import FilesPage from '@/pages/Files/files';
 import Home from '@/pages/Home/Home';
 import Layout from '@/pages/Layout';
@@ -20,84 +21,123 @@ const App = () => {
                         <Route
                             index
                             element={
-                                <>
-                                    <HeadMeta
-                                        title="Acceuil"
-                                        description="Acceuil du site Wild Transfer"
-                                    />
+                                <PageWrapper
+                                    title="Acceuil"
+                                    description="Acceuil du site Wild Transfer"
+                                >
                                     <Home />
-                                </>
+                                </PageWrapper>
                             }
                         />
                         <Route
                             path="/login"
                             element={
-                                <>
-                                    <HeadMeta
-                                        title="Connexion"
-                                        description="Connexion à un compte Wild Transfer"
-                                    />
+                                <PageWrapper
+                                    title="Connexion"
+                                    description="Connexion à un compte Wild Transfer"
+                                >
                                     <Login />
-                                </>
+                                </PageWrapper>
                             }
                         />
                         <Route
                             path="/sign"
                             element={
-                                <>
-                                    <HeadMeta
-                                        title="Inscription"
-                                        description="Création de compte Wild Transfer"
-                                    />
+                                <PageWrapper
+                                    title="Inscription"
+                                    description="Création de compte Wild Transfer"
+                                >
                                     <Sign />
-                                </>
+                                </PageWrapper>
                             }
                         />
                         <Route
                             path="/files"
                             element={
-                                <ProtectedRoute>
-                                    <>
-                                        <HeadMeta
-                                            title="Mes Fichiers"
-                                            description="Page de vos fichiers"
-                                        />
-                                        <FilesPage />
-                                    </>
-                                </ProtectedRoute>
+                                <PageWrapper
+                                    title="Mes Fichiers"
+                                    description="Page de vos fichiers"
+                                    protected
+                                >
+                                    <FilesPage />
+                                </PageWrapper>
                             }
                         />
                         <Route
                             path="/upload"
                             element={
-                                <ProtectedRoute>
-                                    <>
-                                        <HeadMeta
-                                            title="Téléversement"
-                                            description="Téléversement de fichiers"
-                                        />
-                                        <UploadPage />
-                                    </>
-                                </ProtectedRoute>
+                                <PageWrapper
+                                    title="Téléversement"
+                                    description="Téléversement de fichiers"
+                                    protected
+                                >
+                                    <UploadPage />
+                                </PageWrapper>
+                            }
+                        />
+                        <Route
+                            path="/contact"
+                            element={
+                                <PageWrapper
+                                    title="Contact"
+                                    description="Page de contact"
+                                    protected
+                                >
+                                    <Contact />
+                                </PageWrapper>
                             }
                         />
                         <Route
                             path="/forgot-password"
-                            element={<div>Mot de passe oublié</div>}
+                            element={
+                                <PageWrapper
+                                    title="Mot de passe oublié"
+                                    description="Récupération de mot de passe"
+                                >
+                                    <div>Mot de passe oublié</div>
+                                </PageWrapper>
+                            }
                         />
                         <Route
                             path="/subscription"
-                            element={<div>Abonnement</div>}
+                            element={
+                                <PageWrapper
+                                    title="Abonnement"
+                                    description="Abonnement au service Wild Transfer"
+                                >
+                                    <div>Abonnement</div>
+                                </PageWrapper>
+                            }
                         />
-                        <Route path="/about" element={<div>À propos</div>} />
+                        <Route
+                            path="/about"
+                            element={
+                                <PageWrapper
+                                    title="À propos"
+                                    description="À propos"
+                                >
+                                    <div>À propos</div>
+                                </PageWrapper>
+                            }
+                        />
                         <Route
                             path="/sitemap"
-                            element={<div>Plan du site</div>}
+                            element={
+                                <PageWrapper
+                                    title="Plan du site"
+                                    description="Plan du site Wild Transfer"
+                                >
+                                    <div>Plan du site</div>
+                                </PageWrapper>
+                            }
                         />
-                        <Route path="/cgu" element={<div>CGU</div>} />
                         <Route
-                            path="/privacy-policy"
-                            element={<div>Politique de confidentialité</div>}
+                            path="/cgu"
+                            element={
+                                <PageWrapper title="CGU" description="CGU">
+                                    <div>CGU</div>
+                                </PageWrapper>
+                            }
                         />
                     </Route>
                 </Routes>
@@ -105,6 +145,31 @@ const App = () => {
         </AuthProvider>
     );
 };
+
+interface PageWrapperProps {
+    children: React.ReactNode;
+    title: string;
+    description: string;
+    protected?: boolean;
+}
+
+const PageWrapper = ({
+    children,
+    title,
+    description,
+    protected: isProtected,
+}: PageWrapperProps) =>
+    isProtected ? (
+        <ProtectedRoute>
+            <HeadMeta title={title} description={description} />
+            {children}
+        </ProtectedRoute>
+    ) : (
+        <>
+            <HeadMeta title={title} description={description} />
+            {children}
+        </>
+    );
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     const { isAuth } = useAuth();
