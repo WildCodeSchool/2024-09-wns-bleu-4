@@ -1,6 +1,9 @@
 import { Send, FileIcon, Trash2, X } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import music from '@/assets/images/music.png';
+import video from '@/assets/images/video.png'; // <-- nouveau logo vidéo
+import { getFormattedSizeFromUrl } from '@/lib/utils';
 
 interface FileCardProps {
     name: string;
@@ -18,14 +21,32 @@ const FileCard: React.FC<FileCardProps> = ({
     onDelete,
 }) => {
     const isImage = name.match(/\.(jpg|jpeg|png|gif|webp)$/i);
+    const isAudio = name.match(/\.mp3$/i);
+    const isVideo = name.match(/\.mp4$/i); // <-- détection vidéo
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [size, setSize] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchSize = async () => {
+            try {
+                const fileSize = await getFormattedSizeFromUrl(url);
+                setSize(fileSize);
+            } catch (error) {
+                console.error('Error fetching file size:', error);
+            }
+        };
+        fetchSize();
+    }, [url]);
 
     return (
         <>
-            <div className="flex items-center justify-between bg-white rounded-lg shadow p-4 gap-4 w-full max-w-4xl">
+            <div className="flex dark:bg-zinc-900 items-center bg-white rounded-lg shadow-md p-4 gap-4 w-full max-w-4xl">
+                {/* Image à gauche */}
                 <div
                     className="w-28 h-28 flex-shrink-0 rounded overflow-hidden bg-gray-100 flex items-center justify-center cursor-pointer"
-                    onClick={() => isImage && setIsModalOpen(true)}
+                    onClick={() =>
+                        (isImage || isAudio || isVideo) && setIsModalOpen(true)
+                    }
                 >
                     {isImage ? (
                         <img
@@ -33,33 +54,63 @@ const FileCard: React.FC<FileCardProps> = ({
                             alt={name}
                             className="w-full h-full object-cover"
                         />
+                    ) : isAudio ? (
+                        <img
+                            src={music}
+                            alt="music icon"
+                            className="w-12 h-12 object-contain"
+                        />
+                    ) : isVideo ? (
+                        <img
+                            src={video}
+                            alt="video icon"
+                            className="w-12 h-12 object-contain"
+                        />
                     ) : (
                         <FileIcon className="w-12 h-12 text-gray-400" />
                     )}
                 </div>
-                <div className="flex flex-col flex-grow overflow-hidden">
+
+                {/* Contenu à droite */}
+                <div className="flex flex-col justify-between h-full flex-grow overflow-hidden">
+                    {/* Titre en haut */}
                     <h3
-                        className="font-semibold text-base truncate"
+                        className="font-semibold text-base truncate mb-2"
                         title={name}
                     >
                         {name}
                     </h3>
-                </div>
-                <div className="flex flex-col gap-2 items-end">
-                    <Link
-                        to={url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center px-3 py-1.5 text-sm rounded-md bg-gray-200 hover:bg-gray-300 transition"
-                    >
-                        <Send className="w-4 h-4 mr-1" />
-                    </Link>
-                    <button
-                        onClick={() => onDelete(id, name)}
-                        className="inline-flex items-center px-3 py-1.5 text-sm rounded-md bg-red-500 text-white hover:bg-red-600 transition"
-                    >
-                        <Trash2 className="w-4 h-4 mr-1" />
-                    </button>
+
+                    {size && (
+                        <i className="font-normal text-base mb-2">
+                            {size}
+                        </i>
+                    )}
+
+                    {/* Boutons en bas */}
+                    <div className="flex gap-2 items-end justify-end mt-auto">
+                        <Link
+                            to={url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex dark:bg-zinc-500 items-center px-2 py-1.5 text-sm rounded-md bg-gray-200 hover:bg-gray-300 transition"
+                        >
+                            <Send className="w-4 h-4 mr-1" />
+                        </Link>
+                        <button
+                            onClick={() => {
+                                const confirmed = window.confirm(
+                                    `Voulez-vous vraiment supprimer "${name}" ?`,
+                                );
+                                if (confirmed) {
+                                    onDelete(id, name);
+                                }
+                            }}
+                            className="inline-flex items-center px-2 py-1.5 text-sm rounded-md bg-red-400 text-white hover:bg-red-500 transition"
+                        >
+                            <Trash2 className="w-4 h-4 mr-1" />
+                        </button>
+                    </div>
                 </div>
             </div>
             {isModalOpen && (
@@ -78,11 +129,30 @@ const FileCard: React.FC<FileCardProps> = ({
                             <X className="w-6 h-6" />
                         </button>
 
-                        <img
-                            src={url}
-                            alt={name}
-                            className="w-full max-h-[70vh] object-contain"
-                        />
+                        {isImage ? (
+                            <img
+                                src={url}
+                                alt={name}
+                                className="w-full max-h-[70vh] object-contain"
+                            />
+                        ) : isAudio ? (
+                            <div className="p-4">
+                                <audio controls className="w-full">
+                                    <source src={url} type="audio/mpeg" />
+                                    Votre navigateur ne supporte pas la lecture
+                                    audio.
+                                </audio>
+                            </div>
+                        ) : isVideo ? (
+                            <div className="p-4">
+                                <video controls className="w-full max-h-[70vh]">
+                                    <source src={url} type="video/mp4" />
+                                    Votre navigateur ne supporte pas la lecture
+                                    vidéo.
+                                </video>
+                            </div>
+                        ) : null}
+
                         <div className="p-4 pb-0">
                             <h2
                                 className="text-lg font-semibold text-gray-800 truncate"

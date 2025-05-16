@@ -1,4 +1,5 @@
 import Logo from '@/components/Logo';
+import { useAuthContext } from '@/context/useAuthContext';
 import { useLogoutMutation } from '@/generated/graphql-types';
 import { useAuth } from '@/hooks/useAuth';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
@@ -21,12 +22,12 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
 const Header = () => {
     const [logout] = useLogoutMutation();
-    const { authLogout, isAuth } = useAuth();
+    const { refreshAuth, isAuth } = useAuthContext();
     const navigate = useNavigate();
 
-    const handleLogout = () => {
-        authLogout();
-        logout();
+    const handleLogout = async () => {
+        await logout();
+        refreshAuth();
         toast.success('Déconnexion réussie');
         navigate('/');
     };

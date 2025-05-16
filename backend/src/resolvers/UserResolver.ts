@@ -48,6 +48,13 @@ export class UserInfo {
 class UserResolver {
     @Mutation(() => String)
     async register(@Arg('data', () => UserInput) newUserData: User) {
+
+        const existingUser = await User.findOneBy({ email: newUserData.email });
+
+        if (existingUser) {
+            throw new Error('Un compte existe déjà avec cet email');
+        }
+
         const codeToConfirm = Array.from({ length: 8 }, () =>
             Math.floor(Math.random() * 10),
         ).join('');

@@ -1,5 +1,4 @@
-import ContactList from '@/components/contactList/ContactList';
-import FileUploader from '@/components/FileUploader/FileUploader';
+import FileUploader from '@/components/fileUploader/FileUploader';
 import { CREATE_RESOURCE } from '@/graphql/Resource/mutations';
 import { GET_USER_ID } from '@/graphql/User/queries';
 import { useMutation, useQuery } from '@apollo/client';
@@ -14,7 +13,6 @@ const UploadPage = () => {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     const [createResource] = useMutation(CREATE_RESOURCE);
-    const { data: userData } = useQuery(GET_USER_ID);
 
     const acceptedFileTypes = {
         'application/pdf': ['.pdf'],
@@ -29,7 +27,7 @@ const UploadPage = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!file || !userData?.getUserInfo?.id) return;
+        if (!file) return;
 
         setIsUploading(true);
         setSuccessMessage(null);
@@ -47,7 +45,7 @@ const UploadPage = () => {
                         url: fileUrl,
                         description:
                             description || `Fichier uploadé : ${file.name}`,
-                        userId: userData.getUserInfo.id,
+                        userId: 1,
                     },
                 },
             });
@@ -90,7 +88,7 @@ const UploadPage = () => {
     };
 
     return (
-        <div className="w-[80%] mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+        <div className="mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
             <div className="">
                 <h1 className="text-2xl font-bold my-8">
                     Transférez votre fichier
@@ -108,8 +106,6 @@ const UploadPage = () => {
                     />
                 </form>
             </div>
-
-            <ContactList />
         </div>
     );
 };

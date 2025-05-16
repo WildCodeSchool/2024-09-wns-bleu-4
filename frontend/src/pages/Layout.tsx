@@ -5,6 +5,10 @@ import { Outlet } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
 const Layout = () => {
+    const location = useLocation();
+    const isHomePage = location.pathname === '/';
+    const { theme } = useTheme();
+
     return (
         <ThemeProvider>
             <main className="">
@@ -12,10 +16,12 @@ const Layout = () => {
                 <div className="">
                     <Outlet />
                 </div>
-                <ToastContainer position="bottom-right" theme="dark" />
+                <ToastContainer
+                    position="bottom-right"
+                    theme={theme === 'dark' ? 'light' : 'dark'}
+                />
             </main>
         </ThemeProvider>
     );
-};
-
+}
 export default Layout;

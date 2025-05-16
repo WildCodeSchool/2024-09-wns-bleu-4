@@ -43,11 +43,10 @@ export default function FileUploader({
     const [isDragging, setIsDragging] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
 
-    // Process dropped or selected files
     const handleFiles = (fileList: FileList) => {
         if (fileList.length === 0) return;
 
-        const file = fileList[0]; // Only take the first file
+        const file = fileList[0];
 
         const newFile = {
             id: `${URL.createObjectURL(file)}-${Date.now()}`,
@@ -101,7 +100,7 @@ export default function FileUploader({
         if (e.target.files) handleFiles(e.target.files);
     };
 
-    const removeFile = (e: React.MouseEvent, fileId: string) => {
+    const removeFile = (e: React.MouseEvent) => {
         e.stopPropagation();
         setFiles([]);
         onFileChange(null);
@@ -128,7 +127,6 @@ export default function FileUploader({
 
     return (
         <div className="">
-            {/* Message displays */}
             <AnimatePresence>
                 {successMessage && (
                     <motion.div
@@ -153,7 +151,6 @@ export default function FileUploader({
                 )}
             </AnimatePresence>
 
-            {/* Drop zone */}
             {files.length === 0 && (
                 <motion.div
                     onDragOver={onDragOver}
@@ -240,16 +237,13 @@ export default function FileUploader({
                             accept={Object.entries(
                                 acceptedFileTypes || defaultAcceptedTypes,
                             )
-                                .map(([type, extensions]) =>
-                                    extensions.join(','),
-                                )
+                                .map(([, extensions]) => extensions.join(','))
                                 .join(',')}
                         />
                     </div>
                 </motion.div>
             )}
 
-            {/* Uploaded file */}
             <div className="mt-8">
                 <AnimatePresence>
                     {files.length > 0 && (
@@ -308,10 +302,8 @@ export default function FileUploader({
                                     )}
                                 </div>
 
-                                {/* File info & progress */}
                                 <div className="flex-1 min-w-0">
                                     <div className="flex flex-col gap-1 w-full">
-                                        {/* Filename */}
                                         <div className="flex items-center gap-2 min-w-0">
                                             <FileIcon className="w-5 h-5 flex-shrink-0 text-blue-500 dark:text-blue-400" />
                                             <h4
@@ -322,7 +314,6 @@ export default function FileUploader({
                                             </h4>
                                         </div>
 
-                                        {/* Details & remove/loading */}
                                         <div className="flex items-center justify-between gap-3 text-sm text-zinc-500 dark:text-zinc-400">
                                             <span className="text-xs md:text-sm">
                                                 {formatFileSize(files[0].size)}
@@ -340,10 +331,7 @@ export default function FileUploader({
                                                     <Trash2
                                                         className="w-4 h-4 cursor-pointer text-zinc-400 hover:text-red-500 dark:text-zinc-500 dark:hover:text-red-400 transition-colors duration-200"
                                                         onClick={(e) =>
-                                                            removeFile(
-                                                                e,
-                                                                files[0].id,
-                                                            )
+                                                            removeFile(e)
                                                         }
                                                         aria-label="Supprimer le fichier"
                                                     />
@@ -352,7 +340,6 @@ export default function FileUploader({
                                         </div>
                                     </div>
 
-                                    {/* Progress bar */}
                                     <div className="w-full h-2 bg-zinc-200 dark:bg-zinc-700 rounded-full overflow-hidden mt-3">
                                         <motion.div
                                             initial={{ width: 0 }}
@@ -374,7 +361,6 @@ export default function FileUploader({
                                         />
                                     </div>
 
-                                    {/* Description textarea */}
                                     <div className="mt-4">
                                         <textarea
                                             placeholder="Description du fichier (minimum 30 caractères)"
