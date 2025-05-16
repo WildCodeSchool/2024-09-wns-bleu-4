@@ -1,7 +1,6 @@
 import Logo from '@/components/Logo';
 import { useAuthContext } from '@/context/useAuthContext';
 import { useLogoutMutation } from '@/generated/graphql-types';
-import { useAuth } from '@/hooks/useAuth';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { ModeToggle } from '../mode-toggle';
