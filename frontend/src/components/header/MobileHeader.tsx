@@ -13,12 +13,11 @@ import { useState } from "react";
 
 const HeaderMobile = () => {
     const [logout] = useLogoutMutation();
-    const { authLogout, isAuth } = useAuth();
+    const { isAuth } = useAuth();
     const navigate = useNavigate();
 
     const handleLogout = () => {
         logout();
-        authLogout();
         toast.success('Déconnexion réussie');
         navigate('/');
     };
