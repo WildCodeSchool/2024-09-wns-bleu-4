@@ -69,8 +69,8 @@ const App = () => {
                             path="/upload"
                             element={
                                 <PageWrapper
-                                    title="Téléversement"
-                                    description="Téléversement de fichiers"
+                                    title="Transférer des fichiers"
+                                    description="Transfert de fichiers"
                                     protected
                                 >
                                     <UploadPage />
