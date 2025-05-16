@@ -1,6 +1,9 @@
-import FileUploader from '@/components/fileUploader/FileUploader';
+import FileUploader from '@/components/FileUploader/FileUploader';
+import { Button } from '@/components/ui/button';
 import { CREATE_RESOURCE } from '@/graphql/Resource/mutations';
+import { ArrowLeft } from 'lucide-react';
 import { useMutation } from '@apollo/client';
+import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { mutate } from 'swr';
 
@@ -87,7 +90,7 @@ const UploadPage = () => {
     };
 
     return (
-        <div className="mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+        <div className="mx-auto grid grid-cols-1 md:grid-cols-2 gap-2 items-center">
             <div className="">
                 <h1 className="text-2xl font-bold my-8">
                     Transférez votre fichier
@@ -104,6 +107,14 @@ const UploadPage = () => {
                         acceptedFileTypes={acceptedFileTypes}
                     />
                 </form>
+            </div>
+            <div className="flex flex-col gap-4">
+                <Button asChild variant="outline" className="w-full">
+                    <Link to="/files">
+                        <ArrowLeft className="mr-2 h-4 w-4" />
+                        Retour à mes fichiers
+                    </Link>
+                </Button>
             </div>
         </div>
     );
