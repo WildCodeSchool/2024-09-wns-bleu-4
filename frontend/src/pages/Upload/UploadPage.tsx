@@ -1,6 +1,7 @@
 import FileUploader from '@/components/fileUploader/FileUploader';
 import { CREATE_RESOURCE } from '@/graphql/Resource/mutations';
-import { useMutation } from '@apollo/client';
+import { GET_USER_ID } from '@/graphql/User/queries';
+import { useMutation, useQuery } from '@apollo/client';
 import { useState } from 'react';
 import { mutate } from 'swr';
 
