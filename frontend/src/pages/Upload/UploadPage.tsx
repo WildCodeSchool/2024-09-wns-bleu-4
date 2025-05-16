@@ -1,15 +1,9 @@
 import ContactList from '@/components/contactList/ContactList';
 import FileUploader from '@/components/FileUploader/FileUploader';
 import { CREATE_RESOURCE } from '@/graphql/Resource/mutations';
-<<<<<<< HEAD
-import { useMutation } from '@apollo/client';
-import { useState } from 'react';
-=======
 import { GET_USER_ID } from '@/graphql/User/queries';
 import { useMutation, useQuery } from '@apollo/client';
-import { useCallback, useState } from 'react';
-import { useDropzone } from 'react-dropzone';
->>>>>>> 23502952e62f3d0576005aff5d70602a72df7d04
+import { useState } from 'react';
 import { mutate } from 'swr';
 
 const UploadPage = () => {

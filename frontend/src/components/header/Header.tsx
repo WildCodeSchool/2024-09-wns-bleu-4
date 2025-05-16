@@ -14,6 +14,10 @@ import {
 import {
     NavigationMenu,
 } from '../ui/navigation-menu';
+import { MenubarTrigger } from '@radix-ui/react-menubar';
+import { UserIcon } from 'lucide-react';
+import { Button } from '../ui/button';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
 const Header = () => {
     const [logout] = useLogoutMutation();
@@ -54,44 +58,58 @@ const Header = () => {
                     to="/how-work"
                     className="block p-2 hover:bg-gray-200 dark:hover:bg-neutral-700 rounded-md"
                 >
-                   Comment ça marche
+                    Comment ça marche
                 </NavLink>
             </NavigationMenu>
 
             <div className="flex items-center gap-4">
-                {isAuth ? (
-                    <button
-                        name="logout"
-                        className="cursor-pointer px-4 py-1 rounded-md"
-                        onClick={handleLogout}
-                    >
-                        Déconnexion
-                    </button>
-                ) : (
-                    <Menubar className="border-none shadow-none bg-transparent">
-                        <MenubarMenu>
-                            <MenubarContent>
+                <Menubar className="border-none shadow-none bg-transparent">
+                    <MenubarMenu>
+                        <MenubarTrigger>
+                            {isAuth ? 
+                            <>
+                            <Avatar>
+                                <AvatarImage src="https://github.com/shadcn.png" />
+                                <AvatarFallback>CN</AvatarFallback>
+                            </Avatar> 
+                            </>
+                            :
+                                <UserIcon />}
+                        </MenubarTrigger>
+                        <MenubarContent>
+                            {!isAuth ?
+                                <>
+                                    <MenubarItem asChild>
+                                        <Link
+                                            to="/login"
+                                            className="cursor-pointer w-full"
+                                        >
+                                            Connexion
+                                        </Link>
+                                    </MenubarItem>
+                                    <MenubarSeparator />
+                                    <MenubarItem asChild>
+                                        <Link
+                                            to="/sign"
+                                            className="cursor-pointer w-full"
+                                        >
+                                            Inscription
+                                        </Link>
+                                    </MenubarItem>
+                                </>
+                                :
                                 <MenubarItem asChild>
-                                    <Link
-                                        to="/login"
+                                    <Button
                                         className="cursor-pointer w-full"
+                                        onClick={handleLogout}
                                     >
-                                        Connexion
-                                    </Link>
+                                        Deconnexion
+                                    </Button>
                                 </MenubarItem>
-                                <MenubarSeparator />
-                                <MenubarItem asChild>
-                                    <Link
-                                        to="/sign"
-                                        className="cursor-pointer w-full"
-                                    >
-                                        Inscription
-                                    </Link>
-                                </MenubarItem>
-                            </MenubarContent>
-                        </MenubarMenu>
-                    </Menubar>
-                )}
+                            }
+                        </MenubarContent>
+                    </MenubarMenu>
+                </Menubar>
                 <ModeToggle />
             </div>
         </header>

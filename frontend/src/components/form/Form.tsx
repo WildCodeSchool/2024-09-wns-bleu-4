@@ -45,7 +45,7 @@ const Form = ({ title, onSubmit, loading, links, error }: FormProps) => {
     };
 
     return (
-        <Card className="w-auto sm:w-[50%] mx-auto my-40">
+        <Card className="w-auto sm:w-[50%] mx-auto md:my-40  my-6">
             <CardHeader>
                 <CardTitle className="text-2xl">{title}</CardTitle>
                 <CardTitle className="text-sm font-normal text-muted-foreground">
