@@ -3,14 +3,14 @@ import { useAuthContext } from '@/context/useAuthContext';
 import { useLogoutMutation } from '@/generated/graphql-types';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { ModeToggle } from '../mode-toggle';
+import { ModeToggle } from '@/components/mode-toggle';
 import {
     Menubar,
     MenubarContent,
     MenubarItem,
     MenubarMenu,
     MenubarSeparator,
-} from '../ui/menubar';
+} from '@/components/ui/menubar';
 import {
     NavigationMenu,
     NavigationMenuContent,
@@ -18,7 +18,8 @@ import {
     NavigationMenuLink,
     NavigationMenuList,
     NavigationMenuTrigger,
-} from '../ui/navigation-menu';
+} from '@/components/ui/navigation-menu';
+import BlockedLink from '@/components/BlockedLink';
 
 const Header = () => {
     const [logout] = useLogoutMutation();
@@ -53,20 +54,28 @@ const Header = () => {
                                     </Link>
                                 </NavigationMenuLink>
                                 <NavigationMenuLink asChild>
-                                    <Link
-                                        to="/files"
-                                        className="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
-                                    >
-                                        Explorer les fichiers
-                                    </Link>
+                                    {isAuth ? (
+                                        <Link
+                                            to="/files"
+                                            className="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+                                        >
+                                            Explorer les fichiers
+                                        </Link>
+                                    ) : (
+                                        <BlockedLink label="Explorer les fichiers" />
+                                    )}
                                 </NavigationMenuLink>
                                 <NavigationMenuLink asChild>
-                                    <Link
-                                        to="/contact"
-                                        className="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
-                                    >
-                                        Vos contacts
-                                    </Link>
+                                    {isAuth ? (
+                                        <Link
+                                            to="/contact"
+                                            className="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+                                        >
+                                            Vos contacts
+                                        </Link>
+                                    ) : (
+                                        <BlockedLink label="Vos contacts" />
+                                    )}
                                 </NavigationMenuLink>
                             </div>
                         </NavigationMenuContent>
