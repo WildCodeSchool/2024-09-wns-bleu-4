@@ -144,7 +144,6 @@
     padding: 1rem;
     &:hover , &:focus {
         border: none;
-        ;
     }
 }
 
