@@ -3,14 +3,14 @@ import { useAuthContext } from '@/context/useAuthContext';
 import { useLogoutMutation } from '@/generated/graphql-types';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { ModeToggle } from '../mode-toggle';
+import { ModeToggle } from '@/components/mode-toggle';
 import {
     Menubar,
     MenubarContent,
     MenubarItem,
     MenubarMenu,
     MenubarSeparator,
-} from '../ui/menubar';
+} from '@/components/ui/menubar';
 import {
     NavigationMenu,
 } from '../ui/navigation-menu';
@@ -34,7 +34,6 @@ const Header = () => {
     return (
         <header className="flex lg:w-[80%] mx-auto justify-between items-center px-4 py-4 bg-white dark:bg-neutral-900 rounded-lg lg:mt-2">
             <Logo />
-
             <NavigationMenu className="flex gap-4">
                 <NavLink
                     to="/upload"
