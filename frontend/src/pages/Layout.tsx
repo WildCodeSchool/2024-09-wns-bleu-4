@@ -1,11 +1,11 @@
 import Header from '@/components/header/Header';
 import HeaderMobile from '@/components/header/MobileHeader';
 import { Outlet } from 'react-router-dom';
-import { ThemeProvider } from '@/components/theme-provider';
+import { ThemeProvider } from '@/components/themeProvider';
 import { cn } from '@/lib/utils';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom'; 
 import { ToastContainer } from 'react-toastify';
-import { useTheme } from '@/hooks/use-theme';
+import { useTheme } from '@/hooks/useTheme';
 
 const Layout = () => {
     const location = useLocation();
