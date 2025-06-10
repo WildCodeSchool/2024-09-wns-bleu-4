@@ -1,5 +1,5 @@
-import { useGetUserInfoQuery } from '@/generated/graphql-types';
 import { AuthContext } from '@/context/AuthContextInit';
+import { useGetUserIdQuery } from '@/generated/graphql-types';
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const { data, loading, refetch } = useGetUserIdQuery();
