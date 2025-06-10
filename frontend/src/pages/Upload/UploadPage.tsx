@@ -1,8 +1,8 @@
 import FileUploader from '@/components/FileUploader/FileUploader';
 import { Button } from '@/components/ui/button';
 import { CREATE_RESOURCE } from '@/graphql/Resource/mutations';
-import { GET_USER_ID } from '@/graphql/User/queries';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
+import { ArrowLeft, Link } from 'lucide-react';
 import { useState } from 'react';
 import { mutate } from 'swr';
 

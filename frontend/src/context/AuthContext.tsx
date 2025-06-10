@@ -8,7 +8,7 @@ interface AuthContext {
     refreshAuth: () => void;
 }
 
-export const AuthContext = createContext<AuthContext>({
+const AuthContext = createContext<AuthContext>({
     user: null,
     isAuth: false,
     loading: true,

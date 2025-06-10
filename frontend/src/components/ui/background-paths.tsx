@@ -1,8 +1,6 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
 
 function FloatingPaths({ position }: { position: number }) {
     const paths = Array.from({ length: 36 }, (_, i) => ({
