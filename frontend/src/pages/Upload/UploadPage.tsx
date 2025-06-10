@@ -5,6 +5,7 @@ import { useMutation } from '@apollo/client';
 import { ArrowLeft, Link } from 'lucide-react';
 import { useState } from 'react';
 import { mutate } from 'swr';
+import { useAuth } from '@/hooks/useAuth';
 
 const UploadPage = () => {
     const [file, setFile] = useState<File | null>(null);
@@ -12,6 +13,7 @@ const UploadPage = () => {
     const [isUploading, setIsUploading] = useState(false);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const { user } = useAuth();
 
     const [createResource] = useMutation(CREATE_RESOURCE);
 
@@ -46,7 +48,7 @@ const UploadPage = () => {
                         url: fileUrl,
                         description:
                             description || `Fichier uploadé : ${file.name}`,
-                        userId: 1,
+                        userId: user?.id,
                     },
                 },
             });
