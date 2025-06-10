@@ -401,7 +401,7 @@ export type GetAllUsersQuery = { __typename?: 'Query', getAllUsers: Array<{ __ty
 export type GetUserInfoQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUserInfoQuery = { __typename?: 'Query', getUserInfo: { __typename?: 'UserInfo', email?: string | null, isLoggedIn: boolean } };
+export type GetUserInfoQuery = { __typename?: 'Query', getUserInfo: { __typename?: 'UserInfo', email?: string | null, isLoggedIn: boolean, id?: string | null } };
 
 export type GetUserIdQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -929,6 +929,7 @@ export const GetUserInfoDocument = gql`
   getUserInfo {
     email
     isLoggedIn
+    id
   }
 }
     `;
