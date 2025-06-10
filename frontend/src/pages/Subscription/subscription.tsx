@@ -61,12 +61,14 @@ const demoPlans = [
 
 const Subscription = () => {
     return (
-        <div className="h-auto min-h-screen py-10 px-4">
-            <Pricing
-                plans={demoPlans}
-                title="Tarifs simples et transparents"
-                description="Choisissez le plan qui vous convient. Tous les abonnements incluent un accès complet à la plateforme."
-            />
+        <div className="min-h-screen px-4 flex justify-center">
+            <div className="w-full max-w-5xl">
+                <Pricing
+                    plans={demoPlans}
+                    title="Tarifs simples et transparents"
+                    description="Choisissez le plan qui vous convient. Tous les abonnements incluent un accès complet à la plateforme."
+                />
+            </div>
         </div>
     );
 };

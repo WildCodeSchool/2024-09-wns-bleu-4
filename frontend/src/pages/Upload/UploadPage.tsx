@@ -1,9 +1,8 @@
 import FileUploader from '@/components/FileUploader/FileUploader';
 import { Button } from '@/components/ui/button';
 import { CREATE_RESOURCE } from '@/graphql/Resource/mutations';
-import { ArrowLeft } from 'lucide-react';
 import { useMutation } from '@apollo/client';
-import { Link } from 'react-router-dom';
+import { ArrowLeft, Link } from 'lucide-react';
 import { useState } from 'react';
 import { mutate } from 'swr';
 import { useAuth } from '@/hooks/useAuth';

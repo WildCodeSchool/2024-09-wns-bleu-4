@@ -1,19 +1,5 @@
-import { useGetUserIdQuery } from '@/generated/graphql-types';
-import { createContext } from 'react';
-
-interface AuthContext {
-    user: { email: string | null; id?: number } | null;
-    isAuth: boolean;
-    loading: boolean;
-    refreshAuth: () => void;
-}
-
-export const AuthContext = createContext<AuthContext>({
-    user: null,
-    isAuth: false,
-    loading: true,
-    refreshAuth: () => {},
-});
+import { useGetUserInfoQuery } from '@/generated/graphql-types';
+import { AuthContext } from '@/context/AuthContextInit';
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const { data, loading, refetch } = useGetUserIdQuery();

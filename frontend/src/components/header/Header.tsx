@@ -1,7 +1,7 @@
 import Logo from '@/components/Logo';
 import { useAuthContext } from '@/context/useAuthContext';
 import { useLogoutMutation } from '@/generated/graphql-types';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { ModeToggle } from '@/components/mode-toggle';
 import {
@@ -13,13 +13,11 @@ import {
 } from '@/components/ui/menubar';
 import {
     NavigationMenu,
-    NavigationMenuContent,
-    NavigationMenuItem,
-    NavigationMenuLink,
-    NavigationMenuList,
-    NavigationMenuTrigger,
-} from '@/components/ui/navigation-menu';
-import BlockedLink from '@/components/BlockedLink';
+} from '../ui/navigation-menu';
+import { MenubarTrigger } from '@radix-ui/react-menubar';
+import { UserIcon } from 'lucide-react';
+import { Button } from '../ui/button';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
 const Header = () => {
     const [logout] = useLogoutMutation();
@@ -34,119 +32,89 @@ const Header = () => {
     };
 
     return (
-        <header className="flex lg:w-[80%] mx-auto justify-between items-center px-4 py-4 ">
+        <header className="flex lg:w-[80%] mx-auto justify-between items-center px-4 py-4 bg-white dark:bg-neutral-900 rounded-lg lg:mt-2">
             <Logo />
-
-            <NavigationMenu>
-                <NavigationMenuList>
-                    <NavigationMenuItem>
-                        <NavigationMenuTrigger>
-                            Possibilités
-                        </NavigationMenuTrigger>
-                        <NavigationMenuContent>
-                            <div className="p-4 md:w-[400px] lg:w-[500px] space-y-2">
-                                <NavigationMenuLink asChild>
-                                    <Link
-                                        to="/"
-                                        className="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
-                                    >
-                                        Toutes les possibilités
-                                    </Link>
-                                </NavigationMenuLink>
-                                <NavigationMenuLink asChild>
-                                    {isAuth ? (
-                                        <Link
-                                            to="/files"
-                                            className="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
-                                        >
-                                            Explorer les fichiers
-                                        </Link>
-                                    ) : (
-                                        <BlockedLink label="Explorer les fichiers" />
-                                    )}
-                                </NavigationMenuLink>
-                                <NavigationMenuLink asChild>
-                                    {isAuth ? (
-                                        <Link
-                                            to="/contact"
-                                            className="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
-                                        >
-                                            Vos contacts
-                                        </Link>
-                                    ) : (
-                                        <BlockedLink label="Vos contacts" />
-                                    )}
-                                </NavigationMenuLink>
-                            </div>
-                        </NavigationMenuContent>
-                    </NavigationMenuItem>
-
-                    <NavigationMenuItem>
-                        <NavigationMenuTrigger>
-                            Ressources
-                        </NavigationMenuTrigger>
-                        <NavigationMenuContent>
-                            <div className="p-4 md:w-[400px] lg:w-[500px] space-y-2">
-                                <NavigationMenuLink asChild>
-                                    <Link
-                                        to="/subscription"
-                                        className="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
-                                    >
-                                        Abonnements
-                                    </Link>
-                                </NavigationMenuLink>
-                                <NavigationMenuLink asChild>
-                                    <Link
-                                        to="/about"
-                                        className="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
-                                    >
-                                        À propos
-                                    </Link>
-                                </NavigationMenuLink>
-                            </div>
-                        </NavigationMenuContent>
-                    </NavigationMenuItem>
-                </NavigationMenuList>
+            <NavigationMenu className="flex gap-4">
+                <NavLink
+                    to="/upload"
+                    className="block p-2 hover:bg-gray-200 dark:hover:bg-neutral-700 rounded-md"
+                >
+                    Transférez vos fichiers
+                </NavLink>
+                <NavLink
+                    to="/subscription"
+                    className="block p-2 hover:bg-gray-200 dark:hover:bg-neutral-700 rounded-md"
+                >
+                    Nos abonnements
+                </NavLink>
+                <NavLink
+                    to="/about"
+                    className="block p-2 hover:bg-gray-200 dark:hover:bg-neutral-700 rounded-md"
+                >
+                    Qui sommes nous ?
+                </NavLink>
+                <NavLink
+                    to="/how-work"
+                    className="block p-2 hover:bg-gray-200 dark:hover:bg-neutral-700 rounded-md"
+                >
+                    Comment ça marche
+                </NavLink>
             </NavigationMenu>
 
             <div className="flex items-center gap-4">
-                {isAuth ? (
-                    <button
-                        name="logout"
-                        className="cursor-pointer px-4 py-1 rounded-md"
-                        onClick={handleLogout}
-                    >
-                        Déconnexion
-                    </button>
-                ) : (
-                    <Menubar className="border-none shadow-none bg-transparent">
-                        <MenubarMenu>
-                            <MenubarContent>
+                <Menubar className="border-none shadow-none bg-transparent">
+                    <MenubarMenu>
+                        <MenubarTrigger>
+                            {isAuth ? 
+                            <>
+                            <Avatar>
+                                <AvatarImage src="https://github.com/shadcn.png" />
+                                <AvatarFallback>CN</AvatarFallback>
+                            </Avatar> 
+                            </>
+                            :
+                                <UserIcon />}
+                        </MenubarTrigger>
+                        <MenubarContent>
+                            {!isAuth ?
+                                <>
+                                    <MenubarItem asChild>
+                                        <Link
+                                            to="/login"
+                                            className="cursor-pointer w-full"
+                                        >
+                                            Connexion
+                                        </Link>
+                                    </MenubarItem>
+                                    <MenubarSeparator />
+                                    <MenubarItem asChild>
+                                        <Link
+                                            to="/sign"
+                                            className="cursor-pointer w-full"
+                                        >
+                                            Inscription
+                                        </Link>
+                                    </MenubarItem>
+                                </>
+                                :
                                 <MenubarItem asChild>
-                                    <Link
-                                        to="/login"
+                                    <Button
                                         className="cursor-pointer w-full"
+                                        onClick={handleLogout}
                                     >
-                                        Connexion
-                                    </Link>
+                                        Deconnexion
+                                    </Button>
                                 </MenubarItem>
-                                <MenubarSeparator />
-                                <MenubarItem asChild>
-                                    <Link
-                                        to="/sign"
-                                        className="cursor-pointer w-full"
-                                    >
-                                        Inscription
-                                    </Link>
-                                </MenubarItem>
-                            </MenubarContent>
-                        </MenubarMenu>
-                    </Menubar>
-                )}
+                            }
+                        </MenubarContent>
+                    </MenubarMenu>
+                </Menubar>
                 <ModeToggle />
             </div>
         </header>
     );
 };
+
+
 
 export default Header;
