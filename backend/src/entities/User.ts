@@ -85,7 +85,7 @@ export class User extends BaseEntity {
     @ManyToMany(() => Resource, (Resource) => Resource.usersWithAccess, {
         nullable: true,
     })
-    resourceAccess: Resource[];
+    sharedResources: Resource[];
 
     @Field(() => Subscription, { nullable: true })
     @OneToOne(() => Subscription, (subscription) => subscription.user, {

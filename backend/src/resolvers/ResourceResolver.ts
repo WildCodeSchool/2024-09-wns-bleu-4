@@ -52,13 +52,52 @@ class ResourceResolver {
         });
     }
 
+    @Query(() => [User])
+    async getUsersWithAccess(
+        @Arg('resourceId', () => ID) resourceId: number,
+    ): Promise<User[]> {
+        const resource = await Resource.findOne({ where: { id: resourceId }, relations: ['usersWithAccess'] });
+        return resource?.usersWithAccess ?? [];
+    }
+
+    @Mutation(() => String)
+    async createUserAccess(
+        @Arg('resourceId', () => ID) resourceId: number,
+        @Arg('userId', () => ID) userId: number,
+    ): Promise<string> {
+        
+        const resource = await Resource.findOne({ 
+            where: { id: resourceId },
+            relations: ['usersWithAccess'],
+        });
+
+        if (!resource) {
+            throw new Error('Le fichier demandé n\'a pas été trouvé');
+        };
+
+        const user = await User.findOne({ where: { id: userId } });
+        if (!user) {
+            throw new Error('L\'utilisateur demandé n\'a pas été trouvé');
+        };
+
+        // Check if user already has access to this resource
+        if (resource.usersWithAccess.some(u => u.id === user.id)) {
+            return 'User already has access to this resource';
+        } else {
+            resource.usersWithAccess.push(user);
+            await Resource.save(resource);
+            return 'Access granted';
+        }
+
+    }
+
     @Mutation(() => Resource)
     async createResource(
         @Arg('data', () => ResourceInput) data: ResourceInput,
     ): Promise<Resource> {
         const user = await User.findOne({ where: { id: data.userId } });
         if (!user) {
-            throw new Error('User not found');
+            throw new Error('L\'utilisateur demandé n\'a pas été trouvé');
         }
 
         const resource = Resource.create({ ...data, user });
@@ -82,7 +121,7 @@ class ResourceResolver {
         });
 
         if (!resource) {
-            throw new Error('Resource not found');
+            throw new Error('Le fichier demandé n\'a pas été trouvé');
         }
 
         await Resource.remove(resource);
