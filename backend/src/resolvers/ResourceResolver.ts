@@ -80,10 +80,15 @@ class ResourceResolver {
             throw new Error('User not found');
         };
 
-        resource.usersWithAccess.push(user);
-        await Resource.save(resource);
+        // Check if user already has access to this resource
+        if (resource.usersWithAccess.some(u => u.id === user.id)) {
+            return 'User already has access to this resource';
+        } else {
+            resource.usersWithAccess.push(user);
+            await Resource.save(resource);
+            return 'Access granted';
+        }
 
-        return 'Access granted to user';
     }
 
     @Mutation(() => Resource)
