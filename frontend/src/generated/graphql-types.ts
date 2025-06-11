@@ -74,6 +74,7 @@ export type Mutation = {
   createResource: Resource;
   createSubscription: Subscription;
   createUser: User;
+  createUserAccess: Scalars['String']['output'];
   deleteComment: Scalars['String']['output'];
   deleteLike: Scalars['String']['output'];
   deleteReport: Scalars['String']['output'];
@@ -126,6 +127,12 @@ export type MutationCreateSubscriptionArgs = {
 
 export type MutationCreateUserArgs = {
   user: UserInput;
+};
+
+
+export type MutationCreateUserAccessArgs = {
+  resourceId: Scalars['ID']['input'];
+  userId: Scalars['ID']['input'];
 };
 
 
@@ -198,6 +205,8 @@ export type Query = {
   getResourceById?: Maybe<Resource>;
   getResourcesByUserId: Array<Resource>;
   getUserInfo: UserInfo;
+  getUserSharedResources: Array<Resource>;
+  getUsersWithAccess: Array<User>;
 };
 
 
@@ -238,6 +247,16 @@ export type QueryGetResourceByIdArgs = {
 
 export type QueryGetResourcesByUserIdArgs = {
   userId: Scalars['ID']['input'];
+};
+
+
+export type QueryGetUserSharedResourcesArgs = {
+  userId: Scalars['ID']['input'];
+};
+
+
+export type QueryGetUsersWithAccessArgs = {
+  resourceId: Scalars['ID']['input'];
 };
 
 /** The reasons for reporting a resource */

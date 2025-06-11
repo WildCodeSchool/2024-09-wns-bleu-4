@@ -78,7 +78,7 @@ export class Resource extends BaseEntity {
     description: string;
 
     @Field(() => [User])
-    @ManyToMany(() => User, (User) => User.resourceAccess)
+    @ManyToMany(() => User, (User) => User.sharedResources)
     @JoinTable()
     usersWithAccess: User[];
 
