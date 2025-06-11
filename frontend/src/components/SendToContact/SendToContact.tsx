@@ -2,18 +2,14 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { X } from 'lucide-react';
-
-interface Contact {
-    id: string;
-    name: string;
-    email: string;
-}
+import { Contact } from '@/generated/graphql-types';
 
 interface SendToContactProps {
     onSend: (contact: Contact) => void;
+    myContacts: Contact[];
 }
 
-const SendToContact = ({ onSend }: SendToContactProps) => {
+const SendToContact = ({ onSend, myContacts }: SendToContactProps) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
     const [contacts, setContacts] = useState<Contact[]>([]); // This would be populated from your API
@@ -23,10 +19,7 @@ const SendToContact = ({ onSend }: SendToContactProps) => {
         // Here you would typically fetch contacts based on the search query
         // For now, we'll use dummy data
         if (value.length > 2) {
-            setContacts([
-                { id: '1', name: 'John Doe', email: 'john@example.com' },
-                { id: '2', name: 'Jane Smith', email: 'jane@example.com' },
-            ]);
+            setContacts(myContacts);
         } else {
             setContacts([]);
         }
@@ -60,7 +53,7 @@ const SendToContact = ({ onSend }: SendToContactProps) => {
                                 className="p-2 hover:bg-gray-100 cursor-pointer"
                                 onClick={() => handleSelectContact(contact)}
                             >
-                                {contact.name} ({contact.email})
+                                {contact.targetUser?.email}
                             </div>
                         ))}
                     </div>
@@ -69,7 +62,7 @@ const SendToContact = ({ onSend }: SendToContactProps) => {
 
             {selectedContact && (
                 <div className="flex items-center justify-between p-2 bg-gray-100 rounded-md">
-                    <span>{selectedContact.name}</span>
+                    <span>{selectedContact.targetUser?.email}</span>
                     <button
                         onClick={handleRemoveContact}
                         className="p-1 hover:bg-gray-200 rounded-full"

@@ -1,10 +1,13 @@
 import { Send, FileIcon, Trash2, X } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import music from '@/assets/images/music.png';
 import video from '@/assets/images/video.png'; // <-- nouveau logo vidéo
 import { getFormattedSizeFromUrl } from '@/lib/utils';
 import SendToContact from './SendToContact/SendToContact';
+import { Contact } from '@/generated/graphql-types';
+import { CREATE_USER_ACCESS } from '@/graphql/Resource/mutations';
+import { useMutation } from '@apollo/client';
+import { toast } from 'react-toastify';
 
 interface FileCardProps {
     name: string;
@@ -12,6 +15,8 @@ interface FileCardProps {
     id: number;
     description: string;
     onDelete: (id: number, name: string) => void;
+    myContacts: Contact[];
+    isShared: boolean;
 }
 
 const FileCard: React.FC<FileCardProps> = ({
@@ -20,6 +25,8 @@ const FileCard: React.FC<FileCardProps> = ({
     id,
     description,
     onDelete,
+    myContacts,
+    isShared,
 }) => {
     const isImage = name.match(/\.(jpg|jpeg|png|gif|webp)$/i);
     const isAudio = name.match(/\.mp3$/i);
@@ -39,6 +46,22 @@ const FileCard: React.FC<FileCardProps> = ({
         };
         fetchSize();
     }, [url]);
+
+    const [createUserAccess] = useMutation(CREATE_USER_ACCESS);
+
+    const handleShareToContact = async (contact: Contact) => {
+        try {
+            await createUserAccess({
+                variables: {
+                    resourceId: id,
+                    userId: contact.targetUser?.id,
+                },
+            });
+                toast.success('Fichier partagé avec succès');
+        } catch (error) {
+            toast.error(error instanceof Error ? error.message : 'Erreur lors du partage du fichier');
+        }
+    };
 
     return (
         <>
@@ -92,25 +115,29 @@ const FileCard: React.FC<FileCardProps> = ({
 
                         {/* Boutons en bas */}
                         <div className="flex gap-2 items-end justify-end mt-auto">
-                            <button
-                                onClick={() => setIsSendModalOpen(!isSendModalOpen)}
-                                className="inline-flex dark:bg-zinc-500 items-center px-2 py-1.5 text-sm rounded-md bg-gray-200 hover:bg-gray-300 transition"
-                            >
-                                <Send className="w-4 h-4 mr-1" />
-                            </button>
-                            <button
-                                onClick={() => {
-                                    const confirmed = window.confirm(
-                                        `Voulez-vous vraiment supprimer "${name}" ?`,
-                                    );
-                                    if (confirmed) {
-                                        onDelete(id, name);
-                                    }
-                                }}
-                                className="inline-flex items-center px-2 py-1.5 text-sm rounded-md bg-red-400 text-white hover:bg-red-500 transition"
-                            >
-                                <Trash2 className="w-4 h-4 mr-1" />
-                            </button>
+                            {!isShared && (
+                                <>
+                                    <button
+                                        onClick={() => setIsSendModalOpen(!isSendModalOpen)}
+                                        className="cursor-pointer inline-flex dark:bg-zinc-500 items-center px-2 py-1.5 text-sm rounded-md bg-gray-200 hover:bg-gray-300 transition"
+                                    >
+                                        <Send className="w-4 h-4 mr-1" />
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            const confirmed = window.confirm(
+                                                `Voulez-vous vraiment supprimer "${name}" ?`,
+                                            );
+                                            if (confirmed) {
+                                                onDelete(id, name);
+                                            }
+                                        }}
+                                        className="cursor-pointer inline-flex items-center px-2 py-1.5 text-sm rounded-md bg-red-400 text-white hover:bg-red-500 transition"
+                                    >
+                                        <Trash2 className="w-4 h-4 mr-1" />
+                                    </button>
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -127,11 +154,12 @@ const FileCard: React.FC<FileCardProps> = ({
                             </button>
                             <div className="relative z-50 h-full flex items-center">
                                 <SendToContact
-                                    onSend={(contact) => {
+                                    onSend={(contact: Contact) => {
                                         // Here you would typically handle the sending logic
-                                        console.log('Sending to contact:', contact);
+                                        handleShareToContact(contact);
                                         setIsSendModalOpen(false);
                                     }}
+                                    myContacts={myContacts}
                                 />
                             </div>
                         </div>
