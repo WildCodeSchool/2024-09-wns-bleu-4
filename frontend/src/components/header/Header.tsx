@@ -78,14 +78,16 @@ const Header = () => {
             <div className="flex items-center gap-4">
                 <Menubar className="border-none shadow-none bg-transparent">
                     <MenubarMenu>
-                        <MenubarTrigger>
+                        <MenubarTrigger
+                            aria-label={
+                                isAuth ? 'Menu utilisateur' : 'Connexion'
+                            }
+                        >
                             {isAuth ? (
-                                <>
-                                    <Avatar>
-                                        <AvatarImage src="https://github.com/shadcn.png" />
-                                        <AvatarFallback>CN</AvatarFallback>
-                                    </Avatar>
-                                </>
+                                <Avatar>
+                                    <AvatarImage src="https://github.com/shadcn.png" />
+                                    <AvatarFallback>CN</AvatarFallback>
+                                </Avatar>
                             ) : (
                                 <UserIcon />
                             )}
