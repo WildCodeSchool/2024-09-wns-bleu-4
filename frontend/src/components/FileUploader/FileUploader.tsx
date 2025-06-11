@@ -363,7 +363,7 @@ export default function FileUploader({
 
                                     <div className="mt-4">
                                         <textarea
-                                            placeholder="Description du fichier (minimum 30 caractères)"
+                                            placeholder="Description du fichier (minimum 4 caractères)"
                                             value={description}
                                             onChange={(e) =>
                                                 onDescriptionChange(
@@ -372,11 +372,11 @@ export default function FileUploader({
                                             }
                                             className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-lg text-zinc-800 dark:text-zinc-200 bg-white dark:bg-zinc-800 resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
                                             rows={4}
-                                            minLength={30}
+                                            minLength={4}
                                             required
                                         />
                                         <div className="flex justify-end mt-1 text-xs text-zinc-500">
-                                            {description.length}/30 caractères
+                                            {description.length}/4 caractères
                                             minimum
                                         </div>
                                     </div>
@@ -399,12 +399,12 @@ export default function FileUploader({
                         <button
                             type="submit"
                             className={clsx(
-                                'px-6 py-3 rounded-lg font-medium transition-all duration-200 shadow-sm',
-                                description.length >= 30 && !isUploading
+                                'px-8 py-3 rounded-lg font-medium transition-all duration-200 shadow-sm',
+                                description.length >= 4 && !isUploading
                                     ? 'bg-blue-500 hover:bg-blue-600 text-white'
                                     : 'bg-zinc-300 dark:bg-zinc-700 text-zinc-500 dark:text-zinc-400 cursor-not-allowed',
                             )}
-                            disabled={description.length < 30 || isUploading}
+                            disabled={description.length < 4 || isUploading}
                         >
                             {isUploading ? (
                                 <span className="flex items-center gap-2">
@@ -412,7 +412,7 @@ export default function FileUploader({
                                     Envoi en cours...
                                 </span>
                             ) : (
-                                'Envoyer le fichier'
+                                'Enregistrer le fichier'
                             )}
                         </button>
                     </motion.div>

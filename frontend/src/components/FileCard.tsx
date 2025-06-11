@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import music from '@/assets/images/music.png';
 import video from '@/assets/images/video.png'; // <-- nouveau logo vidéo
 import { getFormattedSizeFromUrl } from '@/lib/utils';
+import SendToContact from './SendToContact/SendToContact';
 
 interface FileCardProps {
     name: string;
@@ -24,6 +25,7 @@ const FileCard: React.FC<FileCardProps> = ({
     const isAudio = name.match(/\.mp3$/i);
     const isVideo = name.match(/\.mp4$/i); // <-- détection vidéo
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isSendModalOpen, setIsSendModalOpen] = useState(false);
     const [size, setSize] = useState<string | null>(null);
 
     useEffect(() => {
@@ -40,79 +42,103 @@ const FileCard: React.FC<FileCardProps> = ({
 
     return (
         <>
-            <div className="flex dark:bg-zinc-900 items-center bg-white rounded-lg shadow-md p-4 gap-4 w-full max-w-4xl">
-                {/* Image à gauche */}
-                <div
-                    className="w-28 h-28 flex-shrink-0 rounded overflow-hidden bg-gray-100 flex items-center justify-center cursor-pointer"
-                    onClick={() =>
-                        (isImage || isAudio || isVideo) && setIsModalOpen(true)
-                    }
-                >
-                    {isImage ? (
-                        <img
-                            src={url}
-                            alt={name}
-                            className="w-full h-full object-cover"
-                        />
-                    ) : isAudio ? (
-                        <img
-                            src={music}
-                            alt="music icon"
-                            className="w-12 h-12 object-contain"
-                        />
-                    ) : isVideo ? (
-                        <img
-                            src={video}
-                            alt="video icon"
-                            className="w-12 h-12 object-contain"
-                        />
-                    ) : (
-                        <FileIcon className="w-12 h-12 text-gray-400" />
-                    )}
-                </div>
-
-                {/* Contenu à droite */}
-                <div className="flex flex-col justify-between h-full flex-grow overflow-hidden">
-                    {/* Titre en haut */}
-                    <h3
-                        className="font-semibold text-base truncate mb-2"
-                        title={name}
+            <div className="flex flex-col w-full max-w-4xl relative">
+                <div className="flex dark:bg-zinc-900 items-center bg-white rounded-lg shadow-md p-4 gap-4 w-full">
+                    {/* Image à gauche */}
+                    <div
+                        className="w-28 h-28 flex-shrink-0 rounded overflow-hidden bg-gray-100 flex items-center justify-center cursor-pointer"
+                        onClick={() =>
+                            (isImage || isAudio || isVideo) && setIsModalOpen(true)
+                        }
                     >
-                        {name}
-                    </h3>
+                        {isImage ? (
+                            <img
+                                src={url}
+                                alt={name}
+                                className="w-full h-full object-cover"
+                            />
+                        ) : isAudio ? (
+                            <img
+                                src={music}
+                                alt="music icon"
+                                className="w-12 h-12 object-contain"
+                            />
+                        ) : isVideo ? (
+                            <img
+                                src={video}
+                                alt="video icon"
+                                className="w-12 h-12 object-contain"
+                            />
+                        ) : (
+                            <FileIcon className="w-12 h-12 text-gray-400" />
+                        )}
+                    </div>
 
-                    {size && (
-                        <i className="font-normal text-base mb-2">
-                            {size}
-                        </i>
-                    )}
+                    {/* Contenu à droite */}
+                    <div className="flex flex-col justify-between h-full flex-grow overflow-hidden">
+                        {/* Titre en haut */}
+                        <h3
+                            className="font-semibold text-base truncate mb-2"
+                            title={name}
+                        >
+                            {name}
+                        </h3>
 
-                    {/* Boutons en bas */}
-                    <div className="flex gap-2 items-end justify-end mt-auto">
-                        <Link
-                            to={url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex dark:bg-zinc-500 items-center px-2 py-1.5 text-sm rounded-md bg-gray-200 hover:bg-gray-300 transition"
-                        >
-                            <Send className="w-4 h-4 mr-1" />
-                        </Link>
-                        <button
-                            onClick={() => {
-                                const confirmed = window.confirm(
-                                    `Voulez-vous vraiment supprimer "${name}" ?`,
-                                );
-                                if (confirmed) {
-                                    onDelete(id, name);
-                                }
-                            }}
-                            className="inline-flex items-center px-2 py-1.5 text-sm rounded-md bg-red-400 text-white hover:bg-red-500 transition"
-                        >
-                            <Trash2 className="w-4 h-4 mr-1" />
-                        </button>
+                        {size && (
+                            <i className="font-normal text-base mb-2">
+                                {size}
+                            </i>
+                        )}
+
+                        {/* Boutons en bas */}
+                        <div className="flex gap-2 items-end justify-end mt-auto">
+                            <button
+                                onClick={() => setIsSendModalOpen(!isSendModalOpen)}
+                                className="inline-flex dark:bg-zinc-500 items-center px-2 py-1.5 text-sm rounded-md bg-gray-200 hover:bg-gray-300 transition"
+                            >
+                                <Send className="w-4 h-4 mr-1" />
+                            </button>
+                            <button
+                                onClick={() => {
+                                    const confirmed = window.confirm(
+                                        `Voulez-vous vraiment supprimer "${name}" ?`,
+                                    );
+                                    if (confirmed) {
+                                        onDelete(id, name);
+                                    }
+                                }}
+                                className="inline-flex items-center px-2 py-1.5 text-sm rounded-md bg-red-400 text-white hover:bg-red-500 transition"
+                            >
+                                <Trash2 className="w-4 h-4 mr-1" />
+                            </button>
+                        </div>
                     </div>
                 </div>
+
+                {/* SendToContact component below the card */}
+                {isSendModalOpen && (
+                    <div className="absolute z-50 mt-2 bg-white rounded-lg shadow-lg p-4 w-full h-[144px]">
+                        <div className="relative h-full">
+                            <button
+                                onClick={() => setIsSendModalOpen(false)}
+                                className="absolute -top-2 -right-2 p-1 bg-gray-200 rounded-full hover:bg-gray-300 transition-colors z-[60]"
+                            >
+                                <X className="w-4 h-4" />
+                            </button>
+                            <div className="relative z-50 h-full flex items-center">
+                                <SendToContact
+                                    onSend={(contact) => {
+                                        // Here you would typically handle the sending logic
+                                        console.log('Sending to contact:', contact);
+                                        setIsSendModalOpen(false);
+                                    }}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
+
             {isModalOpen && (
                 <div
                     className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-[2px]"

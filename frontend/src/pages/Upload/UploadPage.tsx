@@ -1,8 +1,7 @@
 import FileUploader from '@/components/FileUploader/FileUploader';
-import { Button } from '@/components/ui/button';
+import SendToContact from '@/components/SendToContact/SendToContact';
 import { CREATE_RESOURCE } from '@/graphql/Resource/mutations';
 import { useMutation } from '@apollo/client';
-import { ArrowLeft, Link } from 'lucide-react';
 import { useState } from 'react';
 import { mutate } from 'swr';
 import { useAuth } from '@/hooks/useAuth';
@@ -90,14 +89,19 @@ const UploadPage = () => {
         }
     };
 
+    const handleSendToContact = (contact: { id: string; name: string; email: string }) => {
+        // Here you would implement the logic to send the file to the selected contact
+        console.log('Sending to contact:', contact);
+    };
+
     return (
-        <div className="mx-auto grid grid-cols-1 md:grid-cols-2 gap-2 items-center">
-            <div className="">
+        <div className="mx-auto grid grid-cols-1 md:grid-cols-2 gap-32 items-start">
+            <div>
                 <h1 className="text-2xl font-bold my-8">
                     Transférez votre fichier
                 </h1>
-
-                <form onSubmit={handleSubmit} className="">
+    
+                <form onSubmit={handleSubmit} className="space-y-6">
                     <FileUploader
                         onFileChange={setFile}
                         onDescriptionChange={setDescription}
@@ -109,16 +113,16 @@ const UploadPage = () => {
                     />
                 </form>
             </div>
-            <div className="flex flex-col gap-4">
-                <Button asChild variant="outline" className="w-full">
-                    <Link to="/files">
-                        <ArrowLeft className="mr-2 h-4 w-4" />
-                        Retour à mes fichiers
-                    </Link>
-                </Button>
-            </div>
+    
+            {file && (
+                <div>
+                    <h2 className="text-2xl font-bold my-8">Envoyer à un contact</h2>
+                    <SendToContact onSend={handleSendToContact} />
+                </div>
+            )}
         </div>
     );
+    
 };
 
 export default UploadPage;
