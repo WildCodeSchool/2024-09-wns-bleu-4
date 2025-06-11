@@ -120,14 +120,25 @@ const Header = () => {
                                     </MenubarItem>
                                 </>
                             ) : (
-                                <MenubarItem asChild>
-                                    <Button
-                                        className="cursor-pointer w-full"
-                                        onClick={handleLogout}
-                                    >
-                                        Deconnexion
-                                    </Button>
-                                </MenubarItem>
+                                <>
+                                    <MenubarSeparator />
+                                    <MenubarItem asChild>
+                                        <Link
+                                            to={'/profile'}
+                                            className="cursor-pointer w-full"
+                                        >
+                                            Profil
+                                        </Link>
+                                    </MenubarItem>
+                                    <MenubarItem asChild>
+                                        <Button
+                                            className="cursor-pointer w-full"
+                                            onClick={handleLogout}
+                                        >
+                                            Deconnexion
+                                        </Button>
+                                    </MenubarItem>
+                                </>
                             )}
                         </MenubarContent>
                     </MenubarMenu>
