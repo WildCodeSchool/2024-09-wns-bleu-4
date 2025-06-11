@@ -16,6 +16,7 @@ import {
     Resolver,
     ID,
 } from 'type-graphql';
+import { Resource } from '@/entities/Resource';
 
 @InputType()
 export class UserInput implements Partial<User> {
@@ -203,6 +204,14 @@ class UserResolver {
             }
         }
         return { isLoggedIn: false };
+    }
+
+    @Query(() => [Resource])
+    async getUserSharedResources(
+        @Arg('userId', () => ID) userId: number,
+    ): Promise<Resource[]> {
+        const user = await User.findOne({ where: { id: userId }, relations: ['sharedResources'] });
+        return user?.sharedResources ?? [];
     }
 }
 

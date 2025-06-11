@@ -52,6 +52,45 @@ class ResourceResolver {
         });
     }
 
+    @Query(() => [User])
+    async getUsersWithAccess(
+        @Arg('resourceId', () => ID) resourceId: number,
+    ): Promise<User[]> {
+        const resource = await Resource.findOne({ where: { id: resourceId }, relations: ['usersWithAccess'] });
+        return resource?.usersWithAccess ?? [];
+    }
+
+    @Mutation(() => String)
+    async createUserAccess(
+        @Arg('resourceId', () => ID) resourceId: number,
+        @Arg('userId', () => ID) userId: number,
+    ): Promise<string> {
+        
+        const resource = await Resource.findOne({ 
+            where: { id: resourceId },
+            relations: ['usersWithAccess'],
+        });
+
+        if (!resource) {
+            throw new Error('Resource not found');
+        };
+
+        const user = await User.findOne({ where: { id: userId } });
+        if (!user) {
+            throw new Error('User not found');
+        };
+
+        // Check if user already has access to this resource
+        if (resource.usersWithAccess.some(u => u.id === user.id)) {
+            return 'User already has access to this resource';
+        } else {
+            resource.usersWithAccess.push(user);
+            await Resource.save(resource);
+            return 'Access granted';
+        }
+
+    }
+
     @Mutation(() => Resource)
     async createResource(
         @Arg('data', () => ResourceInput) data: ResourceInput,
