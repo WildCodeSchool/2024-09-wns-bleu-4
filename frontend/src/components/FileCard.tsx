@@ -8,6 +8,8 @@ import { Contact } from '@/generated/graphql-types';
 import { CREATE_USER_ACCESS } from '@/graphql/Resource/mutations';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
+import { Card } from '@/components/ui/card';
+import { Button } from './ui/button';
 
 interface FileCardProps {
     name: string;
@@ -65,8 +67,8 @@ const FileCard: React.FC<FileCardProps> = ({
 
     return (
         <>
-            <div className="flex flex-col w-full max-w-4xl relative">
-                <div className="flex dark:bg-zinc-900 items-center bg-white rounded-lg shadow-md p-4 gap-4 w-full">
+            <Card className="flex flex-col w-full max-w-4xl relative">
+                <div className="flex dark:bg-zinc-900 items-center rounded-lg shadow-md p-4 gap-4 w-full">
                     {/* Image à gauche */}
                     <div
                         className="w-28 h-28 flex-shrink-0 rounded overflow-hidden bg-gray-100 flex items-center justify-center cursor-pointer"
@@ -117,13 +119,16 @@ const FileCard: React.FC<FileCardProps> = ({
                         <div className="flex gap-2 items-end justify-end mt-auto">
                             {!isShared && (
                                 <>
-                                    <button
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
                                         onClick={() => setIsSendModalOpen(!isSendModalOpen)}
-                                        className="cursor-pointer inline-flex dark:bg-zinc-500 items-center px-2 py-1.5 text-sm rounded-md bg-gray-200 hover:bg-gray-300 transition"
                                     >
                                         <Send className="w-4 h-4 mr-1" />
-                                    </button>
-                                    <button
+                                    </Button>
+                                    <Button
+                                        variant="destructive"
+                                        size="sm"
                                         onClick={() => {
                                             const confirmed = window.confirm(
                                                 `Voulez-vous vraiment supprimer "${name}" ?`,
@@ -132,10 +137,9 @@ const FileCard: React.FC<FileCardProps> = ({
                                                 onDelete(id, name);
                                             }
                                         }}
-                                        className="cursor-pointer inline-flex items-center px-2 py-1.5 text-sm rounded-md bg-red-400 text-white hover:bg-red-500 transition"
                                     >
                                         <Trash2 className="w-4 h-4 mr-1" />
-                                    </button>
+                                    </Button>
                                 </>
                             )}
                         </div>
@@ -144,19 +148,20 @@ const FileCard: React.FC<FileCardProps> = ({
 
                 {/* SendToContact component below the card */}
                 {isSendModalOpen && (
-                    <div className="absolute z-50 mt-2 bg-white rounded-lg shadow-lg p-4 w-full h-[144px]">
+                    <div className="absolute z-50 mt-2 opacity-100 bg-white dark:bg-zinc-900 rounded-lg shadow-lg p-4 w-full h-[144px]">
                         <div className="relative h-full">
                             <button
                                 onClick={() => setIsSendModalOpen(false)}
-                                className="absolute -top-2 -right-2 p-1 bg-gray-200 rounded-full hover:bg-gray-300 transition-colors z-[60]"
+                                className="absolute -top-2 -right-2 p-1 bg-gray-200 dark:bg-zinc-500 rounded-full hover:bg-gray-300 transition-colors z-[60]"
                             >
                                 <X className="w-4 h-4" />
                             </button>
                             <div className="relative z-50 h-full flex items-center">
                                 <SendToContact
-                                    onSend={(contact: Contact) => {
-                                        // Here you would typically handle the sending logic
-                                        handleShareToContact(contact);
+                                    onSend={(contacts: Contact[]) => {
+                                        contacts.forEach((contact) => {
+                                            handleShareToContact(contact);
+                                        });
                                         setIsSendModalOpen(false);
                                     }}
                                     myContacts={myContacts}
@@ -165,7 +170,7 @@ const FileCard: React.FC<FileCardProps> = ({
                         </div>
                     </div>
                 )}
-            </div>
+            </Card>
 
             {isModalOpen && (
                 <div
@@ -173,12 +178,12 @@ const FileCard: React.FC<FileCardProps> = ({
                     onClick={() => setIsModalOpen(false)}
                 >
                     <div
-                        className="bg-white rounded-lg overflow-hidden max-w-3xl w-full relative"
+                        className="rounded-lg overflow-hidden max-w-3xl w-full relative"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <button
                             onClick={() => setIsModalOpen(false)}
-                            className="absolute top-2 right-2 text-white hover:text-black"
+                            className="absolute top-2 right-2 hover:text-black dark:text-white"
                         >
                             <X className="w-6 h-6" />
                         </button>
