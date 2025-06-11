@@ -72,12 +72,12 @@ class ResourceResolver {
         });
 
         if (!resource) {
-            throw new Error('Ressource non trouvée');
+            throw new Error('Le fichier demandé n\'a pas été trouvé');
         };
 
         const user = await User.findOne({ where: { id: userId } });
         if (!user) {
-            throw new Error('Utilisateur non trouvé');
+            throw new Error('L\'utilisateur demandé n\'a pas été trouvé');
         };
 
         // Check if user already has access to this resource
@@ -97,7 +97,7 @@ class ResourceResolver {
     ): Promise<Resource> {
         const user = await User.findOne({ where: { id: data.userId } });
         if (!user) {
-            throw new Error('Utilisateur non trouvé');
+            throw new Error('L\'utilisateur demandé n\'a pas été trouvé');
         }
 
         const resource = Resource.create({ ...data, user });
@@ -121,7 +121,7 @@ class ResourceResolver {
         });
 
         if (!resource) {
-            throw new Error('Ressource non trouvée');
+            throw new Error('Le fichier demandé n\'a pas été trouvé');
         }
 
         await Resource.remove(resource);

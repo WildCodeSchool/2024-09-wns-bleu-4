@@ -53,7 +53,7 @@ class UserResolver {
         const existingUser = await User.findOneBy({ email: newUserData.email });
 
         if (existingUser) {
-            throw new Error('Un compte existe déjà avec cet email');
+            throw new Error('Un compte est déjà associé à cette adresse email');
         }
 
         const codeToConfirm = Array.from({ length: 8 }, () =>
@@ -85,7 +85,7 @@ class UserResolver {
     async resetSendCode(@Arg('email', () => String) email: string) {
         const user = await TempUser.findOneBy({ email });
         if (!user) {
-            throw new Error('User not found');
+            throw new Error('L\'utilisateur demandé n\'a pas été trouvé');
         }
         const resetCode = Array.from({ length: 8 }, () =>
             Math.floor(Math.random() * 10),
@@ -130,7 +130,7 @@ class UserResolver {
         const existingUser = await User.findOneBy({ email: tempUser.email });
 
         if (existingUser) {
-            throw new Error('Un utilisateur avec cet email existe déjà');
+            throw new Error('Un compte est déjà associé à cette adresse email');
         }
         await User.save({
             email: tempUser.email,
@@ -155,7 +155,7 @@ class UserResolver {
         const user = await User.findOneBy({ email: loginUserData.email });
 
         if (!user) {
-            throw new Error("Aucun compte n'existe avec cette adresse email");
+            throw new Error('Aucun compte n\'est associé à cette adresse email');
         }
 
         try {
@@ -171,7 +171,7 @@ class UserResolver {
 
                 return 'The user has been logged in!';
             } else {
-                throw new Error('Mot de passe incorrect');
+                throw new Error('Le mot de passe saisi est incorrect');
             }
         } catch (error) {
             throw new Error(error.message || 'Erreur lors de la connexion');
