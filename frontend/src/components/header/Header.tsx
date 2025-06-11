@@ -1,9 +1,7 @@
 import Logo from '@/components/Logo';
-import { useAuthContext } from '@/context/useAuthContext';
-import { useLogoutMutation } from '@/generated/graphql-types';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { ModeToggle } from '@/components/mode-toggle';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import {
     Menubar,
     MenubarContent,
@@ -11,11 +9,13 @@ import {
     MenubarMenu,
     MenubarSeparator,
 } from '@/components/ui/menubar';
-import { NavigationMenu } from '../ui/navigation-menu';
+import { NavigationMenu } from '@/components/ui/navigation-menu';
+import { useAuthContext } from '@/context/useAuthContext';
+import { useLogoutMutation } from '@/generated/graphql-types';
 import { MenubarTrigger } from '@radix-ui/react-menubar';
 import { UserIcon } from 'lucide-react';
-import { Button } from '../ui/button';
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const Header = () => {
     const [logout] = useLogoutMutation();
@@ -72,6 +72,12 @@ const Header = () => {
                     className="block p-2 hover:bg-gray-200 dark:hover:bg-neutral-700 rounded-md"
                 >
                     Comment ça marche
+                </NavLink>
+                <NavLink
+                    to="/contact"
+                    className="block p-2 hover:bg-gray-200 dark:hover:bg-neutral-700 rounded-md"
+                >
+                    Contact
                 </NavLink>
             </NavigationMenu>
 

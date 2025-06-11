@@ -25,3 +25,9 @@ export const REFUSE_CONTACT_REQUEST = gql`
         }
     }
 `;
+
+export const REMOVE_CONTACT = gql`
+    mutation RemoveContact($contactId: ID!) {
+        removeContact(contactId: $contactId)
+    }
+`;
