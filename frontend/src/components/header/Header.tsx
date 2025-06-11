@@ -73,12 +73,6 @@ const Header = () => {
                 >
                     Comment ça marche
                 </NavLink>
-                <NavLink
-                    to="/contact"
-                    className="block p-2 hover:bg-gray-200 dark:hover:bg-neutral-700 rounded-md"
-                >
-                    Contact
-                </NavLink>
             </NavigationMenu>
 
             <div className="flex items-center gap-4">
