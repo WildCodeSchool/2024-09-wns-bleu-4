@@ -1,9 +1,6 @@
 import Logo from '@/components/Logo';
-import { useAuthContext } from '@/context/useAuthContext';
-import { useLogoutMutation } from '@/generated/graphql-types';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { ModeToggle } from '@/components/mode-toggle';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
     Menubar,
     MenubarContent,
@@ -11,13 +8,14 @@ import {
     MenubarMenu,
     MenubarSeparator,
 } from '@/components/ui/menubar';
-import {
-    NavigationMenu,
-} from '../ui/navigation-menu';
+import { useAuthContext } from '@/context/useAuthContext';
+import { useLogoutMutation } from '@/generated/graphql-types';
 import { MenubarTrigger } from '@radix-ui/react-menubar';
 import { UserIcon } from 'lucide-react';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { Button } from '../ui/button';
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { NavigationMenu } from '../ui/navigation-menu';
 
 const Header = () => {
     const [logout] = useLogoutMutation();
@@ -59,24 +57,31 @@ const Header = () => {
                 >
                     Comment ça marche
                 </NavLink>
+                <NavLink
+                    to="/contact"
+                    className="block p-2 hover:bg-gray-200 dark:hover:bg-neutral-700 rounded-md"
+                >
+                    Contact
+                </NavLink>
             </NavigationMenu>
 
             <div className="flex items-center gap-4">
                 <Menubar className="border-none shadow-none bg-transparent">
                     <MenubarMenu>
                         <MenubarTrigger>
-                            {isAuth ? 
-                            <>
-                            <Avatar>
-                                <AvatarImage src="https://github.com/shadcn.png" />
-                                <AvatarFallback>CN</AvatarFallback>
-                            </Avatar> 
-                            </>
-                            :
-                                <UserIcon />}
+                            {isAuth ? (
+                                <>
+                                    <Avatar>
+                                        <AvatarImage src="https://github.com/shadcn.png" />
+                                        <AvatarFallback>CN</AvatarFallback>
+                                    </Avatar>
+                                </>
+                            ) : (
+                                <UserIcon />
+                            )}
                         </MenubarTrigger>
                         <MenubarContent>
-                            {!isAuth ?
+                            {!isAuth ? (
                                 <>
                                     <MenubarItem asChild>
                                         <Link
@@ -96,7 +101,7 @@ const Header = () => {
                                         </Link>
                                     </MenubarItem>
                                 </>
-                                :
+                            ) : (
                                 <MenubarItem asChild>
                                     <Button
                                         className="cursor-pointer w-full"
@@ -105,7 +110,7 @@ const Header = () => {
                                         Deconnexion
                                     </Button>
                                 </MenubarItem>
-                            }
+                            )}
                         </MenubarContent>
                     </MenubarMenu>
                 </Menubar>
@@ -114,7 +119,5 @@ const Header = () => {
         </header>
     );
 };
-
-
 
 export default Header;

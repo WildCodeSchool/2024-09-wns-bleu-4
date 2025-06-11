@@ -77,7 +77,7 @@ const AddContactDialog: React.FC<AddContactDialogProps> = ({
                 </DialogDescription>
                 <form onSubmit={form.handleSubmit(onSubmit)}>
                     <div className="space-y-4 mt-4">
-                        <div className="space-y-2">
+                        <div className="space-y-2 flex flex-col gap-1.5">
                             <Label htmlFor="email">Adresse e-mail</Label>
                             <Input
                                 id="email"
@@ -93,7 +93,7 @@ const AddContactDialog: React.FC<AddContactDialogProps> = ({
                         </div>
                         {sendError && (
                             <p className="text-red-500 text-sm">
-                                Une erreur est survenue. Veuillez réessayer.
+                                {sendError.message}
                             </p>
                         )}
                         <div className="flex justify-end gap-2">

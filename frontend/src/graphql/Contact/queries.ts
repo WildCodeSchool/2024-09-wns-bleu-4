@@ -3,34 +3,44 @@ import { gql } from '@apollo/client';
 export const GET_MY_CONTACTS = gql`
     query GetMyContacts {
         getMyContacts {
-            id
-            status
-            createdAt
-            sourceUser {
+            acceptedContacts {
                 id
-                email
+                status
+                createdAt
+                sourceUser {
+                    id
+                    email
+                }
+                targetUser {
+                    id
+                    email
+                }
             }
-            targetUser {
+            pendingRequestsReceived {
                 id
-                email
+                status
+                createdAt
+                sourceUser {
+                    id
+                    email
+                }
+                targetUser {
+                    id
+                    email
+                }
             }
-        }
-    }
-`;
-
-export const GET_PENDING_CONTACT_REQUESTS = gql`
-    query GetPendingContactRequests {
-        getPendingContactRequests {
-            id
-            status
-            createdAt
-            sourceUser {
+            pendingRequestsSent {
                 id
-                email
-            }
-            targetUser {
-                id
-                email
+                status
+                createdAt
+                sourceUser {
+                    id
+                    email
+                }
+                targetUser {
+                    id
+                    email
+                }
             }
         }
     }
