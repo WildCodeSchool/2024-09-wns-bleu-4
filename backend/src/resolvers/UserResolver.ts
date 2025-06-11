@@ -130,7 +130,7 @@ class UserResolver {
         const existingUser = await User.findOneBy({ email: tempUser.email });
 
         if (existingUser) {
-            throw new Error('A user with this email already exists');
+            throw new Error('Un utilisateur avec cet email existe déjà');
         }
         await User.save({
             email: tempUser.email,

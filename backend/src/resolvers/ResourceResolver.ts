@@ -72,12 +72,12 @@ class ResourceResolver {
         });
 
         if (!resource) {
-            throw new Error('Resource not found');
+            throw new Error('Ressource non trouvée');
         };
 
         const user = await User.findOne({ where: { id: userId } });
         if (!user) {
-            throw new Error('User not found');
+            throw new Error('Utilisateur non trouvé');
         };
 
         // Check if user already has access to this resource
@@ -97,7 +97,7 @@ class ResourceResolver {
     ): Promise<Resource> {
         const user = await User.findOne({ where: { id: data.userId } });
         if (!user) {
-            throw new Error('User not found');
+            throw new Error('Utilisateur non trouvé');
         }
 
         const resource = Resource.create({ ...data, user });
@@ -121,7 +121,7 @@ class ResourceResolver {
         });
 
         if (!resource) {
-            throw new Error('Resource not found');
+            throw new Error('Ressource non trouvée');
         }
 
         await Resource.remove(resource);
