@@ -11,9 +11,7 @@ import {
     MenubarMenu,
     MenubarSeparator,
 } from '@/components/ui/menubar';
-import {
-    NavigationMenu,
-} from '../ui/navigation-menu';
+import { NavigationMenu } from '../ui/navigation-menu';
 import { MenubarTrigger } from '@radix-ui/react-menubar';
 import { UserIcon } from 'lucide-react';
 import { Button } from '../ui/button';
@@ -35,17 +33,33 @@ const Header = () => {
         <header className="flex lg:w-[80%] mx-auto justify-between items-center px-4 py-4 bg-white dark:bg-neutral-900 rounded-lg lg:mt-2">
             <Logo />
             <NavigationMenu className="flex gap-4">
-                <NavLink
-                    to="/upload"
-                    className="block p-2 hover:bg-gray-200 dark:hover:bg-neutral-700 rounded-md"
-                >
-                    Transférez vos fichiers
-                </NavLink>
+                {isAuth && (
+                    <>
+                        <NavLink
+                            to="/files"
+                            className="block p-2 hover:bg-gray-200 dark:hover:bg-neutral-700 rounded-md"
+                        >
+                            Mes fichiers
+                        </NavLink>
+                        <NavLink
+                            to="/upload"
+                            className="block p-2 hover:bg-gray-200 dark:hover:bg-neutral-700 rounded-md"
+                        >
+                            Transférez vos fichiers
+                        </NavLink>
+                        <NavLink
+                            to="/contact"
+                            className="block p-2 hover:bg-gray-200 dark:hover:bg-neutral-700 rounded-md"
+                        >
+                            Gestion des contacts
+                        </NavLink>
+                    </>
+                )}
                 <NavLink
                     to="/subscription"
                     className="block p-2 hover:bg-gray-200 dark:hover:bg-neutral-700 rounded-md"
                 >
-                    Nos abonnements
+                    Abonnements
                 </NavLink>
                 <NavLink
                     to="/about"
@@ -65,18 +79,19 @@ const Header = () => {
                 <Menubar className="border-none shadow-none bg-transparent">
                     <MenubarMenu>
                         <MenubarTrigger>
-                            {isAuth ? 
-                            <>
-                            <Avatar>
-                                <AvatarImage src="https://github.com/shadcn.png" />
-                                <AvatarFallback>CN</AvatarFallback>
-                            </Avatar> 
-                            </>
-                            :
-                                <UserIcon />}
+                            {isAuth ? (
+                                <>
+                                    <Avatar>
+                                        <AvatarImage src="https://github.com/shadcn.png" />
+                                        <AvatarFallback>CN</AvatarFallback>
+                                    </Avatar>
+                                </>
+                            ) : (
+                                <UserIcon />
+                            )}
                         </MenubarTrigger>
                         <MenubarContent>
-                            {!isAuth ?
+                            {!isAuth ? (
                                 <>
                                     <MenubarItem asChild>
                                         <Link
@@ -96,7 +111,7 @@ const Header = () => {
                                         </Link>
                                     </MenubarItem>
                                 </>
-                                :
+                            ) : (
                                 <MenubarItem asChild>
                                     <Button
                                         className="cursor-pointer w-full"
@@ -105,7 +120,7 @@ const Header = () => {
                                         Deconnexion
                                     </Button>
                                 </MenubarItem>
-                            }
+                            )}
                         </MenubarContent>
                     </MenubarMenu>
                 </Menubar>
@@ -114,7 +129,5 @@ const Header = () => {
         </header>
     );
 };
-
-
 
 export default Header;
