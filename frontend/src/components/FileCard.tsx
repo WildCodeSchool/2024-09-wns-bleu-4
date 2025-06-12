@@ -28,6 +28,7 @@ interface FileCardProps {
     description: string;
     onDelete: (id: number, name: string) => void;
     myContacts: Contact[];
+    isShared?: boolean;
 }
 
 const FileCard: React.FC<FileCardProps> = ({
@@ -37,6 +38,7 @@ const FileCard: React.FC<FileCardProps> = ({
     description,
     onDelete,
     myContacts,
+    isShared = false,
 }) => {
     const isImage = name.match(/\.(jpg|jpeg|png|gif|webp)$/i);
     const isAudio = name.match(/\.mp3$/i);
@@ -165,83 +167,87 @@ const FileCard: React.FC<FileCardProps> = ({
 
                         {/* Boutons en bas */}
                         <div className="flex gap-2 items-end justify-end mt-auto">
-                            <Dialog>
-                                <DialogTrigger asChild>
-                                    <Button
-                                        variant="outline"
-                                        className="inline-flex items-center px-2 py-1.5 text-sm rounded-md bg-gray-200 hover:bg-gray-300 transition"
-                                    >
-                                        <Send className="w-4 h-4 mr-1" />
-                                    </Button>
-                                </DialogTrigger>
-                                <DialogContent>
-                                    <DialogHeader>
-                                        <DialogTitle>Partager le fichier</DialogTitle>
-                                    </DialogHeader>
-                                    <div className="space-y-4">
-                                        <div className="space-y-2">
-                                            <Label htmlFor="search">Rechercher un contact</Label>
-                                            <Input
-                                                id="search"
-                                                type="text"
-                                                value={searchQuery}
-                                                onChange={(e) => setSearchQuery(e.target.value)}
-                                                placeholder="Rechercher par email..."
-                                            />
-                                        </div>
-                                        <div className="h-[200px] rounded-md border p-4">
-                                            <ScrollArea>
+                            {!isShared && (
+                                <>
+                                    <Dialog>
+                                        <DialogTrigger asChild>
+                                            <Button
+                                                variant="outline"
+                                                className="inline-flex items-center px-2 py-1.5 text-sm rounded-md bg-gray-200 hover:bg-gray-300 transition"
+                                            >
+                                                <Send className="w-4 h-4 mr-1" />
+                                            </Button>
+                                        </DialogTrigger>
+                                        <DialogContent>
+                                            <DialogHeader>
+                                                <DialogTitle>Partager le fichier</DialogTitle>
+                                            </DialogHeader>
+                                            <div className="space-y-4">
                                                 <div className="space-y-2">
-                                                    {filteredContacts.map((contact) => {
-                                                        const contactInfo = getContactInfo(contact);
-                                                        return (
-                                                            <div key={contact.id} className="flex items-center space-x-2">
-                                                                <Checkbox
-                                                                    id={`contact-${contact.id}`}
-                                                                    checked={selectedContacts.some(c => c.id === contact.id)}
-                                                                    onCheckedChange={() => toggleContact(contact)}
-                                                                />
-                                                                <Label
-                                                                    htmlFor={`contact-${contact.id}`}
-                                                                    className="text-sm font-normal"
-                                                                >
-                                                                    {contactInfo.email}
-                                                                </Label>
-                                                            </div>
-                                                        );
-                                                    })}
-                                                    {filteredContacts.length === 0 && (
-                                                        <p className="text-sm text-gray-500 text-center">
-                                                            Aucun contact trouvé
-                                                        </p>
-                                                    )}
+                                                    <Label htmlFor="search">Rechercher un contact</Label>
+                                                    <Input
+                                                        id="search"
+                                                        type="text"
+                                                        value={searchQuery}
+                                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                                        placeholder="Rechercher par email..."
+                                                    />
                                                 </div>
-                                            </ScrollArea>
-                                        </div>
-                                        <Button 
-                                            onClick={handleShare} 
-                                            className="w-full"
-                                            disabled={selectedContacts.length === 0}
-                                        >
-                                            Partager avec {selectedContacts.length} contact{selectedContacts.length > 1 ? 's' : ''}
-                                        </Button>
-                                    </div>
-                                </DialogContent>
-                            </Dialog>
-                            <Button
-                                variant="destructive"
-                                onClick={() => {
-                                    const confirmed = window.confirm(
-                                        `Voulez-vous vraiment supprimer "${name}" ?`,
-                                    );
-                                    if (confirmed) {
-                                        onDelete(id, name);
-                                    }
-                                }}
-                                className="inline-flex items-center px-2 py-1.5 text-sm rounded-md bg-red-400 text-white hover:bg-red-500 transition"
-                            >
-                                <Trash2 className="w-4 h-4 mr-1" />
-                            </Button>
+                                                <div className="h-[200px] rounded-md border p-4">
+                                                    <ScrollArea>
+                                                        <div className="space-y-2">
+                                                            {filteredContacts.map((contact) => {
+                                                                const contactInfo = getContactInfo(contact);
+                                                                return (
+                                                                    <div key={contact.id} className="flex items-center space-x-2">
+                                                                        <Checkbox
+                                                                            id={`contact-${contact.id}`}
+                                                                            checked={selectedContacts.some(c => c.id === contact.id)}
+                                                                            onCheckedChange={() => toggleContact(contact)}
+                                                                        />
+                                                                        <Label
+                                                                            htmlFor={`contact-${contact.id}`}
+                                                                            className="text-sm font-normal"
+                                                                        >
+                                                                            {contactInfo.email}
+                                                                        </Label>
+                                                                    </div>
+                                                                );
+                                                            })}
+                                                            {filteredContacts.length === 0 && (
+                                                                <p className="text-sm text-gray-500 text-center">
+                                                                    Aucun contact trouvé
+                                                                </p>
+                                                            )}
+                                                        </div>
+                                                    </ScrollArea>
+                                                </div>
+                                                <Button 
+                                                    onClick={handleShare} 
+                                                    className="w-full"
+                                                    disabled={selectedContacts.length === 0}
+                                                >
+                                                    Partager avec {selectedContacts.length} contact{selectedContacts.length > 1 ? 's' : ''}
+                                                </Button>
+                                            </div>
+                                        </DialogContent>
+                                    </Dialog>
+                                    <Button
+                                        variant="destructive"
+                                        onClick={() => {
+                                            const confirmed = window.confirm(
+                                                `Voulez-vous vraiment supprimer "${name}" ?`,
+                                            );
+                                            if (confirmed) {
+                                                onDelete(id, name);
+                                            }
+                                        }}
+                                        className="inline-flex items-center px-2 py-1.5 text-sm rounded-md bg-red-400 text-white hover:bg-red-500 transition"
+                                    >
+                                        <Trash2 className="w-4 h-4 mr-1" />
+                                    </Button>
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>
