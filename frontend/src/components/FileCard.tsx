@@ -1,6 +1,5 @@
 import { Send, FileIcon, Trash2, X } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import music from '@/assets/images/music.png';
 import video from '@/assets/images/video.png'; // <-- nouveau logo vidéo
 import { getFormattedSizeFromUrl } from '@/lib/utils';
