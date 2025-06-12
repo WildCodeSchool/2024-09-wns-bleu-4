@@ -36,8 +36,15 @@ class SubscriptionResolver {
         if (!user || !user.subscription) {
             throw new Error('L\'utilisateur ou l\'abonnement demandé n\'a pas été trouvé');
         }
-        user.subscription = null;
-        await user.save();
+
+        try {   
+            await Subscription.delete({ id: user.subscription.id });
+            user.subscription = null;
+            await user.save();
+        } catch (error) {
+            throw new Error(error as string);
+        }
+
         return 'Subscription deleted';
     }
 
