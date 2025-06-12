@@ -15,3 +15,9 @@ export const DELETE_RESOURCE = gql`
         deleteResource(id: $deleteResourceId)
     }
 `;
+
+export const CREATE_USER_ACCESS = gql`
+    mutation CreateUserAccess($resourceId: ID!, $userId: ID!) {
+        createUserAccess(resourceId: $resourceId, userId: $userId)
+    }
+`;

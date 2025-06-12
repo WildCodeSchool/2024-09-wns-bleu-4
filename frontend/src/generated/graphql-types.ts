@@ -382,6 +382,14 @@ export type DeleteResourceMutationVariables = Exact<{
 
 export type DeleteResourceMutation = { __typename?: 'Mutation', deleteResource: string };
 
+export type CreateUserAccessMutationVariables = Exact<{
+  resourceId: Scalars['ID']['input'];
+  userId: Scalars['ID']['input'];
+}>;
+
+
+export type CreateUserAccessMutation = { __typename?: 'Mutation', createUserAccess: string };
+
 export type GetAllResourcesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -393,6 +401,13 @@ export type GetResourcesByUserIdQueryVariables = Exact<{
 
 
 export type GetResourcesByUserIdQuery = { __typename?: 'Query', getResourcesByUserId: Array<{ __typename?: 'Resource', description: string, id: number, name: string, path: string, url: string }> };
+
+export type GetUserSharedResourcesQueryVariables = Exact<{
+  userId: Scalars['ID']['input'];
+}>;
+
+
+export type GetUserSharedResourcesQuery = { __typename?: 'Query', getUserSharedResources: Array<{ __typename?: 'Resource', id: number, name: string, description: string, path: string, url: string }> };
 
 export type LoginMutationVariables = Exact<{
   data: UserInput;
@@ -712,6 +727,38 @@ export function useDeleteResourceMutation(baseOptions?: Apollo.MutationHookOptio
 export type DeleteResourceMutationHookResult = ReturnType<typeof useDeleteResourceMutation>;
 export type DeleteResourceMutationResult = Apollo.MutationResult<DeleteResourceMutation>;
 export type DeleteResourceMutationOptions = Apollo.BaseMutationOptions<DeleteResourceMutation, DeleteResourceMutationVariables>;
+export const CreateUserAccessDocument = gql`
+    mutation CreateUserAccess($resourceId: ID!, $userId: ID!) {
+  createUserAccess(resourceId: $resourceId, userId: $userId)
+}
+    `;
+export type CreateUserAccessMutationFn = Apollo.MutationFunction<CreateUserAccessMutation, CreateUserAccessMutationVariables>;
+
+/**
+ * __useCreateUserAccessMutation__
+ *
+ * To run a mutation, you first call `useCreateUserAccessMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateUserAccessMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createUserAccessMutation, { data, loading, error }] = useCreateUserAccessMutation({
+ *   variables: {
+ *      resourceId: // value for 'resourceId'
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useCreateUserAccessMutation(baseOptions?: Apollo.MutationHookOptions<CreateUserAccessMutation, CreateUserAccessMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateUserAccessMutation, CreateUserAccessMutationVariables>(CreateUserAccessDocument, options);
+      }
+export type CreateUserAccessMutationHookResult = ReturnType<typeof useCreateUserAccessMutation>;
+export type CreateUserAccessMutationResult = Apollo.MutationResult<CreateUserAccessMutation>;
+export type CreateUserAccessMutationOptions = Apollo.BaseMutationOptions<CreateUserAccessMutation, CreateUserAccessMutationVariables>;
 export const GetAllResourcesDocument = gql`
     query GetAllResources {
   getAllResources {
@@ -798,6 +845,50 @@ export type GetResourcesByUserIdQueryHookResult = ReturnType<typeof useGetResour
 export type GetResourcesByUserIdLazyQueryHookResult = ReturnType<typeof useGetResourcesByUserIdLazyQuery>;
 export type GetResourcesByUserIdSuspenseQueryHookResult = ReturnType<typeof useGetResourcesByUserIdSuspenseQuery>;
 export type GetResourcesByUserIdQueryResult = Apollo.QueryResult<GetResourcesByUserIdQuery, GetResourcesByUserIdQueryVariables>;
+export const GetUserSharedResourcesDocument = gql`
+    query GetUserSharedResources($userId: ID!) {
+  getUserSharedResources(userId: $userId) {
+    id
+    name
+    description
+    path
+    url
+  }
+}
+    `;
+
+/**
+ * __useGetUserSharedResourcesQuery__
+ *
+ * To run a query within a React component, call `useGetUserSharedResourcesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserSharedResourcesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserSharedResourcesQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useGetUserSharedResourcesQuery(baseOptions: Apollo.QueryHookOptions<GetUserSharedResourcesQuery, GetUserSharedResourcesQueryVariables> & ({ variables: GetUserSharedResourcesQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserSharedResourcesQuery, GetUserSharedResourcesQueryVariables>(GetUserSharedResourcesDocument, options);
+      }
+export function useGetUserSharedResourcesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserSharedResourcesQuery, GetUserSharedResourcesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserSharedResourcesQuery, GetUserSharedResourcesQueryVariables>(GetUserSharedResourcesDocument, options);
+        }
+export function useGetUserSharedResourcesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetUserSharedResourcesQuery, GetUserSharedResourcesQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetUserSharedResourcesQuery, GetUserSharedResourcesQueryVariables>(GetUserSharedResourcesDocument, options);
+        }
+export type GetUserSharedResourcesQueryHookResult = ReturnType<typeof useGetUserSharedResourcesQuery>;
+export type GetUserSharedResourcesLazyQueryHookResult = ReturnType<typeof useGetUserSharedResourcesLazyQuery>;
+export type GetUserSharedResourcesSuspenseQueryHookResult = ReturnType<typeof useGetUserSharedResourcesSuspenseQuery>;
+export type GetUserSharedResourcesQueryResult = Apollo.QueryResult<GetUserSharedResourcesQuery, GetUserSharedResourcesQueryVariables>;
 export const LoginDocument = gql`
     mutation Login($data: UserInput!) {
   login(data: $data)
