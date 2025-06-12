@@ -1,6 +1,6 @@
 import { Subscription } from '@/entities/Subscription';
 import { User } from '@/entities/User';
-import { Arg, ID, Mutation, Resolver } from 'type-graphql';
+import { Arg, ID, Mutation, Query, Resolver } from 'type-graphql';
 
 // Need to refactor the calculateEndAt function to calculate the end date of the subscription based on the paid date.
 const calculateEndAt = (paidAt: Date): Date =>
@@ -39,6 +39,14 @@ class SubscriptionResolver {
         user.subscription = null;
         await user.save();
         return 'Subscription deleted';
+    }
+
+    @Query(() => Subscription, { nullable: true })
+    async getUserSubscription(
+        @Arg('userId', () => ID) userId: User['id'],
+    ): Promise<Subscription | null> {
+        const user = await User.findOneBy({ id: userId });
+        return user?.subscription ?? null;
     }
 }
 

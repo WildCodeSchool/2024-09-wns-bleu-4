@@ -16,6 +16,7 @@ import { useLogoutMutation } from '@/generated/graphql-types';
 import { ChevronDown, CreditCard, Files, HelpCircle, Info, LogOut, Menu, Upload, User, UserIcon, Users } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import SubscribedLogo from '@/components/SubscribedLogo';
 
 const Header = () => {
     const [logout] = useLogoutMutation();
@@ -162,6 +163,9 @@ const Header = () => {
 
             <div className="flex items-center gap-4">
                 <DropdownMenu>
+                    {isAuth && user?.isSubscribed && (
+                        <SubscribedLogo />
+                    )}
                     <DropdownMenuTrigger asChild>
                         <Button 
                             variant="ghost" 
