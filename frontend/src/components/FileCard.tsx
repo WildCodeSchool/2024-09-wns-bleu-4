@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import music from '@/assets/images/music.png';
 import video from '@/assets/images/video.png';
 import { getFormattedSizeFromUrl } from '@/lib/utils';
-import { Contact } from '@/generated/graphql-types';
+import { Contact, ContactStatus } from '@/generated/graphql-types';
 import { CREATE_USER_ACCESS } from '@/graphql/Resource/mutations';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
@@ -19,6 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { useAuthContext } from '@/context/useAuthContext';
 
 interface FileCardProps {
     name: string;
@@ -45,6 +46,7 @@ const FileCard: React.FC<FileCardProps> = ({
     const [createUserAccess] = useMutation(CREATE_USER_ACCESS);
     const [selectedContacts, setSelectedContacts] = useState<Contact[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
+    const { user } = useAuthContext();
 
     useEffect(() => {
         const fetchSize = async () => {
@@ -58,9 +60,22 @@ const FileCard: React.FC<FileCardProps> = ({
         fetchSize();
     }, [url]);
 
-    const filteredContacts = myContacts.filter(contact => 
-        contact.targetUser.email.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const getContactInfo = (contact: Contact) => {
+        const currentUserEmail = user?.email;
+        const isSourceUser = contact.sourceUser.email === currentUserEmail;
+        const otherUser = isSourceUser ? contact.targetUser : contact.sourceUser;
+        return {
+            email: otherUser.email,
+            user: otherUser,
+        };
+    };
+
+    const filteredContacts = myContacts
+        .filter(contact => contact.status === ContactStatus.Accepted)
+        .filter(contact => {
+            const contactInfo = getContactInfo(contact);
+            return contactInfo.email.toLowerCase().includes(searchQuery.toLowerCase());
+        });
 
     const handleShare = async () => {
         try {
@@ -70,10 +85,11 @@ const FileCard: React.FC<FileCardProps> = ({
             }
 
             for (const contact of selectedContacts) {
+                const contactInfo = getContactInfo(contact);
                 await createUserAccess({
                     variables: {
                         resourceId: id.toString(),
-                        userId: contact.targetUser.id,
+                        userId: contactInfo.user.id,
                     },
                 });
             }
@@ -176,21 +192,24 @@ const FileCard: React.FC<FileCardProps> = ({
                                         <div className="h-[200px] rounded-md border p-4">
                                             <ScrollArea>
                                                 <div className="space-y-2">
-                                                    {filteredContacts.map((contact) => (
-                                                        <div key={contact.id} className="flex items-center space-x-2">
-                                                            <Checkbox
-                                                                id={`contact-${contact.id}`}
-                                                                checked={selectedContacts.some(c => c.id === contact.id)}
-                                                                onCheckedChange={() => toggleContact(contact)}
-                                                            />
-                                                            <Label
-                                                                htmlFor={`contact-${contact.id}`}
-                                                                className="text-sm font-normal"
-                                                            >
-                                                                {contact.targetUser.email}
-                                                            </Label>
-                                                        </div>
-                                                    ))}
+                                                    {filteredContacts.map((contact) => {
+                                                        const contactInfo = getContactInfo(contact);
+                                                        return (
+                                                            <div key={contact.id} className="flex items-center space-x-2">
+                                                                <Checkbox
+                                                                    id={`contact-${contact.id}`}
+                                                                    checked={selectedContacts.some(c => c.id === contact.id)}
+                                                                    onCheckedChange={() => toggleContact(contact)}
+                                                                />
+                                                                <Label
+                                                                    htmlFor={`contact-${contact.id}`}
+                                                                    className="text-sm font-normal"
+                                                                >
+                                                                    {contactInfo.email}
+                                                                </Label>
+                                                            </div>
+                                                        );
+                                                    })}
                                                     {filteredContacts.length === 0 && (
                                                         <p className="text-sm text-gray-500 text-center">
                                                             Aucun contact trouvé
