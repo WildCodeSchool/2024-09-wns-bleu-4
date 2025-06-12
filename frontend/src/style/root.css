@@ -139,37 +139,17 @@
         @apply bg-background text-foreground;
     }
 }
-
-.openMenu {
-    padding: 1rem;
-    &:hover , &:focus {
-        border: none;
-    }
+.logo {
+    width: clamp(3rem, 2.5rem + 2vw, 4.5rem);
+    height: auto;
+    display: block;
+    flex-shrink: 0;
+    color: hsl(var(--foreground));
 }
 
-.headerMobile {
+.logo svg {
     width: 100%;
-    position: fixed;
-    bottom: -100%;
-    left: 0;
-    z-index: 1000;
-    border-radius: var(--radius) var(--radius) 0 0;
-    padding: 2rem;
-    display: grid;
-    gap: 5rem;
-    justify-items: center;
-    transition:all 0.3s ease-in-out;
-
-    &.active {
-        bottom: 0;
-    }
-
-    &__nav {
-        place-items: center;
-        
-        a {
-            
-            font-weight: 500;
-        }
-    }
+    height: auto;
+    display: block;
+    fill: currentColor;
 }

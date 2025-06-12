@@ -15,6 +15,7 @@ import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from './hooks/useAuth';
 import HowWork from '@/pages/HowWork';
+import { Profile } from '@/pages/Profile/profile';
 
 const App = () => {
     return (
@@ -146,6 +147,19 @@ const App = () => {
                         <Route
                             path="/how-work"
                             element={<HowWork />}
+                        />
+                        <Route
+                            path="/profile"
+                            element={
+                                <PageWrapper
+                                    title="profil"
+                                    description="Page de profil"
+                                    protected
+                                >
+                                 <Profile/>
+                                </PageWrapper>
+
+                            }
                         />
                     </Route>
                 </Routes>
