@@ -14,7 +14,9 @@ import {
     ObjectType,
     Query,
     Resolver,
+    ID,
 } from 'type-graphql';
+import { Resource } from '@/entities/Resource';
 
 @InputType()
 export class UserInput implements Partial<User> {
@@ -38,12 +40,22 @@ export class UserInfo {
 
     @Field(() => String, { nullable: true })
     email?: String;
+
+    @Field(() => ID, { nullable: true })
+    id?: number;
 }
 
 @Resolver(User)
 class UserResolver {
     @Mutation(() => String)
     async register(@Arg('data', () => UserInput) newUserData: User) {
+
+        const existingUser = await User.findOneBy({ email: newUserData.email });
+
+        if (existingUser) {
+            throw new Error('Un compte est déjà associé à cette adresse email');
+        }
+
         const codeToConfirm = Array.from({ length: 8 }, () =>
             Math.floor(Math.random() * 10),
         ).join('');
@@ -73,7 +85,7 @@ class UserResolver {
     async resetSendCode(@Arg('email', () => String) email: string) {
         const user = await TempUser.findOneBy({ email });
         if (!user) {
-            throw new Error('User not found');
+            throw new Error('L\'utilisateur demandé n\'a pas été trouvé');
         }
         const resetCode = Array.from({ length: 8 }, () =>
             Math.floor(Math.random() * 10),
@@ -118,7 +130,7 @@ class UserResolver {
         const existingUser = await User.findOneBy({ email: tempUser.email });
 
         if (existingUser) {
-            throw new Error('A user with this email already exists');
+            throw new Error('Un compte est déjà associé à cette adresse email');
         }
         await User.save({
             email: tempUser.email,
@@ -143,7 +155,7 @@ class UserResolver {
         const user = await User.findOneBy({ email: loginUserData.email });
 
         if (!user) {
-            throw new Error("Aucun compte n'existe avec cette adresse email");
+            throw new Error('Aucun compte n\'est associé à cette adresse email');
         }
 
         try {
@@ -159,7 +171,7 @@ class UserResolver {
 
                 return 'The user has been logged in!';
             } else {
-                throw new Error('Mot de passe incorrect');
+                throw new Error('Le mot de passe saisi est incorrect');
             }
         } catch (error) {
             throw new Error(error.message || 'Erreur lors de la connexion');
@@ -184,12 +196,22 @@ class UserResolver {
     }
 
     @Query(() => UserInfo)
-    async getUserInfo(@Ctx() context: any) {
+    async getUserInfo(@Ctx() context: any): Promise<UserInfo> {
         if (context.email) {
-            return { isLoggedIn: true, email: context.email };
-        } else {
-            return { isLoggedIn: false };
+            const user = await User.findOne({ where: { email: context.email } });
+            if (user) {
+                return { isLoggedIn: true, email: context.email, id: user.id };
+            }
         }
+        return { isLoggedIn: false };
+    }
+
+    @Query(() => [Resource])
+    async getUserSharedResources(
+        @Arg('userId', () => ID) userId: number,
+    ): Promise<Resource[]> {
+        const user = await User.findOne({ where: { id: userId }, relations: ['sharedResources'] });
+        return user?.sharedResources ?? [];
     }
 }
 

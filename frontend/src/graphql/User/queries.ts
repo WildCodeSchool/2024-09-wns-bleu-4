@@ -14,6 +14,16 @@ export const GET_USER_INFO = gql`
         getUserInfo {
             email
             isLoggedIn
+            id
+        }
+    }
+`;
+
+export const GET_USER_ID = gql`
+    query GetUserId {
+        getUserInfo {
+            id
+            email
         }
     }
 `;

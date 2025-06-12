@@ -9,7 +9,8 @@
         "strict": true,
         "baseUrl": ".",
         "paths": {
-            "@/*": ["./src/*"]
+            "@/*": ["./src/*"],
+            "@public/*": ["./public/*"]
         }
     }
 }

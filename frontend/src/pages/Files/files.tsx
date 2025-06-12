@@ -1,10 +1,13 @@
 import { Loader } from '@/components/Loader';
 import { DELETE_RESOURCE } from '@/graphql/Resource/mutations';
-import { GET_RESOURCES_BY_USER_ID } from '@/graphql/Resource/queries';
+import { GET_RESOURCES_BY_USER_ID, GET_SHARED_RESOURCES } from '@/graphql/Resource/queries';
+import { GET_USER_ID } from '@/graphql/User/queries';
 import { useMutation, useQuery } from '@apollo/client';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import FileCard from '@/components/FileCard';
+import { Button } from '@/components/ui/button';
+import { GET_MY_CONTACTS } from '@/graphql/Contact/queries';
 
 type Resource = {
     id: number;
@@ -15,18 +18,29 @@ type Resource = {
 };
 
 const FilesPage: React.FC = () => {
-    const userId = '1';
+    const { data: userData } = useQuery(GET_USER_ID);
     const {
-        data: graphqlData,
+        data: resources,
         loading,
         error,
         refetch,
     } = useQuery(GET_RESOURCES_BY_USER_ID, {
-        variables: { userId: userId },
+        variables: { userId: userData?.getUserInfo?.id },
+        fetchPolicy: 'cache-and-network',
+        skip: !userData?.getUserInfo?.id,
+    });
+
+    const {
+        data: sharedResources,
+    } = useQuery(GET_SHARED_RESOURCES, {
+        variables: { userId: userData?.getUserInfo?.id },
         fetchPolicy: 'cache-and-network',
     });
 
+    console.log(sharedResources);
+
     const [deleteResourceMutation] = useMutation(DELETE_RESOURCE);
+    const myContacts = useQuery(GET_MY_CONTACTS);
 
     const handleDelete = async (id: number, name: string) => {
         try {
@@ -98,37 +112,90 @@ const FilesPage: React.FC = () => {
     }
 
     return (
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto py-8 flex flex-col gap-8">
             <div className="flex flex-col items-center mb-8">
-                <h1 className="text-3xl font-bold text-white mb-4 text-center">
-                    {graphqlData?.getResourcesByUserId?.length
-                        ? 'Liste des fichiers disponibles'
+                <h1 className="text-3xl font-bold mb-6 text-center">
+                    {resources?.getResourcesByUserId?.length
+                        ? 'Mes fichiers disponibles'
                         : "Vous n'avez pas encore de fichiers"}
                 </h1>
-                <Link
-                    to="/upload"
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                <Button
+                    variant="ghost"
+                    className="rounded-[1.15rem] px-8 py-6 text-lg font-semibold backdrop-blur-md 
+      bg-white/95 hover:bg-white/100 dark:bg-black/95 dark:hover:bg-black/100 
+      text-black dark:text-white transition-all duration-300 
+      group-hover:-translate-y-0.5 border border-black/10 dark:border-white/10
+      hover:shadow-md dark:hover:shadow-neutral-800/50"
                 >
-                    Ajouter un fichier
-                </Link>
+                    <Link to="/upload" className="flex items-center group">
+                        <span className="opacity-90 group-hover:opacity-100 transition-opacity">
+                            Ajouter des fichiers
+                        </span>
+                        <span
+                            className="ml-3 opacity-70 group-hover:opacity-100 group-hover:translate-x-1.5 
+          transition-all duration-300"
+                        >
+                            →
+                        </span>
+                    </Link>
+                </Button>
             </div>
             {loading ? (
                 <div className="flex justify-center items-center">
                     <Loader size={50} />
                 </div>
             ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {graphqlData?.getResourcesByUserId?.map(
-                        (file: Resource) => (
-                            <FileCard
-                                key={file.id}
-                                id={file.id}
-                                name={file.name}
-                                url={file.url}
-                                onDelete={handleDelete}
-                            />
-                        ),
-                    )}
+                <div className="w-full">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                        {resources?.getResourcesByUserId?.map(
+                            (file: Resource) => (
+                                <FileCard
+                                    key={file.id}
+                                    id={file.id}
+                                    name={file.name}
+                                    url={file.url}
+                                    description={file.description}
+                                    onDelete={handleDelete}
+                                    myContacts={
+                                        myContacts.data?.getMyContacts
+                                            ?.acceptedContacts ?? []
+                                    }
+                                    isShared={false}
+                                />
+                            ),
+                        )}
+                    </div>
+                </div>
+            )}
+            <div className="flex flex-col items-center">
+                <h1 className="text-3xl font-bold mb-6 text-center">
+                    {sharedResources?.getUserSharedResources?.length
+                        ? 'Fichiers partagés avec moi'
+                        : 'Aucun fichier partagé avec vous'}
+                </h1>
+            </div>
+            {loading ? (
+                <div className="flex justify-center items-center">
+                    <Loader size={50} />
+                </div>
+            ) : (
+                <div className="w-full">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                        {sharedResources?.getUserSharedResources?.map(
+                            (file: Resource) => (
+                                <FileCard
+                                    key={file.id}
+                                    id={file.id}
+                                    name={file.name}
+                                    url={file.url}
+                                    description={file.description}
+                                    onDelete={() => {}}
+                                    myContacts={[]}
+                                    isShared={true}
+                                />
+                            ),
+                        )}
+                    </div>
                 </div>
             )}
         </div>

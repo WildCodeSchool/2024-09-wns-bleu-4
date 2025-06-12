@@ -5,10 +5,10 @@ import {
     InputOTPSlot,
 } from '@/components/ui/input-otp';
 import { useConfirmEmailMutation } from '@/generated/graphql-types';
-import { cn } from '@/lib/utils';
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 
 export const ConfirmForm: React.FC = () => {
     const [confirmEmail] = useConfirmEmailMutation();
@@ -34,33 +34,37 @@ export const ConfirmForm: React.FC = () => {
     };
 
     return (
-        <div className={cn('form-log')}>
-            <b>Vérification inscription</b>
-            <p>
-                Veuillez vérifier votre boîte mail afin de finaliser votre
-                inscription.
-            </p>
-            <button className="btn">Renvoyer un email</button>
-            <InputOTP
-                ref={otpInputRef}
-                onChange={handleOtpChange}
-                maxLength={8}
-                pattern="^[0-9]*$"
-            >
-                <InputOTPGroup>
-                    <InputOTPSlot index={0} />
-                    <InputOTPSlot index={1} />
-                    <InputOTPSlot index={2} />
-                    <InputOTPSlot index={3} />
-                </InputOTPGroup>
-                <InputOTPSeparator />
-                <InputOTPGroup>
-                    <InputOTPSlot index={4} />
-                    <InputOTPSlot index={5} />
-                    <InputOTPSlot index={6} />
-                    <InputOTPSlot index={7} />
-                </InputOTPGroup>
-            </InputOTP>
-        </div>
+        <Card className="w-full sm:w-[50%] mx-auto">
+            <CardHeader>
+                <CardTitle>Vérification inscription</CardTitle>
+                <CardDescription>
+                    Veuillez vérifier votre boîte mail afin de finaliser votre
+                    inscription.
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <button className="btn py-2">Renvoyer un email</button>
+                <InputOTP
+                    ref={otpInputRef}
+                    onChange={handleOtpChange}
+                    maxLength={8}
+                    pattern="^[0-9]*$"
+                >
+                    <InputOTPGroup>
+                        <InputOTPSlot index={0} />
+                        <InputOTPSlot index={1} />
+                        <InputOTPSlot index={2} />
+                        <InputOTPSlot index={3} />
+                    </InputOTPGroup>
+                    <InputOTPSeparator />
+                    <InputOTPGroup>
+                        <InputOTPSlot index={4} />
+                        <InputOTPSlot index={5} />
+                        <InputOTPSlot index={6} />
+                        <InputOTPSlot index={7} />
+                    </InputOTPGroup>
+                </InputOTP>
+            </CardContent>
+        </Card>
     );
 };

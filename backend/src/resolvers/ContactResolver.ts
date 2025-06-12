@@ -2,127 +2,172 @@ import { Contact, ContactStatus } from '@/entities/Contact';
 import { User } from '@/entities/User';
 import {
     Arg,
+    Ctx,
     Field,
     ID,
     InputType,
     Mutation,
+    ObjectType,
     Query,
     Resolver,
-    Ctx,
 } from 'type-graphql';
 
 @InputType()
 export class ContactInput {
-    @Field(() => ID)
-    targetUserId: number;
+    @Field(() => String)
+    targetUserEmail: string;
+}
+
+@ObjectType()
+export class ContactsResponse {
+    @Field(() => [Contact])
+    acceptedContacts: Contact[];
+
+    @Field(() => [Contact])
+    pendingRequestsReceived: Contact[];
+
+    @Field(() => [Contact])
+    pendingRequestsSent: Contact[];
 }
 
 @Resolver(Contact)
 class ContactResolver {
-    @Query(() => [Contact])
-    async getMyContacts(@Ctx() context: any): Promise<Contact[]> {
+    @Query(() => ContactsResponse)
+    async getMyContacts(@Ctx() context: any): Promise<ContactsResponse> {
         if (!context.email) {
-            throw new Error("Vous devez être connecté pour voir vos contacts");
+            throw new Error('Vous devez être connecté pour voir vos contacts');
         }
 
         const user = await User.findOne({ where: { email: context.email } });
         if (!user) {
-            throw new Error("Utilisateur non trouvé");
+            throw new Error('Utilisateur non trouvé');
         }
 
-        const contacts = await Contact.find({ 
-            where: { sourceUser: { id: user.id } },
-            relations: ["sourceUser", "targetUser"]
+        const allContacts = await Contact.find({
+            where: [
+                { sourceUser: { id: user.id } },
+                { targetUser: { id: user.id } },
+            ],
+            relations: ['sourceUser', 'targetUser'],
+            order: { createdAt: 'DESC' },
         });
-        return contacts;
-    }
 
-    @Query(() => [Contact])
-    async getPendingContactRequests(@Ctx() context: any): Promise<Contact[]> {
-        if (!context.email) {
-            throw new Error("Vous devez être connecté pour voir vos demandes de contact");
-        }
+        const acceptedContacts = allContacts.filter(
+            (contact) => contact.status === ContactStatus.ACCEPTED,
+        );
 
-        const user = await User.findOne({ where: { email: context.email } });
-        if (!user) {
-            throw new Error("Utilisateur non trouvé");
-        }
+        const pendingRequestsReceived = allContacts.filter(
+            (contact) =>
+                contact.status === ContactStatus.PENDING &&
+                contact.targetUser.id === user.id,
+        );
 
-        const contacts = await Contact.find({ 
-            where: { 
-                targetUser: { id: user.id },
-                status: ContactStatus.PENDING
-            },
-            relations: ["sourceUser", "targetUser"]
-        });
-        return contacts;
+        const pendingRequestsSent = allContacts.filter(
+            (contact) =>
+                contact.status === ContactStatus.PENDING &&
+                contact.sourceUser.id === user.id,
+        );
+
+        return {
+            acceptedContacts,
+            pendingRequestsReceived,
+            pendingRequestsSent,
+        };
     }
 
     @Mutation(() => Contact)
     async sendContactRequest(
-        @Arg('contactToCreate', () => ContactInput) contactToCreate: ContactInput,
-        @Ctx() context: any
+        @Arg('contactToCreate', () => ContactInput)
+        contactToCreate: ContactInput,
+        @Ctx() context: any,
     ): Promise<Contact> {
         if (!context.email) {
-            throw new Error("Vous devez être connecté pour envoyer une demande de contact");
+            throw new Error(
+                'Vous devez être connecté pour envoyer une demande de contact',
+            );
         }
 
-        const sourceUser = await User.findOne({ where: { email: context.email } });
+        const sourceUser = await User.findOne({
+            where: { email: context.email },
+        });
         if (!sourceUser) {
-            throw new Error("Utilisateur source non trouvé");
+            throw new Error('Utilisateur source non trouvé');
         }
 
-        const targetUser = await User.findOne({ where: { id: contactToCreate.targetUserId } });
+        const targetUser = await User.findOne({
+            where: { email: contactToCreate.targetUserEmail },
+        });
         if (!targetUser) {
-            throw new Error("Utilisateur cible non trouvé");
+            throw new Error('Utilisateur cible non trouvé');
         }
 
-        // Vérifier si le contact existe déjà
+        if (sourceUser.id === targetUser.id) {
+            throw new Error(
+                'Vous ne pouvez pas vous ajouter vous-même en contact',
+            );
+        }
+
         const existingContact = await Contact.findOne({
-            where: {
-                sourceUser: { id: sourceUser.id },
-                targetUser: { id: targetUser.id }
-            }
+            where: [
+                {
+                    sourceUser: { id: sourceUser.id },
+                    targetUser: { id: targetUser.id },
+                },
+                {
+                    sourceUser: { id: targetUser.id },
+                    targetUser: { id: sourceUser.id },
+                },
+            ],
+            relations: ['sourceUser', 'targetUser'],
         });
 
         if (existingContact) {
-            throw new Error("Ce contact existe déjà");
+            if (existingContact.sourceUser.id === sourceUser.id) {
+                throw new Error(
+                    'Vous avez déjà envoyé une demande à cet utilisateur',
+                );
+            } else {
+                throw new Error(
+                    'Cet utilisateur vous a déjà envoyé une demande de contact. Veuillez vérifier vos demandes reçues.',
+                );
+            }
         }
 
-        // Créer et sauvegarder le nouveau contact
-        const newContact = Contact.create({ 
+        const newContact = Contact.create({
             sourceUser: sourceUser,
             targetUser: targetUser,
-            status: ContactStatus.PENDING
+            status: ContactStatus.PENDING,
         });
-        
+
         return await Contact.save(newContact);
     }
 
     @Mutation(() => Contact)
     async acceptContactRequest(
-        @Arg("contactId", () => ID) contactId: number,
-        @Ctx() context: any
+        @Arg('contactId', () => ID) contactId: number,
+        @Ctx() context: any,
     ): Promise<Contact> {
         if (!context.email) {
-            throw new Error("Vous devez être connecté pour accepter une demande de contact");
+            throw new Error(
+                'Vous devez être connecté pour accepter une demande de contact',
+            );
         }
 
         const user = await User.findOne({ where: { email: context.email } });
         if (!user) {
-            throw new Error("Utilisateur non trouvé");
+            throw new Error('Utilisateur non trouvé');
         }
 
         const contact = await Contact.findOne({
             where: {
                 id: contactId,
                 targetUser: { id: user.id },
-                status: ContactStatus.PENDING
-            }
+                status: ContactStatus.PENDING,
+            },
         });
 
         if (!contact) {
-            throw new Error("Demande de contact non trouvée");
+            throw new Error('Demande de contact non trouvée');
         }
 
         contact.status = ContactStatus.ACCEPTED;
@@ -130,59 +175,68 @@ class ContactResolver {
     }
 
     @Mutation(() => Contact)
-async refuseContactRequest(
-    @Arg("contactId", () => ID) contactId: number,
-    @Ctx() context: any
-): Promise<Contact> {
-    if (!context.email) {
-        throw new Error("Vous devez être connecté pour refuser une demande de contact");
-    }
-
-    const user = await User.findOne({ where: { email: context.email } });
-    if (!user) {
-        throw new Error("Utilisateur non trouvé");
-    }
-
-    const contact = await Contact.findOne({
-        where: {
-            id: contactId,
-            targetUser: { id: user.id },
-            status: ContactStatus.PENDING
-        }
-    });
-
-    if (!contact) {
-        throw new Error("Demande de contact non trouvée");
-    }
-
-    contact.status = ContactStatus.REFUSED;
-    return await Contact.save(contact);
-}
-
-
-    @Mutation(() => Boolean)
-    async removeContact(
-        @Arg("contactId", () => ID) contactId: number,
-        @Ctx() context: any
-    ): Promise<boolean> {
+    async refuseContactRequest(
+        @Arg('contactId', () => ID) contactId: number,
+        @Ctx() context: any,
+    ): Promise<Contact> {
         if (!context.email) {
-            throw new Error("Vous devez être connecté pour supprimer un contact");
+            throw new Error(
+                'Vous devez être connecté pour refuser une demande de contact',
+            );
         }
 
         const user = await User.findOne({ where: { email: context.email } });
         if (!user) {
-            throw new Error("Utilisateur non trouvé");
+            throw new Error('Utilisateur non trouvé');
         }
 
         const contact = await Contact.findOne({
             where: {
                 id: contactId,
-                sourceUser: { id: user.id }
-            }
+                targetUser: { id: user.id },
+                status: ContactStatus.PENDING,
+            },
         });
 
         if (!contact) {
-            throw new Error("Contact non trouvé");
+            throw new Error('Demande de contact non trouvée');
+        }
+
+        contact.status = ContactStatus.REFUSED;
+        return await Contact.save(contact);
+    }
+
+    @Mutation(() => Boolean)
+    async removeContact(
+        @Arg('contactId', () => ID) contactId: number,
+        @Ctx() context: any,
+    ): Promise<boolean> {
+        if (!context.email) {
+            throw new Error(
+                'Vous devez être connecté pour supprimer un contact',
+            );
+        }
+
+        const user = await User.findOne({ where: { email: context.email } });
+        if (!user) {
+            throw new Error('Utilisateur non trouvé');
+        }
+
+        const contact = await Contact.findOne({
+            where: [
+                {
+                    id: contactId,
+                    sourceUser: { id: user.id },
+                },
+                {
+                    id: contactId,
+                    targetUser: { id: user.id },
+                },
+            ],
+        });
+
+        if (!contact) {
+            throw new Error('Contact non trouvé');
         }
 
         await Contact.remove(contact);

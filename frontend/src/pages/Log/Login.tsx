@@ -1,4 +1,5 @@
 import Form from '@/components/form/Form';
+import { useAuthContext } from '@/context/useAuthContext';
 import { useLoginMutation } from '@/generated/graphql-types';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -6,6 +7,7 @@ import { toast } from 'react-toastify';
 const Login = () => {
     const [login, { loading }] = useLoginMutation();
     const navigate = useNavigate();
+    const { refreshAuth } = useAuthContext();
 
     const handleSubmit = async (email: string, password: string) => {
         try {
@@ -14,7 +16,7 @@ const Login = () => {
             });
 
             if (response.data?.login) {
-                localStorage.setItem('token', response.data.login);
+                await refreshAuth();
                 toast.success('Connexion réussie');
                 navigate('/');
             }
@@ -25,17 +27,19 @@ const Login = () => {
     };
 
     return (
-        <Form
-            title="Connexion"
-            onSubmit={handleSubmit}
-            loading={loading}
-            links={
-                <>
-                    <Link to="/forgot-password">Mot de passe oublié ?</Link>
-                    <Link to="/sign">Vous avez déjà un compte ?</Link>
-                </>
-            }
-        />
+        <section className="mx-auto w-[80%]">
+            <Form
+                title="Connexion"
+                onSubmit={handleSubmit}
+                loading={loading}
+                links={
+                    <>
+                        <Link to="/forgot-password">Mot de passe oublié ?</Link>
+                        <Link to="/sign">Créer un compte</Link>
+                    </>
+                }
+            />
+        </section>
     );
 };
 

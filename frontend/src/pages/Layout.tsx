@@ -1,22 +1,40 @@
-import AnimatedDiv from '@/components/background/AnimateBG';
 import Header from '@/components/header/Header';
-import Sidebar from '@/components/sidebar/Sidebar';
-import { Outlet } from 'react-router-dom';
+import HeaderMobile from '@/components/header/MobileHeader';
+import { ThemeProvider } from '@/components/themeProvider';
+import { useTheme } from '@/hooks/useTheme';
+import { cn } from '@/lib/utils';
+import { Outlet, useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
 const Layout = () => {
+    const location = useLocation();
+    const isHomePage = location.pathname === '/';
+    const { theme } = useTheme();
+
     return (
-        <div className="body">
-            <AnimatedDiv className={'yellow'} />
-            <AnimatedDiv className={'orange'} />
-            <div className="blur"></div>
-            <Header />
-            <Sidebar />
-            <main className="flex-1 overflow-auto min-h-0" style={{ gridArea: 'main' }}>
-                <Outlet />
+        <ThemeProvider>
+            <main>
+                <div className="hidden md:block">
+                    <Header />
+                </div>
+
+                <HeaderMobile />
+
+                <div
+                    className={cn(
+                        isHomePage
+                            ? 'pt-16 md:pt-0'
+                            : 'w-[90%] md:w-[80%] mx-auto mt-10 pt-16 md:pt-0',
+                    )}
+                >
+                    <Outlet />
+                </div>
+                <ToastContainer
+                    position="bottom-right"
+                    theme={theme === 'dark' ? 'light' : 'dark'}
+                />
             </main>
-            <ToastContainer position="bottom-right" theme="dark" />
-        </div>
+        </ThemeProvider>
     );
 };
 
