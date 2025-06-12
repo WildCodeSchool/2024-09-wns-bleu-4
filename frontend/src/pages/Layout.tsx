@@ -13,11 +13,18 @@ const Layout = () => {
 
     return (
         <ThemeProvider>
-            <main className="">
-                {window.innerWidth < 999 ? <HeaderMobile /> : <Header />}
+            <main>
+                <div className="hidden md:block">
+                    <Header />
+                </div>
+
+                <HeaderMobile />
+
                 <div
                     className={cn(
-                        isHomePage ? '' : 'w-[90%] md:w-[80%] mx-auto mt-10',
+                        isHomePage
+                            ? 'pt-16 md:pt-0'
+                            : 'w-[90%] md:w-[80%] mx-auto mt-10 pt-16 md:pt-0',
                     )}
                 >
                     <Outlet />
