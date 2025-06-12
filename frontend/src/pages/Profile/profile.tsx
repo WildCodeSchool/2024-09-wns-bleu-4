@@ -9,9 +9,11 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
+import { useAuthContext } from '@/context/useAuthContext';
 import { Plus } from 'lucide-react';
 
 export const Profile = () => {
+    const { user } = useAuthContext();
     return (
         <section>
             <h1 className="text-2xl font-bold mb-4">Mon profil</h1>
@@ -40,8 +42,18 @@ export const Profile = () => {
                         />
                     </div>
                     <div>
-                        <Label>E-mail</Label>
-                        <Input />
+                        <Label htmlFor="email">E-mail</Label>
+                        <Input
+                            id="email"
+                            type="email"
+                            value={user?.email || ''}
+                            placeholder="Votre adresse e-mail"
+                            readOnly
+                            className="bg-muted cursor-not-allowed"
+                        />
+                        <p className="text-xs text-muted-foreground mt-1">
+                            L'adresse e-mail ne peut pas être modifiée
+                        </p>
                     </div>
                     <div>
                         <Label>Mot-de-passe</Label>
