@@ -1,15 +1,24 @@
 import { Send, FileIcon, Trash2, X } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import music from '@/assets/images/music.png';
-import video from '@/assets/images/video.png'; // <-- nouveau logo vidéo
+import video from '@/assets/images/video.png';
 import { getFormattedSizeFromUrl } from '@/lib/utils';
-import SendToContact from './SendToContact/SendToContact';
 import { Contact } from '@/generated/graphql-types';
 import { CREATE_USER_ACCESS } from '@/graphql/Resource/mutations';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
-import { Card } from '@/components/ui/card';
-import { Button } from './ui/button';
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 interface FileCardProps {
     name: string;
@@ -18,7 +27,6 @@ interface FileCardProps {
     description: string;
     onDelete: (id: number, name: string) => void;
     myContacts: Contact[];
-    isShared: boolean;
 }
 
 const FileCard: React.FC<FileCardProps> = ({
@@ -28,14 +36,15 @@ const FileCard: React.FC<FileCardProps> = ({
     description,
     onDelete,
     myContacts,
-    isShared,
 }) => {
     const isImage = name.match(/\.(jpg|jpeg|png|gif|webp)$/i);
     const isAudio = name.match(/\.mp3$/i);
-    const isVideo = name.match(/\.mp4$/i); // <-- détection vidéo
+    const isVideo = name.match(/\.mp4$/i);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isSendModalOpen, setIsSendModalOpen] = useState(false);
     const [size, setSize] = useState<string | null>(null);
+    const [createUserAccess] = useMutation(CREATE_USER_ACCESS);
+    const [selectedContacts, setSelectedContacts] = useState<Contact[]>([]);
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         const fetchSize = async () => {
@@ -49,31 +58,56 @@ const FileCard: React.FC<FileCardProps> = ({
         fetchSize();
     }, [url]);
 
-    const [createUserAccess] = useMutation(CREATE_USER_ACCESS);
+    const filteredContacts = myContacts.filter(contact => 
+        contact.targetUser.email.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
-    const handleShareToContact = async (contact: Contact) => {
+    const handleShare = async () => {
         try {
-            await createUserAccess({
-                variables: {
-                    resourceId: id,
-                    userId: contact.targetUser?.id,
-                },
-            });
-                toast.success('Fichier partagé avec succès');
+            if (selectedContacts.length === 0) {
+                toast.error('Veuillez sélectionner au moins un contact');
+                return;
+            }
+
+            for (const contact of selectedContacts) {
+                await createUserAccess({
+                    variables: {
+                        resourceId: id.toString(),
+                        userId: contact.targetUser.id,
+                    },
+                });
+            }
+            
+            toast.success('Fichier partagé avec succès');
+            setSelectedContacts([]);
+            setSearchQuery('');
         } catch (error) {
-            toast.error(error instanceof Error ? error.message : 'Erreur lors du partage du fichier');
+            console.error('Error sharing file:', error);
+            toast.error('Erreur lors du partage du fichier');
         }
+    };
+
+    const toggleContact = (contact: Contact) => {
+        setSelectedContacts(prev => {
+            const isSelected = prev.some(c => c.id === contact.id);
+            if (isSelected) {
+                return prev.filter(c => c.id !== contact.id);
+            } else {
+                return [...prev, contact];
+            }
+        });
     };
 
     return (
         <>
-            <Card className="flex flex-col w-full max-w-4xl relative">
-                <div className="flex dark:bg-zinc-900 items-center rounded-lg shadow-md p-4 gap-4 w-full">
+            <div className="flex flex-col w-full max-w-4xl relative">
+                <div className="flex dark:bg-zinc-900 items-center bg-white rounded-lg shadow-md p-4 gap-4 w-full">
                     {/* Image à gauche */}
                     <div
                         className="w-28 h-28 flex-shrink-0 rounded overflow-hidden bg-gray-100 flex items-center justify-center cursor-pointer"
                         onClick={() =>
-                            (isImage || isAudio || isVideo) && setIsModalOpen(true)
+                            (isImage || isAudio || isVideo) &&
+                            setIsModalOpen(true)
                         }
                     >
                         {isImage ? (
@@ -110,67 +144,89 @@ const FileCard: React.FC<FileCardProps> = ({
                         </h3>
 
                         {size && (
-                            <i className="font-normal text-base mb-2">
-                                {size}
-                            </i>
+                            <i className="font-normal text-base mb-2">{size}</i>
                         )}
 
                         {/* Boutons en bas */}
                         <div className="flex gap-2 items-end justify-end mt-auto">
-                            {!isShared && (
-                                <>
+                            <Dialog>
+                                <DialogTrigger asChild>
                                     <Button
                                         variant="outline"
-                                        size="sm"
-                                        onClick={() => setIsSendModalOpen(!isSendModalOpen)}
+                                        className="inline-flex items-center px-2 py-1.5 text-sm rounded-md bg-gray-200 hover:bg-gray-300 transition"
                                     >
                                         <Send className="w-4 h-4 mr-1" />
                                     </Button>
-                                    <Button
-                                        variant="destructive"
-                                        size="sm"
-                                        onClick={() => {
-                                            const confirmed = window.confirm(
-                                                `Voulez-vous vraiment supprimer "${name}" ?`,
-                                            );
-                                            if (confirmed) {
-                                                onDelete(id, name);
-                                            }
-                                        }}
-                                    >
-                                        <Trash2 className="w-4 h-4 mr-1" />
-                                    </Button>
-                                </>
-                            )}
+                                </DialogTrigger>
+                                <DialogContent>
+                                    <DialogHeader>
+                                        <DialogTitle>Partager le fichier</DialogTitle>
+                                    </DialogHeader>
+                                    <div className="space-y-4">
+                                        <div className="space-y-2">
+                                            <Label htmlFor="search">Rechercher un contact</Label>
+                                            <Input
+                                                id="search"
+                                                type="text"
+                                                value={searchQuery}
+                                                onChange={(e) => setSearchQuery(e.target.value)}
+                                                placeholder="Rechercher par email..."
+                                            />
+                                        </div>
+                                        <div className="h-[200px] rounded-md border p-4">
+                                            <ScrollArea>
+                                                <div className="space-y-2">
+                                                    {filteredContacts.map((contact) => (
+                                                        <div key={contact.id} className="flex items-center space-x-2">
+                                                            <Checkbox
+                                                                id={`contact-${contact.id}`}
+                                                                checked={selectedContacts.some(c => c.id === contact.id)}
+                                                                onCheckedChange={() => toggleContact(contact)}
+                                                            />
+                                                            <Label
+                                                                htmlFor={`contact-${contact.id}`}
+                                                                className="text-sm font-normal"
+                                                            >
+                                                                {contact.targetUser.email}
+                                                            </Label>
+                                                        </div>
+                                                    ))}
+                                                    {filteredContacts.length === 0 && (
+                                                        <p className="text-sm text-gray-500 text-center">
+                                                            Aucun contact trouvé
+                                                        </p>
+                                                    )}
+                                                </div>
+                                            </ScrollArea>
+                                        </div>
+                                        <Button 
+                                            onClick={handleShare} 
+                                            className="w-full"
+                                            disabled={selectedContacts.length === 0}
+                                        >
+                                            Partager avec {selectedContacts.length} contact{selectedContacts.length > 1 ? 's' : ''}
+                                        </Button>
+                                    </div>
+                                </DialogContent>
+                            </Dialog>
+                            <Button
+                                variant="destructive"
+                                onClick={() => {
+                                    const confirmed = window.confirm(
+                                        `Voulez-vous vraiment supprimer "${name}" ?`,
+                                    );
+                                    if (confirmed) {
+                                        onDelete(id, name);
+                                    }
+                                }}
+                                className="inline-flex items-center px-2 py-1.5 text-sm rounded-md bg-red-400 text-white hover:bg-red-500 transition"
+                            >
+                                <Trash2 className="w-4 h-4 mr-1" />
+                            </Button>
                         </div>
                     </div>
                 </div>
-
-                {/* SendToContact component below the card */}
-                {isSendModalOpen && (
-                    <div className="absolute z-50 mt-2 opacity-100 bg-white dark:bg-zinc-900 rounded-lg shadow-lg p-4 w-full h-[144px]">
-                        <div className="relative h-full">
-                            <button
-                                onClick={() => setIsSendModalOpen(false)}
-                                className="absolute -top-2 -right-2 p-1 bg-gray-200 dark:bg-zinc-500 rounded-full hover:bg-gray-300 transition-colors z-[60]"
-                            >
-                                <X className="w-4 h-4" />
-                            </button>
-                            <div className="relative z-50 h-full flex items-center">
-                                <SendToContact
-                                    onSend={(contacts: Contact[]) => {
-                                        contacts.forEach((contact) => {
-                                            handleShareToContact(contact);
-                                        });
-                                        setIsSendModalOpen(false);
-                                    }}
-                                    myContacts={myContacts}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                )}
-            </Card>
+            </div>
 
             {isModalOpen && (
                 <div
@@ -178,12 +234,12 @@ const FileCard: React.FC<FileCardProps> = ({
                     onClick={() => setIsModalOpen(false)}
                 >
                     <div
-                        className="rounded-lg overflow-hidden max-w-3xl w-full relative"
+                        className="bg-white rounded-lg overflow-hidden max-w-3xl w-full relative"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <button
                             onClick={() => setIsModalOpen(false)}
-                            className="absolute top-2 right-2 hover:text-black dark:text-white"
+                            className="absolute top-2 right-2 text-white hover:text-black"
                         >
                             <X className="w-6 h-6" />
                         </button>
