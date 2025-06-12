@@ -1,12 +1,13 @@
 import { Loader } from '@/components/Loader';
 import { DELETE_RESOURCE } from '@/graphql/Resource/mutations';
-import { GET_RESOURCES_BY_USER_ID } from '@/graphql/Resource/queries';
+import { GET_RESOURCES_BY_USER_ID, GET_SHARED_RESOURCES } from '@/graphql/Resource/queries';
 import { GET_USER_ID } from '@/graphql/User/queries';
 import { useMutation, useQuery } from '@apollo/client';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import FileCard from '@/components/FileCard';
 import { Button } from '@/components/ui/button';
+import { GET_MY_CONTACTS } from '@/graphql/Contact/queries';
 
 type Resource = {
     id: number;
@@ -19,7 +20,7 @@ type Resource = {
 const FilesPage: React.FC = () => {
     const { data: userData } = useQuery(GET_USER_ID);
     const {
-        data: graphqlData,
+        data: resources,
         loading,
         error,
         refetch,
@@ -29,7 +30,17 @@ const FilesPage: React.FC = () => {
         skip: !userData?.getUserInfo?.id,
     });
 
+    const {
+        data: sharedResources,
+    } = useQuery(GET_SHARED_RESOURCES, {
+        variables: { userId: userData?.getUserInfo?.id },
+        fetchPolicy: 'cache-and-network',
+    });
+
+    console.log(sharedResources);
+
     const [deleteResourceMutation] = useMutation(DELETE_RESOURCE);
+    const myContacts = useQuery(GET_MY_CONTACTS);
 
     const handleDelete = async (id: number, name: string) => {
         try {
@@ -101,10 +112,10 @@ const FilesPage: React.FC = () => {
     }
 
     return (
-        <div className="container mx-auto py-8">
+        <div className="container mx-auto py-8 flex flex-col gap-8">
             <div className="flex flex-col items-center mb-8">
                 <h1 className="text-3xl font-bold mb-6 text-center">
-                    {graphqlData?.getResourcesByUserId?.length
+                    {resources?.getResourcesByUserId?.length
                         ? 'Mes fichiers disponibles'
                         : "Vous n'avez pas encore de fichiers"}
                 </h1>
@@ -136,7 +147,7 @@ const FilesPage: React.FC = () => {
             ) : (
                 <div className="w-full">
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                        {graphqlData?.getResourcesByUserId?.map(
+                        {resources?.getResourcesByUserId?.map(
                             (file: Resource) => (
                                 <FileCard
                                     key={file.id}
@@ -145,6 +156,42 @@ const FilesPage: React.FC = () => {
                                     url={file.url}
                                     description={file.description}
                                     onDelete={handleDelete}
+                                    myContacts={
+                                        myContacts.data?.getMyContacts
+                                            ?.acceptedContacts ?? []
+                                    }
+                                    isShared={false}
+                                />
+                            ),
+                        )}
+                    </div>
+                </div>
+            )}
+            <div className="flex flex-col items-center">
+                <h1 className="text-3xl font-bold mb-6 text-center">
+                    {sharedResources?.getUserSharedResources?.length
+                        ? 'Fichiers partagés avec moi'
+                        : 'Aucun fichier partagé avec vous'}
+                </h1>
+            </div>
+            {loading ? (
+                <div className="flex justify-center items-center">
+                    <Loader size={50} />
+                </div>
+            ) : (
+                <div className="w-full">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                        {sharedResources?.getUserSharedResources?.map(
+                            (file: Resource) => (
+                                <FileCard
+                                    key={file.id}
+                                    id={file.id}
+                                    name={file.name}
+                                    url={file.url}
+                                    description={file.description}
+                                    onDelete={() => {}}
+                                    myContacts={[]}
+                                    isShared={true}
                                 />
                             ),
                         )}
