@@ -373,7 +373,7 @@ export type CreateResourceMutationVariables = Exact<{
 }>;
 
 
-export type CreateResourceMutation = { __typename?: 'Mutation', createResource: { __typename?: 'Resource', name: string, description: string, path: string, url: string } };
+export type CreateResourceMutation = { __typename?: 'Mutation', createResource: { __typename?: 'Resource', id: number, name: string, description: string, path: string, url: string } };
 
 export type DeleteResourceMutationVariables = Exact<{
   deleteResourceId: Scalars['ID']['input'];
@@ -663,6 +663,7 @@ export type GetMyContactsQueryResult = Apollo.QueryResult<GetMyContactsQuery, Ge
 export const CreateResourceDocument = gql`
     mutation CreateResource($data: ResourceInput!) {
   createResource(data: $data) {
+    id
     name
     description
     path
