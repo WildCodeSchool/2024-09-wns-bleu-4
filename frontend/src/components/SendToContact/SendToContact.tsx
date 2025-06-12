@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { X } from 'lucide-react';
-import { Contact } from '@/generated/graphql-types';
+import { X, Users } from 'lucide-react';
+import { Contact, ContactStatus } from '@/generated/graphql-types';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Label } from '@/components/ui/label';
+import { useAuthContext } from '@/context/useAuthContext';
+import CardContact from '../Contact/CardContact';
 
 interface SendToContactProps {
     onSend: (contacts: Contact[]) => void;
@@ -15,13 +16,33 @@ const SendToContact = ({ onSend, myContacts }: SendToContactProps) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedContacts, setSelectedContacts] = useState<Contact[]>([]);
     const [contacts, setContacts] = useState<Contact[]>([]);
+    const { user } = useAuthContext();
+
+    useEffect(() => {
+        // Filtrer uniquement les contacts acceptés
+        const acceptedContacts = myContacts.filter(
+            contact => contact.status === ContactStatus.Accepted
+        );
+        setContacts(acceptedContacts);
+    }, [myContacts]);
 
     const handleSearch = (value: string) => {
         setSearchQuery(value);
-        if (value.length > 2) {
-            setContacts(myContacts);
+        if (value.length > 0) {
+            const filteredContacts = myContacts
+                .filter(contact => contact.status === ContactStatus.Accepted)
+                .filter(contact => {
+                    const currentUserEmail = user?.email;
+                    const isSourceUser = contact.sourceUser.email === currentUserEmail;
+                    const otherUser = isSourceUser ? contact.targetUser : contact.sourceUser;
+                    return otherUser.email.toLowerCase().includes(value.toLowerCase());
+                });
+            setContacts(filteredContacts);
         } else {
-            setContacts([]);
+            const acceptedContacts = myContacts.filter(
+                contact => contact.status === ContactStatus.Accepted
+            );
+            setContacts(acceptedContacts);
         }
     };
 
@@ -40,6 +61,32 @@ const SendToContact = ({ onSend, myContacts }: SendToContactProps) => {
         setSelectedContacts(prev => prev.filter(c => c.id !== contactId));
     };
 
+    const getContactInfo = (contact: Contact) => {
+        const currentUserEmail = user?.email;
+        const isSourceUser = contact.sourceUser.email === currentUserEmail;
+        const otherUser = isSourceUser ? contact.targetUser : contact.sourceUser;
+        return {
+            email: otherUser.email,
+            user: otherUser,
+        };
+    };
+
+    if (contacts.length === 0) {
+        return (
+            <div className="flex flex-col items-center justify-center py-12 text-center">
+                <Users className="w-12 h-12 text-gray-400" />
+                <h3 className="text-lg font-semibold text-gray-900 mt-4">
+                    Aucun contact trouvé
+                </h3>
+                <p className="text-gray-500 mt-2 max-w-sm">
+                    {searchQuery.length > 0 
+                        ? "Aucun contact ne correspond à votre recherche."
+                        : "Vous n'avez pas encore de contacts acceptés."}
+                </p>
+            </div>
+        );
+    }
+
     return (
         <div className="flex flex-col gap-4 w-full">
             <div className="relative">
@@ -48,45 +95,49 @@ const SendToContact = ({ onSend, myContacts }: SendToContactProps) => {
                     placeholder="Rechercher un contact..."
                     value={searchQuery}
                     onChange={(e) => handleSearch(e.target.value)}
-                    className="w-full max-w-[80%]"
+                    className="w-full"
                 />
-                {contacts.length > 0 && (
-                    <div className="absolute z-10 w-full mt-1 bg-white border rounded-md shadow-lg max-h-[300px] overflow-y-auto">
-                        {contacts.map((contact) => (
-                            <div
-                                key={contact.id}
-                                className="flex items-center space-x-2 p-2 hover:bg-accent cursor-pointer"
-                            >
-                                <Checkbox
-                                    id={`contact-${contact.id}`}
-                                    checked={selectedContacts.some(c => c.id === contact.id)}
-                                    onCheckedChange={() => handleToggleContact(contact)}
-                                />
-                                <Label
-                                    htmlFor={`contact-${contact.id}`}
-                                    className="flex-1 cursor-pointer"
-                                >
-                                    {contact.targetUser?.email}
-                                </Label>
-                            </div>
-                        ))}
-                    </div>
-                )}
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {contacts.map((contact) => {
+                    const contactInfo = getContactInfo(contact);
+                    return (
+                        <div key={contact.id} className="relative">
+                            <CardContact
+                                email={contactInfo.email}
+                                status="ACCEPTED"
+                                createdAt={contact.createdAt}
+                                actions={
+                                    <Checkbox
+                                        id={`contact-${contact.id}`}
+                                        checked={selectedContacts.some(c => c.id === contact.id)}
+                                        onCheckedChange={() => handleToggleContact(contact)}
+                                        className="absolute top-2 right-2 z-10"
+                                    />
+                                }
+                            />
+                        </div>
+                    );
+                })}
             </div>
 
             {selectedContacts.length > 0 && (
                 <div className="flex flex-col gap-2">
-                    {selectedContacts.map((contact) => (
-                        <div key={contact.id} className="flex items-center justify-between p-2 bg-gray-100 rounded-md">
-                            <span>{contact.targetUser?.email}</span>
-                            <button
-                                onClick={() => handleRemoveContact(contact.id)}
-                                className="p-1 hover:bg-gray-200 rounded-full"
-                            >
-                                <X className="h-4 w-4" />
-                            </button>
-                        </div>
-                    ))}
+                    {selectedContacts.map((contact) => {
+                        const contactInfo = getContactInfo(contact);
+                        return (
+                            <div key={contact.id} className="flex items-center justify-between p-2 bg-gray-100 rounded-md">
+                                <span>{contactInfo.email}</span>
+                                <button
+                                    onClick={() => handleRemoveContact(contact.id)}
+                                    className="p-1 hover:bg-gray-200 rounded-full"
+                                >
+                                    <X className="h-4 w-4" />
+                                </button>
+                            </div>
+                        );
+                    })}
                 </div>
             )}
 
