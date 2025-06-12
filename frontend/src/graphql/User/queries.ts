@@ -15,6 +15,7 @@ export const GET_USER_INFO = gql`
             email
             isLoggedIn
             id
+            isSubscribed
         }
     }
 `;

@@ -43,6 +43,9 @@ export class UserInfo {
 
     @Field(() => ID, { nullable: true })
     id?: number;
+
+    @Field(() => Boolean, { nullable: true })
+    isSubscribed?: boolean;
 }
 
 @Resolver(User)
@@ -200,7 +203,7 @@ class UserResolver {
         if (context.email) {
             const user = await User.findOne({ where: { email: context.email } });
             if (user) {
-                return { isLoggedIn: true, email: context.email, id: user.id };
+                return { isLoggedIn: true, email: context.email, id: user.id, isSubscribed: user.subscription ? true : false };
             }
         }
         return { isLoggedIn: false };
