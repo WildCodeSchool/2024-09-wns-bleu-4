@@ -1,7 +1,7 @@
 import { createContext } from 'react';
 
 interface AuthContext {
-    user: { email: string | null, isSubscribed: boolean } | null;
+    user: { email: string | null, isSubscribed: boolean, id?: number } | null;
     isAuth: boolean;
     loading: boolean;
     refreshAuth: () => void;
