@@ -409,11 +409,16 @@ export type GetResourcesByUserIdQueryVariables = Exact<{
 
 export type GetResourcesByUserIdQuery = { __typename?: 'Query', getResourcesByUserId: Array<{ __typename?: 'Resource', description: string, id: number, name: string, path: string, url: string }> };
 
+export type GetUserSharedResourcesQueryVariables = Exact<{
+  userId: Scalars['ID']['input'];
+}>;
+
+
+export type GetUserSharedResourcesQuery = { __typename?: 'Query', getUserSharedResources: Array<{ __typename?: 'Resource', id: number, name: string, description: string, path: string, url: string }> };
 
 export type CreateSubscriptionMutationVariables = Exact<{
   userId: Scalars['ID']['input'];
 }>;
-
 
 
 export type CreateSubscriptionMutation = { __typename?: 'Mutation', createSubscription: { __typename?: 'Subscription', id: string, paidAt: any, endAt: any } };
@@ -431,9 +436,6 @@ export type GetUserSubscriptionQueryVariables = Exact<{
 
 
 export type GetUserSubscriptionQuery = { __typename?: 'Query', getUserSubscription?: { __typename?: 'Subscription', id: string, paidAt: any, endAt: any } | null };
-
-export type GetUserSharedResourcesQuery = { __typename?: 'Query', getUserSharedResources: Array<{ __typename?: 'Resource', id: number, name: string, description: string, path: string, url: string }> };
-
 
 export type LoginMutationVariables = Exact<{
   data: UserInput;
@@ -872,7 +874,50 @@ export type GetResourcesByUserIdQueryHookResult = ReturnType<typeof useGetResour
 export type GetResourcesByUserIdLazyQueryHookResult = ReturnType<typeof useGetResourcesByUserIdLazyQuery>;
 export type GetResourcesByUserIdSuspenseQueryHookResult = ReturnType<typeof useGetResourcesByUserIdSuspenseQuery>;
 export type GetResourcesByUserIdQueryResult = Apollo.QueryResult<GetResourcesByUserIdQuery, GetResourcesByUserIdQueryVariables>;
+export const GetUserSharedResourcesDocument = gql`
+    query GetUserSharedResources($userId: ID!) {
+  getUserSharedResources(userId: $userId) {
+    id
+    name
+    description
+    path
+    url
+  }
+}
+    `;
 
+/**
+ * __useGetUserSharedResourcesQuery__
+ *
+ * To run a query within a React component, call `useGetUserSharedResourcesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserSharedResourcesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserSharedResourcesQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useGetUserSharedResourcesQuery(baseOptions: Apollo.QueryHookOptions<GetUserSharedResourcesQuery, GetUserSharedResourcesQueryVariables> & ({ variables: GetUserSharedResourcesQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserSharedResourcesQuery, GetUserSharedResourcesQueryVariables>(GetUserSharedResourcesDocument, options);
+      }
+export function useGetUserSharedResourcesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserSharedResourcesQuery, GetUserSharedResourcesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserSharedResourcesQuery, GetUserSharedResourcesQueryVariables>(GetUserSharedResourcesDocument, options);
+        }
+export function useGetUserSharedResourcesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetUserSharedResourcesQuery, GetUserSharedResourcesQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetUserSharedResourcesQuery, GetUserSharedResourcesQueryVariables>(GetUserSharedResourcesDocument, options);
+        }
+export type GetUserSharedResourcesQueryHookResult = ReturnType<typeof useGetUserSharedResourcesQuery>;
+export type GetUserSharedResourcesLazyQueryHookResult = ReturnType<typeof useGetUserSharedResourcesLazyQuery>;
+export type GetUserSharedResourcesSuspenseQueryHookResult = ReturnType<typeof useGetUserSharedResourcesSuspenseQuery>;
+export type GetUserSharedResourcesQueryResult = Apollo.QueryResult<GetUserSharedResourcesQuery, GetUserSharedResourcesQueryVariables>;
 export const CreateSubscriptionDocument = gql`
     mutation CreateSubscription($userId: ID!) {
   createSubscription(userId: $userId) {
@@ -954,40 +999,17 @@ export const GetUserSubscriptionDocument = gql`
  *
  * To run a query within a React component, call `useGetUserSubscriptionQuery` and pass it any options that fit your needs.
  * When your component renders, `useGetUserSubscriptionQuery` returns an object from Apollo Client that contains loading, error, and data properties
-=======
-export const GetUserSharedResourcesDocument = gql`
-    query GetUserSharedResources($userId: ID!) {
-  getUserSharedResources(userId: $userId) {
-    id
-    name
-    description
-    path
-    url
-  }
-}
-    `;
-
-/**
- * __useGetUserSharedResourcesQuery__
- *
- * To run a query within a React component, call `useGetUserSharedResourcesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetUserSharedResourcesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
-
  * const { data, loading, error } = useGetUserSubscriptionQuery({
-
- * const { data, loading, error } = useGetUserSharedResourcesQuery({
-
  *   variables: {
  *      userId: // value for 'userId'
  *   },
  * });
  */
-
 export function useGetUserSubscriptionQuery(baseOptions: Apollo.QueryHookOptions<GetUserSubscriptionQuery, GetUserSubscriptionQueryVariables> & ({ variables: GetUserSubscriptionQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetUserSubscriptionQuery, GetUserSubscriptionQueryVariables>(GetUserSubscriptionDocument, options);
@@ -1004,23 +1026,6 @@ export type GetUserSubscriptionQueryHookResult = ReturnType<typeof useGetUserSub
 export type GetUserSubscriptionLazyQueryHookResult = ReturnType<typeof useGetUserSubscriptionLazyQuery>;
 export type GetUserSubscriptionSuspenseQueryHookResult = ReturnType<typeof useGetUserSubscriptionSuspenseQuery>;
 export type GetUserSubscriptionQueryResult = Apollo.QueryResult<GetUserSubscriptionQuery, GetUserSubscriptionQueryVariables>;
-=======
-export function useGetUserSharedResourcesQuery(baseOptions: Apollo.QueryHookOptions<GetUserSharedResourcesQuery, GetUserSharedResourcesQueryVariables> & ({ variables: GetUserSharedResourcesQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetUserSharedResourcesQuery, GetUserSharedResourcesQueryVariables>(GetUserSharedResourcesDocument, options);
-      }
-export function useGetUserSharedResourcesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserSharedResourcesQuery, GetUserSharedResourcesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetUserSharedResourcesQuery, GetUserSharedResourcesQueryVariables>(GetUserSharedResourcesDocument, options);
-        }
-export function useGetUserSharedResourcesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetUserSharedResourcesQuery, GetUserSharedResourcesQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetUserSharedResourcesQuery, GetUserSharedResourcesQueryVariables>(GetUserSharedResourcesDocument, options);
-        }
-export type GetUserSharedResourcesQueryHookResult = ReturnType<typeof useGetUserSharedResourcesQuery>;
-export type GetUserSharedResourcesLazyQueryHookResult = ReturnType<typeof useGetUserSharedResourcesLazyQuery>;
-export type GetUserSharedResourcesSuspenseQueryHookResult = ReturnType<typeof useGetUserSharedResourcesSuspenseQuery>;
-export type GetUserSharedResourcesQueryResult = Apollo.QueryResult<GetUserSharedResourcesQuery, GetUserSharedResourcesQueryVariables>;
 export const LoginDocument = gql`
     mutation Login($data: UserInput!) {
   login(data: $data)
