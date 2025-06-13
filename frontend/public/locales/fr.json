@@ -254,5 +254,29 @@
       "confirmPassword": "Confirmer le mot de passe",
       "terms": "J'accepte les conditions générales"
     }
+  },
+  "fileCard": {
+    "share": {
+      "title": "Partager le fichier",
+      "search": {
+        "label": "Rechercher un contact",
+        "placeholder": "Rechercher par email..."
+      },
+      "noContacts": "Aucun contact trouvé",
+      "button": "Partager avec {{count}} contact{{plural}}",
+      "error": {
+        "noSelection": "Veuillez sélectionner au moins un contact",
+        "sharing": "Erreur lors du partage du fichier"
+      },
+      "success": "Fichier partagé avec succès"
+    },
+    "delete": {
+      "confirm": "Voulez-vous vraiment supprimer \"{{name}}\" ?",
+      "button": "Supprimer le fichier"
+    },
+    "preview": {
+      "audio": "Votre navigateur ne supporte pas la lecture audio",
+      "video": "Votre navigateur ne supporte pas la lecture vidéo"
+    }
   }
 }

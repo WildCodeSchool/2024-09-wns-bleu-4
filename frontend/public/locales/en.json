@@ -251,5 +251,29 @@
       "confirmPassword": "Confirm Password",
       "terms": "I agree to the terms and conditions"
     }
+  },
+  "fileCard": {
+    "share": {
+      "title": "Share file",
+      "search": {
+        "label": "Search for a contact",
+        "placeholder": "Search by email..."
+      },
+      "noContacts": "No contacts found",
+      "button": "Share with {{count}} contact{{plural}}",
+      "error": {
+        "noSelection": "Please select at least one contact",
+        "sharing": "Error sharing file"
+      },
+      "success": "File shared successfully"
+    },
+    "delete": {
+      "confirm": "Are you sure you want to delete \"{{name}}\"?",
+      "button": "Delete file"
+    },
+    "preview": {
+      "audio": "Your browser does not support audio playback",
+      "video": "Your browser does not support video playback"
+    }
   }
 }

@@ -7,6 +7,7 @@ import { Contact, ContactStatus } from '@/generated/graphql-types';
 import { CREATE_USER_ACCESS } from '@/graphql/Resource/mutations';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 import {
     Dialog,
     DialogContent,
@@ -40,6 +41,7 @@ const FileCard: React.FC<FileCardProps> = ({
     myContacts,
     isShared = false,
 }) => {
+    const { t } = useTranslation();
     const isImage = name.match(/\.(jpg|jpeg|png|gif|webp)$/i);
     const isAudio = name.match(/\.mp3$/i);
     const isVideo = name.match(/\.mp4$/i);
@@ -82,7 +84,7 @@ const FileCard: React.FC<FileCardProps> = ({
     const handleShare = async () => {
         try {
             if (selectedContacts.length === 0) {
-                toast.error('Veuillez sélectionner au moins un contact');
+                toast.error(t('fileCard.share.error.noSelection'));
                 return;
             }
 
@@ -96,12 +98,12 @@ const FileCard: React.FC<FileCardProps> = ({
                 });
             }
             
-            toast.success('Fichier partagé avec succès');
+            toast.success(t('fileCard.share.success'));
             setSelectedContacts([]);
             setSearchQuery('');
         } catch (error) {
             console.error('Error sharing file:', error);
-            toast.error('Erreur lors du partage du fichier');
+            toast.error(t('fileCard.share.error.sharing'));
         }
     };
 
@@ -180,17 +182,17 @@ const FileCard: React.FC<FileCardProps> = ({
                                         </DialogTrigger>
                                         <DialogContent>
                                             <DialogHeader>
-                                                <DialogTitle>Partager le fichier</DialogTitle>
+                                                <DialogTitle>{t('fileCard.share.title')}</DialogTitle>
                                             </DialogHeader>
                                             <div className="space-y-4">
                                                 <div className="space-y-2">
-                                                    <Label htmlFor="search">Rechercher un contact</Label>
+                                                    <Label htmlFor="search">{t('fileCard.share.search.label')}</Label>
                                                     <Input
                                                         id="search"
                                                         type="text"
                                                         value={searchQuery}
                                                         onChange={(e) => setSearchQuery(e.target.value)}
-                                                        placeholder="Rechercher par email..."
+                                                        placeholder={t('fileCard.share.search.placeholder')}
                                                     />
                                                 </div>
                                                 <div className="h-[200px] rounded-md border p-4">
@@ -216,7 +218,7 @@ const FileCard: React.FC<FileCardProps> = ({
                                                             })}
                                                             {filteredContacts.length === 0 && (
                                                                 <p className="text-sm text-gray-500 text-center">
-                                                                    Aucun contact trouvé
+                                                                    {t('fileCard.share.noContacts')}
                                                                 </p>
                                                             )}
                                                         </div>
@@ -227,7 +229,10 @@ const FileCard: React.FC<FileCardProps> = ({
                                                     className="w-full"
                                                     disabled={selectedContacts.length === 0}
                                                 >
-                                                    Partager avec {selectedContacts.length} contact{selectedContacts.length > 1 ? 's' : ''}
+                                                    {t('fileCard.share.button', {
+                                                        count: selectedContacts.length,
+                                                        plural: selectedContacts.length > 1 ? 's' : ''
+                                                    })}
                                                 </Button>
                                             </div>
                                         </DialogContent>
@@ -236,7 +241,7 @@ const FileCard: React.FC<FileCardProps> = ({
                                         variant="destructive"
                                         onClick={() => {
                                             const confirmed = window.confirm(
-                                                `Voulez-vous vraiment supprimer "${name}" ?`,
+                                                t('fileCard.delete.confirm', { name })
                                             );
                                             if (confirmed) {
                                                 onDelete(id, name);
@@ -279,16 +284,14 @@ const FileCard: React.FC<FileCardProps> = ({
                             <div className="p-4">
                                 <audio controls className="w-full">
                                     <source src={url} type="audio/mpeg" />
-                                    Votre navigateur ne supporte pas la lecture
-                                    audio.
+                                    {t('fileCard.preview.audio')}
                                 </audio>
                             </div>
                         ) : isVideo ? (
                             <div className="p-4">
                                 <video controls className="w-full max-h-[70vh]">
                                     <source src={url} type="video/mp4" />
-                                    Votre navigateur ne supporte pas la lecture
-                                    vidéo.
+                                    {t('fileCard.preview.video')}
                                 </video>
                             </div>
                         ) : null}
