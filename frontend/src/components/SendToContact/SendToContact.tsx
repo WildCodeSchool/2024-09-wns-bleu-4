@@ -5,7 +5,7 @@ import { X, Users } from 'lucide-react';
 import { Contact, ContactStatus } from '@/generated/graphql-types';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useAuthContext } from '@/context/useAuthContext';
-import CardContact from '../Contact/CardContact';
+import CardContact from '@/components/Contact/CardContact';
 
 interface SendToContactProps {
     onSend: (contacts: Contact[]) => void;

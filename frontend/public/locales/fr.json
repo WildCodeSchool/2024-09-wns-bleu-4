@@ -35,7 +35,8 @@
     "subtitle": "Transfert de fichiers sécurisé et rapide",
     "getStarted": "Commencer",
     "learnMore": "En savoir plus",
-    "uploadButton": "Transférer vos fichiers"
+    "uploadButton": "Transférer vos fichiers",
+    "description": "Page d'accueil de Wild Transfer"
   },
   "about": {
     "title": "À propos de Wild Transfer",
@@ -44,7 +45,8 @@
     "description2": "Notre mission est de garantir un service fiable et respectueux de votre vie privée. Nous utilisons des technologies modernes pour assurer la sécurité et la confidentialité de vos données.",
     "description3": "Développée par une équipe de développeurs, la plateforme évolue en permanence pour répondre aux nouveaux usages et proposer des fonctionnalités adaptées à vos besoins.",
     "contactText": "Pour toute question ou suggestion, n'hésitez pas à nous contacter via la",
-    "contactLink": "page de contact"
+    "contactLink": "page de contact",
+    "description": "En savoir plus sur Wild Transfer"
   },
   "contact": {
     "title": "Mes contacts",
@@ -244,14 +246,16 @@
       "email": "Email",
       "password": "Mot de passe",
       "rememberMe": "Se souvenir de moi",
-      "forgotPassword": "Mot de passe oublié ?"
+      "forgotPassword": "Mot de passe oublié ?",
+      "description": "Connexion à un compte Wild Transfer"
     },
     "signUp": {
       "title": "Inscription",
       "email": "Email",
       "password": "Mot de passe",
       "confirmPassword": "Confirmer le mot de passe",
-      "terms": "J'accepte les conditions générales"
+      "terms": "J'accepte les conditions générales",
+      "description": "Création de compte Wild Transfer"
     },
     "form": {
       "title": "Veuillez vous connecter pour continuer",
@@ -291,7 +295,8 @@
         "termsLink": "CGU",
         "and": "et la",
         "privacyLink": "Politique de Confidentialité"
-      }
+      },
+      "description": "Création de compte Wild Transfer"
     },
     "confirm": {
       "title": "Vérification inscription",
@@ -299,6 +304,9 @@
       "resendEmail": "Renvoyer un email",
       "success": "Votre email a bien été confirmé, vous pouvez vous connecter !",
       "error": "Le code saisie est incorrect ou a expiré, veuillez réessayer."
+    },
+    "protectedRoute": {
+      "error": "Vous devez être connecté pour accéder à cette page"
     }
   },
   "fileCard": {
@@ -323,6 +331,60 @@
     "preview": {
       "audio": "Votre navigateur ne supporte pas la lecture audio",
       "video": "Votre navigateur ne supporte pas la lecture vidéo"
+    }
+  },
+  "meta": {
+    "home": {
+      "title": "Accueil",
+      "description": "Page d'accueil de Wild Transfer"
+    },
+    "login": {
+      "title": "Connexion",
+      "description": "Connexion à un compte Wild Transfer"
+    },
+    "signup": {
+      "title": "Inscription",
+      "description": "Création de compte Wild Transfer"
+    },
+    "files": {
+      "title": "Mes fichiers",
+      "description": "Page de vos fichiers"
+    },
+    "upload": {
+      "title": "Transférer des fichiers",
+      "description": "Transfert de fichiers"
+    },
+    "contacts": {
+      "title": "Mes contacts",
+      "description": "Page de vos contacts"
+    },
+    "forgotPassword": {
+      "title": "Mot de passe oublié",
+      "description": "Récupération de mot de passe"
+    },
+    "subscription": {
+      "title": "Abonnement",
+      "description": "Abonnement au service Wild Transfer"
+    },
+    "about": {
+      "title": "À propos",
+      "description": "En savoir plus sur Wild Transfer"
+    },
+    "sitemap": {
+      "title": "Plan du site",
+      "description": "Plan du site Wild Transfer"
+    },
+    "terms": {
+      "title": "CGU",
+      "description": "CGU"
+    },
+    "howItWorks": {
+      "title": "Comment ça marche ?",
+      "description": "Comment ça marche ?"
+    },
+    "profile": {
+      "title": "Mon profil",
+      "description": "Page de profil"
     }
   }
 }

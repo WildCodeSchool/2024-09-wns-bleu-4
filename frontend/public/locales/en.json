@@ -35,7 +35,8 @@
     "subtitle": "Secure and fast file transfer",
     "getStarted": "Get Started",
     "learnMore": "Learn More",
-    "uploadButton": "Transfer your files"
+    "uploadButton": "Transfer your files",
+    "description": "Wild Transfer home page"
   },
   "about": {
     "title": "About Wild Transfer",
@@ -44,7 +45,8 @@
     "description2": "Our mission is to provide a reliable service that respects your privacy. We use modern technologies to ensure the security and confidentiality of your data.",
     "description3": "Developed by a team of developers, the platform is constantly evolving to meet new uses and offer features adapted to your needs.",
     "contactText": "For any questions or suggestions, feel free to contact us via the",
-    "contactLink": "contact page"
+    "contactLink": "contact page",
+    "description": "Learn more about Wild Transfer"
   },
   "contact": {
     "title": "My Contacts",
@@ -120,7 +122,8 @@
     },
     "actions": {
       "save": "Save"
-    }
+    },
+    "description": "Profile page"
   },
   "files": {
     "title": {
@@ -139,7 +142,10 @@
       "deleteError": "Error deleting file",
       "storageDeleteError": "Error deleting file from storage",
       "loadError": "Error loading files"
-    }
+    },
+    "uploadNew": "Upload a new file",
+    "search": "Search files",
+    "filter": "Filter"
   },
   "upload": {
     "title": "Upload a file",
@@ -296,6 +302,9 @@
       "resendEmail": "Resend email",
       "success": "Your email has been confirmed, you can now log in!",
       "error": "The entered code is incorrect or has expired, please try again."
+    },
+    "protectedRoute": {
+      "error": "You must be logged in to access this page"
     }
   },
   "fileCard": {
@@ -320,6 +329,60 @@
     "preview": {
       "audio": "Your browser does not support audio playback",
       "video": "Your browser does not support video playback"
+    }
+  },
+  "meta": {
+    "home": {
+      "title": "Home",
+      "description": "Wild Transfer home page"
+    },
+    "login": {
+      "title": "Login",
+      "description": "Login to your Wild Transfer account"
+    },
+    "signup": {
+      "title": "Sign Up",
+      "description": "Create a Wild Transfer account"
+    },
+    "files": {
+      "title": "My Files",
+      "description": "Your files page"
+    },
+    "upload": {
+      "title": "Transfer Files",
+      "description": "File transfer"
+    },
+    "contacts": {
+      "title": "Contacts",
+      "description": "Contacts page"
+    },
+    "forgotPassword": {
+      "title": "Forgot Password",
+      "description": "Password recovery"
+    },
+    "subscription": {
+      "title": "Subscription",
+      "description": "Wild Transfer service subscription"
+    },
+    "about": {
+      "title": "About",
+      "description": "Learn more about Wild Transfer"
+    },
+    "sitemap": {
+      "title": "Sitemap",
+      "description": "Wild Transfer sitemap"
+    },
+    "terms": {
+      "title": "Terms of Service",
+      "description": "Terms of Service"
+    },
+    "howItWorks": {
+      "title": "How it works",
+      "description": "How it works"
+    },
+    "profile": {
+      "title": "Profile",
+      "description": "Profile page"
     }
   }
 }
