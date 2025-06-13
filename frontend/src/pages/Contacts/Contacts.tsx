@@ -6,7 +6,7 @@ import { useQuery } from '@apollo/client';
 import { Loader } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-const Contact = () => {
+const Contacts = () => {
     const { t } = useTranslation();
     const { data, loading, error, refetch } = useQuery(GetMyContactsDocument, {
         fetchPolicy: 'cache-and-network',
@@ -90,4 +90,4 @@ const Contact = () => {
     );
 };
 
-export default Contact;
+export default Contacts;

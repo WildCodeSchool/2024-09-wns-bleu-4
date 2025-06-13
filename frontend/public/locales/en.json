@@ -48,12 +48,59 @@
     "contactLink": "contact page"
   },
   "contact": {
-    "title": "Contact Us",
-    "form": {
-      "name": "Name",
-      "email": "Email",
-      "message": "Message",
-      "send": "Send Message"
+    "title": "My Contacts",
+    "error": "Error loading contacts",
+    "tabs": {
+      "received": "Received Requests",
+      "contacts": "My Contacts",
+      "sent": "Sent Requests"
+    },
+    "empty": {
+      "requests": {
+        "title": "No requests received",
+        "description": "You don't have any new contact requests."
+      },
+      "contacts": {
+        "title": "No contacts",
+        "description": "Start by adding contacts to expand your network."
+      },
+      "sent": {
+        "title": "No sent requests",
+        "description": "You haven't sent any contact requests yet."
+      },
+      "default": {
+        "title": "No items",
+        "description": "No items to display."
+      }
+    },
+    "actions": {
+      "accept": "Accept",
+      "refuse": "Refuse",
+      "remove": "Remove contact",
+      "cancel": "Cancel",
+      "delete": "Delete"
+    },
+    "delete": {
+      "title": "Remove contact",
+      "description": "Are you sure you want to remove {{email}} from your contacts? This action cannot be undone."
+    },
+    "add": {
+      "button": "Add contacts",
+      "title": "Add a contact",
+      "description": "You can add a contact by entering their email address.",
+      "form": {
+        "email": {
+          "label": "Email address",
+          "placeholder": "example@email.com",
+          "invalid": "Invalid email",
+          "required": "Email is required"
+        }
+      },
+      "actions": {
+        "cancel": "Cancel",
+        "add": "Add",
+        "sending": "Sending..."
+      }
     }
   },
   "profile": {

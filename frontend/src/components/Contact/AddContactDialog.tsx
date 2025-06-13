@@ -15,6 +15,7 @@ import { Loader, UserPlus } from 'lucide-react';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { useTranslation } from 'react-i18next';
 
 interface AddContactDialogProps {
     onContactAdded: () => void;
@@ -23,10 +24,11 @@ interface AddContactDialogProps {
 const AddContactDialog: React.FC<AddContactDialogProps> = ({
     onContactAdded,
 }) => {
+    const { t } = useTranslation();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
     const contactFormSchema = z.object({
-        email: z.string().email('Email invalide').min(1, "L'email est requis"),
+        email: z.string().email(t('contact.add.form.email.invalid')).min(1, t('contact.add.form.email.required')),
     });
 
     const [sendContactRequest, { loading: sendingRequest, error: sendError }] =
@@ -66,24 +68,23 @@ const AddContactDialog: React.FC<AddContactDialogProps> = ({
             <DialogTrigger asChild>
                 <Button className="">
                     <UserPlus className="mr-2 h-5 w-5" />
-                    Ajouter des contacts
+                    {t('contact.add.button')}
                 </Button>
             </DialogTrigger>
             <DialogContent>
-                <DialogTitle>Ajouter un contact</DialogTitle>
+                <DialogTitle>{t('contact.add.title')}</DialogTitle>
                 <DialogDescription>
-                    Vous pouvez ajouter un contact en entrant son adresse
-                    e-mail.
+                    {t('contact.add.description')}
                 </DialogDescription>
                 <form onSubmit={form.handleSubmit(onSubmit)}>
                     <div className="space-y-4 mt-4">
                         <div className="space-y-2 flex flex-col gap-1.5">
-                            <Label htmlFor="email">Adresse e-mail</Label>
+                            <Label htmlFor="email">{t('contact.add.form.email.label')}</Label>
                             <Input
                                 id="email"
                                 {...form.register('email')}
                                 type="email"
-                                placeholder="exemple@email.com"
+                                placeholder={t('contact.add.form.email.placeholder')}
                             />
                             {form.formState.errors.email && (
                                 <p className="text-red-500 text-sm">
@@ -105,16 +106,16 @@ const AddContactDialog: React.FC<AddContactDialogProps> = ({
                                     form.reset();
                                 }}
                             >
-                                Annuler
+                                {t('contact.add.actions.cancel')}
                             </Button>
                             <Button type="submit" disabled={sendingRequest}>
                                 {sendingRequest ? (
                                     <>
                                         <Loader className="mr-2 h-4 w-4 animate-spin" />
-                                        Envoi...
+                                        {t('contact.add.actions.sending')}
                                     </>
                                 ) : (
-                                    'Ajouter'
+                                    t('contact.add.actions.add')
                                 )}
                             </Button>
                         </div>

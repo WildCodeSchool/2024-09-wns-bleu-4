@@ -48,12 +48,59 @@
     "contactLink": "page de contact"
   },
   "contact": {
-    "title": "Contactez-nous",
-    "form": {
-      "name": "Nom",
-      "email": "Email",
-      "message": "Message",
-      "send": "Envoyer le message"
+    "title": "Mes contacts",
+    "error": "Erreur lors du chargement des contacts",
+    "tabs": {
+      "received": "Demandes reçues",
+      "contacts": "Mes contacts",
+      "sent": "Demandes envoyées"
+    },
+    "empty": {
+      "requests": {
+        "title": "Aucune demande reçue",
+        "description": "Vous n'avez pas de nouvelles demandes de contact."
+      },
+      "contacts": {
+        "title": "Aucun contact",
+        "description": "Commencez par ajouter des contacts pour élargir votre réseau."
+      },
+      "sent": {
+        "title": "Aucune demande envoyée",
+        "description": "Vous n'avez pas encore envoyé de demandes de contact."
+      },
+      "default": {
+        "title": "Aucun élément",
+        "description": "Aucun élément à afficher."
+      }
+    },
+    "actions": {
+      "accept": "Accepter",
+      "refuse": "Refuser",
+      "remove": "Supprimer le contact",
+      "cancel": "Annuler",
+      "delete": "Supprimer"
+    },
+    "delete": {
+      "title": "Supprimer le contact",
+      "description": "Êtes-vous sûr de vouloir supprimer {{email}} de vos contacts ? Cette action est irréversible."
+    },
+    "add": {
+      "button": "Ajouter des contacts",
+      "title": "Ajouter un contact",
+      "description": "Vous pouvez ajouter un contact en entrant son adresse e-mail.",
+      "form": {
+        "email": {
+          "label": "Adresse e-mail",
+          "placeholder": "exemple@email.com",
+          "invalid": "Email invalide",
+          "required": "L'email est requis"
+        }
+      },
+      "actions": {
+        "cancel": "Annuler",
+        "add": "Ajouter",
+        "sending": "Envoi..."
+      }
     }
   },
   "profile": {

@@ -1,10 +1,10 @@
 import HeadMeta from '@/components/HeadMeta';
 import { Loader } from '@/components/Loader';
 import { AuthProvider } from '@/context/AuthContext';
-import Contact from '@/pages/Contact/contact';
+import Contacts from '@/pages/Contacts/Contacts';
 import FilesPage from '@/pages/Files/files';
 import Home from '@/pages/Home/Home';
-import Subscription from './pages/Subscription/subscription';
+import Subscription from '@/pages/Subscription/subscription';
 import Layout from '@/pages/Layout';
 import Login from '@/pages/Log/Login';
 import Sign from '@/pages/Sign/sign';
@@ -13,9 +13,9 @@ import About from '@/pages/About/about';
 import { useEffect } from 'react';
 import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useAuth } from './hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth';
 import { Profile } from '@/pages/Profile/profile';
-import HowItWorks from '@/pages/HowitWorks';
+import HowItWorks from '@/pages/HowItWorks';
 
 const App = () => {
     return (
@@ -81,14 +81,14 @@ const App = () => {
                             }
                         />
                         <Route
-                            path="/contact"
+                            path="/contacts"
                             element={
                                 <PageWrapper
                                     title="Contact"
                                     description="Page de contact"
                                     protected
                                 >
-                                    <Contact />
+                                    <Contacts />
                                 </PageWrapper>
                             }
                         />
