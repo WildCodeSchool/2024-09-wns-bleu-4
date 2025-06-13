@@ -198,7 +198,7 @@ const Header = () => {
                                         className="cursor-pointer w-full flex items-center gap-2"
                                     >
                                         <UserIcon className="h-4 w-4" />
-                                        {t('auth.signIn.title')}
+                                        {t('auth.logIn.title')}
                                     </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem asChild>

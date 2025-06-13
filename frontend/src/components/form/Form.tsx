@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
+import { useTranslation } from 'react-i18next';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Input } from '../ui/input';
@@ -30,6 +31,7 @@ interface FormProps {
 }
 
 const Form = ({ title, onSubmit, loading, links, error }: FormProps) => {
+    const { t } = useTranslation();
     const [showPassword, setShowPassword] = useState(false);
 
     const {
@@ -57,7 +59,7 @@ const Form = ({ title, onSubmit, loading, links, error }: FormProps) => {
             <CardHeader>
                 <CardTitle className="text-2xl">{title}</CardTitle>
                 <CardTitle className="text-sm font-normal text-muted-foreground">
-                    Veuillez vous connecter pour continuer
+                    {t('auth.form.title')}
                 </CardTitle>
             </CardHeader>
             <CardContent className="grid gap-y-4">
@@ -66,11 +68,11 @@ const Form = ({ title, onSubmit, loading, links, error }: FormProps) => {
                     className="grid gap-4"
                 >
                     <div className="space-y-2">
-                        <Label htmlFor="email">Email</Label>
+                        <Label htmlFor="email">{t('auth.form.email.label')}</Label>
                         <Input
                             id="email"
                             type="email"
-                            placeholder="exemple@exemple.com"
+                            placeholder={t('auth.form.email.placeholder')}
                             {...register('email')}
                         />
                         {errors.email && (
@@ -81,12 +83,12 @@ const Form = ({ title, onSubmit, loading, links, error }: FormProps) => {
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="password">Mot de passe</Label>
+                        <Label htmlFor="password">{t('auth.form.password.label')}</Label>
                         <div className="relative">
                             <Input
                                 id="password"
                                 type={showPassword ? 'text' : 'password'}
-                                placeholder="Votre mot de passe"
+                                placeholder={t('auth.form.password.placeholder')}
                                 className="pr-10"
                                 {...register('password')}
                             />
@@ -126,7 +128,7 @@ const Form = ({ title, onSubmit, loading, links, error }: FormProps) => {
                         type="submit"
                         className="mt-2 cursor-pointer"
                     >
-                        {loading ? `${title} ...` : 'Valider'}
+                        {loading ? t('auth.form.loading', { action: title }) : t('auth.form.submit')}
                     </Button>
 
                     {links && (

@@ -4,8 +4,10 @@ import { useRegisterMutation } from '@/generated/graphql-types';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 const Sign = () => {
+    const { t } = useTranslation();
     const [register, { loading }] = useRegisterMutation();
     const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -15,16 +17,14 @@ const Sign = () => {
                 variables: { data: { email, password } },
             });
             if (response.data?.register) {
-                toast.info(
-                    'Veuillez vérifier votre email pour confirmer votre compte.',
-                );
+                toast.info(t('auth.signup.success'));
                 setIsSubmitted(true);
             }
         } catch (error) {
             if (error instanceof Error) {
                 throw new Error(error.message);
             } else {
-                throw new Error('Une erreur inconnue est survenue.');
+                throw new Error(t('auth.signup.error'));
             }
         }
     };
@@ -33,15 +33,16 @@ const Sign = () => {
         <ConfirmForm />
     ) : (
         <Form
-            title="Inscription"
+            title={t('auth.signup.title')}
             onSubmit={handleSubmit}
             loading={loading}
             links={
                 <span>
-                    En appuyant sur "Valider", vous avez lu et vous acceptez les{' '}
-                    <Link to="/cgu">CGU</Link> et la{' '}
+                    {t('auth.signup.links.terms')}{' '}
+                    <Link to="/cgu">{t('auth.signup.links.termsLink')}</Link>{' '}
+                    {t('auth.signup.links.and')}{' '}
                     <Link to="/privacy-policy">
-                        Politique de Confidentialité
+                        {t('auth.signup.links.privacyLink')}
                     </Link>
                     .
                 </span>

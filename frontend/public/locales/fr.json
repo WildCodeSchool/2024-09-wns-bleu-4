@@ -20,7 +20,7 @@
     "upload": "Transférer fichiers",
     "subscription": "Abonnement",
     "howItWorks": "Comment ça marche",
-    "signIn": "Connexion",
+    "logIn": "Connexion",
     "signUp": "Inscription",
     "logOut": "Déconnexion",
     "mySpace": "Mon espace",
@@ -28,8 +28,7 @@
     "discover": "Découvrir",
     "whoAreWe": "Qui sommes nous ?",
     "myAccount": "Mon compte",
-    "userMenu": "Menu utilisateur",
-    "login": "Connexion"
+    "userMenu": "Menu utilisateur"
   },
   "home": {
     "title": "La solution simple et rapide pour tous vos transferts de fichiers",
@@ -240,7 +239,7 @@
   "auth": {
     "title": "Authentification",
     "logoutSuccess": "Déconnexion réussie",
-    "signIn": {
+    "logIn": {
       "title": "Connexion",
       "email": "Email",
       "password": "Mot de passe",
@@ -253,6 +252,53 @@
       "password": "Mot de passe",
       "confirmPassword": "Confirmer le mot de passe",
       "terms": "J'accepte les conditions générales"
+    },
+    "form": {
+      "title": "Veuillez vous connecter pour continuer",
+      "email": {
+        "label": "Email",
+        "placeholder": "exemple@exemple.com",
+        "validation": "Veuillez saisir une adresse email valide"
+      },
+      "password": {
+        "label": "Mot de passe",
+        "placeholder": "Votre mot de passe",
+        "validation": {
+          "minLength": "Le mot de passe doit contenir au moins 12 caractères",
+          "uppercase": "Doit contenir au moins une majuscule",
+          "number": "Doit contenir au moins un chiffre",
+          "special": "Doit contenir au moins un caractère spécial"
+        }
+      },
+      "submit": "Valider",
+      "loading": "{{action}} ..."
+    },
+    "login": {
+      "title": "Connexion",
+      "success": "Connexion réussie",
+      "error": "Erreur de connexion",
+      "links": {
+        "forgotPassword": "Mot de passe oublié ?",
+        "createAccount": "Créer un compte"
+      }
+    },
+    "signup": {
+      "title": "Inscription",
+      "success": "Veuillez vérifier votre email pour confirmer votre compte.",
+      "error": "Une erreur inconnue est survenue.",
+      "links": {
+        "terms": "En appuyant sur \"Valider\", vous avez lu et vous acceptez les",
+        "termsLink": "CGU",
+        "and": "et la",
+        "privacyLink": "Politique de Confidentialité"
+      }
+    },
+    "confirm": {
+      "title": "Vérification inscription",
+      "description": "Veuillez vérifier votre boîte mail afin de finaliser votre inscription.",
+      "resendEmail": "Renvoyer un email",
+      "success": "Votre email a bien été confirmé, vous pouvez vous connecter !",
+      "error": "Le code saisie est incorrect ou a expiré, veuillez réessayer."
     }
   },
   "fileCard": {

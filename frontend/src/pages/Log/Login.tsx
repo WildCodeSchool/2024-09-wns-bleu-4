@@ -3,8 +3,10 @@ import { useAuthContext } from '@/context/useAuthContext';
 import { useLoginMutation } from '@/generated/graphql-types';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 const Login = () => {
+    const { t } = useTranslation();
     const [login, { loading }] = useLoginMutation();
     const navigate = useNavigate();
     const { refreshAuth } = useAuthContext();
@@ -17,25 +19,25 @@ const Login = () => {
 
             if (response.data?.login) {
                 await refreshAuth();
-                toast.success('Connexion réussie');
+                toast.success(t('auth.login.success'));
                 navigate('/');
             }
         } catch (err) {
-            console.error('Erreur de connexion :', err);
-            toast.error('Erreur de connexion');
+            console.error('Login error:', err);
+            toast.error(t('auth.login.error'));
         }
     };
 
     return (
         <section className="mx-auto w-[80%]">
             <Form
-                title="Connexion"
+                title={t('auth.login.title')}
                 onSubmit={handleSubmit}
                 loading={loading}
                 links={
                     <>
-                        <Link to="/forgot-password">Mot de passe oublié ?</Link>
-                        <Link to="/sign">Créer un compte</Link>
+                        <Link to="/forgot-password">{t('auth.login.links.forgotPassword')}</Link>
+                        <Link to="/sign">{t('auth.login.links.createAccount')}</Link>
                     </>
                 }
             />

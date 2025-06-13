@@ -20,7 +20,7 @@
     "upload": "Upload Files",
     "subscription": "Subscription",
     "howItWorks": "How it works",
-    "signIn": "Sign In",
+    "logIn": "Login",
     "signUp": "Sign Up",
     "logOut": "Log Out",
     "mySpace": "My Space",
@@ -28,8 +28,7 @@
     "discover": "Discover",
     "whoAreWe": "Who are we?",
     "myAccount": "My Account",
-    "userMenu": "User menu",
-    "login": "Login"
+    "userMenu": "User menu"
   },
   "home": {
     "title": "The simple and fast solution for all your file transfers",
@@ -237,8 +236,8 @@
   "auth": {
     "title": "Authentication",
     "logoutSuccess": "Successfully logged out",
-    "signIn": {
-      "title": "Sign In",
+    "logIn": {
+      "title": "Log In",
       "email": "Email",
       "password": "Password",
       "rememberMe": "Remember me",
@@ -250,6 +249,53 @@
       "password": "Password",
       "confirmPassword": "Confirm Password",
       "terms": "I agree to the terms and conditions"
+    },
+    "form": {
+      "title": "Please log in to continue",
+      "email": {
+        "label": "Email",
+        "placeholder": "example@example.com",
+        "validation": "Please enter a valid email address"
+      },
+      "password": {
+        "label": "Password",
+        "placeholder": "Your password",
+        "validation": {
+          "minLength": "Password must be at least 12 characters",
+          "uppercase": "Must contain at least one uppercase letter",
+          "number": "Must contain at least one number",
+          "special": "Must contain at least one special character"
+        }
+      },
+      "submit": "Validate",
+      "loading": "{{action}} ..."
+    },
+    "login": {
+      "title": "Login",
+      "success": "Login successful",
+      "error": "Login error",
+      "links": {
+        "forgotPassword": "Forgot password?",
+        "createAccount": "Create an account"
+      }
+    },
+    "signup": {
+      "title": "Sign Up",
+      "success": "Please check your email to confirm your account.",
+      "error": "An unknown error occurred.",
+      "links": {
+        "terms": "By clicking \"Validate\", you have read and accept the",
+        "termsLink": "Terms of Service",
+        "and": "and",
+        "privacyLink": "Privacy Policy"
+      }
+    },
+    "confirm": {
+      "title": "Registration verification",
+      "description": "Please check your email to complete your registration.",
+      "resendEmail": "Resend email",
+      "success": "Your email has been confirmed, you can now log in!",
+      "error": "The entered code is incorrect or has expired, please try again."
     }
   },
   "fileCard": {
