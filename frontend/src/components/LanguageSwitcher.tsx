@@ -18,7 +18,7 @@ const LanguageSwitcher = () => {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon">
+                <Button variant="outline" size="icon" className='cursor-pointer'>
                     <Globe className="h-5 w-5" />
                     <span className="sr-only">Switch language</span>
                 </Button>
