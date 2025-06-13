@@ -14,8 +14,8 @@ import { useEffect } from 'react';
 import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from './hooks/useAuth';
-import HowWork from '@/pages/HowWork';
 import { Profile } from '@/pages/Profile/profile';
+import HowItWorks from '@/pages/HowitWorks';
 
 const App = () => {
     return (
@@ -145,8 +145,8 @@ const App = () => {
                             }
                         />
                         <Route
-                            path="/how-work"
-                            element={<HowWork />}
+                            path="/how-it-works"
+                            element={<HowItWorks />}
                         />
                         <Route
                             path="/profile"
