@@ -15,8 +15,8 @@ export const LOGOUT = gql`
 
 //Register
 export const REGISTER = gql`
-    mutation Register($data: UserInput!) {
-        register(data: $data)
+    mutation Register($data: UserInput!, $lang: String!) {
+        register(data: $data, lang: $lang)
     }
 `;
 

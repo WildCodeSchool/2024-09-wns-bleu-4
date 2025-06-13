@@ -16,18 +16,20 @@ import React from 'react';
 interface ResetPasswordEmailProps {
     userEmail: string;
     resetPasswordLink: string;
+    lang: 'fr' | 'en';
 }
 
 export const ResetPasswordEmail = ({
     userEmail,
     resetPasswordLink,
+    lang,
 }: ResetPasswordEmailProps) => {
     return (
         <Tailwind>
             <Html>
                 <Head />
                 <Body className="bg-[#f6f9fc] py-2 font-sans">
-                    <Preview>Wild Transfer reset your password</Preview>
+                    <Preview>{lang === 'fr' ? 'Réinitialiser votre mot de passe' : 'Reset your password'}</Preview>
                     <Container className="bg-white border border-[#f0f0f0] p-[45px]">
                         <div className="flex justify-center">
                             <svg
@@ -62,37 +64,32 @@ export const ResetPasswordEmail = ({
                         </div>
                         <Section>
                             <Text className="text-[#404040] text-[16px] font-light leading-[26px]">
-                                Hi {userEmail},
+                                {lang === 'fr' ? 'Bonjour' : 'Hi'} {userEmail},
                             </Text>
                             <Text className="text-[#404040] text-[16px] font-light leading-[26px]">
-                                Someone recently requested a password change for
-                                your Wild Transfer account. If this was you, you
-                                can set a new password here:
+                                {lang === 'fr' ? 'Quelqu\'un a récemment demandé un changement de mot de passe pour votre compte Wild Transfer. Si c\'était vous, vous pouvez définir un nouveau mot de passe ici :' : 'Someone recently requested a password change for your Wild Transfer account. If this was you, you can set a new password here:'}
                             </Text>
                             <Button
                                 href={resetPasswordLink}
                                 className="bg-[#007ee6] text-white text-[15px] font-normal text-center no-underline rounded w-[210px] py-[14px] px-[7px] block mt-4"
                             >
-                                Reset password
+                                {lang === 'fr' ? 'Réinitialiser le mot de passe' : 'Reset password'}
                             </Button>
                             <Text className="text-[#404040] text-[16px] font-light leading-[26px] mt-4">
-                                If you don't want to change your password or
-                                didn't request this, just ignore and delete this
-                                message.
+                                {lang === 'fr' ? 'Si vous ne voulez pas changer votre mot de passe ou n\'avez pas demandé cela, ignorez simplement et supprimez ce message.' : 'If you don\'t want to change your password or didn\'t request this, just ignore and delete this message.'}
                             </Text>
                             <Text className="text-[#404040] text-[16px] font-light leading-[26px] mt-4">
-                                To keep your account secure, please don't
-                                forward this email to anyone. See{' '}
+                                {lang === 'fr' ? 'Pour garder votre compte sécurisé, veuillez ne pas envoyer ce mail à quelqu\'un d\'autre. Voir cette page pour plus de conseils de sécurité.' : 'To keep your account secure, please don\'t forward this email to anyone. See this page for more security tips.'}
                                 <Link
                                     href="https://it.ucsb.edu/general-security-resources/password-best-practices"
                                     className="underline text-[#404040]"
                                 >
-                                    this page
+                                    {lang === 'fr' ? 'cette page' : 'this page'}
                                 </Link>
-                                {' '}for more security tips.
+                                {' '}{lang === 'fr' ? 'pour plus de conseils de sécurité.' : 'for more security tips.'}
                             </Text>
                             <Text className="text-[#404040] text-[16px] font-light leading-[26px] mt-4">
-                                See you on the website!
+                                {lang === 'fr' ? 'À bientôt sur le site !' : 'See you on the website!'}
                             </Text>
                         </Section>
                     </Container>

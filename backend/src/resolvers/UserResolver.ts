@@ -51,8 +51,10 @@ export class UserInfo {
 @Resolver(User)
 class UserResolver {
     @Mutation(() => String)
-    async register(@Arg('data', () => UserInput) newUserData: User) {
-
+    async register(
+        @Arg('data', () => UserInput) newUserData: User,
+        @Arg('lang', () => String) lang: 'fr' | 'en'
+    ) {
         const existingUser = await User.findOneBy({ email: newUserData.email });
 
         if (existingUser) {
@@ -75,8 +77,9 @@ class UserResolver {
                 to: [newUserData.email],
                 subject: 'Verify Account Creation',
                 react: VerifyAccountEmail({
-                    validationCode: codeToConfirm
-                }),
+                    validationCode: codeToConfirm,
+                    lang: lang as 'fr' | 'en'
+                })
             });
         } catch (error) {
             throw new Error(error);
@@ -85,7 +88,10 @@ class UserResolver {
     }
 
     @Mutation(() => String)
-    async resetSendCode(@Arg('email', () => String) email: string) {
+    async resetSendCode(
+        @Arg('email', () => String) email: string,
+        @Arg('lang', () => String) lang: string
+    ) {
         const user = await TempUser.findOneBy({ email });
         if (!user) {
             throw new Error('L\'utilisateur demandé n\'a pas été trouvé');
@@ -102,8 +108,9 @@ class UserResolver {
                 subject: 'Reset Password',
                 react: ResetPasswordEmail({
                     userEmail: email,
-                    resetPasswordLink: "#" // TODO: Replacer par le vrai lien une fois la feature en place + Supprimer ce commentaire
-                }),
+                    resetPasswordLink: "#",
+                    lang: lang as 'fr' | 'en'
+                })
             });
             return 'Un code de réinitialisation a été envoyé à votre adresse email';
         } catch (error) {

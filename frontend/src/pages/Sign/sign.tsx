@@ -6,15 +6,16 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 
+
 const Sign = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const [register, { loading }] = useRegisterMutation();
     const [isSubmitted, setIsSubmitted] = useState(false);
 
     const handleSubmit = async (email: string, password: string) => {
         try {
             const response = await register({
-                variables: { data: { email, password } },
+                variables: { data: { email, password }, lang: i18n.language as 'fr' | 'en' },
             });
             if (response.data?.register) {
                 toast.info(t('auth.signup.success'));

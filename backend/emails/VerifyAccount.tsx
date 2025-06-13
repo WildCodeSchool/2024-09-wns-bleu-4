@@ -14,10 +14,12 @@ import React from 'react';
 
 interface VerifyAccountEmailProps {
     validationCode?: string;
+    lang: 'fr' | 'en';
 }
 
 export const VerifyAccountEmail = ({
     validationCode,
+    lang,
 }: VerifyAccountEmailProps) => (
     <Tailwind>
         <Html>
@@ -56,11 +58,10 @@ export const VerifyAccountEmail = ({
                         </svg>
                     </div>
                     <Text className="text-[#0a85ea] text-[11px] font-bold h-[16px] leading-[16px] mt-4 mb-2 mx-2 uppercase text-center">
-                        Verify Your Email
+                        {lang === 'fr' ? 'Vérifiez votre email' : 'Verify Your Email'}
                     </Text>
                     <Heading className="text-black text-[20px] font-medium leading-[24px] my-0 text-center max-w-10/12">
-                        Enter the following code on website to finish the
-                        creation of your Wild Transfer account.
+                        {lang === 'fr' ? 'Entrez le code suivant sur le site pour terminer la création de votre compte Wild Transfer.' : 'Enter the following code on website to finish the creation of your Wild Transfer account.'}
                     </Heading>
                     <Section className="bg-black/5 rounded w-[280px] my-4 mx-auto align-middle">
                         <Text className="text-black text-[32px] font-bold leading-[40px] tracking-[6px] py-2 m-0 block text-center">
@@ -68,7 +69,7 @@ export const VerifyAccountEmail = ({
                         </Text>
                     </Section>
                     <Text className="text-[#444] text-[15px] leading-[23px] px-10 m-0 text-center">
-                        Not expecting this email?
+                        {lang === 'fr' ? 'Vous ne vous attendiez pas à recevoir ce mail ?' : 'Not expecting this email?'}
                     </Text>
                     <Text className="text-[#444] text-[15px] leading-[23px] px-10 m-0 text-center">
                         Contact{' '}
@@ -78,11 +79,11 @@ export const VerifyAccountEmail = ({
                         >
                             contact@wildtransfer.cloud
                         </Link>{' '}
-                        if you did not request this code.
+                        {lang === 'fr' ? 'si vous n\'avez pas demandé ce code.' : 'if you did not request this code.'}
                     </Text>
                 </Container>
                 <Text className="text-black text-[12px] font-extrabold leading-[23px] mt-5 m-0 text-center uppercase">
-                    Securely powered by WCS.
+                    {lang === 'fr' ? 'Sécurisé par WCS.' : 'Securely powered by WCS.'}
                 </Text>
             </Body>
         </Html>
