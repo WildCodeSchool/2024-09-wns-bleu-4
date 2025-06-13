@@ -146,7 +146,26 @@
     "filter": "Filtrer"
   },
   "upload": {
-    "title": "Transférez votre fichier",
+    "title": "Télécharger un fichier",
+    "dragDrop": {
+      "title": "Transférez votre fichier",
+      "dropHere": "Déposez le fichier ici",
+      "releaseToUpload": "Relâchez pour télécharger",
+      "browse": "parcourez",
+      "supportedTypes": "Supporte les images, documents, vidéos, et plus"
+    },
+    "selectedFile": {
+      "title": "Fichier sélectionné",
+      "delete": "Supprimer le fichier"
+    },
+    "description": {
+      "placeholder": "Description du fichier (minimum 4 caractères)",
+      "charCount": "{{count}}/4 caractères minimum"
+    },
+    "submit": {
+      "uploading": "Envoi en cours...",
+      "save": "Enregistrer le fichier"
+    },
     "success": {
       "message": "✅ Le fichier a été envoyé et enregistré avec succès !",
       "shareNow": "Partager maintenant"

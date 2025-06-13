@@ -143,7 +143,26 @@
     }
   },
   "upload": {
-    "title": "Transfer your file",
+    "title": "Upload a file",
+    "dragDrop": {
+      "title": "Transfer your file",
+      "dropHere": "Drop file here",
+      "releaseToUpload": "Release to upload",
+      "browse": "browse",
+      "supportedTypes": "Supports images, documents, videos, and more"
+    },
+    "selectedFile": {
+      "title": "Selected file",
+      "delete": "Delete file"
+    },
+    "description": {
+      "placeholder": "File description (minimum 4 characters)",
+      "charCount": "{{count}}/4 minimum characters"
+    },
+    "submit": {
+      "uploading": "Uploading...",
+      "save": "Save file"
+    },
     "success": {
       "message": "✅ File has been successfully uploaded and saved!",
       "shareNow": "Share now"
