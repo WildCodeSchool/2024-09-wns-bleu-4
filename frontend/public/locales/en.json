@@ -63,19 +63,51 @@
     "security": "Security"
   },
   "files": {
-    "title": "My Files",
-    "uploadNew": "Upload New File",
-    "noFiles": "No files found",
-    "search": "Search files",
-    "filter": "Filter"
+    "title": {
+      "myFiles": "My available files",
+      "noFiles": "You don't have any files yet",
+      "sharedFiles": "Files shared with me",
+      "noSharedFiles": "No files shared with you"
+    },
+    "actions": {
+      "addFiles": "Add files"
+    },
+    "errors": {
+      "invalidResourceId": "Invalid resource ID",
+      "deleting": "Deleting...",
+      "deleteSuccess": "File successfully deleted",
+      "deleteError": "Error deleting file",
+      "storageDeleteError": "Error deleting file from storage",
+      "loadError": "Error loading files"
+    }
   },
   "upload": {
-    "title": "Upload Files",
-    "dragDrop": "Drag and drop files here",
-    "or": "or",
-    "browse": "Browse Files",
-    "maxSize": "Maximum file size: {{size}}",
-    "allowedTypes": "Allowed file types: {{types}}"
+    "title": "Transfer your file",
+    "success": {
+      "message": "✅ File has been successfully uploaded and saved!",
+      "shareNow": "Share now"
+    },
+    "errors": {
+      "upload": "❌ An error occurred. Please try again.",
+      "fileUpload": "Error uploading file",
+      "share": {
+        "noContacts": "Please select at least one contact",
+        "error": "An error occurred while sharing",
+        "success": "File shared successfully",
+        "failed": "Error sharing file"
+      }
+    },
+    "share": {
+      "title": "Share file",
+      "description": "Select the contacts you want to share this file with.",
+      "search": {
+        "label": "Search for a contact",
+        "placeholder": "Search by email..."
+      },
+      "noContacts": "No contacts found",
+      "button": "Share with {{count}} contact",
+      "button_plural": "Share with {{count}} contacts"
+    }
   },
   "subscription": {
     "title": "Subscription Plans",

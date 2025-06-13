@@ -63,19 +63,54 @@
     "security": "Sécurité"
   },
   "files": {
-    "title": "Mes Fichiers",
+    "title": {
+      "myFiles": "Mes fichiers disponibles",
+      "noFiles": "Vous n'avez pas encore de fichiers",
+      "sharedFiles": "Fichiers partagés avec moi",
+      "noSharedFiles": "Aucun fichier partagé avec vous"
+    },
+    "actions": {
+      "addFiles": "Ajouter des fichiers"
+    },
+    "errors": {
+      "invalidResourceId": "ID de ressource non valide",
+      "deleting": "Suppression en cours...",
+      "deleteSuccess": "Fichier supprimé avec succès",
+      "deleteError": "Erreur lors de la suppression",
+      "storageDeleteError": "Erreur lors de la suppression du fichier du stockage",
+      "loadError": "Erreur lors du chargement des fichiers"
+    },
     "uploadNew": "Télécharger un nouveau fichier",
-    "noFiles": "Aucun fichier trouvé",
     "search": "Rechercher des fichiers",
     "filter": "Filtrer"
   },
   "upload": {
-    "title": "Télécharger des fichiers",
-    "dragDrop": "Glissez et déposez vos fichiers ici",
-    "or": "ou",
-    "browse": "Parcourir les fichiers",
-    "maxSize": "Taille maximale du fichier : {{size}}",
-    "allowedTypes": "Types de fichiers autorisés : {{types}}"
+    "title": "Transférez votre fichier",
+    "success": {
+      "message": "✅ Le fichier a été envoyé et enregistré avec succès !",
+      "shareNow": "Partager maintenant"
+    },
+    "errors": {
+      "upload": "❌ Une erreur s'est produite. Veuillez réessayer.",
+      "fileUpload": "Erreur lors de l'upload du fichier",
+      "share": {
+        "noContacts": "Veuillez sélectionner au moins un contact",
+        "error": "Une erreur est survenue lors du partage",
+        "success": "Fichier partagé avec succès",
+        "failed": "Erreur lors du partage du fichier"
+      }
+    },
+    "share": {
+      "title": "Partager le fichier",
+      "description": "Sélectionnez les contacts avec lesquels vous souhaitez partager ce fichier.",
+      "search": {
+        "label": "Rechercher un contact",
+        "placeholder": "Rechercher par email..."
+      },
+      "noContacts": "Aucun contact trouvé",
+      "button": "Partager avec {{count}} contact",
+      "button_plural": "Partager avec {{count}} contacts"
+    }
   },
   "subscription": {
     "title": "Plans d'abonnement",

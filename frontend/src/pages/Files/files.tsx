@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import FileCard from '@/components/FileCard';
 import { Button } from '@/components/ui/button';
 import { GET_MY_CONTACTS } from '@/graphql/Contact/queries';
+import { useTranslation } from 'react-i18next';
 
 type Resource = {
     id: number;
@@ -18,6 +19,7 @@ type Resource = {
 };
 
 const FilesPage: React.FC = () => {
+    const { t } = useTranslation();
     const { data: userData } = useQuery(GET_USER_ID);
     const {
         data: resources,
@@ -45,10 +47,10 @@ const FilesPage: React.FC = () => {
     const handleDelete = async (id: number, name: string) => {
         try {
             if (!id) {
-                toast.error('ID de ressource non valide');
+                toast.error(t('files.errors.invalidResourceId'));
                 return;
             }
-            const toastId = toast.loading('Suppression en cours...');
+            const toastId = toast.loading(t('files.errors.deleting'));
 
             const { data } = await deleteResourceMutation({
                 variables: { deleteResourceId: id.toString() },
@@ -69,14 +71,14 @@ const FilesPage: React.FC = () => {
 
                     if (response.ok) {
                         toast.update(toastId, {
-                            render: 'Fichier supprimé avec succès',
+                            render: t('files.errors.deleteSuccess'),
                             type: 'success',
                             isLoading: false,
                             autoClose: 3000,
                         });
                     } else {
                         toast.update(toastId, {
-                            render: `Erreur lors de la suppression du fichier du stockage: ${responseData.message}`,
+                            render: `${t('files.errors.storageDeleteError')}: ${responseData.message}`,
                             type: 'error',
                             isLoading: false,
                             autoClose: 5000,
@@ -85,7 +87,7 @@ const FilesPage: React.FC = () => {
                 } catch (error) {
                     console.error(error);
                     toast.update(toastId, {
-                        render: 'Erreur lors de la suppression du fichier du stockage',
+                        render: t('files.errors.storageDeleteError'),
                         type: 'error',
                         isLoading: false,
                         autoClose: 5000,
@@ -95,7 +97,7 @@ const FilesPage: React.FC = () => {
                 await refetch();
             } else {
                 toast.update(toastId, {
-                    render: 'La suppression de la ressource a échoué',
+                    render: t('files.errors.deleteError'),
                     type: 'error',
                     isLoading: false,
                     autoClose: 5000,
@@ -103,12 +105,12 @@ const FilesPage: React.FC = () => {
             }
         } catch (error) {
             console.error(error);
-            toast.error('Erreur lors de la suppression');
+            toast.error(t('files.errors.deleteError'));
         }
     };
 
     if (error) {
-        toast.error(`Erreur lors du chargement des fichiers: ${error.message}`);
+        toast.error(`${t('files.errors.loadError')}: ${error.message}`);
     }
 
     return (
@@ -116,8 +118,8 @@ const FilesPage: React.FC = () => {
             <div className="flex flex-col items-center mb-8">
                 <h1 className="text-3xl font-bold mb-6 text-center">
                     {resources?.getResourcesByUserId?.length
-                        ? 'Mes fichiers disponibles'
-                        : "Vous n'avez pas encore de fichiers"}
+                        ? t('files.title.myFiles')
+                        : t('files.title.noFiles')}
                 </h1>
                 <Button
                     variant="ghost"
@@ -129,7 +131,7 @@ const FilesPage: React.FC = () => {
                 >
                     <Link to="/upload" className="flex items-center group">
                         <span className="opacity-90 group-hover:opacity-100 transition-opacity">
-                            Ajouter des fichiers
+                            {t('files.actions.addFiles')}
                         </span>
                         <span
                             className="ml-3 opacity-70 group-hover:opacity-100 group-hover:translate-x-1.5 
@@ -170,8 +172,8 @@ const FilesPage: React.FC = () => {
             <div className="flex flex-col items-center">
                 <h1 className="text-3xl font-bold mb-6 text-center">
                     {sharedResources?.getUserSharedResources?.length
-                        ? 'Fichiers partagés avec moi'
-                        : 'Aucun fichier partagé avec vous'}
+                        ? t('files.title.sharedFiles')
+                        : t('files.title.noSharedFiles')}
                 </h1>
             </div>
             {loading ? (
