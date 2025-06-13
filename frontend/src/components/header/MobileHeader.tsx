@@ -1,3 +1,23 @@
+import LanguageSwitcher from '@/components/LanguageSwitcher';
+import Logo from '@/components/Logo';
+import { ModeToggle } from '@/components/mode-toggle';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import {
+    Sheet,
+    SheetContent,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+} from '@/components/ui/sheet';
 import { useAuthContext } from '@/context/useAuthContext';
 import { useLogoutMutation } from '@/generated/graphql-types';
 import {
@@ -12,37 +32,20 @@ import {
     UserIcon,
     Users,
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import Logo from '../Logo';
-import { ModeToggle } from '../mode-toggle';
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
-import { Button } from '../ui/button';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from '../ui/dropdown-menu';
-import {
-    Sheet,
-    SheetContent,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger,
-} from '../ui/sheet';
 
 const HeaderMobile = () => {
     const [logout] = useLogoutMutation();
     const { isAuth, user, refreshAuth } = useAuthContext();
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const handleLogout = async () => {
         await logout();
         refreshAuth();
-        toast.success('Déconnexion réussie');
+        toast.success(t('auth.logoutSuccess'));
         navigate('/');
     };
 
@@ -51,6 +54,7 @@ const HeaderMobile = () => {
             <div className="flex items-center justify-between px-4 py-3">
                 <Logo />
                 <div className="flex items-center gap-2">
+                    <LanguageSwitcher />
                     <ModeToggle />
 
                     <Sheet>
@@ -62,14 +66,14 @@ const HeaderMobile = () => {
                             >
                                 <Menu className="h-5 w-5" />
                                 <span className="sr-only">
-                                    Menu de navigation
+                                    {t('navigation.menu')}
                                 </span>
                             </Button>
                         </SheetTrigger>
                         <SheetContent side="right" className="w-80 p-0">
                             <SheetHeader className="border-b px-6 py-4">
                                 <SheetTitle className="text-left">
-                                    Navigation
+                                    {t('navigation.title')}
                                 </SheetTitle>
                             </SheetHeader>
 
@@ -80,7 +84,7 @@ const HeaderMobile = () => {
                                         className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors"
                                     >
                                         <Upload className="h-4 w-4" />
-                                        Transférez vos fichiers
+                                        {t('navigation.upload')}
                                     </Link>
 
                                     {isAuth && (
@@ -90,14 +94,14 @@ const HeaderMobile = () => {
                                                 className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors"
                                             >
                                                 <Files className="h-4 w-4" />
-                                                Mes fichiers
+                                                {t('navigation.files')}
                                             </Link>
                                             <Link
                                                 to="/contacts"
                                                 className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors"
                                             >
                                                 <Users className="h-4 w-4" />
-                                                Mes contacts
+                                                {t('navigation.contacts')}
                                             </Link>
                                         </>
                                     )}
@@ -107,21 +111,21 @@ const HeaderMobile = () => {
                                         className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors"
                                     >
                                         <CreditCard className="h-4 w-4" />
-                                        Abonnements
+                                        {t('navigation.subscription')}
                                     </Link>
                                     <Link
                                         to="/about"
                                         className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors"
                                     >
                                         <Info className="h-4 w-4" />
-                                        Qui sommes nous ?
+                                        {t('navigation.whoAreWe')}
                                     </Link>
                                     <Link
                                         to="/how-work"
                                         className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors"
                                     >
                                         <HelpCircle className="h-4 w-4" />
-                                        Comment ça marche
+                                        {t('navigation.howItWorks')}
                                     </Link>
                                 </nav>
 
@@ -142,7 +146,9 @@ const HeaderMobile = () => {
                                                         </Avatar>
                                                         <div className="flex flex-col items-start">
                                                             <span className="text-sm font-medium">
-                                                                Mon compte
+                                                                {t(
+                                                                    'navigation.myAccount',
+                                                                )}
                                                             </span>
                                                             <span className="text-xs text-muted-foreground">
                                                                 {user?.email}
@@ -154,11 +160,14 @@ const HeaderMobile = () => {
                                                         <UserIcon className="h-8 w-8" />
                                                         <div className="flex flex-col items-start">
                                                             <span className="text-sm font-medium">
-                                                                Se connecter
+                                                                {t(
+                                                                    'navigation.logIn',
+                                                                )}
                                                             </span>
                                                             <span className="text-xs text-muted-foreground">
-                                                                Accéder à mon
-                                                                compte
+                                                                {t(
+                                                                    'auth.form.title',
+                                                                )}
                                                             </span>
                                                         </div>
                                                     </>
@@ -173,7 +182,7 @@ const HeaderMobile = () => {
                                             {!isAuth ? (
                                                 <>
                                                     <DropdownMenuLabel>
-                                                        Authentification
+                                                        {t('auth.title')}
                                                     </DropdownMenuLabel>
                                                     <DropdownMenuSeparator />
                                                     <DropdownMenuItem asChild>
@@ -182,7 +191,9 @@ const HeaderMobile = () => {
                                                             className="cursor-pointer w-full flex items-center gap-2"
                                                         >
                                                             <UserIcon className="h-4 w-4" />
-                                                            Connexion
+                                                            {t(
+                                                                'navigation.logIn',
+                                                            )}
                                                         </Link>
                                                     </DropdownMenuItem>
                                                     <DropdownMenuItem asChild>
@@ -191,14 +202,18 @@ const HeaderMobile = () => {
                                                             className="cursor-pointer w-full flex items-center gap-2"
                                                         >
                                                             <User className="h-4 w-4" />
-                                                            Inscription
+                                                            {t(
+                                                                'navigation.signUp',
+                                                            )}
                                                         </Link>
                                                     </DropdownMenuItem>
                                                 </>
                                             ) : (
                                                 <>
                                                     <DropdownMenuLabel>
-                                                        Mon compte
+                                                        {t(
+                                                            'navigation.myAccount',
+                                                        )}
                                                     </DropdownMenuLabel>
                                                     <DropdownMenuSeparator />
                                                     <DropdownMenuItem asChild>
@@ -207,7 +222,9 @@ const HeaderMobile = () => {
                                                             className="cursor-pointer w-full flex items-center gap-2"
                                                         >
                                                             <User className="h-4 w-4" />
-                                                            Profil
+                                                            {t(
+                                                                'navigation.profile',
+                                                            )}
                                                         </Link>
                                                     </DropdownMenuItem>
                                                     <DropdownMenuSeparator />
@@ -216,7 +233,7 @@ const HeaderMobile = () => {
                                                         className="cursor-pointer flex items-center gap-2 text-red-600 focus:text-red-600"
                                                     >
                                                         <LogOut className="h-4 w-4" />
-                                                        Déconnexion
+                                                        {t('navigation.logOut')}
                                                     </DropdownMenuItem>
                                                 </>
                                             )}
