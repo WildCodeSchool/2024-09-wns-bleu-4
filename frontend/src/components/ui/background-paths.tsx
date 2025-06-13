@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 function FloatingPaths({ position }: { position: number }) {
     const paths = Array.from({ length: 36 }, (_, i) => ({
@@ -46,7 +47,13 @@ function FloatingPaths({ position }: { position: number }) {
     );
 }
 
-export function BackgroundPaths() {
+interface BackgroundPathsProps {
+    title: string;
+}
+
+export function BackgroundPaths({ title }: BackgroundPathsProps) {
+    const { t } = useTranslation();
+
     return (
         <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-white dark:bg-neutral-950">
             <div className="absolute inset-0">
@@ -62,8 +69,7 @@ export function BackgroundPaths() {
                     className="mx-auto"
                 >
                     <h1 className="text-5xl sm:text-7xl md:text-8xl font-bold mb-8 tracking-tighter inline-block mr-4 last:mr-0 text-transparent bg-clip-text bg-gradient-to-r from-neutral-900 to-neutral-700/80 dark:from-white dark:to-white/80">
-                        La solution simple et rapide pour tous vos
-                        transferts de fichiers
+                        {title}
                     </h1>
 
                     <div
@@ -79,7 +85,7 @@ export function BackgroundPaths() {
                             hover:shadow-md dark:hover:shadow-neutral-800/50"
                         >
                             <span className="opacity-90 group-hover:opacity-100 transition-opacity">
-                                Transférer vos fichiers
+                                {t('home.uploadButton')}
                             </span>
                             <span
                                 className="ml-3 opacity-70 group-hover:opacity-100 group-hover:translate-x-1.5 

@@ -1,0 +1,110 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Success",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "submit": "Submit"
+  },
+  "navigation": {
+    "title": "Navigation",
+    "menu": "Navigation menu",
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact",
+    "profile": "Profile",
+    "files": "My Files",
+    "upload": "Upload Files",
+    "subscription": "Subscription",
+    "howItWorks": "How it works",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "logOut": "Log Out",
+    "mySpace": "My Space",
+    "contacts": "My Contacts",
+    "discover": "Discover",
+    "whoAreWe": "Who are we?",
+    "myAccount": "My Account",
+    "userMenu": "User menu",
+    "login": "Login"
+  },
+  "home": {
+    "title": "The simple and fast solution for all your file transfers",
+    "subtitle": "Secure and fast file transfer",
+    "getStarted": "Get Started",
+    "learnMore": "Learn More",
+    "uploadButton": "Transfer your files"
+  },
+  "about": {
+    "title": "About Wild Transfer",
+    "subtitle": "A modern platform to transfer your files with peace of mind",
+    "description1": "is a simple, fast and secure solution for file sharing. It is designed for both professionals and individuals, with an intuitive interface designed for a smooth experience.",
+    "description2": "Our mission is to provide a reliable service that respects your privacy. We use modern technologies to ensure the security and confidentiality of your data.",
+    "description3": "Developed by a team of developers, the platform is constantly evolving to meet new uses and offer features adapted to your needs.",
+    "contactText": "For any questions or suggestions, feel free to contact us via the",
+    "contactLink": "contact page"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "message": "Message",
+      "send": "Send Message"
+    }
+  },
+  "profile": {
+    "title": "My Profile",
+    "personalInfo": "Personal Information",
+    "settings": "Settings",
+    "security": "Security"
+  },
+  "files": {
+    "title": "My Files",
+    "uploadNew": "Upload New File",
+    "noFiles": "No files found",
+    "search": "Search files",
+    "filter": "Filter"
+  },
+  "upload": {
+    "title": "Upload Files",
+    "dragDrop": "Drag and drop files here",
+    "or": "or",
+    "browse": "Browse Files",
+    "maxSize": "Maximum file size: {{size}}",
+    "allowedTypes": "Allowed file types: {{types}}"
+  },
+  "subscription": {
+    "title": "Subscription Plans",
+    "currentPlan": "Current Plan",
+    "upgrade": "Upgrade",
+    "downgrade": "Downgrade"
+  },
+  "howItWorks": {
+    "title": "How It Works",
+    "step1": "Step 1: Upload your files",
+    "step2": "Step 2: Share with others",
+    "step3": "Step 3: Track transfers"
+  },
+  "auth": {
+    "title": "Authentication",
+    "logoutSuccess": "Successfully logged out",
+    "signIn": {
+      "title": "Sign In",
+      "email": "Email",
+      "password": "Password",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot password?"
+    },
+    "signUp": {
+      "title": "Sign Up",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "terms": "I agree to the terms and conditions"
+    }
+  }
+}
