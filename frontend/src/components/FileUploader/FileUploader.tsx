@@ -8,6 +8,7 @@ import {
     UploadCloud,
 } from 'lucide-react';
 import { ChangeEvent, DragEvent, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface FileWithPreview {
     id: string;
@@ -39,6 +40,7 @@ export default function FileUploader({
     errorMessage,
     acceptedFileTypes,
 }: FileUploaderProps) {
+    const { t } = useTranslation();
     const [files, setFiles] = useState<FileWithPreview[]>([]);
     const [isDragging, setIsDragging] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -207,25 +209,25 @@ export default function FileUploader({
                         <div className="space-y-2">
                             <h3 className="text-xl md:text-2xl font-semibold text-zinc-800 dark:text-zinc-100">
                                 {isDragging
-                                    ? 'Déposez le fichier ici'
-                                    : 'Transférez votre fichier'}
+                                    ? t('upload.dragDrop.dropHere')
+                                    : t('upload.dragDrop.title')}
                             </h3>
                             <p className="text-zinc-600 dark:text-zinc-300 md:text-lg max-w-md mx-auto">
                                 {isDragging ? (
                                     <span className="font-medium text-blue-500">
-                                        Relâchez pour télécharger
+                                        {t('upload.dragDrop.releaseToUpload')}
                                     </span>
                                 ) : (
                                     <>
-                                        Glissez-déposez votre fichier ici, ou{' '}
+                                        {t('upload.dragDrop.title')}{' '}
                                         <span className="text-blue-500 font-medium">
-                                            parcourez
+                                            {t('upload.dragDrop.browse')}
                                         </span>
                                     </>
                                 )}
                             </p>
                             <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                                Supporte les images, documents, vidéos, et plus
+                                {t('upload.dragDrop.supportedTypes')}
                             </p>
                         </div>
 
@@ -254,7 +256,7 @@ export default function FileUploader({
                                 className="flex justify-between items-center mb-3 px-2"
                             >
                                 <h3 className="font-semibold text-lg md:text-xl text-zinc-800 dark:text-zinc-200">
-                                    Fichier sélectionné
+                                    {t('upload.selectedFile.title')}
                                 </h3>
                             </motion.div>
 
@@ -333,7 +335,7 @@ export default function FileUploader({
                                                         onClick={(e) =>
                                                             removeFile(e)
                                                         }
-                                                        aria-label="Supprimer le fichier"
+                                                        aria-label={t('upload.selectedFile.delete')}
                                                     />
                                                 )}
                                             </span>
@@ -363,7 +365,7 @@ export default function FileUploader({
 
                                     <div className="mt-4">
                                         <textarea
-                                            placeholder="Description du fichier (minimum 4 caractères)"
+                                            placeholder={t('upload.description.placeholder')}
                                             value={description}
                                             onChange={(e) =>
                                                 onDescriptionChange(
@@ -376,8 +378,7 @@ export default function FileUploader({
                                             required
                                         />
                                         <div className="flex justify-end mt-1 text-xs text-zinc-500">
-                                            {description.length}/4 caractères
-                                            minimum
+                                            {t('upload.description.charCount', { count: description.length })}
                                         </div>
                                     </div>
                                 </div>
@@ -409,10 +410,10 @@ export default function FileUploader({
                             {isUploading ? (
                                 <span className="flex items-center gap-2">
                                     <Loader className="w-4 h-4 animate-spin" />
-                                    Envoi en cours...
+                                    {t('upload.submit.uploading')}
                                 </span>
                             ) : (
-                                'Enregistrer le fichier'
+                                t('upload.submit.save')
                             )}
                         </button>
                     </motion.div>

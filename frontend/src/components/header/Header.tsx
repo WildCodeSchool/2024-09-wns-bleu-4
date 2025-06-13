@@ -17,18 +17,20 @@ import { ChevronDown, CreditCard, Files, HelpCircle, Info, LogOut, Menu, Upload,
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import SubscribedLogo from '@/components/SubscribedLogo';
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 const Header = () => {
     const [logout] = useLogoutMutation();
     const { refreshAuth, isAuth } = useAuthContext();
     const navigate = useNavigate();
-
+    const { t } = useTranslation();
     const { user } = useAuthContext();
 
     const handleLogout = async () => {
         await logout();
         refreshAuth();
-        toast.success('Déconnexion réussie');
+        toast.success(t('auth.logoutSuccess'));
         navigate('/');
     };
 
@@ -41,29 +43,29 @@ const Header = () => {
                         <DropdownMenuTrigger asChild>
                             <Button variant="ghost" className="flex cursor-pointer items-center gap-1">
                                 <Files className="h-4 w-4" />
-                                Mes fichiers
+                                {t('navigation.files')}
                                 <ChevronDown className="h-4 w-4" />
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="start" className="w-52">
-                            <DropdownMenuLabel>Mon espace</DropdownMenuLabel>
+                            <DropdownMenuLabel>{t('navigation.mySpace')}</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem asChild>
                                 <Link to="/files" className="flex items-center gap-2">
                                     <Files className="h-4 w-4" />
-                                    Mes fichiers
+                                    {t('navigation.files')}
                                 </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild>
                                 <Link to="/upload" className="flex items-center gap-2">
                                     <Upload className="h-4 w-4" />
-                                    Transférer fichiers
+                                    {t('navigation.upload')}
                                 </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild>
-                                <Link to="/contact" className="flex items-center gap-2">
+                                <Link to="/contacts" className="flex items-center gap-2">
                                     <Users className="h-4 w-4" />
-                                    Mes contacts
+                                    {t('navigation.contacts')}
                                 </Link>
                             </DropdownMenuItem>
                         </DropdownMenuContent>
@@ -74,23 +76,23 @@ const Header = () => {
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" className="flex cursor-pointer items-center gap-1">
                             <Info className="h-4 w-4" />
-                            Découvrir
+                            {t('navigation.discover')}
                             <ChevronDown className="h-4 w-4" />
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start" className="w-52">
-                        <DropdownMenuLabel>À propos</DropdownMenuLabel>
+                        <DropdownMenuLabel>{t('navigation.about')}</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem asChild>
                             <Link to="/about" className="flex items-center gap-2">
                                 <Info className="h-4 w-4" />
-                                Qui sommes nous ?
+                                {t('navigation.whoAreWe')}
                             </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild>
-                            <Link to="/how-work" className="flex items-center gap-2">
+                            <Link to="/how-it-works" className="flex items-center gap-2">
                                 <HelpCircle className="h-4 w-4" />
-                                Comment ça marche
+                                {t('navigation.howItWorks')}
                             </Link>
                         </DropdownMenuItem>
                     </DropdownMenuContent>
@@ -99,7 +101,7 @@ const Header = () => {
                 <Button variant="ghost" asChild>
                     <Link to="/subscription" className="flex items-center gap-2">
                         <CreditCard className="h-4 w-4" />
-                        Abonnements
+                        {t('navigation.subscription')}
                     </Link>
                 </Button>
             </NavigationMenu>
@@ -110,30 +112,30 @@ const Header = () => {
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="sm">
                             <Menu className="h-5 w-5" />
-                            <span className="sr-only">Menu navigation</span>
+                            <span className="sr-only">{t('navigation.menu')}</span>
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-56">
-                        <DropdownMenuLabel>Navigation</DropdownMenuLabel>
+                        <DropdownMenuLabel>{t('navigation.title')}</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         {isAuth && (
                             <>
                                 <DropdownMenuItem asChild>
                                     <Link to="/files" className="flex items-center gap-2">
                                         <Files className="h-4 w-4" />
-                                        Mes fichiers
+                                        {t('navigation.files')}
                                     </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem asChild>
                                     <Link to="/upload" className="flex items-center gap-2">
                                         <Upload className="h-4 w-4" />
-                                        Transférer fichiers
+                                        {t('navigation.upload')}
                                     </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem asChild>
-                                    <Link to="/contact" className="flex items-center gap-2">
+                                    <Link to="/contacts" className="flex items-center gap-2">
                                         <Users className="h-4 w-4" />
-                                        Mes contacts
+                                        {t('navigation.contacts')}
                                     </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
@@ -142,19 +144,19 @@ const Header = () => {
                         <DropdownMenuItem asChild>
                             <Link to="/subscription" className="flex items-center gap-2">
                                 <CreditCard className="h-4 w-4" />
-                                Abonnements
+                                {t('navigation.subscription')}
                             </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild>
                             <Link to="/about" className="flex items-center gap-2">
                                 <Info className="h-4 w-4" />
-                                Qui sommes nous ?
+                                {t('navigation.whoAreWe')}
                             </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild>
-                            <Link to="/how-work" className="flex items-center gap-2">
+                            <Link to="/how-it-works" className="flex items-center gap-2">
                                 <HelpCircle className="h-4 w-4" />
-                                Comment ça marche
+                                {t('navigation.howItWorks')}
                             </Link>
                         </DropdownMenuItem>
                     </DropdownMenuContent>
@@ -171,7 +173,7 @@ const Header = () => {
                             variant="ghost" 
                             size="sm"
                             className="relative h-10 w-10 rounded-full cursor-pointer"
-                            aria-label={isAuth ? 'Menu utilisateur' : 'Connexion'}
+                            aria-label={isAuth ? t('navigation.userMenu') : t('navigation.login')}
                         >
                             {isAuth ? (
                                 <Avatar className="h-10 w-10">
@@ -187,7 +189,7 @@ const Header = () => {
                         {!isAuth ? (
                             <>
                                 <DropdownMenuLabel>
-                                    Authentification
+                                    {t('auth.title')}
                                 </DropdownMenuLabel>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem asChild>
@@ -196,7 +198,7 @@ const Header = () => {
                                         className="cursor-pointer w-full flex items-center gap-2"
                                     >
                                         <UserIcon className="h-4 w-4" />
-                                        Connexion
+                                        {t('auth.logIn.title')}
                                     </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem asChild>
@@ -205,14 +207,14 @@ const Header = () => {
                                         className="cursor-pointer w-full flex items-center gap-2"
                                     >
                                         <User className="h-4 w-4" />
-                                        Inscription
+                                        {t('auth.signUp.title')}
                                     </Link>
                                 </DropdownMenuItem>
                             </>
                         ) : (
                             <>
                                 <DropdownMenuLabel>
-                                    Mon compte
+                                    {t('navigation.myAccount')}
                                 </DropdownMenuLabel>
                                 <div className="px-2 py-1.5 text-sm text-muted-foreground">
                                     {user?.email}
@@ -224,7 +226,7 @@ const Header = () => {
                                         className="cursor-pointer w-full flex items-center gap-2"
                                     >
                                         <User className="h-4 w-4" />
-                                        Profil
+                                        {t('navigation.profile')}
                                     </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
@@ -233,12 +235,13 @@ const Header = () => {
                                     className="cursor-pointer flex items-center gap-2 text-red-600 focus:text-red-600"
                                 >
                                     <LogOut className="h-4 w-4" />
-                                    Déconnexion
+                                    {t('navigation.logOut')}
                                 </DropdownMenuItem>
                             </>
                         )}
                     </DropdownMenuContent>
                 </DropdownMenu>
+                <LanguageSwitcher />
                 <ModeToggle />
             </div>
         </header>

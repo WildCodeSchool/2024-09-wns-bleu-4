@@ -4,8 +4,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { GetMyContactsDocument } from '@/generated/graphql-types';
 import { useQuery } from '@apollo/client';
 import { Loader } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
-const Contact = () => {
+const Contacts = () => {
+    const { t } = useTranslation();
     const { data, loading, error, refetch } = useQuery(GetMyContactsDocument, {
         fetchPolicy: 'cache-and-network',
         onError: (error) => {
@@ -36,7 +38,7 @@ const Contact = () => {
         return (
             <section className="my-8">
                 <div className="text-center py-8 text-red-500">
-                    Une erreur est survenue lors du chargement des contacts.
+                    {t('contact.error')}
                 </div>
             </section>
         );
@@ -45,7 +47,7 @@ const Contact = () => {
     return (
         <section className="my-8">
             <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
-                <h1 className="text-2xl font-bold">Contacts</h1>
+                <h1 className="text-2xl font-bold">{t('contact.title')}</h1>
                 <AddContactDialog
                     onContactAdded={function (): void {
                         handleContactAdded();
@@ -55,9 +57,9 @@ const Contact = () => {
 
             <Tabs defaultValue="requests" className="w-full">
                 <TabsList className="mb-6">
-                    <TabsTrigger value="requests">Reçues</TabsTrigger>
-                    <TabsTrigger value="contacts">Contacts</TabsTrigger>
-                    <TabsTrigger value="sent">Envoyées</TabsTrigger>
+                    <TabsTrigger value="requests">{t('contact.tabs.received')}</TabsTrigger>
+                    <TabsTrigger value="contacts">{t('contact.tabs.contacts')}</TabsTrigger>
+                    <TabsTrigger value="sent">{t('contact.tabs.sent')}</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="requests" className="space-y-8">
@@ -88,4 +90,4 @@ const Contact = () => {
     );
 };
 
-export default Contact;
+export default Contacts;

@@ -1,10 +1,12 @@
 import { BackgroundPaths } from '@/components/ui/background-paths';
+import { useTranslation } from 'react-i18next';
 
 const Home = () => {
+    const { t } = useTranslation();
+    
     return (
         <BackgroundPaths
-            title="La solution simple et rapide pour tous vos
-                transferts de fichiers"
+            title={t('home.title')}
         />
     );
 };

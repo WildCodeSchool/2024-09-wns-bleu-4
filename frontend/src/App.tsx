@@ -1,10 +1,10 @@
 import HeadMeta from '@/components/HeadMeta';
 import { Loader } from '@/components/Loader';
 import { AuthProvider } from '@/context/AuthContext';
-import Contact from '@/pages/Contact/contact';
+import Contacts from '@/pages/Contacts/Contacts';
 import FilesPage from '@/pages/Files/files';
 import Home from '@/pages/Home/Home';
-import Subscription from './pages/Subscription/subscription';
+import Subscription from '@/pages/Subscription/subscription';
 import Layout from '@/pages/Layout';
 import Login from '@/pages/Log/Login';
 import Sign from '@/pages/Sign/sign';
@@ -13,11 +13,14 @@ import About from '@/pages/About/about';
 import { useEffect } from 'react';
 import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useAuth } from './hooks/useAuth';
-import HowWork from '@/pages/HowWork';
+import { useAuth } from '@/hooks/useAuth';
 import { Profile } from '@/pages/Profile/profile';
+import HowItWorks from '@/pages/HowItWorks';
+import { useTranslation } from 'react-i18next';
 
 const App = () => {
+    const { t } = useTranslation();
+    
     return (
         <AuthProvider>
             <BrowserRouter>
@@ -27,8 +30,8 @@ const App = () => {
                             index
                             element={
                                 <PageWrapper
-                                    title="Acceuil"
-                                    description="Acceuil du site Wild Transfer"
+                                    title={t('meta.home.title')}
+                                    description={t('meta.home.description')}
                                 >
                                     <Home />
                                 </PageWrapper>
@@ -38,8 +41,8 @@ const App = () => {
                             path="/login"
                             element={
                                 <PageWrapper
-                                    title="Connexion"
-                                    description="Connexion à un compte Wild Transfer"
+                                    title={t('meta.login.title')}
+                                    description={t('meta.login.description')}
                                 >
                                     <Login />
                                 </PageWrapper>
@@ -49,8 +52,8 @@ const App = () => {
                             path="/sign"
                             element={
                                 <PageWrapper
-                                    title="Inscription"
-                                    description="Création de compte Wild Transfer"
+                                    title={t('meta.signup.title')}
+                                    description={t('meta.signup.description')}
                                 >
                                     <Sign />
                                 </PageWrapper>
@@ -60,8 +63,8 @@ const App = () => {
                             path="/files"
                             element={
                                 <PageWrapper
-                                    title="Mes Fichiers"
-                                    description="Page de vos fichiers"
+                                    title={t('meta.files.title')}
+                                    description={t('meta.files.description')}
                                     protected
                                 >
                                     <FilesPage />
@@ -72,8 +75,8 @@ const App = () => {
                             path="/upload"
                             element={
                                 <PageWrapper
-                                    title="Transférer des fichiers"
-                                    description="Transfert de fichiers"
+                                    title={t('meta.upload.title')}
+                                    description={t('meta.upload.description')}
                                     protected
                                 >
                                     <UploadPage />
@@ -81,14 +84,14 @@ const App = () => {
                             }
                         />
                         <Route
-                            path="/contact"
+                            path="/contacts"
                             element={
                                 <PageWrapper
-                                    title="Contact"
-                                    description="Page de contact"
+                                    title={t('meta.contacts.title')}
+                                    description={t('meta.contacts.description')}
                                     protected
                                 >
-                                    <Contact />
+                                    <Contacts />
                                 </PageWrapper>
                             }
                         />
@@ -96,10 +99,10 @@ const App = () => {
                             path="/forgot-password"
                             element={
                                 <PageWrapper
-                                    title="Mot de passe oublié"
-                                    description="Récupération de mot de passe"
+                                    title={t('meta.forgotPassword.title')}
+                                    description={t('meta.forgotPassword.description')}
                                 >
-                                    <div>Mot de passe oublié</div>
+                                    <div>{t('meta.forgotPassword.title')}</div>
                                 </PageWrapper>
                             }
                         />
@@ -107,19 +110,19 @@ const App = () => {
                             path="/subscription"
                             element={
                                 <PageWrapper
-                                    title="Abonnement"
-                                    description="Abonnement au service Wild Transfer"
+                                    title={t('meta.subscription.title')}
+                                    description={t('meta.subscription.description')}
                                 >
                                     <Subscription />
                                 </PageWrapper>
                             }
-                        />{' '}
+                        />
                         <Route
                             path="/about"
                             element={
                                 <PageWrapper
-                                    title="À propos"
-                                    description="En savoir plus sur Wild Transfer"
+                                    title={t('meta.about.title')}
+                                    description={t('meta.about.description')}
                                 >
                                     <About />
                                 </PageWrapper>
@@ -129,36 +132,44 @@ const App = () => {
                             path="/sitemap"
                             element={
                                 <PageWrapper
-                                    title="Plan du site"
-                                    description="Plan du site Wild Transfer"
+                                    title={t('meta.sitemap.title')}
+                                    description={t('meta.sitemap.description')}
                                 >
-                                    <div>Plan du site</div>
+                                    <div>{t('meta.sitemap.title')}</div>
                                 </PageWrapper>
                             }
                         />
                         <Route
                             path="/cgu"
                             element={
-                                <PageWrapper title="CGU" description="CGU">
-                                    <div>CGU</div>
+                                <PageWrapper
+                                    title={t('meta.terms.title')}
+                                    description={t('meta.terms.description')}
+                                >
+                                    <div>{t('meta.terms.title')}</div>
                                 </PageWrapper>
                             }
                         />
                         <Route
-                            path="/how-work"
-                            element={<HowWork />}
+                            path="/how-it-works"
+                            element={<PageWrapper
+                                    title={t('meta.howItWorks.title')}
+                                    description={t('meta.howItWorks.description')}
+                                >
+                                    <HowItWorks />
+                                </PageWrapper>
+                            }
                         />
                         <Route
                             path="/profile"
                             element={
                                 <PageWrapper
-                                    title="profil"
-                                    description="Page de profil"
+                                    title={t('meta.profile.title')}
+                                    description={t('meta.profile.description')}
                                     protected
                                 >
-                                 <Profile/>
+                                    <Profile />
                                 </PageWrapper>
-
                             }
                         />
                     </Route>
@@ -194,15 +205,16 @@ const PageWrapper = ({
     );
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+    const { t } = useTranslation();
     const { isAuth, loading } = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {
         if (!loading && !isAuth) {
-            toast.error('Vous devez être connecté pour accéder à cette page');
+            toast.error(t('auth.protectedRoute.error'));
             navigate('/login');
         }
-    }, [isAuth, loading, navigate]);
+    }, [isAuth, loading, navigate, t]);
 
     if (loading) return <Loader />;
     return isAuth ? children : null;

@@ -21,8 +21,10 @@ import {
     DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from 'react-i18next';
 
 const UploadPage = () => {
+    const { t } = useTranslation();
     const [file, setFile] = useState<File | null>(null);
     const [description, setDescription] = useState<string>('');
     const [isUploading, setIsUploading] = useState(false);
@@ -89,22 +91,18 @@ const UploadPage = () => {
                 });
 
                 if (!storageResponse.ok) {
-                    throw new Error("Erreur lors de l'upload du fichier");
+                    throw new Error(t('upload.errors.fileUpload'));
                 }
 
                 setLastUploadedResourceId(resourceResponse.data.createResource.id);
                 setFile(null);
                 setDescription('');
                 mutate('/storage/files');
-                setSuccessMessage(
-                    '✅ Le fichier a été envoyé et enregistré avec succès !',
-                );
+                setSuccessMessage(t('upload.success.message'));
             }
         } catch (error) {
             console.error("Erreur lors de l'upload:", error);
-            setErrorMessage(
-                "❌ Une erreur s'est produite. Veuillez réessayer.",
-            );
+            setErrorMessage(t('upload.errors.upload'));
         } finally {
             setIsUploading(false);
         }
@@ -112,12 +110,12 @@ const UploadPage = () => {
 
     const handleShare = async () => {
         if (selectedContacts.length === 0) {
-            toast.error('Veuillez sélectionner au moins un contact');
+            toast.error(t('upload.errors.share.noContacts'));
             return;
         }
 
         if (!lastUploadedResourceId) {
-            toast.error('Une erreur est survenue lors du partage');
+            toast.error(t('upload.errors.share.error'));
             return;
         }
 
@@ -131,13 +129,13 @@ const UploadPage = () => {
                 });
             }
             
-            toast.success('Fichier partagé avec succès');
+            toast.success(t('upload.errors.share.success'));
             setSelectedContacts([]);
             setSearchQuery('');
             setIsShareModalOpen(false);
         } catch (error) {
             console.error('Error sharing file:', error);
-            toast.error('Erreur lors du partage du fichier');
+            toast.error(t('upload.errors.share.failed'));
         }
     };
 
@@ -156,7 +154,7 @@ const UploadPage = () => {
         <div className="mx-auto grid grid-cols-1 gap-8 items-start max-w-2xl">
             <div>
                 <h1 className="text-2xl font-bold my-8">
-                    Transférez votre fichier
+                    {t('upload.title')}
                 </h1>
     
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -165,89 +163,88 @@ const UploadPage = () => {
                         onDescriptionChange={setDescription}
                         description={description}
                         isUploading={isUploading}
-                        successMessage={
-                            successMessage && (
-                                <div className="flex items-center gap-4">
-                                    <span>{successMessage}</span>
-                                    <Dialog open={isShareModalOpen} onOpenChange={setIsShareModalOpen}>
-                                        <DialogTrigger asChild>
-                                            <Button variant="outline" size="sm" className="flex items-center gap-2">
-                                                <Share2 className="w-4 h-4" />
-                                                Partager maintenant
-                                            </Button>
-                                        </DialogTrigger>
-                                        <DialogContent>
-                                            <DialogHeader>
-                                                <DialogTitle>Partager le fichier</DialogTitle>
-                                                <DialogDescription>
-                                                    Sélectionnez les contacts avec lesquels vous souhaitez partager ce fichier.
-                                                </DialogDescription>
-                                            </DialogHeader>
-                                            {contactsLoading ? (
-                                                <div className="flex items-center justify-center py-12">
-                                                    <Loader className="h-8 w-8 animate-spin text-primary" />
-                                                </div>
-                                            ) : (
-                                                <div className="space-y-4">
-                                                    <div className="space-y-2">
-                                                        <Label htmlFor="search">Rechercher un contact</Label>
-                                                        <Input
-                                                            id="search"
-                                                            type="text"
-                                                            value={searchQuery}
-                                                            onChange={(e) => setSearchQuery(e.target.value)}
-                                                            placeholder="Rechercher par email..."
-                                                        />
-                                                    </div>
-                                                    <div className="h-[200px] rounded-md border p-4">
-                                                        <ScrollArea>
-                                                            <div className="space-y-2">
-                                                                {myContacts
-                                                                    .filter(contact => 
-                                                                        contact.targetUser.email.toLowerCase().includes(searchQuery.toLowerCase())
-                                                                    )
-                                                                    .map((contact) => (
-                                                                        <div key={contact.id} className="flex items-center space-x-2">
-                                                                            <Checkbox
-                                                                                id={`contact-${contact.id}`}
-                                                                                checked={selectedContacts.some(c => c.id === contact.id)}
-                                                                                onCheckedChange={() => toggleContact(contact)}
-                                                                            />
-                                                                            <Label
-                                                                                htmlFor={`contact-${contact.id}`}
-                                                                                className="text-sm font-normal"
-                                                                            >
-                                                                                {contact.targetUser.email}
-                                                                            </Label>
-                                                                        </div>
-                                                                    ))}
-                                                                {myContacts.filter(contact => 
-                                                                    contact.targetUser.email.toLowerCase().includes(searchQuery.toLowerCase())
-                                                                ).length === 0 && (
-                                                                    <p className="text-sm text-gray-500 text-center">
-                                                                        Aucun contact trouvé
-                                                                    </p>
-                                                                )}
-                                                            </div>
-                                                        </ScrollArea>
-                                                    </div>
-                                                    <Button 
-                                                        onClick={handleShare} 
-                                                        className="w-full"
-                                                        disabled={selectedContacts.length === 0}
-                                                    >
-                                                        Partager avec {selectedContacts.length} contact{selectedContacts.length > 1 ? 's' : ''}
-                                                    </Button>
-                                                </div>
-                                            )}
-                                        </DialogContent>
-                                    </Dialog>
-                                </div>
-                            )
-                        }
+                        successMessage={successMessage}
                         errorMessage={errorMessage}
                         acceptedFileTypes={acceptedFileTypes}
                     />
+                    {successMessage && (
+                        <div className="flex items-center gap-4">
+                            <span>{successMessage}</span>
+                            <Dialog open={isShareModalOpen} onOpenChange={setIsShareModalOpen}>
+                                <DialogTrigger asChild>
+                                    <Button variant="outline" size="sm" className="flex items-center gap-2">
+                                        <Share2 className="w-4 h-4" />
+                                        {t('upload.success.shareNow')}
+                                    </Button>
+                                </DialogTrigger>
+                                <DialogContent>
+                                    <DialogHeader>
+                                        <DialogTitle>{t('upload.share.title')}</DialogTitle>
+                                        <DialogDescription>
+                                            {t('upload.share.description')}
+                                        </DialogDescription>
+                                    </DialogHeader>
+                                    {contactsLoading ? (
+                                        <div className="flex items-center justify-center py-12">
+                                            <Loader className="h-8 w-8 animate-spin text-primary" />
+                                        </div>
+                                    ) : (
+                                        <div className="space-y-4">
+                                            <div className="space-y-2">
+                                                <Label htmlFor="search">{t('upload.share.search.label')}</Label>
+                                                <Input
+                                                    id="search"
+                                                    type="text"
+                                                    value={searchQuery}
+                                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                                    placeholder={t('upload.share.search.placeholder')}
+                                                />
+                                            </div>
+                                            <div className="h-[200px] rounded-md border p-4">
+                                                <ScrollArea>
+                                                    <div className="space-y-2">
+                                                        {myContacts
+                                                            .filter(contact => 
+                                                                contact.targetUser.email.toLowerCase().includes(searchQuery.toLowerCase())
+                                                            )
+                                                            .map((contact) => (
+                                                                <div key={contact.id} className="flex items-center space-x-2">
+                                                                    <Checkbox
+                                                                        id={`contact-${contact.id}`}
+                                                                        checked={selectedContacts.some(c => c.id === contact.id)}
+                                                                        onCheckedChange={() => toggleContact(contact)}
+                                                                    />
+                                                                    <Label
+                                                                        htmlFor={`contact-${contact.id}`}
+                                                                        className="text-sm font-normal"
+                                                                    >
+                                                                        {contact.targetUser.email}
+                                                                    </Label>
+                                                                </div>
+                                                            ))}
+                                                        {myContacts.filter(contact => 
+                                                            contact.targetUser.email.toLowerCase().includes(searchQuery.toLowerCase())
+                                                        ).length === 0 && (
+                                                            <p className="text-sm text-gray-500 text-center">
+                                                                {t('upload.share.noContacts')}
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                </ScrollArea>
+                                            </div>
+                                            <Button 
+                                                onClick={handleShare} 
+                                                className="w-full"
+                                                disabled={selectedContacts.length === 0}
+                                            >
+                                                {t('upload.share.button', { count: selectedContacts.length })}
+                                            </Button>
+                                        </div>
+                                    )}
+                                </DialogContent>
+                            </Dialog>
+                        </div>
+                    )}
                 </form>
             </div>
         </div>
