@@ -104,10 +104,24 @@
     }
   },
   "profile": {
-    "title": "Mon Profil",
-    "personalInfo": "Informations personnelles",
-    "settings": "Paramètres",
-    "security": "Sécurité"
+    "title": "Mon profil",
+    "personalInfo": {
+      "title": "Informations personnelles",
+      "description": "Modifiez vos informations personnelles."
+    },
+    "form": {
+      "email": {
+        "label": "E-mail",
+        "placeholder": "Votre adresse e-mail",
+        "readonly": "L'adresse e-mail ne peut pas être modifiée"
+      },
+      "password": {
+        "label": "Mot-de-passe"
+      }
+    },
+    "actions": {
+      "save": "Enregistrer"
+    }
   },
   "files": {
     "title": {

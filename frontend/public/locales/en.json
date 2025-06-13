@@ -105,9 +105,23 @@
   },
   "profile": {
     "title": "My Profile",
-    "personalInfo": "Personal Information",
-    "settings": "Settings",
-    "security": "Security"
+    "personalInfo": {
+      "title": "Personal Information",
+      "description": "Edit your personal information."
+    },
+    "form": {
+      "email": {
+        "label": "Email",
+        "placeholder": "Your email address",
+        "readonly": "Email address cannot be modified"
+      },
+      "password": {
+        "label": "Password"
+      }
+    },
+    "actions": {
+      "save": "Save"
+    }
   },
   "files": {
     "title": {
