@@ -28,7 +28,12 @@
     "discover": "Découvrir",
     "whoAreWe": "Qui sommes nous ?",
     "myAccount": "Mon compte",
-    "userMenu": "Menu utilisateur"
+    "userMenu": "Menu utilisateur",
+    "notFound": {
+      "title": "404",
+      "description": "Page non trouvée",
+      "backToHome": "Retour à l'accueil"
+    }
   },
   "home": {
     "title": "La solution simple et rapide pour tous vos transferts de fichiers",
@@ -385,6 +390,10 @@
     "profile": {
       "title": "Mon profil",
       "description": "Page de profil"
+    },
+    "notFound": {
+      "title": "404",
+      "description": "Page non trouvée"
     }
   }
 }

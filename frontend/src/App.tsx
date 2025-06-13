@@ -15,7 +15,8 @@ import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '@/hooks/useAuth';
 import { Profile } from '@/pages/Profile/profile';
-import HowItWorks from '@/pages/HowItWorks';
+import HowItWorks from '@/pages/HowitWorks';
+import NotFound from '@/pages/Error/NotFound';
 import { useTranslation } from 'react-i18next';
 
 const App = () => {
@@ -173,6 +174,14 @@ const App = () => {
                             }
                         />
                     </Route>
+                    <Route path="*" element={
+                        <PageWrapper
+                            title={t('meta.notFound.title')}
+                            description={t('meta.notFound.description')}
+                        >
+                            <NotFound />
+                        </PageWrapper>
+                    } />
                 </Routes>
             </BrowserRouter>
         </AuthProvider>
