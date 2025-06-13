@@ -154,7 +154,7 @@ const Header = () => {
                             </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild>
-                            <Link to="/how-work" className="flex items-center gap-2">
+                            <Link to="/how-it-works" className="flex items-center gap-2">
                                 <HelpCircle className="h-4 w-4" />
                                 {t('navigation.howItWorks')}
                             </Link>
