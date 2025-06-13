@@ -84,10 +84,43 @@
     "downgrade": "Downgrade"
   },
   "howItWorks": {
-    "title": "How It Works",
-    "step1": "Step 1: Upload your files",
-    "step2": "Step 2: Share with others",
-    "step3": "Step 3: Track transfers"
+    "title": "How it works",
+    "step1": {
+      "title": "Create your account",
+      "description": "Sign up for free in seconds to access all our features."
+    },
+    "step2": {
+      "title": "Transfer your files",
+      "description": "Upload your files securely. We support all common formats."
+    },
+    "step3": {
+      "title": "Manage and share",
+      "description": "Organize your files and share them easily with your contacts."
+    },
+    "cta": {
+      "title": "Ready to get started?",
+      "createAccount": "Create an account",
+      "viewSubscriptions": "View our subscriptions"
+    },
+    "features": {
+      "title": "Key features",
+      "security": {
+        "title": "Maximum security",
+        "description": "Your files are encrypted and stored securely."
+      },
+      "transfer": {
+        "title": "Fast transfer",
+        "description": "Transfer your files quickly with our optimized infrastructure."
+      },
+      "contacts": {
+        "title": "Contact management",
+        "description": "Organize your contacts and share your files easily."
+      },
+      "support": {
+        "title": "24/7 Support",
+        "description": "Our team is available to help you at any time."
+      }
+    }
   },
   "auth": {
     "title": "Authentication",

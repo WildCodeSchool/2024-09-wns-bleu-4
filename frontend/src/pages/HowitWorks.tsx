@@ -1,51 +1,54 @@
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const HowItWorks = () => {
+    const { t } = useTranslation();
+
     return (
         <div className="container mx-auto py-12 px-4">
-            <h1 className="text-4xl font-bold text-center mb-12">Comment ça marche ?</h1>
+            <h1 className="text-4xl font-bold text-center mb-12">{t('howItWorks.title')}</h1>
             
             <div className="grid md:grid-cols-3 gap-8 mb-12">
                 <div className="bg-white dark:bg-neutral-800 p-6 rounded-lg shadow-md">
                     <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-4">1</div>
-                    <h3 className="text-xl font-semibold mb-3">Créez votre compte</h3>
+                    <h3 className="text-xl font-semibold mb-3">{t('howItWorks.step1.title')}</h3>
                     <p className="text-gray-600 dark:text-gray-300">
-                        Inscrivez-vous gratuitement en quelques secondes pour accéder à toutes nos fonctionnalités.
+                        {t('howItWorks.step1.description')}
                     </p>
                 </div>
 
                 <div className="bg-white dark:bg-neutral-800 p-6 rounded-lg shadow-md">
                     <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-4">2</div>
-                    <h3 className="text-xl font-semibold mb-3">Transférez vos fichiers</h3>
+                    <h3 className="text-xl font-semibold mb-3">{t('howItWorks.step2.title')}</h3>
                     <p className="text-gray-600 dark:text-gray-300">
-                        Uploadez vos fichiers en toute sécurité. Nous supportons tous les formats courants.
+                        {t('howItWorks.step2.description')}
                     </p>
                 </div>
 
                 <div className="bg-white dark:bg-neutral-800 p-6 rounded-lg shadow-md">
                     <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-4">3</div>
-                    <h3 className="text-xl font-semibold mb-3">Gérez et partagez</h3>
+                    <h3 className="text-xl font-semibold mb-3">{t('howItWorks.step3.title')}</h3>
                     <p className="text-gray-600 dark:text-gray-300">
-                        Organisez vos fichiers et partagez-les facilement avec vos contacts.
+                        {t('howItWorks.step3.description')}
                     </p>
                 </div>
             </div>
 
             <div className="text-center">
-                <h2 className="text-2xl font-semibold mb-6">Prêt à commencer ?</h2>
+                <h2 className="text-2xl font-semibold mb-6">{t('howItWorks.cta.title')}</h2>
                 <div className="flex justify-center gap-4">
                     <Button asChild variant="default" size="lg">
-                        <Link to="/sign">Créer un compte</Link>
+                        <Link to="/sign">{t('howItWorks.cta.createAccount')}</Link>
                     </Button>
                     <Button asChild variant="outline" size="lg">
-                        <Link to="/subscription">Voir nos abonnements</Link>
+                        <Link to="/subscription">{t('howItWorks.cta.viewSubscriptions')}</Link>
                     </Button>
                 </div>
             </div>
 
             <div className="mt-16 bg-gray-50 dark:bg-neutral-800 p-8 rounded-lg">
-                <h2 className="text-2xl font-semibold mb-6">Fonctionnalités principales</h2>
+                <h2 className="text-2xl font-semibold mb-6">{t('howItWorks.features.title')}</h2>
                 <div className="grid md:grid-cols-2 gap-6">
                     <div className="flex items-start gap-4">
                         <div className="bg-blue-100 dark:bg-blue-900 p-2 rounded-lg">
@@ -54,8 +57,8 @@ const HowItWorks = () => {
                             </svg>
                         </div>
                         <div>
-                            <h3 className="font-semibold mb-2">Sécurité maximale</h3>
-                            <p className="text-gray-600 dark:text-gray-300">Vos fichiers sont cryptés et stockés de manière sécurisée.</p>
+                            <h3 className="font-semibold mb-2">{t('howItWorks.features.security.title')}</h3>
+                            <p className="text-gray-600 dark:text-gray-300">{t('howItWorks.features.security.description')}</p>
                         </div>
                     </div>
                     <div className="flex items-start gap-4">
@@ -65,8 +68,8 @@ const HowItWorks = () => {
                             </svg>
                         </div>
                         <div>
-                            <h3 className="font-semibold mb-2">Transfert rapide</h3>
-                            <p className="text-gray-600 dark:text-gray-300">Transférez vos fichiers rapidement avec notre infrastructure optimisée.</p>
+                            <h3 className="font-semibold mb-2">{t('howItWorks.features.transfer.title')}</h3>
+                            <p className="text-gray-600 dark:text-gray-300">{t('howItWorks.features.transfer.description')}</p>
                         </div>
                     </div>
                     <div className="flex items-start gap-4">
@@ -76,8 +79,8 @@ const HowItWorks = () => {
                             </svg>
                         </div>
                         <div>
-                            <h3 className="font-semibold mb-2">Gestion des contacts</h3>
-                            <p className="text-gray-600 dark:text-gray-300">Organisez vos contacts et partagez facilement vos fichiers.</p>
+                            <h3 className="font-semibold mb-2">{t('howItWorks.features.contacts.title')}</h3>
+                            <p className="text-gray-600 dark:text-gray-300">{t('howItWorks.features.contacts.description')}</p>
                         </div>
                     </div>
                     <div className="flex items-start gap-4">
@@ -87,8 +90,8 @@ const HowItWorks = () => {
                             </svg>
                         </div>
                         <div>
-                            <h3 className="font-semibold mb-2">Support 24/7</h3>
-                            <p className="text-gray-600 dark:text-gray-300">Notre équipe est disponible pour vous aider à tout moment.</p>
+                            <h3 className="font-semibold mb-2">{t('howItWorks.features.support.title')}</h3>
+                            <p className="text-gray-600 dark:text-gray-300">{t('howItWorks.features.support.description')}</p>
                         </div>
                     </div>
                 </div>

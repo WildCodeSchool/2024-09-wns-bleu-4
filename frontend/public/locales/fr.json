@@ -84,10 +84,43 @@
     "downgrade": "Rétrograder"
   },
   "howItWorks": {
-    "title": "Comment ça marche",
-    "step1": "Étape 1 : Téléchargez vos fichiers",
-    "step2": "Étape 2 : Partagez avec d'autres",
-    "step3": "Étape 3 : Suivez les transferts"
+    "title": "Comment ça marche ?",
+    "step1": {
+      "title": "Créez votre compte",
+      "description": "Inscrivez-vous gratuitement en quelques secondes pour accéder à toutes nos fonctionnalités."
+    },
+    "step2": {
+      "title": "Transférez vos fichiers",
+      "description": "Uploadez vos fichiers en toute sécurité. Nous supportons tous les formats courants."
+    },
+    "step3": {
+      "title": "Gérez et partagez",
+      "description": "Organisez vos fichiers et partagez-les facilement avec vos contacts."
+    },
+    "cta": {
+      "title": "Prêt à commencer ?",
+      "createAccount": "Créer un compte",
+      "viewSubscriptions": "Voir nos abonnements"
+    },
+    "features": {
+      "title": "Fonctionnalités principales",
+      "security": {
+        "title": "Sécurité maximale",
+        "description": "Vos fichiers sont cryptés et stockés de manière sécurisée."
+      },
+      "transfer": {
+        "title": "Transfert rapide",
+        "description": "Transférez vos fichiers rapidement avec notre infrastructure optimisée."
+      },
+      "contacts": {
+        "title": "Gestion des contacts",
+        "description": "Organisez vos contacts et partagez facilement vos fichiers."
+      },
+      "support": {
+        "title": "Support 24/7",
+        "description": "Notre équipe est disponible pour vous aider à tout moment."
+      }
+    }
   },
   "auth": {
     "title": "Authentification",
