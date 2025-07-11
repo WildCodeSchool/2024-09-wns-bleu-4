@@ -1,0 +1,63 @@
+name: CI End2End
+
+on:
+    pull_request:
+        branches:
+            - dev
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: lts/*
+
+    - name: Installation des dépendances
+      run: |
+        cd playwright
+        npm ci
+
+    - name: Installation des navigateurs de Playwright
+      run: |
+        cd playwright
+        npx playwright install --with-deps
+
+    - name: Create .env with required variables
+      run: |
+        cd backend
+        echo "JWT_SECRET_KEY=ci-test-secret-key" >> .env
+        echo "RESEND_API_KEY=test-api-key" >> .env
+        echo "RESEND_EMAIL_DOMAIN=resend.dev" >> .env
+
+    - name: Build Docker containers
+      run: |
+        docker compose up --build -d
+      continue-on-error: false
+
+    - name: Wait for application to be ready
+      run: |
+        echo "Waiting for application to be ready..."
+        timeout 120 bash -c 'until curl -f http://localhost:7007 > /dev/null 2>&1; do sleep 5; done'
+        echo "Application is ready!"
+
+    - name: Exécution des tests Playwright
+      run: |
+        cd playwright
+        npx playwright test
+
+    - name: Stop Docker containers
+      if: always()
+      run: |
+        docker compose down -v
+        docker system prune -f
+
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report
+        path: playwright/playwright-report/
+        retention-days: 30
