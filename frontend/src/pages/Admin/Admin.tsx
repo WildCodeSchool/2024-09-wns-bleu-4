@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
@@ -16,9 +16,18 @@ const AdminPage: React.FC = () => {
     // Requêtes pour les statistiques
     const { data: userData, loading: userLoading, error: userError } = useQuery(GET_USER_STATS);
     const { data: resourceData, loading: resourceLoading, error: resourceError } = useQuery(GET_RESOURCE_STATS);
-    const { data: logsData, loading: logsLoading, error: logsError } = useQuery(GET_SYSTEM_LOGS, {
+    const { data: logsData, loading: logsLoading, error: logsError, refetch: refetchLogs } = useQuery(GET_SYSTEM_LOGS, {
         variables: { limit: 10.0, offset: 0.0 }
     });
+
+    // Rafraîchissement automatique des logs toutes les 2 secondes
+    useEffect(() => {
+        const interval = setInterval(() => {
+            refetchLogs();
+        }, 2000); // 2 secondes
+
+        return () => clearInterval(interval);
+    }, [refetchLogs]);
 
     // Fonction pour formater la date relative
     const formatRelativeTime = (date: string) => {
