@@ -285,7 +285,13 @@
       "sharedBy": "Partagé par",
       "actions": {
         "download": "Télécharger",
+        "downloadSuccess": "Fichier téléchargé avec succès",
         "delete": "Supprimer"
+      },
+      "delete": {
+        "description": "Êtes-vous sûr de vouloir supprimer le fichier {{name}} ? Cette action est irréversible.",
+        "success": "Fichier supprimé avec succès",
+        "error": "Erreur lors de la suppression du fichier"
       }
     },
     "logs": {

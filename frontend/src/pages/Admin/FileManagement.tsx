@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQuery } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { FileText, Search, User, Download, Trash2 } from 'lucide-react';
 import { GET_ALL_RESOURCES } from '@/graphql/Resource/queries';
+import { DELETE_RESOURCE } from '@/graphql/Resource/mutations';
+import { toast } from 'react-toastify';
 
 interface Resource {
     id: number;
@@ -25,6 +27,9 @@ const FileManagement: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
     
     const { data, loading, error } = useQuery(GET_ALL_RESOURCES);
+    const [deleteResource] = useMutation(DELETE_RESOURCE, {
+        refetchQueries: [{ query: GET_ALL_RESOURCES }],
+    });
 
     // Filtrer les fichiers selon le terme de recherche
     const filteredFiles = data?.getAllResources?.filter((file: Resource) =>
@@ -32,6 +37,35 @@ const FileManagement: React.FC = () => {
         file.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
         file.user?.email.toLowerCase().includes(searchTerm.toLowerCase())
     ) || [];
+
+    // Fonction de téléchargement
+    const handleDownload = (file: Resource) => {
+        const link = document.createElement('a');
+        link.href = file.url;
+        link.download = file.name;
+        link.target = '_blank';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        toast.success(t('admin.files.actions.downloadSuccess'));
+    };
+
+    // Fonction de suppression
+    const handleDelete = async (file: Resource) => {
+        if (!confirm(t('admin.files.delete.description', { name: file.name }))) {
+            return;
+        }
+
+        try {
+            await deleteResource({
+                variables: { deleteResourceId: file.id.toString() }
+            });
+            toast.success(t('admin.files.delete.success'));
+        } catch (error) {
+            console.error('Error deleting file:', error);
+            toast.error(t('admin.files.delete.error'));
+        }
+    };
 
     if (loading) {
         return (
@@ -80,7 +114,7 @@ const FileManagement: React.FC = () => {
             </div>
 
             {/* Statistiques rapides */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <Card>
                     <CardContent className="p-4">
                         <div className="flex items-center justify-between">
@@ -89,19 +123,6 @@ const FileManagement: React.FC = () => {
                                 <p className="text-2xl font-bold">{data?.getAllResources?.length || 0}</p>
                             </div>
                             <FileText className="h-8 w-8 text-blue-600" />
-                        </div>
-                    </CardContent>
-                </Card>
-                <Card>
-                    <CardContent className="p-4">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <p className="text-sm text-gray-600">{t('admin.files.stats.users')}</p>
-                                <p className="text-2xl font-bold">
-                                    {new Set(data?.getAllResources?.map((file: Resource) => file.user?.email).filter(Boolean)).size || 0}
-                                </p>
-                            </div>
-                            <User className="h-8 w-8 text-green-600" />
                         </div>
                     </CardContent>
                 </Card>
@@ -161,7 +182,11 @@ const FileManagement: React.FC = () => {
                                         <Badge variant="secondary">
                                             {file.path.split('.').pop()?.toUpperCase() || 'FILE'}
                                         </Badge>
-                                        <Button variant="outline" size="sm">
+                                        <Button 
+                                            variant="outline" 
+                                            size="sm"
+                                            onClick={() => handleDownload(file)}
+                                        >
                                             <Download className="h-4 w-4 mr-1" />
                                             {t('admin.files.actions.download')}
                                         </Button>
@@ -169,6 +194,7 @@ const FileManagement: React.FC = () => {
                                             variant="outline" 
                                             size="sm"
                                             className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                                            onClick={() => handleDelete(file)}
                                         >
                                             <Trash2 className="h-4 w-4 mr-1" />
                                             {t('admin.files.actions.delete')}

@@ -287,7 +287,13 @@
       "sharedBy": "Shared by",
       "actions": {
         "download": "Download",
+        "downloadSuccess": "File downloaded successfully",
         "delete": "Delete"
+      },
+      "delete": {
+        "description": "Are you sure you want to delete the file {{name}}? This action is irreversible.",
+        "success": "File deleted successfully",
+        "error": "Error deleting file"
       }
     },
     "logs": {
