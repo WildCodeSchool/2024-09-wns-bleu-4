@@ -230,7 +230,32 @@
       "title": "Gestion des utilisateurs",
       "description": "Voir et gérer les comptes utilisateurs, rôles et permissions",
       "viewAll": "Voir tous les utilisateurs",
-      "manageRoles": "Gérer les rôles"
+      "manageRoles": "Gérer les rôles",
+      "search": {
+        "placeholder": "Rechercher un utilisateur par email..."
+      },
+      "stats": {
+        "total": "Total utilisateurs",
+        "admins": "Administrateurs",
+        "users": "Utilisateurs"
+      },
+      "list": {
+        "title": "Liste des utilisateurs",
+        "empty": "Aucun utilisateur trouvé",
+        "noResults": "Aucun utilisateur ne correspond à votre recherche"
+      },
+      "subscribed": "Abonné",
+      "actions": {
+        "edit": "Modifier",
+        "delete": "Supprimer"
+      },
+      "delete": {
+        "title": "Supprimer l'utilisateur",
+        "description": "Êtes-vous sûr de vouloir supprimer l'utilisateur {{email}} ? Cette action est irréversible et supprimera définitivement le compte.",
+        "confirm": "Oui, supprimer",
+        "success": "Utilisateur supprimé avec succès",
+        "error": "Erreur lors de la suppression de l'utilisateur"
+      }
     },
     "files": {
       "title": "Gestion des fichiers",
@@ -436,6 +461,10 @@
     "admin": {
       "title": "Administration",
       "description": "Panneau d'administration pour gérer les utilisateurs et fichiers"
+    },
+    "userManagement": {
+      "title": "Gestion des utilisateurs",
+      "description": "Gérer les comptes utilisateurs, rôles et permissions"
     },
     "notFound": {
       "title": "404",

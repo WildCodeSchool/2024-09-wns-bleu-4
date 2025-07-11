@@ -5,6 +5,10 @@ export const GET_ALL_USERS = gql`
         getAllUsers {
             id
             email
+            role
+            subscription {
+                id
+            }
         }
     }
 `;
@@ -35,6 +39,9 @@ export const GET_USER_STATS = gql`
         getAllUsers {
             id
             role
+            subscription {
+                id
+            }
         }
     }
 `;

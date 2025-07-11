@@ -246,6 +246,28 @@ class UserResolver {
         
         return resourcesWithOwner.filter((resource): resource is Resource => resource !== null);
     }
+
+    @Mutation(() => String)
+    async deleteUser(@Arg('id', () => ID) id: number): Promise<string> {
+        const user = await User.findOne({ 
+            where: { id },
+            relations: ['likes', 'reports', 'comments', 'sharedResources', 'subscription']
+        });
+
+        if (!user) {
+            throw new Error('L\'utilisateur demandé n\'a pas été trouvé');
+        }
+
+        // Empêcher la suppression de l'utilisateur connecté
+        // TODO: Ajouter une vérification du contexte pour empêcher l'auto-suppression
+
+        try {
+            await User.remove(user);
+            return 'Utilisateur supprimé avec succès';
+        } catch (error) {
+            throw new Error('Erreur lors de la suppression de l\'utilisateur');
+        }
+    }
 }
 
 export default UserResolver;

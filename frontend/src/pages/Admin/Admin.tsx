@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@apollo/client';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Users, FileText, Shield } from 'lucide-react';
@@ -9,6 +10,7 @@ import { GET_RESOURCE_STATS } from '@/graphql/Resource/queries';
 
 const AdminPage: React.FC = () => {
     const { t } = useTranslation();
+    const navigate = useNavigate();
     
     // Requêtes pour les statistiques
     const { data: userData, loading: userLoading, error: userError } = useQuery(GET_USER_STATS);
@@ -116,7 +118,11 @@ const AdminPage: React.FC = () => {
                                 {t('admin.users.description')}
                             </p>
                             <div className="flex gap-2">
-                                <Button variant="outline" size="sm">
+                                <Button 
+                                    variant="outline" 
+                                    size="sm"
+                                    onClick={() => navigate('/admin/users')}
+                                >
                                     {t('admin.users.viewAll')}
                                 </Button>
                                 <Button variant="outline" size="sm">

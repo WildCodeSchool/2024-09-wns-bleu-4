@@ -87,6 +87,7 @@ export type Mutation = {
   deleteReport: Scalars['String']['output'];
   deleteResource: Scalars['String']['output'];
   deleteSubscription: Scalars['String']['output'];
+  deleteUser: Scalars['String']['output'];
   login: Scalars['String']['output'];
   logout: Scalars['String']['output'];
   refuseContactRequest: Contact;
@@ -165,6 +166,11 @@ export type MutationDeleteResourceArgs = {
 
 export type MutationDeleteSubscriptionArgs = {
   userId: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteUserArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -427,6 +433,11 @@ export type GetUserSharedResourcesQueryVariables = Exact<{
 
 export type GetUserSharedResourcesQuery = { __typename?: 'Query', getUserSharedResources: Array<{ __typename?: 'Resource', id: number, name: string, description: string, path: string, url: string, user: { __typename?: 'User', id: string, email: string } }> };
 
+export type GetResourceStatsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetResourceStatsQuery = { __typename?: 'Query', getAllResources: Array<{ __typename?: 'Resource', id: number }> };
+
 export type CreateSubscriptionMutationVariables = Exact<{
   userId: Scalars['ID']['input'];
 }>;
@@ -475,10 +486,17 @@ export type ConfirmEmailMutationVariables = Exact<{
 
 export type ConfirmEmailMutation = { __typename?: 'Mutation', confirmEmail: string };
 
+export type DeleteUserMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DeleteUserMutation = { __typename?: 'Mutation', deleteUser: string };
+
 export type GetAllUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllUsersQuery = { __typename?: 'Query', getAllUsers: Array<{ __typename?: 'User', id: string, email: string }> };
+export type GetAllUsersQuery = { __typename?: 'Query', getAllUsers: Array<{ __typename?: 'User', id: string, email: string, role: UserRole, subscription?: { __typename?: 'Subscription', id: string } | null }> };
 
 export type GetUserInfoQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -489,6 +507,11 @@ export type GetUserIdQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetUserIdQuery = { __typename?: 'Query', getUserInfo: { __typename?: 'UserInfo', id?: string | null, email?: string | null } };
+
+export type GetUserStatsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetUserStatsQuery = { __typename?: 'Query', getAllUsers: Array<{ __typename?: 'User', id: string, role: UserRole, subscription?: { __typename?: 'Subscription', id: string } | null }> };
 
 
 export const SendContactRequestDocument = gql`
@@ -934,6 +957,45 @@ export type GetUserSharedResourcesQueryHookResult = ReturnType<typeof useGetUser
 export type GetUserSharedResourcesLazyQueryHookResult = ReturnType<typeof useGetUserSharedResourcesLazyQuery>;
 export type GetUserSharedResourcesSuspenseQueryHookResult = ReturnType<typeof useGetUserSharedResourcesSuspenseQuery>;
 export type GetUserSharedResourcesQueryResult = Apollo.QueryResult<GetUserSharedResourcesQuery, GetUserSharedResourcesQueryVariables>;
+export const GetResourceStatsDocument = gql`
+    query GetResourceStats {
+  getAllResources {
+    id
+  }
+}
+    `;
+
+/**
+ * __useGetResourceStatsQuery__
+ *
+ * To run a query within a React component, call `useGetResourceStatsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetResourceStatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetResourceStatsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetResourceStatsQuery(baseOptions?: Apollo.QueryHookOptions<GetResourceStatsQuery, GetResourceStatsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetResourceStatsQuery, GetResourceStatsQueryVariables>(GetResourceStatsDocument, options);
+      }
+export function useGetResourceStatsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetResourceStatsQuery, GetResourceStatsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetResourceStatsQuery, GetResourceStatsQueryVariables>(GetResourceStatsDocument, options);
+        }
+export function useGetResourceStatsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetResourceStatsQuery, GetResourceStatsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetResourceStatsQuery, GetResourceStatsQueryVariables>(GetResourceStatsDocument, options);
+        }
+export type GetResourceStatsQueryHookResult = ReturnType<typeof useGetResourceStatsQuery>;
+export type GetResourceStatsLazyQueryHookResult = ReturnType<typeof useGetResourceStatsLazyQuery>;
+export type GetResourceStatsSuspenseQueryHookResult = ReturnType<typeof useGetResourceStatsSuspenseQuery>;
+export type GetResourceStatsQueryResult = Apollo.QueryResult<GetResourceStatsQuery, GetResourceStatsQueryVariables>;
 export const CreateSubscriptionDocument = gql`
     mutation CreateSubscription($userId: ID!) {
   createSubscription(userId: $userId) {
@@ -1166,11 +1228,46 @@ export function useConfirmEmailMutation(baseOptions?: Apollo.MutationHookOptions
 export type ConfirmEmailMutationHookResult = ReturnType<typeof useConfirmEmailMutation>;
 export type ConfirmEmailMutationResult = Apollo.MutationResult<ConfirmEmailMutation>;
 export type ConfirmEmailMutationOptions = Apollo.BaseMutationOptions<ConfirmEmailMutation, ConfirmEmailMutationVariables>;
+export const DeleteUserDocument = gql`
+    mutation DeleteUser($id: ID!) {
+  deleteUser(id: $id)
+}
+    `;
+export type DeleteUserMutationFn = Apollo.MutationFunction<DeleteUserMutation, DeleteUserMutationVariables>;
+
+/**
+ * __useDeleteUserMutation__
+ *
+ * To run a mutation, you first call `useDeleteUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteUserMutation, { data, loading, error }] = useDeleteUserMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteUserMutation(baseOptions?: Apollo.MutationHookOptions<DeleteUserMutation, DeleteUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteUserMutation, DeleteUserMutationVariables>(DeleteUserDocument, options);
+      }
+export type DeleteUserMutationHookResult = ReturnType<typeof useDeleteUserMutation>;
+export type DeleteUserMutationResult = Apollo.MutationResult<DeleteUserMutation>;
+export type DeleteUserMutationOptions = Apollo.BaseMutationOptions<DeleteUserMutation, DeleteUserMutationVariables>;
 export const GetAllUsersDocument = gql`
     query getAllUsers {
   getAllUsers {
     id
     email
+    role
+    subscription {
+      id
+    }
   }
 }
     `;
@@ -1289,3 +1386,46 @@ export type GetUserIdQueryHookResult = ReturnType<typeof useGetUserIdQuery>;
 export type GetUserIdLazyQueryHookResult = ReturnType<typeof useGetUserIdLazyQuery>;
 export type GetUserIdSuspenseQueryHookResult = ReturnType<typeof useGetUserIdSuspenseQuery>;
 export type GetUserIdQueryResult = Apollo.QueryResult<GetUserIdQuery, GetUserIdQueryVariables>;
+export const GetUserStatsDocument = gql`
+    query GetUserStats {
+  getAllUsers {
+    id
+    role
+    subscription {
+      id
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetUserStatsQuery__
+ *
+ * To run a query within a React component, call `useGetUserStatsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserStatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserStatsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetUserStatsQuery(baseOptions?: Apollo.QueryHookOptions<GetUserStatsQuery, GetUserStatsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserStatsQuery, GetUserStatsQueryVariables>(GetUserStatsDocument, options);
+      }
+export function useGetUserStatsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserStatsQuery, GetUserStatsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserStatsQuery, GetUserStatsQueryVariables>(GetUserStatsDocument, options);
+        }
+export function useGetUserStatsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetUserStatsQuery, GetUserStatsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetUserStatsQuery, GetUserStatsQueryVariables>(GetUserStatsDocument, options);
+        }
+export type GetUserStatsQueryHookResult = ReturnType<typeof useGetUserStatsQuery>;
+export type GetUserStatsLazyQueryHookResult = ReturnType<typeof useGetUserStatsLazyQuery>;
+export type GetUserStatsSuspenseQueryHookResult = ReturnType<typeof useGetUserStatsSuspenseQuery>;
+export type GetUserStatsQueryResult = Apollo.QueryResult<GetUserStatsQuery, GetUserStatsQueryVariables>;

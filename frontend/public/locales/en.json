@@ -232,7 +232,32 @@
       "title": "User Management",
       "description": "View and manage user accounts, roles, and permissions",
       "viewAll": "View All Users",
-      "manageRoles": "Manage Roles"
+      "manageRoles": "Manage Roles",
+      "search": {
+        "placeholder": "Search for a user by email..."
+      },
+      "stats": {
+        "total": "Total users",
+        "admins": "Administrators",
+        "users": "Users"
+      },
+      "list": {
+        "title": "User list",
+        "empty": "No users found",
+        "noResults": "No users match your search"
+      },
+      "subscribed": "Subscribed",
+      "actions": {
+        "edit": "Edit",
+        "delete": "Delete"
+      },
+      "delete": {
+        "title": "Delete user",
+        "description": "Are you sure you want to delete user {{email}}? This action is irreversible and will permanently delete the account.",
+        "confirm": "Yes, delete",
+        "success": "User deleted successfully",
+        "error": "Error deleting user"
+      }
     },
     "files": {
       "title": "File Management",
@@ -435,6 +460,10 @@
     "admin": {
       "title": "Administration",
       "description": "Administration panel for managing users and files"
+    },
+    "userManagement": {
+      "title": "User Management",
+      "description": "Manage user accounts, roles and permissions"
     },
     "notFound": {
       "title": "404",

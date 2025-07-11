@@ -17,6 +17,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Profile } from '@/pages/Profile/profile';
 import HowItWorks from '@/pages/HowitWorks';
 import AdminPage from '@/pages/Admin/Admin';
+import UserManagement from '@/pages/Admin/UserManagement';
 import AdminRoute from '@/components/AdminRoute';
 import NotFound from '@/pages/Error/NotFound';
 import { useTranslation } from 'react-i18next';
@@ -185,6 +186,20 @@ const App = () => {
                                 >
                                     <AdminRoute>
                                         <AdminPage />
+                                    </AdminRoute>
+                                </PageWrapper>
+                            }
+                        />
+                        <Route
+                            path="/admin/users"
+                            element={
+                                <PageWrapper
+                                    title={t('admin.users.title')}
+                                    description={t('admin.users.description')}
+                                    protected
+                                >
+                                    <AdminRoute>
+                                        <UserManagement />
                                     </AdminRoute>
                                 </PageWrapper>
                             }
