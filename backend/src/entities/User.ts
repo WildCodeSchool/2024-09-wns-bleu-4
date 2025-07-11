@@ -4,7 +4,7 @@ import { Report } from '@/entities/Report';
 import { Resource } from '@/entities/Resource';
 import { Subscription } from '@/entities/Subscription';
 import { IsDate, IsEnum, Length } from 'class-validator';
-import { Field, ID, ObjectType } from 'type-graphql';
+import { Field, ID, ObjectType, registerEnumType } from 'type-graphql';
 import {
     BaseEntity,
     Column,
@@ -21,6 +21,11 @@ export enum UserRole {
     USER = 'user',
     ADMIN = 'admin',
 }
+
+registerEnumType(UserRole, {
+    name: 'UserRole',
+    description: 'User role enum',
+});
 
 @Entity()
 export class TempUser extends BaseEntity {
@@ -65,6 +70,7 @@ export class User extends BaseEntity {
     @CreateDateColumn()
     lastLoggedAt: Date;
 
+    @Field(() => UserRole)
     @IsEnum(UserRole)
     @Column({
         type: 'enum',
@@ -85,7 +91,7 @@ export class User extends BaseEntity {
     @ManyToMany(() => Resource, (Resource) => Resource.usersWithAccess, {
         nullable: true,
     })
-    resourceAccess: Resource[];
+    sharedResources: Resource[];
 
     @Field(() => Subscription, { nullable: true })
     @OneToOne(() => Subscription, (subscription) => subscription.user, {

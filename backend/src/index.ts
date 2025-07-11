@@ -15,10 +15,7 @@ import 'reflect-metadata';
 import { buildSchema } from 'type-graphql';
 
 const start = async () => {
-    if (
-        process.env.JWT_SECRET_KEY === null ||
-        process.env.JWT_SECRET_KEY === undefined
-    ) {
+    if (!process.env.JWT_SECRET_KEY) {
         throw Error('no jwt secret');
     }
     await dataSource.initialize();
@@ -55,7 +52,7 @@ const start = async () => {
         context: async ({ req, res }) => {
             if (req.headers.cookie) {
                 const cookies = cookie.parse(req.headers.cookie as string);
-                if (cookies.token !== undefined) {
+                if (cookies.token) {
                     const payload: any = jwt.verify(
                         cookies.token,
                         process.env.JWT_SECRET_KEY as Secret,

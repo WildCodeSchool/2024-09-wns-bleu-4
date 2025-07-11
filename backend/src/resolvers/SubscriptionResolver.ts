@@ -1,6 +1,6 @@
 import { Subscription } from '@/entities/Subscription';
 import { User } from '@/entities/User';
-import { Arg, ID, Mutation, Resolver } from 'type-graphql';
+import { Arg, ID, Mutation, Query, Resolver } from 'type-graphql';
 
 // Need to refactor the calculateEndAt function to calculate the end date of the subscription based on the paid date.
 const calculateEndAt = (paidAt: Date): Date =>
@@ -14,7 +14,7 @@ class SubscriptionResolver {
     ): Promise<Subscription> {
         const user = await User.findOneBy({ id: userId });
         if (!user) {
-            throw new Error('User not found');
+            throw new Error('L\'utilisateur demandé n\'a pas été trouvé');
         }
         const paidAt = new Date();
 
@@ -34,11 +34,26 @@ class SubscriptionResolver {
     ): Promise<string> {
         const user = await User.findOneBy({ id: userId });
         if (!user || !user.subscription) {
-            throw new Error('User or subscription not found');
+            throw new Error('L\'utilisateur ou l\'abonnement demandé n\'a pas été trouvé');
         }
-        user.subscription = null;
-        await user.save();
+
+        try {   
+            await Subscription.delete({ id: user.subscription.id });
+            user.subscription = null;
+            await user.save();
+        } catch (error) {
+            throw new Error(error as string);
+        }
+
         return 'Subscription deleted';
+    }
+
+    @Query(() => Subscription, { nullable: true })
+    async getUserSubscription(
+        @Arg('userId', () => ID) userId: User['id'],
+    ): Promise<Subscription | null> {
+        const user = await User.findOneBy({ id: userId });
+        return user?.subscription ?? null;
     }
 }
 

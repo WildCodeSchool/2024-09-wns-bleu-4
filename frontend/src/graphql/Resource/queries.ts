@@ -22,3 +22,19 @@ export const GET_RESOURCES_BY_USER_ID = gql`
         }
     }
 `;
+
+export const GET_SHARED_RESOURCES = gql`
+    query GetUserSharedResources($userId: ID!) {
+        getUserSharedResources(userId: $userId) {
+            id
+            name
+            description
+            path
+            url
+            user {
+                id
+                email
+            }
+        }
+    }
+`;

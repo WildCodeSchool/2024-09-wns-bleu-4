@@ -14,7 +14,10 @@ import {
     ObjectType,
     Query,
     Resolver,
+    ID,
 } from 'type-graphql';
+import { Resource } from '@/entities/Resource';
+import { UserRole } from '@/entities/User';
 
 @InputType()
 export class UserInput implements Partial<User> {
@@ -38,12 +41,30 @@ export class UserInfo {
 
     @Field(() => String, { nullable: true })
     email?: String;
+
+    @Field(() => ID, { nullable: true })
+    id?: number;
+
+    @Field(() => Boolean, { nullable: true })
+    isSubscribed?: boolean;
+
+    @Field(() => UserRole, { nullable: true })
+    role?: UserRole;
 }
 
 @Resolver(User)
 class UserResolver {
     @Mutation(() => String)
-    async register(@Arg('data', () => UserInput) newUserData: User) {
+    async register(
+        @Arg('data', () => UserInput) newUserData: User,
+        @Arg('lang', () => String) lang: 'fr' | 'en'
+    ) {
+        const existingUser = await User.findOneBy({ email: newUserData.email });
+
+        if (existingUser) {
+            throw new Error('Un compte est déjà associé à cette adresse email');
+        }
+
         const codeToConfirm = Array.from({ length: 8 }, () =>
             Math.floor(Math.random() * 10),
         ).join('');
@@ -60,8 +81,9 @@ class UserResolver {
                 to: [newUserData.email],
                 subject: 'Verify Account Creation',
                 react: VerifyAccountEmail({
-                    validationCode: codeToConfirm
-                }),
+                    validationCode: codeToConfirm,
+                    lang: lang as 'fr' | 'en'
+                })
             });
         } catch (error) {
             throw new Error(error);
@@ -70,10 +92,13 @@ class UserResolver {
     }
 
     @Mutation(() => String)
-    async resetSendCode(@Arg('email', () => String) email: string) {
+    async resetSendCode(
+        @Arg('email', () => String) email: string,
+        @Arg('lang', () => String) lang: string
+    ) {
         const user = await TempUser.findOneBy({ email });
         if (!user) {
-            throw new Error('User not found');
+            throw new Error('L\'utilisateur demandé n\'a pas été trouvé');
         }
         const resetCode = Array.from({ length: 8 }, () =>
             Math.floor(Math.random() * 10),
@@ -87,8 +112,9 @@ class UserResolver {
                 subject: 'Reset Password',
                 react: ResetPasswordEmail({
                     userEmail: email,
-                    resetPasswordLink: "#" // TODO: Replacer par le vrai lien une fois la feature en place + Supprimer ce commentaire
-                }),
+                    resetPasswordLink: "#",
+                    lang: lang as 'fr' | 'en'
+                })
             });
             return 'Un code de réinitialisation a été envoyé à votre adresse email';
         } catch (error) {
@@ -118,7 +144,7 @@ class UserResolver {
         const existingUser = await User.findOneBy({ email: tempUser.email });
 
         if (existingUser) {
-            throw new Error('A user with this email already exists');
+            throw new Error('Un compte est déjà associé à cette adresse email');
         }
         await User.save({
             email: tempUser.email,
@@ -143,7 +169,7 @@ class UserResolver {
         const user = await User.findOneBy({ email: loginUserData.email });
 
         if (!user) {
-            throw new Error("Aucun compte n'existe avec cette adresse email");
+            throw new Error('Aucun compte n\'est associé à cette adresse email');
         }
 
         try {
@@ -159,7 +185,7 @@ class UserResolver {
 
                 return 'The user has been logged in!';
             } else {
-                throw new Error('Mot de passe incorrect');
+                throw new Error('Le mot de passe saisi est incorrect');
             }
         } catch (error) {
             throw new Error(error.message || 'Erreur lors de la connexion');
@@ -184,12 +210,41 @@ class UserResolver {
     }
 
     @Query(() => UserInfo)
-    async getUserInfo(@Ctx() context: any) {
+    async getUserInfo(@Ctx() context: any): Promise<UserInfo> {
         if (context.email) {
-            return { isLoggedIn: true, email: context.email };
-        } else {
-            return { isLoggedIn: false };
+            const user = await User.findOne({ where: { email: context.email } });
+            if (user) {
+                return { 
+                    isLoggedIn: true, 
+                    email: context.email, 
+                    id: user.id, 
+                    isSubscribed: user.subscription ? true : false,
+                    role: user.role
+                };
+            }
         }
+        return { isLoggedIn: false };
+    }
+
+    @Query(() => [Resource])
+    async getUserSharedResources(
+        @Arg('userId', () => ID) userId: number,
+    ): Promise<Resource[]> {
+        const user = await User.findOne({ where: { id: userId }, relations: ['sharedResources'] });
+        const sharedResources = user?.sharedResources ?? [];
+        
+        // récup les infos de l'utilisateur propriétaire
+        const resourcesWithOwner = await Promise.all(
+            sharedResources.map(async (resource) => {
+                const resourceWithUser = await Resource.findOne({
+                    where: { id: resource.id },
+                    relations: ['user']
+                });
+                return resourceWithUser;
+            })
+        );
+        
+        return resourcesWithOwner.filter((resource): resource is Resource => resource !== null);
     }
 }
 

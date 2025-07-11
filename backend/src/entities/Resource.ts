@@ -28,6 +28,7 @@ export class Resource extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Field(() => User)
     @ManyToOne(() => User, { onDelete: 'CASCADE' })
     user: User;
 
@@ -78,7 +79,7 @@ export class Resource extends BaseEntity {
     description: string;
 
     @Field(() => [User])
-    @ManyToMany(() => User, (User) => User.resourceAccess)
+    @ManyToMany(() => User, (User) => User.sharedResources)
     @JoinTable()
     usersWithAccess: User[];
 

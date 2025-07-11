@@ -2,7 +2,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import { z } from 'zod';
+import { useTranslation } from 'react-i18next';
+import { Button } from '../ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Input } from '../ui/input';
+import { Label } from '../ui/label';
 
 const formSchema = z.object({
     email: z.string().email('Veuillez saisir une adresse email valide'),
@@ -25,6 +31,7 @@ interface FormProps {
 }
 
 const Form = ({ title, onSubmit, loading, links, error }: FormProps) => {
+    const { t } = useTranslation();
     const [showPassword, setShowPassword] = useState(false);
 
     const {
@@ -37,57 +44,101 @@ const Form = ({ title, onSubmit, loading, links, error }: FormProps) => {
     });
 
     const submitForm = async (data: FormData) => {
-        await onSubmit(data.email, data.password);
+        await onSubmit(data.email, data.password)
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((error) => {
+                toast.error(error.message);
+                throw new Error(error.message);
+            });
     };
 
     return (
-        <div className="form-log">
-            <b>{title}</b>
-            <form onSubmit={handleSubmit(submitForm)}>
-                <label className="form-label" htmlFor="email">
-                    Email
-                    <input
-                        type="email"
-                        placeholder="exemple@exemple.com"
-                        {...register('email')}
-                    />
-                    {errors.email && (
-                        <span className="error-message">
-                            {errors.email.message}
-                        </span>
-                    )}
-                </label>
-                <label className="form-label" htmlFor="password">
-                    Mot de passe
-                    <input
-                        type={showPassword ? 'text' : 'password'}
-                        placeholder="Votre mot de passe"
-                        {...register('password')}
-                    />
-                    <button
-                        type="button"
-                        className="show-password"
-                        onClick={() => setShowPassword(!showPassword)}
-                    >
-                        {showPassword ? (
-                            <EyeOff aria-label="Show password" />
-                        ) : (
-                            <Eye stroke="#FF934F" aria-label="Hide password" />
+        <Card className="w-auto sm:w-[50%] mx-auto md:my-40  my-6">
+            <CardHeader>
+                <CardTitle className="text-2xl">{title}</CardTitle>
+                <CardTitle className="text-sm font-normal text-muted-foreground">
+                    {t('auth.form.title')}
+                </CardTitle>
+            </CardHeader>
+            <CardContent className="grid gap-y-4">
+                <form
+                    onSubmit={handleSubmit(submitForm)}
+                    className="grid gap-4"
+                >
+                    <div className="space-y-2">
+                        <Label htmlFor="email">{t('auth.form.email.label')}</Label>
+                        <Input
+                            id="email"
+                            type="email"
+                            placeholder={t('auth.form.email.placeholder')}
+                            {...register('email')}
+                        />
+                        {errors.email && (
+                            <span className="text-sm text-red-500">
+                                {errors.email.message}
+                            </span>
                         )}
-                    </button>
-                    {errors.password && (
-                        <span className="error-message">
-                            {errors.password.message}
-                        </span>
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="password">{t('auth.form.password.label')}</Label>
+                        <div className="relative">
+                            <Input
+                                id="password"
+                                type={showPassword ? 'text' : 'password'}
+                                placeholder={t('auth.form.password.placeholder')}
+                                className="pr-10"
+                                {...register('password')}
+                            />
+                            <Button
+                                type="button"
+                                variant="ghost"
+                                size="icon"
+                                className="absolute right-0 top-0 h-full px-3"
+                                onClick={() => setShowPassword(!showPassword)}
+                            >
+                                {showPassword ? (
+                                    <EyeOff
+                                        className="h-4 w-4"
+                                        aria-label="Hide password"
+                                    />
+                                ) : (
+                                    <Eye
+                                        className="h-4 w-4"
+                                        aria-label="Show password"
+                                    />
+                                )}
+                            </Button>
+                        </div>
+                        {errors.password && (
+                            <span className="text-sm text-red-500">
+                                {errors.password.message}
+                            </span>
+                        )}
+                    </div>
+
+                    {error && (
+                        <div className="text-sm text-red-500">{error}</div>
                     )}
-                </label>
-                {error && <div className="form-error">{error}</div>}
-                {links && <div className="links-supp">{links}</div>}
-                <button disabled={!isValid} type="submit" className="btn">
-                    {loading ? `${title} ...` : 'Valider'}
-                </button>
-            </form>
-        </div>
+
+                    <Button
+                        disabled={!isValid}
+                        type="submit"
+                        className="mt-2 cursor-pointer"
+                    >
+                        {loading ? t('auth.form.loading', { action: title }) : t('auth.form.submit')}
+                    </Button>
+
+                    {links && (
+                        <div className="mt-2 flex gap-5 text-blue-500">
+                            {links}
+                        </div>
+                    )}
+                </form>
+            </CardContent>
+        </Card>
     );
 };
 
