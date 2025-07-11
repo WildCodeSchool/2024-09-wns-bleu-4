@@ -7,7 +7,6 @@ import { useAuth } from '@/hooks/useAuth';
 import { Contact } from '@/generated/graphql-types';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from 'react-toastify';
 import { useGetMyContactsQuery } from '@/generated/graphql-types';
@@ -137,17 +136,6 @@ const UploadPage = () => {
             console.error('Error sharing file:', error);
             toast.error(t('upload.errors.share.failed'));
         }
-    };
-
-    const toggleContact = (contact: Contact) => {
-        setSelectedContacts(prev => {
-            const isSelected = prev.some(c => c.id === contact.id);
-            if (isSelected) {
-                return prev.filter(c => c.id !== contact.id);
-            } else {
-                return [...prev, contact];
-            }
-        });
     };
 
     return (
