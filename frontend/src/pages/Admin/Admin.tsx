@@ -63,7 +63,7 @@ const AdminPage: React.FC = () => {
 
     // Calcul des statistiques
     const totalUsers = userData?.getAllUsers?.length || 0;
-    const totalAdmins = userData?.getAllUsers?.filter((user: any) => user.role === 'ADMIN')?.length || 0;
+    const totalAdmins = userData?.getAllUsers?.filter((user: { role: string }) => user.role === 'ADMIN')?.length || 0;
     const totalFiles = resourceData?.getAllResources?.length || 0;
 
     if (userLoading || resourceLoading || logsLoading) {
@@ -220,7 +220,7 @@ const AdminPage: React.FC = () => {
                                 </div>
                             ) : (
                                 <div className="space-y-3">
-                                    {logsData?.getSystemLogs?.map((log: any) => (
+                                    {logsData?.getSystemLogs?.map((log: { id: string; type: string; message: string; details?: string | null; userId?: string | null; createdAt: string }) => (
                                         <div
                                             key={log.id}
                                             className="flex items-start gap-3 p-3 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"

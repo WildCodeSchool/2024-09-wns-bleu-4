@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { FileText, Search, User, Download, Trash2 } from 'lucide-react';
+import { FileText, Search, Download, Trash2 } from 'lucide-react';
 import { GET_ALL_RESOURCES } from '@/graphql/Resource/queries';
 import { DELETE_RESOURCE } from '@/graphql/Resource/mutations';
 import { toast } from 'react-toastify';

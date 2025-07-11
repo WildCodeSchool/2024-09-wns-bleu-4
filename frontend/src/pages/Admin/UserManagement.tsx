@@ -55,8 +55,9 @@ const UserManagement: React.FC = () => {
             
             toast.success(t('admin.users.delete.success'));
             setUserToDelete(null);
-        } catch (error: any) {
-            toast.error(error.message || t('admin.users.delete.error'));
+        } catch (error: unknown) {
+            const errorMessage = error instanceof Error ? error.message : t('admin.users.delete.error');
+            toast.error(errorMessage);
         }
     };
 
@@ -70,8 +71,9 @@ const UserManagement: React.FC = () => {
             });
             
             toast.success(t('admin.users.role.success'));
-        } catch (error: any) {
-            toast.error(error.message || t('admin.users.role.error'));
+        } catch (error: unknown) {
+            const errorMessage = error instanceof Error ? error.message : t('admin.users.role.error');
+            toast.error(errorMessage);
         }
     };
 
