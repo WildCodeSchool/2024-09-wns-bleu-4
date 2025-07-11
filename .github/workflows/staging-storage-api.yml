@@ -24,7 +24,7 @@ jobs:
       - uses: docker/build-push-action@v2
         name: Build and push
         with:
-          context: ./frontend
-          file: ./frontend/Dockerfile.prod
+          context: ./storage-api
+          file: ./storage-api/Dockerfile.prod
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.STAGING_STORAGE_IMAGE }}:latest
