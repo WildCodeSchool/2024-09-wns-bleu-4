@@ -38,7 +38,7 @@ jobs:
       - uses: docker/build-push-action@v2
         name: Build and push
         with:
-          context: ./client
-          file: ./client/Dockerfile
+          context: ./frontend
+          file: ./frontend/Dockerfile.prod
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_CLIENT_IMAGE }}:latest
