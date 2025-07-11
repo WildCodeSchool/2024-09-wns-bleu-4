@@ -2,7 +2,7 @@ name: Compile and push storage api image
 
 on:
   push:
-    branches: ["deploy-staging"]
+    branches: ["dev"]
 
   workflow_dispatch:
 

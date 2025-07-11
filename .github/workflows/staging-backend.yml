@@ -2,7 +2,7 @@ name: Compile and push backend image
 
 on:
   push:
-    branches: ["deploy-staging"]
+    branches: ["dev"]
   workflow_dispatch:
 jobs:
   build:

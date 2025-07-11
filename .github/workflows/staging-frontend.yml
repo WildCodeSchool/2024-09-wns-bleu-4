@@ -2,7 +2,7 @@ name: Compile and push frontend image
 
 on:
   push:
-    branches: ["deploy-staging"]
+    branches: ["dev"]
 
   workflow_dispatch:
 
