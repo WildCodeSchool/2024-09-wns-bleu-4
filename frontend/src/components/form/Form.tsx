@@ -64,6 +64,7 @@ const Form = ({ title, onSubmit, loading, links, error }: FormProps) => {
                 <form
                     onSubmit={handleSubmit(submitForm)}
                     className="grid gap-4"
+                    data-testid="form"
                 >
                     <div className="space-y-2">
                         <Label htmlFor="email">Email</Label>
@@ -96,6 +97,7 @@ const Form = ({ title, onSubmit, loading, links, error }: FormProps) => {
                                 size="icon"
                                 className="absolute right-0 top-0 h-full px-3"
                                 onClick={() => setShowPassword(!showPassword)}
+                                data-testid="password-toggle"
                             >
                                 {showPassword ? (
                                     <EyeOff
@@ -111,7 +113,7 @@ const Form = ({ title, onSubmit, loading, links, error }: FormProps) => {
                             </Button>
                         </div>
                         {errors.password && (
-                            <span className="text-sm text-red-500">
+                            <span className="text-sm text-red-500" data-testid="password-error">
                                 {errors.password.message}
                             </span>
                         )}
