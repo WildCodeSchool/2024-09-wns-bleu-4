@@ -209,11 +209,6 @@ const UploadPage = () => {
                                                             )
                                                             .map((contact) => (
                                                                 <div key={contact.id} className="flex items-center space-x-2">
-                                                                    <Checkbox
-                                                                        id={`contact-${contact.id}`}
-                                                                        checked={selectedContacts.some(c => c.id === contact.id)}
-                                                                        onCheckedChange={() => toggleContact(contact)}
-                                                                    />
                                                                     <Label
                                                                         htmlFor={`contact-${contact.id}`}
                                                                         className="text-sm font-normal"

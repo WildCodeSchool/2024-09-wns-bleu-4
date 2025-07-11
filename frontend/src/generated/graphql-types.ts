@@ -384,7 +384,7 @@ export type RemoveContactMutation = { __typename?: 'Mutation', removeContact: bo
 export type GetMyContactsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetMyContactsQuery = { __typename?: 'Query', getMyContacts: { __typename?: 'ContactsResponse', acceptedContacts: Array<{ __typename?: 'Contact', id: string, status: ContactStatus, createdAt: any, sourceUser: { __typename?: 'User', id: string, email: string }, targetUser: { __typename?: 'User', id: string, email: string } }>, pendingRequestsReceived: Array<{ __typename?: 'Contact', id: string, status: ContactStatus, createdAt: any, sourceUser: { __typename?: 'User', id: string, email: string }, targetUser: { __typename?: 'User', id: string, email: string } }>, pendingRequestsSent: Array<{ __typename?: 'Contact', id: string, status: ContactStatus, createdAt: any, sourceUser: { __typename?: 'User', id: string, email: string }, targetUser: { __typename?: 'User', id: string, email: string } }> } };
+export type GetMyContactsQuery = { __typename?: 'Query', getMyContacts: { __typename?: 'ContactsResponse', acceptedContacts: Array<{ __typename?: 'Contact', id: string, status: ContactStatus, createdAt: any, sourceUser: { __typename?: 'User', id: string, email: string, role: UserRole }, targetUser: { __typename?: 'User', id: string, email: string } }>, pendingRequestsReceived: Array<{ __typename?: 'Contact', id: string, status: ContactStatus, createdAt: any, sourceUser: { __typename?: 'User', id: string, email: string }, targetUser: { __typename?: 'User', id: string, email: string } }>, pendingRequestsSent: Array<{ __typename?: 'Contact', id: string, status: ContactStatus, createdAt: any, sourceUser: { __typename?: 'User', id: string, email: string }, targetUser: { __typename?: 'User', id: string, email: string } }> } };
 
 export type CreateResourceMutationVariables = Exact<{
   data: ResourceInput;
@@ -633,6 +633,7 @@ export const GetMyContactsDocument = gql`
       sourceUser {
         id
         email
+        role
       }
       targetUser {
         id
