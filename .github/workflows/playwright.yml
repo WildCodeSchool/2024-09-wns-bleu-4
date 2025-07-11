@@ -33,12 +33,10 @@ jobs:
         echo "RESEND_API_KEY=test-api-key" >> .env
         echo "RESEND_EMAIL_DOMAIN=resend.dev" >> .env
 
-    - name: Build and start Docker containers
+    - name: Build Docker containers
       run: |
-        docker-compose up -d --build
-        echo "Waiting for containers to be healthy..."
-        timeout 300 bash -c 'until docker-compose ps | grep -q "healthy"; do sleep 5; done'
-        echo "All containers are healthy!"
+        docker compose up --build -d
+      continue-on-error: false
 
     - name: Wait for application to be ready
       run: |
@@ -54,7 +52,7 @@ jobs:
     - name: Stop Docker containers
       if: always()
       run: |
-        docker-compose down -v
+        docker compose down -v
         docker system prune -f
 
     - uses: actions/upload-artifact@v4
