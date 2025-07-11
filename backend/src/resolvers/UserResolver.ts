@@ -1,4 +1,6 @@
 import { TempUser, User } from '@/entities/User';
+import { LogType } from '@/entities/SystemLog';
+import SystemLogResolver from '@/resolvers/SystemLogResolver';
 import * as argon2 from 'argon2';
 import { IsEmail, Length, Matches } from 'class-validator';
 import jwt, { Secret } from 'jsonwebtoken';
@@ -263,8 +265,24 @@ class UserResolver {
 
         try {
             await User.remove(user);
+            
+            // Log de l'événement
+            await SystemLogResolver.logEvent(
+                LogType.SUCCESS,
+                'Utilisateur supprimé',
+                `L'utilisateur ${user.email} a été supprimé du système`,
+                user.email
+            );
+            
             return 'Utilisateur supprimé avec succès';
         } catch (error) {
+            // Log de l'erreur
+            await SystemLogResolver.logEvent(
+                LogType.ERROR,
+                'Erreur lors de la suppression d\'utilisateur',
+                `Erreur lors de la suppression de l'utilisateur ${user.email}: ${error}`,
+                user.email
+            );
             throw new Error('Erreur lors de la suppression de l\'utilisateur');
         }
     }
@@ -284,10 +302,27 @@ class UserResolver {
         // TODO: Ajouter une vérification du contexte pour empêcher l'auto-modification
 
         try {
+            const oldRole = user.role;
             user.role = role;
             await User.save(user);
+            
+            // Log de l'événement
+            await SystemLogResolver.logEvent(
+                LogType.SUCCESS,
+                'Rôle utilisateur mis à jour',
+                `L'utilisateur ${user.email} est passé de ${oldRole} à ${role}`,
+                user.email
+            );
+            
             return `Rôle de l'utilisateur mis à jour avec succès vers ${role}`;
         } catch (error) {
+            // Log de l'erreur
+            await SystemLogResolver.logEvent(
+                LogType.ERROR,
+                'Erreur lors de la mise à jour du rôle',
+                `Erreur lors de la mise à jour du rôle de ${user.email}: ${error}`,
+                user.email
+            );
             throw new Error('Erreur lors de la mise à jour du rôle');
         }
     }

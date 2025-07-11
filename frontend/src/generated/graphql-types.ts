@@ -59,6 +59,14 @@ export type ContactsResponse = {
   pendingRequestsSent: Array<Contact>;
 };
 
+export type CreateLogInput = {
+  details?: InputMaybe<Scalars['String']['input']>;
+  ipAddress?: InputMaybe<Scalars['String']['input']>;
+  message: Scalars['String']['input'];
+  type: LogType;
+  userId?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type Like = {
   __typename?: 'Like';
   id: Scalars['ID']['output'];
@@ -71,15 +79,25 @@ export type LikeInput = {
   user: Scalars['ID']['input'];
 };
 
+/** System log type enum */
+export enum LogType {
+  Error = 'ERROR',
+  Info = 'INFO',
+  Success = 'SUCCESS',
+  Warning = 'WARNING'
+}
+
 export type Mutation = {
   __typename?: 'Mutation';
   acceptContactRequest: Contact;
+  clearSystemLogs: Scalars['String']['output'];
   confirmEmail: Scalars['String']['output'];
   createComment: Comment;
   createLike: Like;
   createReport: Report;
   createResource: Resource;
   createSubscription: Subscription;
+  createSystemLog: SystemLog;
   createUser: User;
   createUserAccess: Scalars['String']['output'];
   deleteComment: Scalars['String']['output'];
@@ -87,6 +105,7 @@ export type Mutation = {
   deleteReport: Scalars['String']['output'];
   deleteResource: Scalars['String']['output'];
   deleteSubscription: Scalars['String']['output'];
+  deleteSystemLog: Scalars['String']['output'];
   deleteUser: Scalars['String']['output'];
   login: Scalars['String']['output'];
   logout: Scalars['String']['output'];
@@ -134,6 +153,11 @@ export type MutationCreateSubscriptionArgs = {
 };
 
 
+export type MutationCreateSystemLogArgs = {
+  data: CreateLogInput;
+};
+
+
 export type MutationCreateUserArgs = {
   user: UserInput;
 };
@@ -167,6 +191,11 @@ export type MutationDeleteResourceArgs = {
 
 export type MutationDeleteSubscriptionArgs = {
   userId: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteSystemLogArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -225,6 +254,8 @@ export type Query = {
   getReportsByUser: Array<Report>;
   getResourceById?: Maybe<Resource>;
   getResourcesByUserId: Array<Resource>;
+  getSystemLogById?: Maybe<SystemLog>;
+  getSystemLogs: Array<SystemLog>;
   getUserInfo: UserInfo;
   getUserSharedResources: Array<Resource>;
   getUserSubscription?: Maybe<Subscription>;
@@ -269,6 +300,18 @@ export type QueryGetResourceByIdArgs = {
 
 export type QueryGetResourcesByUserIdArgs = {
   userId: Scalars['ID']['input'];
+};
+
+
+export type QueryGetSystemLogByIdArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryGetSystemLogsArgs = {
+  limit?: Scalars['Float']['input'];
+  offset?: Scalars['Float']['input'];
+  type?: InputMaybe<LogType>;
 };
 
 
@@ -336,6 +379,17 @@ export type Subscription = {
   endAt: Scalars['DateTimeISO']['output'];
   id: Scalars['ID']['output'];
   paidAt: Scalars['DateTimeISO']['output'];
+};
+
+export type SystemLog = {
+  __typename?: 'SystemLog';
+  createdAt: Scalars['String']['output'];
+  details?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  ipAddress?: Maybe<Scalars['String']['output']>;
+  message: Scalars['String']['output'];
+  type: LogType;
+  userId?: Maybe<Scalars['String']['output']>;
 };
 
 export type User = {
@@ -465,6 +519,41 @@ export type GetUserSubscriptionQueryVariables = Exact<{
 
 
 export type GetUserSubscriptionQuery = { __typename?: 'Query', getUserSubscription?: { __typename?: 'Subscription', id: string, paidAt: any, endAt: any } | null };
+
+export type CreateSystemLogMutationVariables = Exact<{
+  data: CreateLogInput;
+}>;
+
+
+export type CreateSystemLogMutation = { __typename?: 'Mutation', createSystemLog: { __typename?: 'SystemLog', id: string, type: LogType, message: string, details?: string | null, userId?: string | null, ipAddress?: string | null, createdAt: string } };
+
+export type DeleteSystemLogMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DeleteSystemLogMutation = { __typename?: 'Mutation', deleteSystemLog: string };
+
+export type ClearSystemLogsMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ClearSystemLogsMutation = { __typename?: 'Mutation', clearSystemLogs: string };
+
+export type GetSystemLogsQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  offset?: InputMaybe<Scalars['Float']['input']>;
+  type?: InputMaybe<LogType>;
+}>;
+
+
+export type GetSystemLogsQuery = { __typename?: 'Query', getSystemLogs: Array<{ __typename?: 'SystemLog', id: string, type: LogType, message: string, details?: string | null, userId?: string | null, ipAddress?: string | null, createdAt: string }> };
+
+export type GetSystemLogByIdQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type GetSystemLogByIdQuery = { __typename?: 'Query', getSystemLogById?: { __typename?: 'SystemLog', id: string, type: LogType, message: string, details?: string | null, userId?: string | null, ipAddress?: string | null, createdAt: string } | null };
 
 export type LoginMutationVariables = Exact<{
   data: UserInput;
@@ -1119,6 +1208,200 @@ export type GetUserSubscriptionQueryHookResult = ReturnType<typeof useGetUserSub
 export type GetUserSubscriptionLazyQueryHookResult = ReturnType<typeof useGetUserSubscriptionLazyQuery>;
 export type GetUserSubscriptionSuspenseQueryHookResult = ReturnType<typeof useGetUserSubscriptionSuspenseQuery>;
 export type GetUserSubscriptionQueryResult = Apollo.QueryResult<GetUserSubscriptionQuery, GetUserSubscriptionQueryVariables>;
+export const CreateSystemLogDocument = gql`
+    mutation CreateSystemLog($data: CreateLogInput!) {
+  createSystemLog(data: $data) {
+    id
+    type
+    message
+    details
+    userId
+    ipAddress
+    createdAt
+  }
+}
+    `;
+export type CreateSystemLogMutationFn = Apollo.MutationFunction<CreateSystemLogMutation, CreateSystemLogMutationVariables>;
+
+/**
+ * __useCreateSystemLogMutation__
+ *
+ * To run a mutation, you first call `useCreateSystemLogMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateSystemLogMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createSystemLogMutation, { data, loading, error }] = useCreateSystemLogMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateSystemLogMutation(baseOptions?: Apollo.MutationHookOptions<CreateSystemLogMutation, CreateSystemLogMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateSystemLogMutation, CreateSystemLogMutationVariables>(CreateSystemLogDocument, options);
+      }
+export type CreateSystemLogMutationHookResult = ReturnType<typeof useCreateSystemLogMutation>;
+export type CreateSystemLogMutationResult = Apollo.MutationResult<CreateSystemLogMutation>;
+export type CreateSystemLogMutationOptions = Apollo.BaseMutationOptions<CreateSystemLogMutation, CreateSystemLogMutationVariables>;
+export const DeleteSystemLogDocument = gql`
+    mutation DeleteSystemLog($id: ID!) {
+  deleteSystemLog(id: $id)
+}
+    `;
+export type DeleteSystemLogMutationFn = Apollo.MutationFunction<DeleteSystemLogMutation, DeleteSystemLogMutationVariables>;
+
+/**
+ * __useDeleteSystemLogMutation__
+ *
+ * To run a mutation, you first call `useDeleteSystemLogMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteSystemLogMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteSystemLogMutation, { data, loading, error }] = useDeleteSystemLogMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteSystemLogMutation(baseOptions?: Apollo.MutationHookOptions<DeleteSystemLogMutation, DeleteSystemLogMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteSystemLogMutation, DeleteSystemLogMutationVariables>(DeleteSystemLogDocument, options);
+      }
+export type DeleteSystemLogMutationHookResult = ReturnType<typeof useDeleteSystemLogMutation>;
+export type DeleteSystemLogMutationResult = Apollo.MutationResult<DeleteSystemLogMutation>;
+export type DeleteSystemLogMutationOptions = Apollo.BaseMutationOptions<DeleteSystemLogMutation, DeleteSystemLogMutationVariables>;
+export const ClearSystemLogsDocument = gql`
+    mutation ClearSystemLogs {
+  clearSystemLogs
+}
+    `;
+export type ClearSystemLogsMutationFn = Apollo.MutationFunction<ClearSystemLogsMutation, ClearSystemLogsMutationVariables>;
+
+/**
+ * __useClearSystemLogsMutation__
+ *
+ * To run a mutation, you first call `useClearSystemLogsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useClearSystemLogsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [clearSystemLogsMutation, { data, loading, error }] = useClearSystemLogsMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useClearSystemLogsMutation(baseOptions?: Apollo.MutationHookOptions<ClearSystemLogsMutation, ClearSystemLogsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ClearSystemLogsMutation, ClearSystemLogsMutationVariables>(ClearSystemLogsDocument, options);
+      }
+export type ClearSystemLogsMutationHookResult = ReturnType<typeof useClearSystemLogsMutation>;
+export type ClearSystemLogsMutationResult = Apollo.MutationResult<ClearSystemLogsMutation>;
+export type ClearSystemLogsMutationOptions = Apollo.BaseMutationOptions<ClearSystemLogsMutation, ClearSystemLogsMutationVariables>;
+export const GetSystemLogsDocument = gql`
+    query GetSystemLogs($limit: Float, $offset: Float, $type: LogType) {
+  getSystemLogs(limit: $limit, offset: $offset, type: $type) {
+    id
+    type
+    message
+    details
+    userId
+    ipAddress
+    createdAt
+  }
+}
+    `;
+
+/**
+ * __useGetSystemLogsQuery__
+ *
+ * To run a query within a React component, call `useGetSystemLogsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSystemLogsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSystemLogsQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      type: // value for 'type'
+ *   },
+ * });
+ */
+export function useGetSystemLogsQuery(baseOptions?: Apollo.QueryHookOptions<GetSystemLogsQuery, GetSystemLogsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetSystemLogsQuery, GetSystemLogsQueryVariables>(GetSystemLogsDocument, options);
+      }
+export function useGetSystemLogsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSystemLogsQuery, GetSystemLogsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetSystemLogsQuery, GetSystemLogsQueryVariables>(GetSystemLogsDocument, options);
+        }
+export function useGetSystemLogsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetSystemLogsQuery, GetSystemLogsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetSystemLogsQuery, GetSystemLogsQueryVariables>(GetSystemLogsDocument, options);
+        }
+export type GetSystemLogsQueryHookResult = ReturnType<typeof useGetSystemLogsQuery>;
+export type GetSystemLogsLazyQueryHookResult = ReturnType<typeof useGetSystemLogsLazyQuery>;
+export type GetSystemLogsSuspenseQueryHookResult = ReturnType<typeof useGetSystemLogsSuspenseQuery>;
+export type GetSystemLogsQueryResult = Apollo.QueryResult<GetSystemLogsQuery, GetSystemLogsQueryVariables>;
+export const GetSystemLogByIdDocument = gql`
+    query GetSystemLogById($id: ID!) {
+  getSystemLogById(id: $id) {
+    id
+    type
+    message
+    details
+    userId
+    ipAddress
+    createdAt
+  }
+}
+    `;
+
+/**
+ * __useGetSystemLogByIdQuery__
+ *
+ * To run a query within a React component, call `useGetSystemLogByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSystemLogByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSystemLogByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetSystemLogByIdQuery(baseOptions: Apollo.QueryHookOptions<GetSystemLogByIdQuery, GetSystemLogByIdQueryVariables> & ({ variables: GetSystemLogByIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetSystemLogByIdQuery, GetSystemLogByIdQueryVariables>(GetSystemLogByIdDocument, options);
+      }
+export function useGetSystemLogByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSystemLogByIdQuery, GetSystemLogByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetSystemLogByIdQuery, GetSystemLogByIdQueryVariables>(GetSystemLogByIdDocument, options);
+        }
+export function useGetSystemLogByIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetSystemLogByIdQuery, GetSystemLogByIdQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetSystemLogByIdQuery, GetSystemLogByIdQueryVariables>(GetSystemLogByIdDocument, options);
+        }
+export type GetSystemLogByIdQueryHookResult = ReturnType<typeof useGetSystemLogByIdQuery>;
+export type GetSystemLogByIdLazyQueryHookResult = ReturnType<typeof useGetSystemLogByIdLazyQuery>;
+export type GetSystemLogByIdSuspenseQueryHookResult = ReturnType<typeof useGetSystemLogByIdSuspenseQuery>;
+export type GetSystemLogByIdQueryResult = Apollo.QueryResult<GetSystemLogByIdQuery, GetSystemLogByIdQueryVariables>;
 export const LoginDocument = gql`
     mutation Login($data: UserInput!) {
   login(data: $data)

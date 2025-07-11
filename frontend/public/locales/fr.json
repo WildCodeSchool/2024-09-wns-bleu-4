@@ -271,11 +271,15 @@
       "viewAll": "Voir tous les fichiers",
       "manageStorage": "Gérer le stockage"
     },
-    "quickActions": {
-      "title": "Actions rapides",
-      "addUser": "Ajouter un utilisateur",
-      "manageRoles": "Gérer les rôles",
-      "viewLogs": "Voir les logs"
+    "logs": {
+      "title": "Journaux d'événements",
+      "empty": "Aucun événement récent",
+      "types": {
+        "success": "Succès",
+        "error": "Erreur",
+        "warning": "Avertissement",
+        "info": "Information"
+      }
     }
   },
   "howItWorks": {

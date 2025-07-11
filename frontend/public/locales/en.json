@@ -273,11 +273,15 @@
       "viewAll": "View All Files",
       "manageStorage": "Manage Storage"
     },
-    "quickActions": {
-      "title": "Quick Actions",
-      "addUser": "Add User",
-      "manageRoles": "Manage Roles",
-      "viewLogs": "View Logs"
+    "logs": {
+      "title": "Event Logs",
+      "empty": "No recent events",
+      "types": {
+        "success": "Success",
+        "error": "Error",
+        "warning": "Warning",
+        "info": "Information"
+      }
     }
   },
   "howItWorks": {
