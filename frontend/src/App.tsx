@@ -15,10 +15,9 @@ import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '@/hooks/useAuth';
 import { Profile } from '@/pages/Profile/profile';
-import HowItWorks from '@/pages/HowItWorks';
+import HowItWorks from '@/pages/HowitWorks';
 import AdminPage from '@/pages/Admin/Admin';
 import AdminRoute from '@/components/AdminRoute';
-import HowItWorks from '@/pages/HowitWorks';
 import NotFound from '@/pages/Error/NotFound';
 import { useTranslation } from 'react-i18next';
 
