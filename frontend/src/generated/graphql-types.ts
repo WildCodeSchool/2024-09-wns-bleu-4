@@ -107,7 +107,6 @@ export type Mutation = {
   deleteSubscription: Scalars['String']['output'];
   deleteSystemLog: Scalars['String']['output'];
   deleteUser: Scalars['String']['output'];
-  logFileDownload: Scalars['String']['output'];
   login: Scalars['String']['output'];
   logout: Scalars['String']['output'];
   refuseContactRequest: Contact;
@@ -201,11 +200,6 @@ export type MutationDeleteSystemLogArgs = {
 
 
 export type MutationDeleteUserArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type MutationLogFileDownloadArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -480,13 +474,6 @@ export type CreateUserAccessMutationVariables = Exact<{
 
 
 export type CreateUserAccessMutation = { __typename?: 'Mutation', createUserAccess: string };
-
-export type LogFileDownloadMutationVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-
-export type LogFileDownloadMutation = { __typename?: 'Mutation', logFileDownload: string };
 
 export type GetAllResourcesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -940,37 +927,6 @@ export function useCreateUserAccessMutation(baseOptions?: Apollo.MutationHookOpt
 export type CreateUserAccessMutationHookResult = ReturnType<typeof useCreateUserAccessMutation>;
 export type CreateUserAccessMutationResult = Apollo.MutationResult<CreateUserAccessMutation>;
 export type CreateUserAccessMutationOptions = Apollo.BaseMutationOptions<CreateUserAccessMutation, CreateUserAccessMutationVariables>;
-export const LogFileDownloadDocument = gql`
-    mutation LogFileDownload($id: ID!) {
-  logFileDownload(id: $id)
-}
-    `;
-export type LogFileDownloadMutationFn = Apollo.MutationFunction<LogFileDownloadMutation, LogFileDownloadMutationVariables>;
-
-/**
- * __useLogFileDownloadMutation__
- *
- * To run a mutation, you first call `useLogFileDownloadMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useLogFileDownloadMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [logFileDownloadMutation, { data, loading, error }] = useLogFileDownloadMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useLogFileDownloadMutation(baseOptions?: Apollo.MutationHookOptions<LogFileDownloadMutation, LogFileDownloadMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<LogFileDownloadMutation, LogFileDownloadMutationVariables>(LogFileDownloadDocument, options);
-      }
-export type LogFileDownloadMutationHookResult = ReturnType<typeof useLogFileDownloadMutation>;
-export type LogFileDownloadMutationResult = Apollo.MutationResult<LogFileDownloadMutation>;
-export type LogFileDownloadMutationOptions = Apollo.BaseMutationOptions<LogFileDownloadMutation, LogFileDownloadMutationVariables>;
 export const GetAllResourcesDocument = gql`
     query GetAllResources {
   getAllResources {
