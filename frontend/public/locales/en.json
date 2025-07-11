@@ -313,6 +313,7 @@
     }
   },
   "fileCard": {
+    "sharedBy": "Shared by",
     "share": {
       "title": "Share file",
       "search": {

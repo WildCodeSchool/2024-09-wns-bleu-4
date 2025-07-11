@@ -306,6 +306,7 @@ export type Resource = {
   path: Scalars['String']['output'];
   reports: Array<Report>;
   url: Scalars['String']['output'];
+  user: User;
   usersWithAccess: Array<User>;
 };
 
@@ -416,7 +417,7 @@ export type GetUserSharedResourcesQueryVariables = Exact<{
 }>;
 
 
-export type GetUserSharedResourcesQuery = { __typename?: 'Query', getUserSharedResources: Array<{ __typename?: 'Resource', id: number, name: string, description: string, path: string, url: string }> };
+export type GetUserSharedResourcesQuery = { __typename?: 'Query', getUserSharedResources: Array<{ __typename?: 'Resource', id: number, name: string, description: string, path: string, url: string, user: { __typename?: 'User', id: string, email: string } }> };
 
 export type CreateSubscriptionMutationVariables = Exact<{
   userId: Scalars['ID']['input'];
@@ -885,6 +886,10 @@ export const GetUserSharedResourcesDocument = gql`
     description
     path
     url
+    user {
+      id
+      email
+    }
   }
 }
     `;

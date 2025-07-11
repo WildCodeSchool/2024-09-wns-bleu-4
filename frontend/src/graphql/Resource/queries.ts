@@ -31,6 +31,10 @@ export const GET_SHARED_RESOURCES = gql`
             description
             path
             url
+            user {
+                id
+                email
+            }
         }
     }
 `;

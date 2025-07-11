@@ -315,6 +315,7 @@
     }
   },
   "fileCard": {
+    "sharedBy": "Partagé par",
     "share": {
       "title": "Partager le fichier",
       "search": {
