@@ -36,7 +36,8 @@
     "getStarted": "Get Started",
     "learnMore": "Learn More",
     "uploadButton": "Transfer your files",
-    "description": "Wild Transfer home page"
+    "description": "Wild Transfer home page",
+    "disclaimer": "Wildtransfer is a study project created by students from the Wild Code School. For security reasons, we advise you not to provide sensitive or personal information. Use temporary emails to register, as well as passwords different from those you usually use, and do not share sensitive files."
   },
   "about": {
     "title": "About Wild Transfer",

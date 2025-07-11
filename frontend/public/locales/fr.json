@@ -36,7 +36,8 @@
     "getStarted": "Commencer",
     "learnMore": "En savoir plus",
     "uploadButton": "Transférer vos fichiers",
-    "description": "Page d'accueil de Wild Transfer"
+    "description": "Page d'accueil de Wild Transfer",
+    "disclaimer": "Wildtransfer est un projet d'étude réalisé par des étudiants de la Wild Code School. Pour des raisons de sécurité nous vous conseillons de ne pas fournir des informations sensibles ou personnelles. Utilisez des emails temporaires pour vous inscrire ainsi que des mots de passe différents de ceux utilisés habituellement et ne partagez pas de fichiers sensibles."
   },
   "about": {
     "title": "À propos de Wild Transfer",
