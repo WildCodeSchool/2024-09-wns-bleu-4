@@ -16,6 +16,10 @@ type Resource = {
     description: string;
     path: string;
     url: string;
+    user?: {
+        id: number;
+        email: string;
+    };
 };
 
 const FilesPage: React.FC = () => {
@@ -194,6 +198,7 @@ const FilesPage: React.FC = () => {
                                     onDelete={() => {}}
                                     myContacts={[]}
                                     isShared={true}
+                                    owner={file.user}
                                 />
                             ),
                         )}

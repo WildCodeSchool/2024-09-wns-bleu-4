@@ -28,6 +28,7 @@ export class Resource extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Field(() => User)
     @ManyToOne(() => User, { onDelete: 'CASCADE' })
     user: User;
 

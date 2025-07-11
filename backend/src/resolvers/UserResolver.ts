@@ -214,7 +214,20 @@ class UserResolver {
         @Arg('userId', () => ID) userId: number,
     ): Promise<Resource[]> {
         const user = await User.findOne({ where: { id: userId }, relations: ['sharedResources'] });
-        return user?.sharedResources ?? [];
+        const sharedResources = user?.sharedResources ?? [];
+        
+        // récup les infos de l'utilisateur propriétaire
+        const resourcesWithOwner = await Promise.all(
+            sharedResources.map(async (resource) => {
+                const resourceWithUser = await Resource.findOne({
+                    where: { id: resource.id },
+                    relations: ['user']
+                });
+                return resourceWithUser;
+            })
+        );
+        
+        return resourcesWithOwner.filter((resource): resource is Resource => resource !== null);
     }
 }
 

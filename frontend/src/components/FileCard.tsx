@@ -30,6 +30,10 @@ interface FileCardProps {
     onDelete: (id: number, name: string) => void;
     myContacts: Contact[];
     isShared?: boolean;
+    owner?: {
+        id: number;
+        email: string;
+    };
 }
 
 const FileCard: React.FC<FileCardProps> = ({
@@ -40,6 +44,7 @@ const FileCard: React.FC<FileCardProps> = ({
     onDelete,
     myContacts,
     isShared = false,
+    owner,
 }) => {
     const { t } = useTranslation();
     const isImage = name.match(/\.(jpg|jpeg|png|gif|webp)$/i);
@@ -165,6 +170,19 @@ const FileCard: React.FC<FileCardProps> = ({
 
                         {size && (
                             <i className="font-normal text-base mb-2">{size}</i>
+                        )}
+
+                        {/* Affichage de l'expéditeur ** */}
+                        {isShared && owner && (
+                            <div className="text-xs text-gray-500 dark:text-gray-500 mb-2">
+                                <span className="font-medium">{t('fileCard.sharedBy')}: </span>
+                                <span 
+                                    className="text-blue-600 dark:text-blue-400 truncate block"
+                                    title={owner.email}
+                                >
+                                    {owner.email}
+                                </span>
+                            </div>
                         )}
 
                         {/* Boutons en bas */}
