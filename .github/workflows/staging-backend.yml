@@ -1,4 +1,4 @@
-name: Compile and push server image
+name: Compile and push backend image
 
 on:
   push:

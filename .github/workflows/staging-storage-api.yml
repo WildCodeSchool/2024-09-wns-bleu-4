@@ -1,4 +1,4 @@
-name: Compile and push frontend image
+name: Compile and push storage api image
 
 on:
   push:
@@ -27,4 +27,4 @@ jobs:
           context: ./frontend
           file: ./frontend/Dockerfile.prod
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.STAGING_FRONT_IMAGE }}:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.STAGING_STORAGE_IMAGE }}:latest
