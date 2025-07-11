@@ -125,9 +125,6 @@ const AdminPage: React.FC = () => {
                                 >
                                     {t('admin.users.viewAll')}
                                 </Button>
-                                <Button variant="outline" size="sm">
-                                    {t('admin.users.manageRoles')}
-                                </Button>
                             </div>
                         </div>
                     </CardContent>

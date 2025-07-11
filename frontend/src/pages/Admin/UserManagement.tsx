@@ -5,10 +5,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { Users, Search, Shield, User, Trash2 } from 'lucide-react';
+import { Users, Search, Shield, User, Trash2, Crown } from 'lucide-react';
 import { GET_ALL_USERS } from '@/graphql/User/queries';
-import { DELETE_USER } from '@/graphql/User/mutations';
+import { DELETE_USER, UPDATE_USER_ROLE } from '@/graphql/User/mutations';
 import { toast } from 'react-toastify';
 
 interface User {
@@ -27,6 +28,9 @@ const UserManagement: React.FC = () => {
     
     const { data, loading, error } = useQuery(GET_ALL_USERS);
     const [deleteUser, { loading: deleteLoading }] = useMutation(DELETE_USER, {
+        refetchQueries: [{ query: GET_ALL_USERS }]
+    });
+    const [updateUserRole, { loading: roleLoading }] = useMutation(UPDATE_USER_ROLE, {
         refetchQueries: [{ query: GET_ALL_USERS }]
     });
 
@@ -53,6 +57,21 @@ const UserManagement: React.FC = () => {
             setUserToDelete(null);
         } catch (error: any) {
             toast.error(error.message || t('admin.users.delete.error'));
+        }
+    };
+
+    const handleRoleChange = async (userId: number, newRole: 'USER' | 'ADMIN') => {
+        try {
+            await updateUserRole({
+                variables: {
+                    id: userId,
+                    role: newRole
+                }
+            });
+            
+            toast.success(t('admin.users.role.success'));
+        } catch (error: any) {
+            toast.error(error.message || t('admin.users.role.error'));
         }
     };
 
@@ -184,6 +203,32 @@ const UserManagement: React.FC = () => {
                                                 {t('admin.users.subscribed')}
                                             </Badge>
                                         )}
+                                        
+                                        {/* Sélecteur de rôle */}
+                                        <Select
+                                            value={user.role}
+                                            onValueChange={(value: 'USER' | 'ADMIN') => handleRoleChange(user.id, value)}
+                                            disabled={roleLoading}
+                                        >
+                                            <SelectTrigger className="w-32">
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="USER">
+                                                    <div className="flex items-center gap-2">
+                                                        <User className="h-4 w-4" />
+                                                        {t('admin.users.roles.user')}
+                                                    </div>
+                                                </SelectItem>
+                                                <SelectItem value="ADMIN">
+                                                    <div className="flex items-center gap-2">
+                                                        <Crown className="h-4 w-4" />
+                                                        {t('admin.users.roles.admin')}
+                                                    </div>
+                                                </SelectItem>
+                                            </SelectContent>
+                                        </Select>
+
                                         <AlertDialog>
                                             <AlertDialogTrigger asChild>
                                                 <Button 

@@ -32,3 +32,9 @@ export const DELETE_USER = gql`
         deleteUser(id: $id)
     }
 `;
+
+export const UPDATE_USER_ROLE = gql`
+    mutation UpdateUserRole($id: ID!, $role: UserRole!) {
+        updateUserRole(id: $id, role: $role)
+    }
+`;

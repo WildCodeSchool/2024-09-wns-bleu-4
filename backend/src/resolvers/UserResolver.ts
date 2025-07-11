@@ -268,6 +268,29 @@ class UserResolver {
             throw new Error('Erreur lors de la suppression de l\'utilisateur');
         }
     }
+
+    @Mutation(() => String)
+    async updateUserRole(
+        @Arg('id', () => ID) id: number,
+        @Arg('role', () => UserRole) role: UserRole
+    ): Promise<string> {
+        const user = await User.findOne({ where: { id } });
+
+        if (!user) {
+            throw new Error('L\'utilisateur demandé n\'a pas été trouvé');
+        }
+
+        // Empêcher la modification de son propre rôle
+        // TODO: Ajouter une vérification du contexte pour empêcher l'auto-modification
+
+        try {
+            user.role = role;
+            await User.save(user);
+            return `Rôle de l'utilisateur mis à jour avec succès vers ${role}`;
+        } catch (error) {
+            throw new Error('Erreur lors de la mise à jour du rôle');
+        }
+    }
 }
 
 export default UserResolver;
