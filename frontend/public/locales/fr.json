@@ -28,6 +28,10 @@
     "discover": "Découvrir",
     "whoAreWe": "Qui sommes nous ?",
     "myAccount": "Mon compte",
+    "admin": "Administration",
+    "administration": "Administration",
+    "login": "Connexion",
+    "userMenu": "Menu utilisateur"
     "userMenu": "Menu utilisateur",
     "notFound": {
       "title": "404",
@@ -203,6 +207,44 @@
     "currentPlan": "Plan actuel",
     "upgrade": "Améliorer",
     "downgrade": "Rétrograder"
+  },
+  "admin": {
+    "title": "Panneau d'administration",
+    "description": "Gérer les utilisateurs, fichiers et paramètres système",
+    "access": {
+      "denied": {
+        "notLoggedIn": "Vous devez être connecté pour accéder au panneau d'administration",
+        "notAdmin": "Vous devez être administrateur pour accéder à cette page"
+      }
+    },
+    "stats": {
+      "totalUsers": "Utilisateurs totaux",
+      "usersDescription": "Utilisateurs enregistrés",
+      "totalFiles": "Fichiers totaux",
+      "filesDescription": "Fichiers téléchargés",
+      "admins": "Administrateurs",
+      "adminsDescription": "Utilisateurs administrateurs",
+      "activity": "Activité récente",
+      "activityDescription": "Activité système"
+    },
+    "users": {
+      "title": "Gestion des utilisateurs",
+      "description": "Voir et gérer les comptes utilisateurs, rôles et permissions",
+      "viewAll": "Voir tous les utilisateurs",
+      "manageRoles": "Gérer les rôles"
+    },
+    "files": {
+      "title": "Gestion des fichiers",
+      "description": "Surveiller et gérer les fichiers téléchargés et le stockage",
+      "viewAll": "Voir tous les fichiers",
+      "manageStorage": "Gérer le stockage"
+    },
+    "quickActions": {
+      "title": "Actions rapides",
+      "addUser": "Ajouter un utilisateur",
+      "manageRoles": "Gérer les rôles",
+      "viewLogs": "Voir les logs"
+    }
   },
   "howItWorks": {
     "title": "Comment ça marche ?",
@@ -392,6 +434,9 @@
       "title": "Mon profil",
       "description": "Page de profil"
     },
+    "admin": {
+      "title": "Administration",
+      "description": "Panneau d'administration pour gérer les utilisateurs et fichiers"
     "notFound": {
       "title": "404",
       "description": "Page non trouvée"

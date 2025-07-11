@@ -17,6 +17,7 @@ import {
     ID,
 } from 'type-graphql';
 import { Resource } from '@/entities/Resource';
+import { UserRole } from '@/entities/User';
 
 @InputType()
 export class UserInput implements Partial<User> {
@@ -46,6 +47,9 @@ export class UserInfo {
 
     @Field(() => Boolean, { nullable: true })
     isSubscribed?: boolean;
+
+    @Field(() => UserRole, { nullable: true })
+    role?: UserRole;
 }
 
 @Resolver(User)
@@ -210,7 +214,13 @@ class UserResolver {
         if (context.email) {
             const user = await User.findOne({ where: { email: context.email } });
             if (user) {
-                return { isLoggedIn: true, email: context.email, id: user.id, isSubscribed: user.subscription ? true : false };
+                return { 
+                    isLoggedIn: true, 
+                    email: context.email, 
+                    id: user.id, 
+                    isSubscribed: user.subscription ? true : false,
+                    role: user.role
+                };
             }
         }
         return { isLoggedIn: false };
