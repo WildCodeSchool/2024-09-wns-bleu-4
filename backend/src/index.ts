@@ -5,6 +5,7 @@ import LikeResolver from '@/resolvers/LikeResolver';
 import ReportResolver from '@/resolvers/ReportResolver';
 import ResourceResolver from '@/resolvers/ResourceResolver';
 import SubscriptionResolver from '@/resolvers/SubscriptionResolver';
+import SystemLogResolver from '@/resolvers/SystemLogResolver';
 import UserResolver from '@/resolvers/UserResolver';
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
@@ -29,6 +30,7 @@ const start = async () => {
             ReportResolver,
             SubscriptionResolver,
             ResourceResolver,
+            SystemLogResolver,
         ],
         authChecker: ({ context }, rolesForOperation) => {
             if (context.email) {

@@ -26,3 +26,15 @@ export const CONFIRM_EMAIL = gql`
         confirmEmail(codeByUser: $codeByUser)
     }
 `;
+
+export const DELETE_USER = gql`
+    mutation DeleteUser($id: ID!) {
+        deleteUser(id: $id)
+    }
+`;
+
+export const UPDATE_USER_ROLE = gql`
+    mutation UpdateUserRole($id: ID!, $role: UserRole!) {
+        updateUserRole(id: $id, role: $role)
+    }
+`;

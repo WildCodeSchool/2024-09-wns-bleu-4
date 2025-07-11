@@ -5,6 +5,7 @@ import { Like } from '@/entities/Like';
 import { Report } from '@/entities/Report';
 import { Resource } from '@/entities/Resource';
 import { Subscription } from '@/entities/Subscription';
+import { SystemLog } from '@/entities/SystemLog';
 import { TempUser, User } from '@/entities/User';
 
 export const dataSource = new DataSource({
@@ -13,7 +14,7 @@ export const dataSource = new DataSource({
     username: 'postgres',
     database: 'postgres',
     password: 'example',
-    entities: [Comment, Contact, Like, Report, Resource, Subscription, User, TempUser],
+    entities: [Comment, Contact, Like, Report, Resource, Subscription, SystemLog, User, TempUser],
     synchronize: true,
     logging: ['error', 'query'],
 });

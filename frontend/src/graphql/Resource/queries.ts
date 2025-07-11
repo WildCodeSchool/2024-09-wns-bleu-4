@@ -3,10 +3,15 @@ import { gql } from '@apollo/client';
 export const GET_ALL_RESOURCES = gql`
     query GetAllResources {
         getAllResources {
+            id
             name
             description
             path
             url
+            user {
+                id
+                email
+            }
         }
     }
 `;
@@ -35,6 +40,14 @@ export const GET_SHARED_RESOURCES = gql`
                 id
                 email
             }
+        }
+    }
+`;
+
+export const GET_RESOURCE_STATS = gql`
+    query GetResourceStats {
+        getAllResources {
+            id
         }
     }
 `;
