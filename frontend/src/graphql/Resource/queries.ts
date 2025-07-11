@@ -38,3 +38,11 @@ export const GET_SHARED_RESOURCES = gql`
         }
     }
 `;
+
+export const GET_RESOURCE_STATS = gql`
+    query GetResourceStats {
+        getAllResources {
+            id
+        }
+    }
+`;

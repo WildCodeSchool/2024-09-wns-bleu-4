@@ -29,3 +29,12 @@ export const GET_USER_ID = gql`
         }
     }
 `;
+
+export const GET_USER_STATS = gql`
+    query GetUserStats {
+        getAllUsers {
+            id
+            role
+        }
+    }
+`;
