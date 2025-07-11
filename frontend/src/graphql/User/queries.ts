@@ -16,6 +16,7 @@ export const GET_USER_INFO = gql`
             isLoggedIn
             id
             isSubscribed
+            role
         }
     }
 `;

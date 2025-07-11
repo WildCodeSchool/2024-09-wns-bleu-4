@@ -327,6 +327,7 @@ export type User = {
   __typename?: 'User';
   email: Scalars['String']['output'];
   id: Scalars['ID']['output'];
+  role: UserRole;
   subscription?: Maybe<Subscription>;
 };
 
@@ -336,12 +337,19 @@ export type UserInfo = {
   id?: Maybe<Scalars['ID']['output']>;
   isLoggedIn: Scalars['Boolean']['output'];
   isSubscribed?: Maybe<Scalars['Boolean']['output']>;
+  role?: Maybe<UserRole>;
 };
 
 export type UserInput = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
 };
+
+/** User role enum */
+export enum UserRole {
+  Admin = 'ADMIN',
+  User = 'USER'
+}
 
 export type SendContactRequestMutationVariables = Exact<{
   contactToCreate: ContactInput;
@@ -472,7 +480,7 @@ export type GetAllUsersQuery = { __typename?: 'Query', getAllUsers: Array<{ __ty
 export type GetUserInfoQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUserInfoQuery = { __typename?: 'Query', getUserInfo: { __typename?: 'UserInfo', email?: string | null, isLoggedIn: boolean, id?: string | null, isSubscribed?: boolean | null } };
+export type GetUserInfoQuery = { __typename?: 'Query', getUserInfo: { __typename?: 'UserInfo', email?: string | null, isLoggedIn: boolean, id?: string | null, isSubscribed?: boolean | null, role?: UserRole | null } };
 
 export type GetUserIdQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1201,6 +1209,7 @@ export const GetUserInfoDocument = gql`
     isLoggedIn
     id
     isSubscribed
+    role
   }
 }
     `;

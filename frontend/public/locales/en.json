@@ -28,6 +28,9 @@
     "discover": "Discover",
     "whoAreWe": "Who are we?",
     "myAccount": "My Account",
+    "admin": "Administration",
+    "administration": "Administration",
+    "login": "Login",
     "userMenu": "User menu"
   },
   "home": {
@@ -199,6 +202,44 @@
     "currentPlan": "Current Plan",
     "upgrade": "Upgrade",
     "downgrade": "Downgrade"
+  },
+  "admin": {
+    "title": "Administration Panel",
+    "description": "Manage users, files, and system settings",
+    "access": {
+      "denied": {
+        "notLoggedIn": "You must be logged in to access the admin panel",
+        "notAdmin": "You must be an administrator to access this page"
+      }
+    },
+    "stats": {
+      "totalUsers": "Total Users",
+      "usersDescription": "Registered users",
+      "totalFiles": "Total Files",
+      "filesDescription": "Uploaded files",
+      "admins": "Administrators",
+      "adminsDescription": "Admin users",
+      "activity": "Recent Activity",
+      "activityDescription": "System activity"
+    },
+    "users": {
+      "title": "User Management",
+      "description": "View and manage user accounts, roles, and permissions",
+      "viewAll": "View All Users",
+      "manageRoles": "Manage Roles"
+    },
+    "files": {
+      "title": "File Management",
+      "description": "Monitor and manage uploaded files and storage",
+      "viewAll": "View All Files",
+      "manageStorage": "Manage Storage"
+    },
+    "quickActions": {
+      "title": "Quick Actions",
+      "addUser": "Add User",
+      "manageRoles": "Manage Roles",
+      "viewLogs": "View Logs"
+    }
   },
   "howItWorks": {
     "title": "How it works",
@@ -384,6 +425,10 @@
     "profile": {
       "title": "Profile",
       "description": "Profile page"
+    },
+    "admin": {
+      "title": "Administration",
+      "description": "Administration panel for managing users and files"
     }
   }
 }

@@ -13,7 +13,7 @@ import {
 import { NavigationMenu } from '@/components/ui/navigation-menu';
 import { useAuthContext } from '@/context/useAuthContext';
 import { useLogoutMutation } from '@/generated/graphql-types';
-import { ChevronDown, CreditCard, Files, HelpCircle, Info, LogOut, Menu, Upload, User, UserIcon, Users } from 'lucide-react';
+import { ChevronDown, CreditCard, Files, HelpCircle, Info, LogOut, Menu, Upload, User, UserIcon, Users, Shield } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import SubscribedLogo from '@/components/SubscribedLogo';
@@ -104,6 +104,15 @@ const Header = () => {
                         {t('navigation.subscription')}
                     </Link>
                 </Button>
+                
+                {isAuth && user?.role === 'ADMIN' && (
+                    <Button variant="ghost" asChild>
+                        <Link to="/admin" className="flex items-center gap-2">
+                            <Shield className="h-4 w-4" />
+                            {t('navigation.administration')}
+                        </Link>
+                    </Button>
+                )}
             </NavigationMenu>
 
             {/* Menu mobile */}
@@ -138,6 +147,14 @@ const Header = () => {
                                         {t('navigation.contacts')}
                                     </Link>
                                 </DropdownMenuItem>
+                                {user?.role === 'ADMIN' && (
+                                    <DropdownMenuItem asChild>
+                                        <Link to="/admin" className="flex items-center gap-2">
+                                            <Shield className="h-4 w-4" />
+                                            {t('navigation.administration')}
+                                        </Link>
+                                    </DropdownMenuItem>
+                                )}
                                 <DropdownMenuSeparator />
                             </>
                         )}
@@ -229,6 +246,17 @@ const Header = () => {
                                         {t('navigation.profile')}
                                     </Link>
                                 </DropdownMenuItem>
+                                {user?.role === 'ADMIN' && (
+                                    <DropdownMenuItem asChild>
+                                        <Link
+                                            to="/admin"
+                                            className="cursor-pointer w-full flex items-center gap-2"
+                                        >
+                                            <Shield className="h-4 w-4" />
+                                            {t('navigation.admin')}
+                                        </Link>
+                                    </DropdownMenuItem>
+                                )}
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem
                                     onClick={handleLogout}

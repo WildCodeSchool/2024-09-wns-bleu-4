@@ -16,6 +16,8 @@ import { toast } from 'react-toastify';
 import { useAuth } from '@/hooks/useAuth';
 import { Profile } from '@/pages/Profile/profile';
 import HowItWorks from '@/pages/HowItWorks';
+import AdminPage from '@/pages/Admin/Admin';
+import AdminRoute from '@/components/AdminRoute';
 import { useTranslation } from 'react-i18next';
 
 const App = () => {
@@ -169,6 +171,20 @@ const App = () => {
                                     protected
                                 >
                                     <Profile />
+                                </PageWrapper>
+                            }
+                        />
+                        <Route
+                            path="/admin"
+                            element={
+                                <PageWrapper
+                                    title={t('meta.admin.title')}
+                                    description={t('meta.admin.description')}
+                                    protected
+                                >
+                                    <AdminRoute>
+                                        <AdminPage />
+                                    </AdminRoute>
                                 </PageWrapper>
                             }
                         />

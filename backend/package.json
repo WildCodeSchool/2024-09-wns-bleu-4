@@ -7,6 +7,7 @@
     "scripts": {
         "build": "tsc",
         "seed": "tsx ./src/seeds/index.ts",
+        "create-admin": "tsx ./src/seeds/createAdmin.ts",
         "start:dev": "npm run seed && tsx ./src/index.ts",
         "start:prod": "tsx ./src/index.ts",
         "lint": "eslint .",
