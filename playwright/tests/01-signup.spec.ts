@@ -1,11 +1,7 @@
 import { test, expect } from '@playwright/test';
+import credentials from '../mocks';
 
 test.describe('User Registration', () => {
-
-    const signupMock = {
-        email: "test@test.com",
-        password: "ValidPassword123!",
-    }
 
     test('should display signup form', async ({ page }) => {
         await page.goto('/sign');
@@ -22,7 +18,7 @@ test.describe('User Registration', () => {
         
         // Try to submit with invalid email
         await page.getByLabel('Email').fill('invalid');
-        await page.getByLabel('Mot de passe').fill(signupMock.password);
+        await page.getByLabel('Mot de passe').fill(credentials.password);
         
         // Button should be disabled with invalid email
         await expect(page.getByRole('button', { name: 'Valider' })).toBeDisabled();
@@ -32,7 +28,7 @@ test.describe('User Registration', () => {
         await page.goto('/sign');
         
         // Try to submit with weak password
-        await page.getByLabel('Email').fill(signupMock.email);
+        await page.getByLabel('Email').fill(credentials.email);
         await page.getByLabel('Mot de passe').fill('weak');
         
         // Button should be disabled with weak password
@@ -52,7 +48,7 @@ test.describe('User Registration', () => {
         await page.goto('/sign');
         
         // Fill email and start typing password
-        await page.getByLabel('Email').fill(signupMock.email);
+        await page.getByLabel('Email').fill(credentials.email);
         await page.getByLabel('Mot de passe').fill('weak');
         
         // Should show password validation errors
@@ -90,8 +86,8 @@ test.describe('User Registration', () => {
         await page.goto('/sign');
         
         // Fill form with valid data
-        await page.getByLabel('Email').fill(signupMock.email);
-        await page.getByLabel('Mot de passe').fill(signupMock.password);
+        await page.getByLabel('Email').fill(credentials.email);
+        await page.getByLabel('Mot de passe').fill(credentials.password);
         
         // Submit form
         await page.getByRole('button', { name: 'Valider' }).click();
