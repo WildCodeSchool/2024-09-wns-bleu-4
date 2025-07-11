@@ -271,7 +271,24 @@
       "title": "File Management",
       "description": "Monitor and manage uploaded files and storage",
       "viewAll": "View All Files",
-      "manageStorage": "Manage Storage"
+      "search": {
+        "placeholder": "Search for a file by name, description or user..."
+      },
+      "stats": {
+        "total": "Total files",
+        "users": "Active users",
+        "size": "Total size"
+      },
+      "list": {
+        "title": "File list",
+        "empty": "No files found",
+        "noResults": "No files match your search"
+      },
+      "sharedBy": "Shared by",
+      "actions": {
+        "download": "Download",
+        "delete": "Delete"
+      }
     },
     "logs": {
       "title": "Event Logs",

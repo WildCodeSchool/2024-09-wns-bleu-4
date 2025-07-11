@@ -180,11 +180,12 @@ const AdminPage: React.FC = () => {
                                 {t('admin.files.description')}
                             </p>
                             <div className="flex gap-2">
-                                <Button variant="outline" size="sm">
+                                <Button 
+                                    variant="outline" 
+                                    size="sm"
+                                    onClick={() => navigate('/admin/files')}
+                                >
                                     {t('admin.files.viewAll')}
-                                </Button>
-                                <Button variant="outline" size="sm">
-                                    {t('admin.files.manageStorage')}
                                 </Button>
                             </div>
                         </div>

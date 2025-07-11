@@ -478,7 +478,7 @@ export type CreateUserAccessMutation = { __typename?: 'Mutation', createUserAcce
 export type GetAllResourcesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllResourcesQuery = { __typename?: 'Query', getAllResources: Array<{ __typename?: 'Resource', name: string, description: string, path: string, url: string }> };
+export type GetAllResourcesQuery = { __typename?: 'Query', getAllResources: Array<{ __typename?: 'Resource', id: number, name: string, description: string, path: string, url: string, user: { __typename?: 'User', id: string, email: string } }> };
 
 export type GetResourcesByUserIdQueryVariables = Exact<{
   userId: Scalars['ID']['input'];
@@ -930,10 +930,15 @@ export type CreateUserAccessMutationOptions = Apollo.BaseMutationOptions<CreateU
 export const GetAllResourcesDocument = gql`
     query GetAllResources {
   getAllResources {
+    id
     name
     description
     path
     url
+    user {
+      id
+      email
+    }
   }
 }
     `;

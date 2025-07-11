@@ -269,7 +269,24 @@
       "title": "Gestion des fichiers",
       "description": "Surveiller et gérer les fichiers téléchargés et le stockage",
       "viewAll": "Voir tous les fichiers",
-      "manageStorage": "Gérer le stockage"
+      "search": {
+        "placeholder": "Rechercher un fichier par nom, description ou utilisateur..."
+      },
+      "stats": {
+        "total": "Total fichiers",
+        "users": "Utilisateurs actifs",
+        "size": "Taille totale"
+      },
+      "list": {
+        "title": "Liste des fichiers",
+        "empty": "Aucun fichier trouvé",
+        "noResults": "Aucun fichier ne correspond à votre recherche"
+      },
+      "sharedBy": "Partagé par",
+      "actions": {
+        "download": "Télécharger",
+        "delete": "Supprimer"
+      }
     },
     "logs": {
       "title": "Journaux d'événements",
