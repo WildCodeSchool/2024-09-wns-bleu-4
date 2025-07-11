@@ -31,7 +31,6 @@
     "admin": "Administration",
     "administration": "Administration",
     "login": "Connexion",
-    "userMenu": "Menu utilisateur"
     "userMenu": "Menu utilisateur",
     "notFound": {
       "title": "404",
@@ -437,6 +436,7 @@
     "admin": {
       "title": "Administration",
       "description": "Panneau d'administration pour gérer les utilisateurs et fichiers"
+    },
     "notFound": {
       "title": "404",
       "description": "Page non trouvée"
