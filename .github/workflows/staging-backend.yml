@@ -1,8 +1,10 @@
 name: Compile and push backend image
 
 on:
-  pull_request:
+  pull_request_target:
+    types: [closed]
     branches: ["dev"]
+    
   workflow_dispatch:
 jobs:
   build:

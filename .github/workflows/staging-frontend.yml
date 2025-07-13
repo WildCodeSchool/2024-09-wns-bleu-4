@@ -1,7 +1,8 @@
 name: Compile and push frontend image
 
 on:
-  pull_request:
+  pull_request_target:
+    types: [closed]
     branches: ["dev"]
 
   workflow_dispatch:
