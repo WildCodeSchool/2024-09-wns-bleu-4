@@ -32,7 +32,7 @@ export class ResourceInput implements Partial<Resource> {
 class ResourceResolver {
     @Query(() => [Resource])
     async getAllResources(): Promise<Resource[]> {
-        return await Resource.find();
+        return await Resource.find({ relations: ['user'] });
     }
 
     @Query(() => Resource, { nullable: true })

@@ -233,19 +233,79 @@
       "title": "User Management",
       "description": "View and manage user accounts, roles, and permissions",
       "viewAll": "View All Users",
-      "manageRoles": "Manage Roles"
+      "manageRoles": "Manage Roles",
+      "search": {
+        "placeholder": "Search for a user by email..."
+      },
+      "stats": {
+        "total": "Total users",
+        "admins": "Administrators",
+        "users": "Users"
+      },
+      "list": {
+        "title": "User list",
+        "empty": "No users found",
+        "noResults": "No users match your search"
+      },
+      "subscribed": "Subscribed",
+      "actions": {
+        "edit": "Edit",
+        "delete": "Delete"
+      },
+      "delete": {
+        "title": "Delete user",
+        "description": "Are you sure you want to delete user {{email}}? This action is irreversible and will permanently delete the account.",
+        "confirm": "Yes, delete",
+        "success": "User deleted successfully",
+        "error": "Error deleting user"
+      },
+      "role": {
+        "success": "User role updated successfully",
+        "error": "Error updating user role"
+      },
+      "roles": {
+        "user": "User",
+        "admin": "Administrator"
+      }
     },
     "files": {
       "title": "File Management",
       "description": "Monitor and manage uploaded files and storage",
       "viewAll": "View All Files",
-      "manageStorage": "Manage Storage"
+      "search": {
+        "placeholder": "Search for a file by name, description or user..."
+      },
+      "stats": {
+        "total": "Total files",
+        "users": "Active users",
+        "size": "Total size"
+      },
+      "list": {
+        "title": "File list",
+        "empty": "No files found",
+        "noResults": "No files match your search"
+      },
+      "sharedBy": "Shared by",
+      "actions": {
+        "download": "Download",
+        "downloadSuccess": "File downloaded successfully",
+        "delete": "Delete"
+      },
+      "delete": {
+        "description": "Are you sure you want to delete the file {{name}}? This action is irreversible.",
+        "success": "File deleted successfully",
+        "error": "Error deleting file"
+      }
     },
-    "quickActions": {
-      "title": "Quick Actions",
-      "addUser": "Add User",
-      "manageRoles": "Manage Roles",
-      "viewLogs": "View Logs"
+    "logs": {
+      "title": "Event Logs",
+      "empty": "No recent events",
+      "types": {
+        "success": "Success",
+        "error": "Error",
+        "warning": "Warning",
+        "info": "Information"
+      }
     }
   },
   "howItWorks": {
@@ -436,6 +496,10 @@
     "admin": {
       "title": "Administration",
       "description": "Administration panel for managing users and files"
+    },
+    "userManagement": {
+      "title": "User Management",
+      "description": "Manage user accounts, roles and permissions"
     },
     "notFound": {
       "title": "404",

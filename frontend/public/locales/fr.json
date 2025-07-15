@@ -231,19 +231,79 @@
       "title": "Gestion des utilisateurs",
       "description": "Voir et gérer les comptes utilisateurs, rôles et permissions",
       "viewAll": "Voir tous les utilisateurs",
-      "manageRoles": "Gérer les rôles"
+      "manageRoles": "Gérer les rôles",
+      "search": {
+        "placeholder": "Rechercher un utilisateur par email..."
+      },
+      "stats": {
+        "total": "Total utilisateurs",
+        "admins": "Administrateurs",
+        "users": "Utilisateurs"
+      },
+      "list": {
+        "title": "Liste des utilisateurs",
+        "empty": "Aucun utilisateur trouvé",
+        "noResults": "Aucun utilisateur ne correspond à votre recherche"
+      },
+      "subscribed": "Abonné",
+      "actions": {
+        "edit": "Modifier",
+        "delete": "Supprimer"
+      },
+      "delete": {
+        "title": "Supprimer l'utilisateur",
+        "description": "Êtes-vous sûr de vouloir supprimer l'utilisateur {{email}} ? Cette action est irréversible et supprimera définitivement le compte.",
+        "confirm": "Oui, supprimer",
+        "success": "Utilisateur supprimé avec succès",
+        "error": "Erreur lors de la suppression de l'utilisateur"
+      },
+      "role": {
+        "success": "Rôle de l'utilisateur mis à jour avec succès",
+        "error": "Erreur lors de la mise à jour du rôle"
+      },
+      "roles": {
+        "user": "Utilisateur",
+        "admin": "Administrateur"
+      }
     },
     "files": {
       "title": "Gestion des fichiers",
       "description": "Surveiller et gérer les fichiers téléchargés et le stockage",
       "viewAll": "Voir tous les fichiers",
-      "manageStorage": "Gérer le stockage"
+      "search": {
+        "placeholder": "Rechercher un fichier par nom, description ou utilisateur..."
+      },
+      "stats": {
+        "total": "Total fichiers",
+        "users": "Utilisateurs actifs",
+        "size": "Taille totale"
+      },
+      "list": {
+        "title": "Liste des fichiers",
+        "empty": "Aucun fichier trouvé",
+        "noResults": "Aucun fichier ne correspond à votre recherche"
+      },
+      "sharedBy": "Partagé par",
+      "actions": {
+        "download": "Télécharger",
+        "downloadSuccess": "Fichier téléchargé avec succès",
+        "delete": "Supprimer"
+      },
+      "delete": {
+        "description": "Êtes-vous sûr de vouloir supprimer le fichier {{name}} ? Cette action est irréversible.",
+        "success": "Fichier supprimé avec succès",
+        "error": "Erreur lors de la suppression du fichier"
+      }
     },
-    "quickActions": {
-      "title": "Actions rapides",
-      "addUser": "Ajouter un utilisateur",
-      "manageRoles": "Gérer les rôles",
-      "viewLogs": "Voir les logs"
+    "logs": {
+      "title": "Journaux d'événements",
+      "empty": "Aucun événement récent",
+      "types": {
+        "success": "Succès",
+        "error": "Erreur",
+        "warning": "Avertissement",
+        "info": "Information"
+      }
     }
   },
   "howItWorks": {
@@ -437,6 +497,10 @@
     "admin": {
       "title": "Administration",
       "description": "Panneau d'administration pour gérer les utilisateurs et fichiers"
+    },
+    "userManagement": {
+      "title": "Gestion des utilisateurs",
+      "description": "Gérer les comptes utilisateurs, rôles et permissions"
     },
     "notFound": {
       "title": "404",
