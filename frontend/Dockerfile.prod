@@ -15,4 +15,4 @@ COPY tsconfig.json tsconfig.json
 COPY tsconfig.node.json tsconfig.node.json
 COPY vite.config.ts vite.config.ts
 
-RUN npm run build
+CMD ["npm", "run", "build"]
