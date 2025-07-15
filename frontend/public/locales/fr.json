@@ -216,7 +216,23 @@
     "error": {
       "title": "Erreur d'abonnement",
       "description": "Un problème est survenu lors de l'activation de votre abonnement. Veuillez réessayer ou contacter le support."
-    }
+    },
+    "premiumPlan": {
+      "name": "ABONNEMENT PREMIUM",
+      "description": "Accès complet à la plateforme de transfert de fichiers",
+      "startNow": "Commencer maintenant",
+      "perMonth": "par mois"
+    },
+    "feature": {
+      "unlimitedTransfer": "Transfert de fichiers illimité",
+      "shareWithContacts": "Partage avec vos contacts",
+      "emailSupport": "Support par email",
+      "allFeatures": "Accès à toutes les fonctionnalités",
+      "modernUI": "Interface moderne et intuitive",
+      "enhancedSecurity": "Sécurité renforcée"
+    },
+    "simpleEffectiveTitle": "Abonnement simple et efficace",
+    "simpleEffectiveDescription": "Un seul plan pour tous vos besoins de transfert de fichiers. Accès complet à toutes les fonctionnalités de la plateforme."
   },
   "payment": {
     "page": {

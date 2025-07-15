@@ -218,7 +218,23 @@
     "error": {
       "title": "Subscription Error",
       "description": "There was a problem activating your subscription. Please try again or contact support."
-    }
+    },
+    "premiumPlan": {
+      "name": "PREMIUM SUBSCRIPTION",
+      "description": "Full access to the file transfer platform",
+      "startNow": "Start now",
+      "perMonth": "per month"
+    },
+    "feature": {
+      "unlimitedTransfer": "Unlimited file transfer",
+      "shareWithContacts": "Share with your contacts",
+      "emailSupport": "Email support",
+      "allFeatures": "Access to all features",
+      "modernUI": "Modern and intuitive interface",
+      "enhancedSecurity": "Enhanced security"
+    },
+    "simpleEffectiveTitle": "Simple and effective subscription",
+    "simpleEffectiveDescription": "One plan for all your file transfer needs. Full access to all platform features."
   },
   "payment": {
     "page": {

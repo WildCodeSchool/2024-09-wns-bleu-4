@@ -24,7 +24,6 @@ import NotFound from '@/pages/Error/NotFound';
 import { useTranslation } from 'react-i18next';
 import Payment from '@/pages/Subscription/Payment';
 import SubscriptionSuccess from './pages/Subscription/SubscriptionSuccess';
-import SubscriptionError from './pages/Subscription/SubscripyionError';
 
 const App = () => {
     const { t } = useTranslation();
@@ -146,18 +145,6 @@ const App = () => {
                                     protected
                                 >
                                     <SubscriptionSuccess />
-                                </PageWrapper>
-                            }
-                        />
-                        <Route
-                            path="/subscription/error"
-                            element={
-                                <PageWrapper
-                                    title={t('meta.subscription.error.title')}
-                                    description={t('meta.subscription.error.description')}
-                                    protected
-                                >
-                                    <SubscriptionError />
                                 </PageWrapper>
                             }
                         />
