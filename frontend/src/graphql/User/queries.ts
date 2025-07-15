@@ -21,6 +21,7 @@ export const GET_USER_INFO = gql`
             id
             isSubscribed
             role
+            profilePicture
         }
     }
 `;

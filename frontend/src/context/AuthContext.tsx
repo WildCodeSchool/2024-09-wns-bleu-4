@@ -5,12 +5,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const { data, loading, refetch } = useGetUserInfoQuery();
 
     const isAuth = !!data?.getUserInfo.id;
-    const user = isAuth ? { 
-        email: data?.getUserInfo.email ?? null,
-        id: data?.getUserInfo.id ? Number(data.getUserInfo.id) : undefined,
-        isSubscribed: data?.getUserInfo.isSubscribed ? true : false,
-        role: data?.getUserInfo.role ?? undefined
-    } : null;
+    const user = isAuth
+        ? {
+              email: data?.getUserInfo.email ?? null,
+              id: data?.getUserInfo.id
+                  ? Number(data.getUserInfo.id)
+                  : undefined,
+              isSubscribed: data?.getUserInfo.isSubscribed ? true : false,
+              role: data?.getUserInfo.role ?? undefined,
+              profilePicture: data?.getUserInfo.profilePicture ?? null,
+          }
+        : null;
 
     const refreshAuth = () => {
         refetch();
