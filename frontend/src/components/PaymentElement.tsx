@@ -90,10 +90,10 @@ export const PaymentElement: React.FC<PaymentElementProps> = ({
       <div className="flex flex-col items-center justify-center p-8 space-y-4">
         <CheckCircle className="h-16 w-16 text-green-500" />
         <h2 className="text-2xl font-bold text-green-600">
-          {t('payment.success.title', 'Payment Successful!')}
+          {t('payment.success.title')}
         </h2>
-        <p className="text-gray-600 text-center">
-          {t('payment.success.description', 'Your subscription has been activated successfully.')}
+        <p className="text-gray-600 dark:text-white text-center">
+          {t('payment.success.description')}
         </p>
       </div>
     );
@@ -105,8 +105,8 @@ export const PaymentElement: React.FC<PaymentElementProps> = ({
         <h2 className="text-2xl font-bold">
           {t('payment.title', 'Complete Your Payment')}
         </h2>
-        <p className="text-gray-600">
-          {t('payment.description', 'Enter your payment details to complete your subscription')}
+        <p className="text-gray-600 dark:text-muted-foreground">
+          {t('payment.description')}
         </p>
         <div className="text-lg font-semibold text-primary">
           {formatAmount(amount)}
@@ -155,7 +155,7 @@ export const PaymentElement: React.FC<PaymentElementProps> = ({
         </Button>
       </form>
 
-      <div className="text-xs text-gray-500 text-center">
+      <div className="text-xs text-gray-500 dark:text-white text-center">
         {t('payment.security.notice', 'Your payment information is secure and encrypted')}
       </div>
     </div>

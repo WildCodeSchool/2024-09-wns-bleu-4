@@ -9,6 +9,7 @@ import { useCheckout } from '@/hooks/useCheckout';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Loader2 } from 'lucide-react';
+import { toast } from 'react-toastify';
 
 export default function Payment() {
   const { t } = useTranslation();
@@ -18,8 +19,8 @@ export default function Payment() {
   
   const [clientSecret, setClientSecret] = useState<string | null>(null);
 
-  // Subscription amount in cents (€9.00 = 900 cents)
-  const subscriptionAmount = 900;
+  // Subscription amount in cents (€4.00 = 400 cents)
+  const subscriptionAmount = 400;
 
   useEffect(() => {
     const initializePayment = async () => {
@@ -44,81 +45,47 @@ export default function Payment() {
           setClientSecret(result.paymentIntentId);
         }
       } catch (err) {
-        console.error('Failed to initialize payment:', err);
+        toast.error(err as string);
       }
     };
 
     initializePayment();
   }, [user, createPaymentIntent, navigate]);
 
-  const handlePaymentSuccess = (paymentIntentId: string) => {
-    console.log('Payment successful:', paymentIntentId);
-    // In a real implementation, you'd update the user's subscription status
-    navigate('/subscription/success');
+  const handlePaymentSuccess = () => {
+    toast.success('Payment successful');
   };
 
   const handlePaymentError = (error: string) => {
-    console.error('Payment failed:', error);
-    // You could show a toast notification here
+    toast.error(error);
   };
-
-  const handleBack = () => {
-    navigate('/subscription');
-  };
-
-  if (!user) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <p className="text-gray-600">Please log in to continue</p>
-          <Button onClick={() => navigate('/login')} className="mt-4">
-            Go to Login
-          </Button>
-        </div>
-      </div>
-    );
-  }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-4">
-        {/* Header */}
-        <div className="mb-8">
-          <Button
-            variant="ghost"
-            onClick={handleBack}
-            className="mb-4"
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            {t('common.back', 'Back')}
+    <div className="dark:bg-black min-h-screen bg-gray-50 py-8">
+      
+        <div className="mb-6">
+          <Button variant="outline" onClick={() => navigate('/subscription')}>
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              {t('common.back')}
           </Button>
-          
-          <div className="text-center">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              {t('payment.page.title', 'Complete Your Subscription')}
-            </h1>
-            <p className="text-gray-600">
-              {t('payment.page.description', 'You\'re just one step away from accessing all premium features')}
-            </p>
-          </div>
         </div>
 
         {/* Payment Form */}
-        <div className="bg-white rounded-lg shadow-sm border">
+        <div className="bg-white dark:bg-black">
           {isLoading ? (
             <div className="flex items-center justify-center p-12">
               <div className="text-center">
                 <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-primary" />
-                <p className="text-gray-600">
-                  {t('payment.initializing', 'Initializing payment...')}
+                <p className="text-gray-600 dark:text-white">
+                  {t('payment.initializing')}
                 </p>
               </div>
             </div>
           ) : error ? (
             <div className="p-8 text-center">
-              <p className="text-red-600 mb-4">{error}</p>
+              <p className="text-red-600 dark:text-white mb-4">{error}</p>
               <Button onClick={() => window.location.reload()}>
-                {t('common.retry', 'Try Again')}
+                {t('common.retry')}
               </Button>
             </div>
           ) : clientSecret ? (
@@ -132,20 +99,12 @@ export default function Payment() {
             </StripeProvider>
           ) : (
             <div className="p-8 text-center">
-              <p className="text-gray-600">
-                {t('payment.loading', 'Loading payment form...')}
+              <p className="text-gray-600 dark:text-white">
+                {t('payment.loading')}
               </p>
             </div>
           )}
         </div>
-
-        {/* Security Notice */}
-        <div className="mt-8 text-center">
-          <p className="text-sm text-gray-500">
-            {t('payment.security.notice', 'Your payment information is secure and encrypted by Stripe')}
-          </p>
-        </div>
       </div>
-    </div>
   );
 }

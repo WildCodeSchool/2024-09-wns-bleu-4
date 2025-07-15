@@ -18,9 +18,13 @@ Add the following environment variables to your `.env` file:
 
 ```env
 # Stripe Configuration
+
+## Backend
 STRIPE_SECRET_KEY=sk_test_your_stripe_secret_key_here
-STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_publishable_key_here
 STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret_here
+
+## Frontend
+STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_publishable_key_here
 
 # Optional: Stripe Price IDs for subscriptions
 STRIPE_PREMIUM_PRICE_ID=price_your_premium_price_id_here

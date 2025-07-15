@@ -2,6 +2,7 @@ import React from 'react';
 import { Elements } from '@stripe/react-stripe-js';
 import { useStripe } from './StripeProvider';
 import { PaymentElement } from './PaymentElement';
+import { useTheme } from '@/hooks/useTheme';
 
 interface StripeElementsProps {
   clientSecret: string;
@@ -17,13 +18,14 @@ export const StripeElements: React.FC<StripeElementsProps> = ({
   onError,
 }) => {
   const { stripe, isLoading, error } = useStripe();
+  const { theme } = useTheme();
 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center p-8">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading payment form...</p>
+          <p className="text-gray-600 dark:text-white">Loading payment form...</p>
         </div>
       </div>
     );
@@ -55,7 +57,8 @@ export const StripeElements: React.FC<StripeElementsProps> = ({
       options={{
         clientSecret,
         appearance: {
-          theme: 'stripe',
+          theme: theme === 'dark' ? 'night' : 'stripe',
+          labels: 'floating',
           variables: {
             colorPrimary: '#0ea5e9',
             colorBackground: '#ffffff',
