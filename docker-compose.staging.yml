@@ -45,16 +45,11 @@ services:
             - ./nginx.conf:/etc/nginx/nginx.conf
             - web-front-build:/web-front-build
             - ./logs:/var/log/nginx
-        depends_on:
-            backend:
-                condition: service_healthy
-            frontend:
-                condition: service_healthy
         ports:
             - 7007:80
 volumes:
   web-front-build:
 
 secrets:
-    JWT_SECRET_KEY:
+    env_file:
         file: ./backend/.env
