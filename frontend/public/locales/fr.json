@@ -208,6 +208,25 @@
     "upgrade": "Améliorer",
     "downgrade": "Rétrograder"
   },
+  "payment": {
+    "page": {
+      "title": "Finalisez votre abonnement",
+      "description": "Vous n'êtes qu'à une étape d'accéder à toutes les fonctionnalités premium"
+    },
+    "title": "Finalisez votre paiement",
+    "description": "Saisissez vos informations de paiement pour finaliser votre abonnement",
+    "processing": "Traitement en cours...",
+    "pay": "Payer maintenant",
+    "initializing": "Initialisation du paiement...",
+    "loading": "Chargement du formulaire de paiement...",
+    "success": {
+      "title": "Paiement réussi !",
+      "description": "Votre abonnement a été activé avec succès."
+    },
+    "security": {
+      "notice": "Vos informations de paiement sont sécurisées et cryptées par Stripe"
+    }
+  },
   "admin": {
     "title": "Panneau d'administration",
     "description": "Gérer les utilisateurs, fichiers et paramètres système",
@@ -473,6 +492,10 @@
     "subscription": {
       "title": "Abonnement",
       "description": "Abonnement au service Wild Transfer"
+    },
+    "payment": {
+      "title": "Paiement d'abonnement",
+      "description": "Finalisez votre paiement d'abonnement pour Wild Transfer"
     },
     "about": {
       "title": "À propos",

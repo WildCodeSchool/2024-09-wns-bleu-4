@@ -22,6 +22,7 @@ import FileManagement from '@/pages/Admin/FileManagement';
 import AdminRoute from '@/components/AdminRoute';
 import NotFound from '@/pages/Error/NotFound';
 import { useTranslation } from 'react-i18next';
+import Payment from '@/pages/Subscription/Payment';
 
 const App = () => {
     const { t } = useTranslation();
@@ -119,6 +120,18 @@ const App = () => {
                                     description={t('meta.subscription.description')}
                                 >
                                     <Subscription />
+                                </PageWrapper>
+                            }
+                        />
+                        <Route
+                            path="/subscription/payment"
+                            element={
+                                <PageWrapper
+                                    title={t('meta.payment.title')}
+                                    description={t('meta.payment.description')}
+                                    protected
+                                >
+                                    <Payment />
                                 </PageWrapper>
                             }
                         />

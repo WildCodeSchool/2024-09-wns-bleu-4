@@ -34,6 +34,7 @@
         "react-jsx": "^1.0.0",
         "reflect-metadata": "^0.2.2",
         "resend": "^4.1.2",
+        "stripe": "^14.21.0",
         "type-graphql": "^2.0.0-rc.2",
         "typeorm": "^0.3.20",
         "uuid": "^11.0.5"

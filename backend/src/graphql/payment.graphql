@@ -1,0 +1,69 @@
+# Payment-related GraphQL operations
+
+# Mutations
+type Mutation {
+  # Create a payment intent for subscription payment
+  createPaymentIntent(
+    amount: Float!
+    currency: String = "eur"
+    description: String = "Wild Transfer Subscription"
+    metadata: String
+  ): String!
+
+  # Confirm a payment using client secret and payment method
+  confirmPayment(
+    clientSecret: String!
+    paymentMethodId: String!
+  ): Boolean!
+
+  # Create a Stripe subscription
+  createStripeSubscription(
+    priceId: String!
+  ): String!
+
+  # Cancel a subscription
+  cancelSubscription(
+    subscriptionId: String!
+  ): Boolean!
+}
+
+# Queries
+type Query {
+  # Get payment intent details
+  getPaymentIntent(
+    paymentIntentId: String!
+  ): String!
+
+  # Get user's Stripe customer ID
+  getUserStripeCustomerId: String
+}
+
+# Example usage:
+# 
+# 1. Create a payment intent:
+# mutation {
+#   createPaymentIntent(
+#     amount: 900
+#     currency: "eur"
+#     description: "Premium Subscription"
+#     metadata: "{\"subscriptionType\":\"premium\"}"
+#   )
+# }
+#
+# 2. Confirm a payment:
+# mutation {
+#   confirmPayment(
+#     clientSecret: "pi_xxx_secret_xxx"
+#     paymentMethodId: "pm_xxx"
+#   )
+# }
+#
+# 3. Get payment intent details:
+# query {
+#   getPaymentIntent(paymentIntentId: "pi_xxx")
+# }
+#
+# 4. Get user's Stripe customer ID:
+# query {
+#   getUserStripeCustomerId
+# } 

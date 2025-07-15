@@ -210,6 +210,25 @@
     "upgrade": "Upgrade",
     "downgrade": "Downgrade"
   },
+  "payment": {
+    "page": {
+      "title": "Complete Your Subscription",
+      "description": "You're just one step away from accessing all premium features"
+    },
+    "title": "Complete Your Payment",
+    "description": "Enter your payment details to complete your subscription",
+    "processing": "Processing...",
+    "pay": "Pay Now",
+    "initializing": "Initializing payment...",
+    "loading": "Loading payment form...",
+    "success": {
+      "title": "Payment Successful!",
+      "description": "Your subscription has been activated successfully."
+    },
+    "security": {
+      "notice": "Your payment information is secure and encrypted by Stripe"
+    }
+  },
   "admin": {
     "title": "Administration Panel",
     "description": "Manage users, files, and system settings",
@@ -472,6 +491,10 @@
     "subscription": {
       "title": "Subscription",
       "description": "Wild Transfer service subscription"
+    },
+    "payment": {
+      "title": "Subscription Payment",
+      "description": "Complete your subscription payment for Wild Transfer"
     },
     "about": {
       "title": "About",
