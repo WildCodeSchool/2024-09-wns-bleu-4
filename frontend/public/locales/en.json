@@ -438,6 +438,32 @@
     "preview": {
       "audio": "Your browser does not support audio playback",
       "video": "Your browser does not support video playback"
+    },
+    "menu": {
+      "info": "Information",
+      "report": "Report"
+    },
+    "info": {
+      "title": "File Information",
+      "name": "File name",
+      "size": "Size",
+      "description": "Description",
+      "owner": "Owner",
+      "url": "URL"
+    },
+    "report": {
+      "title": "Report this file",
+      "description": "Why do you want to report this file?",
+      "reason": "Reason for reporting",
+      "reasons": {
+        "inappropriate": "Inappropriate content",
+        "harassment": "Harassment",
+        "spam": "Spam",
+        "corrupted": "Corrupted or unreadable file",
+        "display": "Display issue",
+        "other": "Other"
+      },
+      "success": "File reported successfully"
     }
   },
   "meta": {

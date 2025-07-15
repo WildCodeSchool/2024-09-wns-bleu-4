@@ -439,6 +439,32 @@
     "preview": {
       "audio": "Votre navigateur ne supporte pas la lecture audio",
       "video": "Votre navigateur ne supporte pas la lecture vidéo"
+    },
+    "menu": {
+      "info": "Informations",
+      "report": "Signaler"
+    },
+    "info": {
+      "title": "Informations sur le fichier",
+      "name": "Nom du fichier",
+      "size": "Taille",
+      "description": "Description",
+      "owner": "Propriétaire",
+      "url": "URL"
+    },
+    "report": {
+      "title": "Signaler ce fichier",
+      "description": "Pourquoi souhaitez-vous signaler ce fichier ?",
+      "reason": "Raison du signalement",
+      "reasons": {
+        "inappropriate": "Contenu inapproprié",
+        "harassment": "Harcèlement",
+        "spam": "Spam",
+        "corrupted": "Fichier corrompu ou illisible",
+        "display": "Problème d'affichage",
+        "other": "Autre"
+      },
+      "success": "Fichier signalé avec succès"
     }
   },
   "meta": {
