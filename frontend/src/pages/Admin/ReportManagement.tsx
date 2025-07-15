@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -32,7 +32,16 @@ const ReportManagement: React.FC = () => {
     const { t } = useTranslation();
     const [searchQuery, setSearchQuery] = useState('');
     
-    const { data, loading, error } = useGetAllReportsQuery();
+    const { data, loading, error, refetch } = useGetAllReportsQuery();
+    
+    // Rechargement automatique toutes les 5 secondes
+    useEffect(() => {
+        const interval = setInterval(() => {
+            refetch();
+        }, 5000); // 5 secondes
+
+        return () => clearInterval(interval);
+    }, [refetch]);
     
     // Debug logs
     console.log('ReportManagement - loading:', loading);
@@ -116,6 +125,9 @@ const ReportManagement: React.FC = () => {
                 </h1>
                 <p className="text-gray-600 dark:text-gray-400 text-center">
                     {t('admin.reports.description')}
+                </p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 text-center mt-2">
+                    La liste se met à jour automatiquement toutes les 5 secondes
                 </p>
             </div>
             
@@ -255,15 +267,6 @@ const ReportManagement: React.FC = () => {
                                             </p>
                                         </div>
                                     )}
-                                    
-                                    <div className="flex gap-2 mt-4">
-                                        <Button variant="outline" size="sm">
-                                            {t('admin.reports.actions.resolve')}
-                                        </Button>
-                                        <Button variant="destructive" size="sm">
-                                            {t('admin.reports.actions.delete')}
-                                        </Button>
-                                    </div>
                                 </div>
                             ))}
                         </div>
