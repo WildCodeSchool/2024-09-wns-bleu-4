@@ -417,10 +417,6 @@ const FileCard: React.FC<FileCardProps> = ({
                                 <p className="text-sm text-gray-600 dark:text-gray-300">{owner.email}</p>
                             </div>
                         )}
-                        <div>
-                            <Label className="text-sm font-medium">{t('fileCard.info.url')}</Label>
-                            <p className="text-sm text-gray-600 dark:text-gray-300 break-all">{url}</p>
-                        </div>
                     </div>
                 </DialogContent>
             </Dialog>
@@ -441,6 +437,20 @@ const FileCard: React.FC<FileCardProps> = ({
                                 <Button
                                     variant="outline"
                                     className="w-full justify-start"
+                                    onClick={() => handleReport('corrupted')}
+                                >
+                                    {t('fileCard.report.reasons.corrupted')}
+                                </Button>
+                                <Button
+                                    variant="outline"
+                                    className="w-full justify-start"
+                                    onClick={() => handleReport('display')}
+                                >
+                                    {t('fileCard.report.reasons.display')}
+                                </Button>
+                                <Button
+                                    variant="outline"
+                                    className="w-full justify-start"
                                     onClick={() => handleReport('inappropriate')}
                                 >
                                     {t('fileCard.report.reasons.inappropriate')}
@@ -458,20 +468,6 @@ const FileCard: React.FC<FileCardProps> = ({
                                     onClick={() => handleReport('spam')}
                                 >
                                     {t('fileCard.report.reasons.spam')}
-                                </Button>
-                                <Button
-                                    variant="outline"
-                                    className="w-full justify-start"
-                                    onClick={() => handleReport('corrupted')}
-                                >
-                                    {t('fileCard.report.reasons.corrupted')}
-                                </Button>
-                                <Button
-                                    variant="outline"
-                                    className="w-full justify-start"
-                                    onClick={() => handleReport('display')}
-                                >
-                                    {t('fileCard.report.reasons.display')}
                                 </Button>
                                 <Button
                                     variant="outline"
