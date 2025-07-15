@@ -8,7 +8,8 @@
     "delete": "Supprimer",
     "edit": "Modifier",
     "submit": "Envoyer",
-    "back": "Retour"
+    "back": "Retour",
+    "backToHome": "Retour à l'accueil"
   },
   "navigation": {
     "title": "Navigation",
@@ -207,7 +208,15 @@
     "title": "Plans d'abonnement",
     "currentPlan": "Plan actuel",
     "upgrade": "Améliorer",
-    "downgrade": "Rétrograder"
+    "downgrade": "Rétrograder",
+    "success": {
+      "title": "Abonnement activé !",
+      "description": "Votre abonnement est maintenant actif. Merci pour votre souscription !"
+    },
+    "error": {
+      "title": "Erreur d'abonnement",
+      "description": "Un problème est survenu lors de l'activation de votre abonnement. Veuillez réessayer ou contacter le support."
+    }
   },
   "payment": {
     "page": {

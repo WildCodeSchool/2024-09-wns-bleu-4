@@ -23,6 +23,8 @@ import AdminRoute from '@/components/AdminRoute';
 import NotFound from '@/pages/Error/NotFound';
 import { useTranslation } from 'react-i18next';
 import Payment from '@/pages/Subscription/Payment';
+import SubscriptionSuccess from './pages/Subscription/SubscriptionSuccess';
+import SubscriptionError from './pages/Subscription/SubscripyionError';
 
 const App = () => {
     const { t } = useTranslation();
@@ -132,6 +134,30 @@ const App = () => {
                                     protected
                                 >
                                     <Payment />
+                                </PageWrapper>
+                            }
+                        />
+                        <Route
+                            path="/subscription/success"
+                            element={
+                                <PageWrapper
+                                    title={t('meta.subscription.success.title')}
+                                    description={t('meta.subscription.success.description')}
+                                    protected
+                                >
+                                    <SubscriptionSuccess />
+                                </PageWrapper>
+                            }
+                        />
+                        <Route
+                            path="/subscription/error"
+                            element={
+                                <PageWrapper
+                                    title={t('meta.subscription.error.title')}
+                                    description={t('meta.subscription.error.description')}
+                                    protected
+                                >
+                                    <SubscriptionError />
                                 </PageWrapper>
                             }
                         />

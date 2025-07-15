@@ -8,7 +8,8 @@
     "delete": "Delete",
     "edit": "Edit",
     "submit": "Submit",
-    "back": "Back"
+    "back": "Back",
+    "backToHome": "Back to home"
   },
   "navigation": {
     "title": "Navigation",
@@ -209,7 +210,15 @@
     "title": "Subscription Plans",
     "currentPlan": "Current Plan",
     "upgrade": "Upgrade",
-    "downgrade": "Downgrade"
+    "downgrade": "Downgrade",
+    "success": {
+      "title": "Subscription Activated!",
+      "description": "Your subscription is now active. Thank you for subscribing!"
+    },
+    "error": {
+      "title": "Subscription Error",
+      "description": "There was a problem activating your subscription. Please try again or contact support."
+    }
   },
   "payment": {
     "page": {
