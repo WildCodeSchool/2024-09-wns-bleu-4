@@ -113,7 +113,7 @@ Adminer pour la gestion de la base de données : port 8080
 ```
   npm test
 ```
-## Interface de test d'emails :
+## Interface de test d'emails :.
 ### Terminal - Backend
 ```
   npm email

@@ -5,6 +5,10 @@ export const GET_ALL_USERS = gql`
         getAllUsers {
             id
             email
+            role
+            subscription {
+                id
+            }
         }
     }
 `;
@@ -26,6 +30,18 @@ export const GET_USER_ID = gql`
         getUserInfo {
             id
             email
+        }
+    }
+`;
+
+export const GET_USER_STATS = gql`
+    query GetUserStats {
+        getAllUsers {
+            id
+            role
+            subscription {
+                id
+            }
         }
     }
 `;
