@@ -17,27 +17,27 @@ services:
                 condition: service_healthy
     backend:
         image: jeynox/staging_back
-        command: sh -c "npm run build && npm run start:prod"
         expose:
-            - 5000
+            - 4000
         environment:
             - NODE_ENV=production
-            - SERVER_PORT=5000
-            - JWT_SECRET_KEY=/run/env/jwt_secret_key
+            - SERVER_PORT=4000
+        env_file:
+            - ./.env
         depends_on:
             - db
     frontend:
         image: jeynox/staging_front
-        command: sh -c "npm run build"
         volumes:
-            - web-front-build:/app/build
+            - web-front-build:/app/dist
         environment:
-        - NODE_ENV=production  
+            - NODE_ENV=production  
     storage-api:
         image: jeynox/staging_storage
-        command: sh -c "npm run build && npm run start:prod"
         environment:
-        - NODE_ENV=production  
+            - NODE_ENV=production
+        expose:
+            - 3000
 
     api_gateway:
         image: nginx
@@ -46,10 +46,6 @@ services:
             - web-front-build:/web-front-build
             - ./logs:/var/log/nginx
         ports:
-            - 7007:80
+            - 7008:80
 volumes:
   web-front-build:
-
-secrets:
-    env_file:
-        file: ./backend/.env
