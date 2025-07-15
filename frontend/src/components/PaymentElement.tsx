@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useStripe, useElements, PaymentElement as StripePaymentElement } from '@stripe/react-stripe-js';
-import { useCheckout } from '@/hooks/useCheckout';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Loader2, CheckCircle, XCircle } from 'lucide-react';
@@ -21,17 +20,10 @@ export const PaymentElement: React.FC<PaymentElementProps> = ({
   const { t } = useTranslation();
   const stripe = useStripe();
   const elements = useElements();
-  const { confirmPayment, isLoading, error, clearError } = useCheckout();
   
   const [paymentStatus, setPaymentStatus] = useState<'idle' | 'processing' | 'success' | 'error'>('idle');
   const [paymentError, setPaymentError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (error) {
-      setPaymentError(error);
-      setPaymentStatus('error');
-    }
-  }, [error]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -43,7 +35,7 @@ export const PaymentElement: React.FC<PaymentElementProps> = ({
     }
 
     setPaymentStatus('processing');
-    clearError();
+    setIsLoading(true);
 
     try {
       const { error: submitError } = await elements.submit();
@@ -55,26 +47,32 @@ export const PaymentElement: React.FC<PaymentElementProps> = ({
         return;
       }
 
-      // For this template, we'll use a simplified approach
-      // In a real implementation, you'd handle the payment method creation properly
-      const result = await confirmPayment(clientSecret, {
-        id: 'temp_payment_method',
-        type: 'card',
+      // Confirm the payment using Stripe Elements
+      const { error: confirmError } = await stripe.confirmPayment({
+        elements,
+        clientSecret,
+        confirmParams: {
+          return_url: `${window.location.origin}/subscription/success`,
+        },
       });
 
-      if (result.success) {
-        setPaymentStatus('success');
-        onSuccess?.(result.paymentIntentId || '');
-      } else {
-        setPaymentError(result.error || 'Payment failed');
+      if (confirmError) {
+        setPaymentError(confirmError.message || 'Payment confirmation failed');
         setPaymentStatus('error');
-        onError?.(result.error || 'Payment failed');
+        onError?.(confirmError.message || 'Payment confirmation failed');
+        return;
       }
+
+      // If we reach here, payment was successful
+      setPaymentStatus('success');
+      onSuccess?.(clientSecret.split('_secret_')[0]); // Extract payment intent ID from client secret
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Payment failed';
       setPaymentError(errorMessage);
       setPaymentStatus('error');
       onError?.(errorMessage);
+    } finally {
+      setIsLoading(false);
     }
   };
 

@@ -69,7 +69,10 @@ export class StripeService {
         try {
             const { clientSecret, paymentMethodId } = options;
 
-            const paymentIntent = await stripe.paymentIntents.confirm(clientSecret, {
+            // Extract payment intent ID from client secret
+            const paymentIntentId = clientSecret.split('_secret_')[0];
+
+            const paymentIntent = await stripe.paymentIntents.confirm(paymentIntentId, {
                 payment_method: paymentMethodId,
             });
 
