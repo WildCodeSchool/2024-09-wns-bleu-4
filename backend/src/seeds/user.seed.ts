@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker';
 import { User, UserRole } from '../entities/User';
 import * as argon2 from 'argon2';
+import { Subscription, SubscriptionStatus } from '@/entities/Subscription';
 
 const generateSecurePassword = () => {
     const length = faker.number.int({ min: 12, max: 16 });
@@ -35,6 +36,26 @@ export const seedUsers = async () => {
     } else {
         console.log(`ℹ️ Admin(s) already exist: ${adminCount}`);
     }
+
+    // Creation d'un user avec un abonnement premium + Admin
+    const subscription = Subscription.create({
+        status: SubscriptionStatus.ACTIVE,
+        paidAt: new Date(),
+        endAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 jours
+    });
+    await subscription.save();
+
+    const premiumUserPassword = await argon2.hash('Premium@123456');
+    const premiumUser = User.create({
+        email: 'premium@example.com',
+        password: premiumUserPassword,
+        role: UserRole.ADMIN,
+        lastLoggedAt: new Date(),
+        createdAt: new Date(),
+        subscription,
+    });
+    await premiumUser.save();
+    console.log('✅ Premium user created');
 
     // Vérifier combien d'utilisateurs USER il y a
     const userCount = await User.count({ where: { role: UserRole.USER } });
