@@ -527,6 +527,9 @@
         }
     },
     "avatar": {
+        "altWithEmail": "Photo de profil de {{email}}",
+        "altWithoutEmail": "Photo de profil utilisateur",
+        "uploadLabel": "Télécharger une nouvelle photo de profil",
         "upload": {
             "title": "Mettre à jour la photo de profil",
             "dragDrop": "Glissez-déposez une image ici, ou cliquez pour sélectionner",

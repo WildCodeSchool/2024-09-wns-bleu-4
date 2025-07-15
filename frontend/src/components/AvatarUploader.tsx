@@ -119,6 +119,7 @@ export const AvatarUploader = ({
             <button
                 onClick={handleClick}
                 disabled={isUploading}
+                aria-label={t('avatar.uploadLabel')}
                 className="absolute -bottom-2 -right-2 bg-white dark:bg-zinc-800 rounded-full p-2 shadow-md hover:shadow-lg transition-shadow border border-gray-200 dark:border-zinc-700"
             >
                 {isUploading ? (

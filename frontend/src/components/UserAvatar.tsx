@@ -1,5 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
+import { useTranslation } from 'react-i18next';
 
 interface UserAvatarProps {
     user?: {
@@ -39,6 +40,7 @@ export const UserAvatar = ({
     showFallback = true,
     onClick,
 }: UserAvatarProps) => {
+    const { t } = useTranslation();
     const avatarSrc = user?.profilePicture || getPlaceholderUrl();
 
     return (

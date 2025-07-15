@@ -457,6 +457,9 @@
         }
     },
     "avatar": {
+        "altWithEmail": "Profile picture of {{email}}",
+        "altWithoutEmail": "User profile picture",
+        "uploadLabel": "Upload new profile picture",
         "upload": {
             "title": "Update Profile Picture",
             "dragDrop": "Drag and drop an image here, or click to select",
