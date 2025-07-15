@@ -224,6 +224,8 @@
       "filesDescription": "Fichiers téléchargés",
       "admins": "Administrateurs",
       "adminsDescription": "Utilisateurs administrateurs",
+      "reports": "Signalements",
+      "reportsDescription": "Signalements de fichiers",
       "activity": "Activité récente",
       "activityDescription": "Activité système"
     },
@@ -293,6 +295,36 @@
         "description": "Êtes-vous sûr de vouloir supprimer le fichier {{name}} ? Cette action est irréversible.",
         "success": "Fichier supprimé avec succès",
         "error": "Erreur lors de la suppression du fichier"
+      }
+    },
+    "reports": {
+      "title": "Gestion des signalements",
+      "description": "Surveiller et gérer les signalements de fichiers par les utilisateurs",
+      "viewAll": "Voir tous les signalements",
+      "search": {
+        "placeholder": "Rechercher un signalement par utilisateur ou fichier..."
+      },
+      "stats": {
+        "total": "Total signalements",
+        "pending": "En attente",
+        "resolved": "Résolus"
+      },
+      "list": {
+        "title": "Liste des signalements",
+        "empty": "Aucun signalement trouvé",
+        "noResults": "Aucun signalement ne correspond à votre recherche"
+      },
+      "details": {
+        "reporter": "Signalé par",
+        "fileOwner": "Propriétaire du fichier",
+        "fileName": "Nom du fichier",
+        "reason": "Raison",
+        "content": "Détails",
+        "createdAt": "Créé le"
+      },
+      "actions": {
+        "resolve": "Résoudre",
+        "delete": "Supprimer"
       }
     },
     "logs": {
@@ -465,6 +497,7 @@
         "other": "Autre"
       },
       "success": "Fichier signalé avec succès",
+      "error": "Erreur lors du signalement",
       "confirm": {
         "title": "Confirmer le signalement",
         "description": "Êtes-vous sûr de vouloir signaler ce fichier pour",

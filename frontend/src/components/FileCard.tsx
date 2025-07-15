@@ -5,6 +5,7 @@ import video from '@/assets/images/video.png';
 import { getFormattedSizeFromUrl } from '@/lib/utils';
 import { Contact, ContactStatus } from '@/generated/graphql-types';
 import { CREATE_USER_ACCESS } from '@/graphql/Resource/mutations';
+import { CREATE_REPORT } from '@/graphql/Report/mutations';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
@@ -69,6 +70,7 @@ const FileCard: React.FC<FileCardProps> = ({
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [size, setSize] = useState<string | null>(null);
     const [createUserAccess] = useMutation(CREATE_USER_ACCESS);
+    const [createReport] = useMutation(CREATE_REPORT);
     const [selectedContacts, setSelectedContacts] = useState<Contact[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
     const { user } = useAuthContext();
@@ -146,13 +148,26 @@ const FileCard: React.FC<FileCardProps> = ({
         setPendingReportReason(reason);
     };
 
-    const handleConfirmReport = () => {
-        if (pendingReportReason) {
-            // TODO: Implémenter l'appel à l'API pour signaler le fichier
-            console.log('Signalement du fichier:', { fileId: id, reason: pendingReportReason });
-            toast.success(t('fileCard.report.success'));
-            setShowReportDialog(false);
-            setPendingReportReason(null);
+    const handleConfirmReport = async () => {
+        if (pendingReportReason && user) {
+            try {
+                await createReport({
+                    variables: {
+                        input: {
+                            userId: user.id,
+                            resourceId: id,
+                            reason: pendingReportReason.toUpperCase(),
+                            content: `Signalement: ${t(`fileCard.report.reasons.${pendingReportReason}`)}`,
+                        },
+                    },
+                });
+                toast.success(t('fileCard.report.success'));
+                setShowReportDialog(false);
+                setPendingReportReason(null);
+            } catch (error) {
+                console.error('Erreur lors du signalement:', error);
+                toast.error(t('fileCard.report.error'));
+            }
         }
     };
 

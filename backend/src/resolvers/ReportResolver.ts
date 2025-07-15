@@ -3,6 +3,7 @@ import { Resource } from '@/entities/Resource';
 import { User } from '@/entities/User';
 import {
     Arg,
+    Authorized,
     Field,
     ID,
     InputType,
@@ -24,6 +25,21 @@ export class ReportInput implements Partial<Report> {
 
     @Field(() => Reason)
     reason?: Reason | undefined;
+}
+
+@InputType()
+export class CreateReportInput {
+    @Field(() => ID)
+    userId: number;
+
+    @Field(() => ID)
+    resourceId: number;
+
+    @Field(() => String, { nullable: true })
+    content?: string;
+
+    @Field(() => Reason)
+    reason: Reason;
 }
 
 @Resolver(Report)
@@ -50,6 +66,16 @@ class ReportResolver {
         return reports;
     }
 
+    @Authorized('admin')
+    @Query(() => [Report])
+    async getAllReports(): Promise<Report[]> {
+        const reports = await Report.find({
+            relations: ['user', 'resource', 'resource.user'],
+            order: { createdAt: 'DESC' },
+        });
+        return reports;
+    }
+
     @Mutation(() => Report)
     async createReport(
         @Arg('newReport', () => ReportInput) newReport: Report,
@@ -57,6 +83,43 @@ class ReportResolver {
         const report = Report.create(newReport);
         await report.save();
         return report;
+    }
+
+    @Mutation(() => Report)
+    async createReportByIds(
+        @Arg('input', () => CreateReportInput) input: CreateReportInput,
+    ): Promise<Report> {
+        const user = await User.findOne({ where: { id: input.userId } });
+        const resource = await Resource.findOne({ where: { id: input.resourceId } });
+        
+        if (!user) {
+            throw new Error('Utilisateur non trouvé');
+        }
+        
+        if (!resource) {
+            throw new Error('Ressource non trouvée');
+        }
+
+        const report = Report.create({
+            user,
+            resource,
+            content: input.content,
+            reason: input.reason,
+        });
+        
+        await report.save();
+        
+        // Recharger le report avec toutes ses relations
+        const savedReport = await Report.findOne({
+            where: { id: report.id },
+            relations: ['user', 'resource', 'resource.user'],
+        });
+        
+        if (!savedReport) {
+            throw new Error('Erreur lors de la création du signalement');
+        }
+        
+        return savedReport;
     }
 
     @Mutation(() => String)

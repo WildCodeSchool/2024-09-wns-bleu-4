@@ -226,6 +226,8 @@
       "filesDescription": "Uploaded files",
       "admins": "Administrators",
       "adminsDescription": "Admin users",
+      "reports": "Reports",
+      "reportsDescription": "File reports",
       "activity": "Recent Activity",
       "activityDescription": "System activity"
     },
@@ -295,6 +297,36 @@
         "description": "Are you sure you want to delete the file {{name}}? This action is irreversible.",
         "success": "File deleted successfully",
         "error": "Error deleting file"
+      }
+    },
+    "reports": {
+      "title": "Report Management",
+      "description": "Monitor and manage file reports from users",
+      "viewAll": "View all reports",
+      "search": {
+        "placeholder": "Search for a report by user or file..."
+      },
+      "stats": {
+        "total": "Total reports",
+        "pending": "Pending",
+        "resolved": "Resolved"
+      },
+      "list": {
+        "title": "Report List",
+        "empty": "No reports found",
+        "noResults": "No reports match your search"
+      },
+      "details": {
+        "reporter": "Reported by",
+        "fileOwner": "File owner",
+        "fileName": "File name",
+        "reason": "Reason",
+        "content": "Details",
+        "createdAt": "Created on"
+      },
+      "actions": {
+        "resolve": "Resolve",
+        "delete": "Delete"
       }
     },
     "logs": {
@@ -464,6 +496,7 @@
         "other": "Other"
       },
       "success": "File reported successfully",
+      "error": "Error reporting file",
       "confirm": {
         "title": "Confirm Report",
         "description": "Are you sure you want to report this file for",
