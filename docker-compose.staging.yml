@@ -49,3 +49,5 @@ services:
             - 7008:80
 volumes:
   web-front-build:
+
+  
