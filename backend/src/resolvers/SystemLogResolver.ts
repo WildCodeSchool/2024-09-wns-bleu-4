@@ -23,9 +23,6 @@ export class CreateLogInput {
 
     @Field(() => String, { nullable: true })
     userId?: string;
-
-    @Field(() => String, { nullable: true })
-    ipAddress?: string;
 }
 
 @Resolver(SystemLog)
@@ -62,7 +59,6 @@ class SystemLogResolver {
     ): Promise<SystemLog> {
         const log = SystemLog.create({
             ...data,
-            ipAddress: data.ipAddress || context.ipAddress,
             userId: data.userId || context.email,
         });
 
@@ -92,15 +88,13 @@ class SystemLogResolver {
         type: LogType,
         message: string,
         details?: string,
-        userId?: string,
-        ipAddress?: string
+        userId?: string
     ): Promise<SystemLog> {
         const log = SystemLog.create({
             type,
             message,
             details,
             userId,
-            ipAddress,
         });
 
         return await SystemLog.save(log);

@@ -8,7 +8,6 @@ export const GET_SYSTEM_LOGS = gql`
             message
             details
             userId
-            ipAddress
             createdAt
         }
     }
@@ -22,7 +21,6 @@ export const GET_SYSTEM_LOG_BY_ID = gql`
             message
             details
             userId
-            ipAddress
             createdAt
         }
     }

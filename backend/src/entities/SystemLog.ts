@@ -56,14 +56,6 @@ export class SystemLog extends BaseEntity {
     })
     userId?: string;
 
-    @Field(() => String, { nullable: true })
-    @Column({
-        type: 'varchar',
-        length: 45,
-        nullable: true,
-    })
-    ipAddress?: string;
-
     @Field(() => String)
     @CreateDateColumn()
     createdAt: Date;

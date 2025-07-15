@@ -61,7 +61,6 @@ export type ContactsResponse = {
 
 export type CreateLogInput = {
   details?: InputMaybe<Scalars['String']['input']>;
-  ipAddress?: InputMaybe<Scalars['String']['input']>;
   message: Scalars['String']['input'];
   type: LogType;
   userId?: InputMaybe<Scalars['String']['input']>;
@@ -386,7 +385,6 @@ export type SystemLog = {
   createdAt: Scalars['String']['output'];
   details?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
-  ipAddress?: Maybe<Scalars['String']['output']>;
   message: Scalars['String']['output'];
   type: LogType;
   userId?: Maybe<Scalars['String']['output']>;
@@ -525,7 +523,7 @@ export type CreateSystemLogMutationVariables = Exact<{
 }>;
 
 
-export type CreateSystemLogMutation = { __typename?: 'Mutation', createSystemLog: { __typename?: 'SystemLog', id: string, type: LogType, message: string, details?: string | null, userId?: string | null, ipAddress?: string | null, createdAt: string } };
+export type CreateSystemLogMutation = { __typename?: 'Mutation', createSystemLog: { __typename?: 'SystemLog', id: string, type: LogType, message: string, details?: string | null, userId?: string | null, createdAt: string } };
 
 export type DeleteSystemLogMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -546,14 +544,14 @@ export type GetSystemLogsQueryVariables = Exact<{
 }>;
 
 
-export type GetSystemLogsQuery = { __typename?: 'Query', getSystemLogs: Array<{ __typename?: 'SystemLog', id: string, type: LogType, message: string, details?: string | null, userId?: string | null, ipAddress?: string | null, createdAt: string }> };
+export type GetSystemLogsQuery = { __typename?: 'Query', getSystemLogs: Array<{ __typename?: 'SystemLog', id: string, type: LogType, message: string, details?: string | null, userId?: string | null, createdAt: string }> };
 
 export type GetSystemLogByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetSystemLogByIdQuery = { __typename?: 'Query', getSystemLogById?: { __typename?: 'SystemLog', id: string, type: LogType, message: string, details?: string | null, userId?: string | null, ipAddress?: string | null, createdAt: string } | null };
+export type GetSystemLogByIdQuery = { __typename?: 'Query', getSystemLogById?: { __typename?: 'SystemLog', id: string, type: LogType, message: string, details?: string | null, userId?: string | null, createdAt: string } | null };
 
 export type LoginMutationVariables = Exact<{
   data: UserInput;
@@ -1221,7 +1219,6 @@ export const CreateSystemLogDocument = gql`
     message
     details
     userId
-    ipAddress
     createdAt
   }
 }
@@ -1321,7 +1318,6 @@ export const GetSystemLogsDocument = gql`
     message
     details
     userId
-    ipAddress
     createdAt
   }
 }
@@ -1369,7 +1365,6 @@ export const GetSystemLogByIdDocument = gql`
     message
     details
     userId
-    ipAddress
     createdAt
   }
 }
