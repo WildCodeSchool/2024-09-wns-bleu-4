@@ -463,7 +463,13 @@
         "display": "Display issue",
         "other": "Other"
       },
-      "success": "File reported successfully"
+      "success": "File reported successfully",
+      "confirm": {
+        "title": "Confirm Report",
+        "description": "Are you sure you want to report this file for",
+        "cancel": "Cancel",
+        "confirm": "Report"
+      }
     }
   },
   "meta": {

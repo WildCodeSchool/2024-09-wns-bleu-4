@@ -27,6 +27,16 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface FileCardProps {
     name: string;
@@ -64,6 +74,7 @@ const FileCard: React.FC<FileCardProps> = ({
     const { user } = useAuthContext();
     const [showFileInfo, setShowFileInfo] = useState(false);
     const [showReportDialog, setShowReportDialog] = useState(false);
+    const [pendingReportReason, setPendingReportReason] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchSize = async () => {
@@ -131,11 +142,22 @@ const FileCard: React.FC<FileCardProps> = ({
         });
     };
 
-    const handleReport = (reason: string) => {
-        // TODO: Implémenter l'appel à l'API pour signaler le fichier
-        console.log('Signalement du fichier:', { fileId: id, reason });
-        toast.success(t('fileCard.report.success'));
-        setShowReportDialog(false);
+    const handleReportClick = (reason: string) => {
+        setPendingReportReason(reason);
+    };
+
+    const handleConfirmReport = () => {
+        if (pendingReportReason) {
+            // TODO: Implémenter l'appel à l'API pour signaler le fichier
+            console.log('Signalement du fichier:', { fileId: id, reason: pendingReportReason });
+            toast.success(t('fileCard.report.success'));
+            setShowReportDialog(false);
+            setPendingReportReason(null);
+        }
+    };
+
+    const handleCancelReport = () => {
+        setPendingReportReason(null);
     };
 
     const handleCloseDropdown = () => {
@@ -437,42 +459,42 @@ const FileCard: React.FC<FileCardProps> = ({
                                 <Button
                                     variant="outline"
                                     className="w-full justify-start"
-                                    onClick={() => handleReport('corrupted')}
+                                    onClick={() => handleReportClick('corrupted')}
                                 >
                                     {t('fileCard.report.reasons.corrupted')}
                                 </Button>
                                 <Button
                                     variant="outline"
                                     className="w-full justify-start"
-                                    onClick={() => handleReport('display')}
+                                    onClick={() => handleReportClick('display')}
                                 >
                                     {t('fileCard.report.reasons.display')}
                                 </Button>
                                 <Button
                                     variant="outline"
                                     className="w-full justify-start"
-                                    onClick={() => handleReport('inappropriate')}
+                                    onClick={() => handleReportClick('inappropriate')}
                                 >
                                     {t('fileCard.report.reasons.inappropriate')}
                                 </Button>
                                 <Button
                                     variant="outline"
                                     className="w-full justify-start"
-                                    onClick={() => handleReport('harassment')}
+                                    onClick={() => handleReportClick('harassment')}
                                 >
                                     {t('fileCard.report.reasons.harassment')}
                                 </Button>
                                 <Button
                                     variant="outline"
                                     className="w-full justify-start"
-                                    onClick={() => handleReport('spam')}
+                                    onClick={() => handleReportClick('spam')}
                                 >
                                     {t('fileCard.report.reasons.spam')}
                                 </Button>
                                 <Button
                                     variant="outline"
                                     className="w-full justify-start"
-                                    onClick={() => handleReport('other')}
+                                    onClick={() => handleReportClick('other')}
                                 >
                                     {t('fileCard.report.reasons.other')}
                                 </Button>
@@ -481,6 +503,35 @@ const FileCard: React.FC<FileCardProps> = ({
                     </div>
                 </DialogContent>
             </Dialog>
+
+            {/* Dialog de confirmation pour le signalement */}
+            <AlertDialog open={pendingReportReason !== null} onOpenChange={(open) => !open && handleCancelReport()}>
+                <AlertDialogContent className="bg-gray-50 dark:bg-gray-900">
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>{t('fileCard.report.confirm.title')}</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            {t('fileCard.report.confirm.description')}
+                            {pendingReportReason && (
+                                <span className="font-medium">
+                                    {" "}{t(`fileCard.report.reasons.${pendingReportReason}`).toLowerCase()}
+                                </span>
+                            )}
+                            ?
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel onClick={handleCancelReport}>
+                            {t('fileCard.report.confirm.cancel')}
+                        </AlertDialogCancel>
+                        <AlertDialogAction 
+                            onClick={handleConfirmReport}
+                            className="bg-red-600 hover:bg-red-700 text-white"
+                        >
+                            {t('fileCard.report.confirm.confirm')}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </>
     );
 };

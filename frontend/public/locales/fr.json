@@ -464,7 +464,13 @@
         "display": "Problème d'affichage",
         "other": "Autre"
       },
-      "success": "Fichier signalé avec succès"
+      "success": "Fichier signalé avec succès",
+      "confirm": {
+        "title": "Confirmer le signalement",
+        "description": "Êtes-vous sûr de vouloir signaler ce fichier pour",
+        "cancel": "Annuler",
+        "confirm": "Signaler"
+      }
     }
   },
   "meta": {
