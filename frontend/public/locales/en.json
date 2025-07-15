@@ -255,6 +255,13 @@
       "notice": "Your payment information is secure and encrypted by Stripe"
     }
   },
+  "pricing": {
+    "yearlyBilling": "Yearly billing",
+    "save20Percent": "(Save 20%)",
+    "monthlyBilling": "monthly billing",
+    "popular": "Popular",
+    "threeMonths": "3 months"
+  },
   "admin": {
     "title": "Administration Panel",
     "description": "Manage users, files, and system settings",

@@ -8,6 +8,7 @@ import { motion } from 'framer-motion';
 import { Check, Star } from 'lucide-react';
 import { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { buttonVariants } from './ui/variants';
 
 interface PricingPlan {
@@ -33,6 +34,7 @@ export function Pricing({
     title = 'Des tarifs simples et transparents',
     description = 'Choisissez le forfait qui vous convient.\nTous les forfaits incluent un accès à notre plateforme, un espace de stockage sécurisé et une assistance dédiée.',
 }: PricingProps) {
+    const { t } = useTranslation();
     const [isMonthly, setIsMonthly] = useState(true);
     const isDesktop = useMediaQuery('(min-width: 768px)');
     const switchRef = useRef<HTMLButtonElement>(null);
@@ -90,15 +92,15 @@ export function Pricing({
                     </Label>
                 </label>
                 <span className="ml-2 font-semibold">
-                    Facturation annuelle{' '}
-                    <span className="text-primary">(Économisez 20%)</span>
+                    {t('pricing.yearlyBilling')}{' '}
+                    <span className="text-primary">{t('pricing.save20Percent')}</span>
                 </span>
             </div>
 
             <div className={cn(
                 "grid gap-4",
-                isSinglePlan 
-                    ? "grid-cols-1 max-w-2xl mx-auto" 
+                isSinglePlan
+                    ? "grid-cols-1 max-w-2xl mx-auto"
                     : "grid-cols-1 md:grid-cols-3 sm:grid-cols-2"
             )}>
                 {plans.map((plan, index) => {
@@ -159,7 +161,7 @@ export function Pricing({
                                 <div className="absolute top-0 right-0 bg-primary py-0.5 px-2 rounded-bl-xl rounded-tr-xl flex items-center">
                                     <Star className="text-primary-foreground h-4 w-4 fill-current" />
                                     <span className="text-primary-foreground ml-1 font-sans font-semibold">
-                                        Populaire
+                                        {t('pricing.popular')}
                                     </span>
                                 </div>
                             )}
@@ -197,7 +199,7 @@ export function Pricing({
                                     )}>
                                         /{' '}
                                         {plan.period === 'Next 3 months'
-                                            ? '3 mois'
+                                            ? t('pricing.threeMonths')
                                             : plan.period}
                                     </span>
                                 </div>
@@ -207,8 +209,8 @@ export function Pricing({
                                     isSinglePlan && "text-sm"
                                 )}>
                                     {isMonthly
-                                        ? 'facturation mensuelle'
-                                        : 'facturation annuelle'}
+                                        ? t('pricing.monthlyBilling')
+                                        : t('pricing.yearlyBilling')}
                                 </p>
 
                                 <ul className={cn(

@@ -253,6 +253,13 @@
       "notice": "Vos informations de paiement sont sécurisées et cryptées par Stripe"
     }
   },
+  "pricing": {
+    "yearlyBilling": "Facturation annuelle",
+    "save20Percent": "(Économisez 20%)",
+    "monthlyBilling": "facturation mensuelle",
+    "popular": "Populaire",
+    "threeMonths": "3 mois"
+  },
   "admin": {
     "title": "Panneau d'administration",
     "description": "Gérer les utilisateurs, fichiers et paramètres système",
