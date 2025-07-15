@@ -55,8 +55,8 @@ export const UserAvatar = ({
                 className="object-cover"
                 alt={
                     user?.email
-                        ? `Avatar de ${user.email}`
-                        : 'Avatar utilisateur'
+                        ? t('avatar.altWithEmail', { email: user.email })
+                        : t('avatar.altWithoutEmail')
                 }
             />
             {showFallback && (
