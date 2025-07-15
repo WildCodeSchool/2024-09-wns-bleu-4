@@ -1,7 +1,7 @@
 name: Compile and push storage api image
 
 on:
-  pull_request_target:
+  pull_request:
     types: [closed]
     branches: ["dev"]
 
