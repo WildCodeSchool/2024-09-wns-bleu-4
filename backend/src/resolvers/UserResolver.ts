@@ -1,25 +1,24 @@
-import { TempUser, User } from '@/entities/User';
+import { ResetPasswordEmail } from '@/emails/ResetPassword';
+import { VerifyAccountEmail } from '@/emails/VerifyAccount';
+import { Resource } from '@/entities/Resource';
 import { LogType } from '@/entities/SystemLog';
+import { TempUser, User, UserRole } from '@/entities/User';
 import SystemLogResolver from '@/resolvers/SystemLogResolver';
 import * as argon2 from 'argon2';
 import { IsEmail, Length, Matches } from 'class-validator';
 import jwt, { Secret } from 'jsonwebtoken';
 import { Resend } from 'resend';
-import { VerifyAccountEmail } from '@/emails/VerifyAccount'
-import { ResetPasswordEmail } from '@/emails/ResetPassword'
 import {
     Arg,
     Ctx,
     Field,
+    ID,
     InputType,
     Mutation,
     ObjectType,
     Query,
     Resolver,
-    ID,
 } from 'type-graphql';
-import { Resource } from '@/entities/Resource';
-import { UserRole } from '@/entities/User';
 
 @InputType()
 export class UserInput implements Partial<User> {
@@ -34,6 +33,12 @@ export class UserInput implements Partial<User> {
             '🔒 Password must include an uppercase, lowercase, number & special character.',
     })
     password: string;
+}
+
+@InputType()
+export class UpdateProfilePictureInput {
+    @Field(() => String)
+    profilePictureUrl: string;
 }
 
 @ObjectType()
@@ -52,6 +57,9 @@ export class UserInfo {
 
     @Field(() => UserRole, { nullable: true })
     role?: UserRole;
+
+    @Field(() => String, { nullable: true })
+    profilePicture?: string | null;
 }
 
 @Resolver(User)
@@ -59,7 +67,7 @@ class UserResolver {
     @Mutation(() => String)
     async register(
         @Arg('data', () => UserInput) newUserData: User,
-        @Arg('lang', () => String) lang: 'fr' | 'en'
+        @Arg('lang', () => String) lang: string = 'fr',
     ) {
         const existingUser = await User.findOneBy({ email: newUserData.email });
 
@@ -84,8 +92,8 @@ class UserResolver {
                 subject: 'Verify Account Creation',
                 react: VerifyAccountEmail({
                     validationCode: codeToConfirm,
-                    lang: lang as 'fr' | 'en'
-                })
+                    lang: lang as 'fr' | 'en',
+                }),
             });
         } catch (error) {
             throw new Error(error);
@@ -96,11 +104,11 @@ class UserResolver {
     @Mutation(() => String)
     async resetSendCode(
         @Arg('email', () => String) email: string,
-        @Arg('lang', () => String) lang: string
+        @Arg('lang', () => String) lang: string,
     ) {
         const user = await TempUser.findOneBy({ email });
         if (!user) {
-            throw new Error('L\'utilisateur demandé n\'a pas été trouvé');
+            throw new Error("L'utilisateur demandé n'a pas été trouvé");
         }
         const resetCode = Array.from({ length: 8 }, () =>
             Math.floor(Math.random() * 10),
@@ -114,9 +122,9 @@ class UserResolver {
                 subject: 'Reset Password',
                 react: ResetPasswordEmail({
                     userEmail: email,
-                    resetPasswordLink: "#",
-                    lang: lang as 'fr' | 'en'
-                })
+                    resetPasswordLink: '#', // TODO: Replacer par le vrai lien une fois la feature en place + Supprimer ce commentaire
+                    lang: lang as 'fr' | 'en',
+                }),
             });
             return 'Un code de réinitialisation a été envoyé à votre adresse email';
         } catch (error) {
@@ -171,7 +179,7 @@ class UserResolver {
         const user = await User.findOneBy({ email: loginUserData.email });
 
         if (!user) {
-            throw new Error('Aucun compte n\'est associé à cette adresse email');
+            throw new Error("Aucun compte n'est associé à cette adresse email");
         }
 
         try {
@@ -214,14 +222,17 @@ class UserResolver {
     @Query(() => UserInfo)
     async getUserInfo(@Ctx() context: any): Promise<UserInfo> {
         if (context.email) {
-            const user = await User.findOne({ where: { email: context.email } });
+            const user = await User.findOne({
+                where: { email: context.email },
+            });
             if (user) {
-                return { 
-                    isLoggedIn: true, 
-                    email: context.email, 
-                    id: user.id, 
+                return {
+                    isLoggedIn: true,
+                    email: context.email,
+                    id: user.id,
                     isSubscribed: user.subscription ? true : false,
-                    role: user.role
+                    role: user.role,
+                    profilePicture: user.profilePicture,
                 };
             }
         }
@@ -232,32 +243,67 @@ class UserResolver {
     async getUserSharedResources(
         @Arg('userId', () => ID) userId: number,
     ): Promise<Resource[]> {
-        const user = await User.findOne({ where: { id: userId }, relations: ['sharedResources'] });
+        const user = await User.findOne({
+            where: { id: userId },
+            relations: ['sharedResources'],
+        });
         const sharedResources = user?.sharedResources ?? [];
-        
+
         // récup les infos de l'utilisateur propriétaire
         const resourcesWithOwner = await Promise.all(
             sharedResources.map(async (resource) => {
                 const resourceWithUser = await Resource.findOne({
                     where: { id: resource.id },
-                    relations: ['user']
+                    relations: ['user'],
                 });
                 return resourceWithUser;
-            })
+            }),
         );
-        
-        return resourcesWithOwner.filter((resource): resource is Resource => resource !== null);
+
+        return resourcesWithOwner.filter(
+            (resource): resource is Resource => resource !== null,
+        );
+    }
+
+    @Mutation(() => User)
+    async updateProfilePicture(
+        @Arg('data', () => UpdateProfilePictureInput)
+        data: UpdateProfilePictureInput,
+        @Ctx() context: any,
+    ): Promise<User> {
+        if (!context.email) {
+            throw new Error('User not authenticated');
+        }
+
+        const user = await User.findOne({ where: { email: context.email } });
+
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        user.profilePicture = data.profilePictureUrl;
+        await user.save();
+
+        return user;
+
+        // TODO: Optionnel - supprimer l'ancien fichier du storage
     }
 
     @Mutation(() => String)
     async deleteUser(@Arg('id', () => ID) id: number): Promise<string> {
-        const user = await User.findOne({ 
+        const user = await User.findOne({
             where: { id },
-            relations: ['likes', 'reports', 'comments', 'sharedResources', 'subscription']
+            relations: [
+                'likes',
+                'reports',
+                'comments',
+                'sharedResources',
+                'subscription',
+            ],
         });
 
         if (!user) {
-            throw new Error('L\'utilisateur demandé n\'a pas été trouvé');
+            throw new Error("L'utilisateur demandé n'a pas été trouvé");
         }
 
         // Empêcher la suppression de l'utilisateur connecté
@@ -265,37 +311,37 @@ class UserResolver {
 
         try {
             await User.remove(user);
-            
+
             // Log de l'événement
             await SystemLogResolver.logEvent(
                 LogType.SUCCESS,
                 'Utilisateur supprimé',
                 `L'utilisateur ${user.email} a été supprimé du système`,
-                user.email
+                user.email,
             );
-            
+
             return 'Utilisateur supprimé avec succès';
         } catch (error) {
             // Log de l'erreur
             await SystemLogResolver.logEvent(
                 LogType.ERROR,
-                'Erreur lors de la suppression d\'utilisateur',
+                "Erreur lors de la suppression d'utilisateur",
                 `Erreur lors de la suppression de l'utilisateur ${user.email}: ${error}`,
-                user.email
+                user.email,
             );
-            throw new Error('Erreur lors de la suppression de l\'utilisateur');
+            throw new Error("Erreur lors de la suppression de l'utilisateur");
         }
     }
 
     @Mutation(() => String)
     async updateUserRole(
         @Arg('id', () => ID) id: number,
-        @Arg('role', () => UserRole) role: UserRole
+        @Arg('role', () => UserRole) role: UserRole,
     ): Promise<string> {
         const user = await User.findOne({ where: { id } });
 
         if (!user) {
-            throw new Error('L\'utilisateur demandé n\'a pas été trouvé');
+            throw new Error("L'utilisateur demandé n'a pas été trouvé");
         }
 
         // Empêcher la modification de son propre rôle
@@ -305,15 +351,15 @@ class UserResolver {
             const oldRole = user.role;
             user.role = role;
             await User.save(user);
-            
+
             // Log de l'événement
             await SystemLogResolver.logEvent(
                 LogType.SUCCESS,
                 'Rôle utilisateur mis à jour',
                 `L'utilisateur ${user.email} est passé de ${oldRole} à ${role}`,
-                user.email
+                user.email,
             );
-            
+
             return `Rôle de l'utilisateur mis à jour avec succès vers ${role}`;
         } catch (error) {
             // Log de l'erreur
@@ -321,7 +367,7 @@ class UserResolver {
                 LogType.ERROR,
                 'Erreur lors de la mise à jour du rôle',
                 `Erreur lors de la mise à jour du rôle de ${user.email}: ${error}`,
-                user.email
+                user.email,
             );
             throw new Error('Erreur lors de la mise à jour du rôle');
         }

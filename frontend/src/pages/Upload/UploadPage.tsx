@@ -7,7 +7,6 @@ import { useAuth } from '@/hooks/useAuth';
 import { Contact } from '@/generated/graphql-types';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from 'react-toastify';
 import { useGetMyContactsQuery } from '@/generated/graphql-types';
@@ -140,17 +139,6 @@ const UploadPage = () => {
         }
     };
 
-    const toggleContact = (contact: Contact) => {
-        setSelectedContacts(prev => {
-            const isSelected = prev.some(c => c.id === contact.id);
-            if (isSelected) {
-                return prev.filter(c => c.id !== contact.id);
-            } else {
-                return [...prev, contact];
-            }
-        });
-    };
-
     return (
         <div className="mx-auto grid grid-cols-1 gap-8 items-start max-w-2xl">
             <div>
@@ -210,11 +198,6 @@ const UploadPage = () => {
                                                             )
                                                             .map((contact) => (
                                                                 <div key={contact.id} className="flex items-center space-x-2">
-                                                                    <Checkbox
-                                                                        id={`contact-${contact.id}`}
-                                                                        checked={selectedContacts.some(c => c.id === contact.id)}
-                                                                        onCheckedChange={() => toggleContact(contact)}
-                                                                    />
                                                                     <Label
                                                                         htmlFor={`contact-${contact.id}`}
                                                                         className="text-sm font-normal"

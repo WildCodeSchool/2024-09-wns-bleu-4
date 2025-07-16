@@ -1,574 +1,474 @@
 {
-  "common": {
-    "loading": "Loading...",
-    "error": "An error occurred",
-    "success": "Success",
-    "save": "Save",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "edit": "Edit",
-    "submit": "Submit"
-  },
-  "navigation": {
-    "title": "Navigation",
-    "menu": "Navigation menu",
-    "home": "Home",
-    "about": "About",
-    "contact": "Contact",
-    "profile": "Profile",
-    "files": "My Files",
-    "upload": "Upload Files",
-    "subscription": "Subscription",
-    "howItWorks": "How it works",
-    "logIn": "Login",
-    "signUp": "Sign Up",
-    "logOut": "Log Out",
-    "mySpace": "My Space",
-    "contacts": "My Contacts",
-    "discover": "Discover",
-    "whoAreWe": "Who are we?",
-    "myAccount": "My Account",
-    "admin": "Administration",
-    "administration": "Administration",
-    "login": "Login",
-    "userMenu": "User menu",
-    "notFound": {
-      "title": "404",
-      "description": "Page not found",
-      "backToHome": "Back to home"
-    }
-
-  },
-  "home": {
-    "title": "The simple and fast solution for all your file transfers",
-    "subtitle": "Secure and fast file transfer",
-    "getStarted": "Get Started",
-    "learnMore": "Learn More",
-    "uploadButton": "Transfer your files",
-    "description": "Wild Transfer home page",
-    "disclaimer": "Wildtransfer is a study project created by students from the Wild Code School. For security reasons, we advise you not to provide sensitive or personal information. Use temporary emails to register, as well as passwords different from those you usually use, and do not share sensitive files."
-  },
-  "about": {
-    "title": "About Wild Transfer",
-    "subtitle": "A modern platform to transfer your files with peace of mind",
-    "description1": "is a simple, fast and secure solution for file sharing. It is designed for both professionals and individuals, with an intuitive interface designed for a smooth experience.",
-    "description2": "Our mission is to provide a reliable service that respects your privacy. We use modern technologies to ensure the security and confidentiality of your data.",
-    "description3": "Developed by a team of developers, the platform is constantly evolving to meet new uses and offer features adapted to your needs.",
-    "contactText": "For any questions or suggestions, feel free to contact us via the",
-    "contactLink": "contact page",
-    "description": "Learn more about Wild Transfer"
-  },
-  "contact": {
-    "title": "My Contacts",
-    "error": "Error loading contacts",
-    "tabs": {
-      "received": "Received Requests",
-      "contacts": "My Contacts",
-      "sent": "Sent Requests"
-    },
-    "empty": {
-      "requests": {
-        "title": "No requests received",
-        "description": "You don't have any new contact requests."
-      },
-      "contacts": {
-        "title": "No contacts",
-        "description": "Start by adding contacts to expand your network."
-      },
-      "sent": {
-        "title": "No sent requests",
-        "description": "You haven't sent any contact requests yet."
-      },
-      "default": {
-        "title": "No items",
-        "description": "No items to display."
-      }
-    },
-    "actions": {
-      "accept": "Accept",
-      "refuse": "Refuse",
-      "remove": "Remove contact",
-      "cancel": "Cancel",
-      "delete": "Delete"
-    },
-    "delete": {
-      "title": "Remove contact",
-      "description": "Are you sure you want to remove {{email}} from your contacts? This action cannot be undone."
-    },
-    "add": {
-      "button": "Add contacts",
-      "title": "Add a contact",
-      "description": "You can add a contact by entering their email address.",
-      "form": {
-        "email": {
-          "label": "Email address",
-          "placeholder": "example@email.com",
-          "invalid": "Invalid email",
-          "required": "Email is required"
-        }
-      },
-      "actions": {
-        "cancel": "Cancel",
-        "add": "Add",
-        "sending": "Sending..."
-      }
-    }
-  },
-  "profile": {
-    "title": "My Profile",
-    "personalInfo": {
-      "title": "Personal Information",
-      "description": "Edit your personal information."
-    },
-    "form": {
-      "email": {
-        "label": "Email",
-        "placeholder": "Your email address",
-        "readonly": "Email address cannot be modified"
-      },
-      "password": {
-        "label": "Password"
-      }
-    },
-    "actions": {
-      "save": "Save"
-    },
-    "description": "Profile page"
-  },
-  "files": {
-    "title": {
-      "myFiles": "My available files",
-      "noFiles": "You don't have any files yet",
-      "sharedFiles": "Files shared with me",
-      "noSharedFiles": "No files shared with you"
-    },
-    "actions": {
-      "addFiles": "Add files"
-    },
-    "errors": {
-      "invalidResourceId": "Invalid resource ID",
-      "deleting": "Deleting...",
-      "deleteSuccess": "File successfully deleted",
-      "deleteError": "Error deleting file",
-      "storageDeleteError": "Error deleting file from storage",
-      "loadError": "Error loading files"
-    },
-    "uploadNew": "Upload a new file",
-    "search": "Search files",
-    "filter": "Filter"
-  },
-  "upload": {
-    "title": "Upload a file",
-    "dragDrop": {
-      "title": "Transfer your file",
-      "dropHere": "Drop file here",
-      "releaseToUpload": "Release to upload",
-      "browse": "browse",
-      "supportedTypes": "Supports images, documents, videos, and more"
-    },
-    "selectedFile": {
-      "title": "Selected file",
-      "delete": "Delete file"
-    },
-    "description": {
-      "placeholder": "File description (minimum 4 characters)",
-      "charCount": "{{count}}/4 minimum characters"
-    },
-    "submit": {
-      "uploading": "Uploading...",
-      "save": "Save file"
-    },
-    "success": {
-      "message": "✅ File has been successfully uploaded and saved!",
-      "shareNow": "Share now"
-    },
-    "errors": {
-      "upload": "❌ An error occurred. Please try again.",
-      "fileUpload": "Error uploading file",
-      "share": {
-        "noContacts": "Please select at least one contact",
-        "error": "An error occurred while sharing",
-        "success": "File shared successfully",
-        "failed": "Error sharing file"
-      }
-    },
-    "share": {
-      "title": "Share file",
-      "description": "Select the contacts you want to share this file with.",
-      "search": {
-        "label": "Search for a contact",
-        "placeholder": "Search by email..."
-      },
-      "noContacts": "No contacts found",
-      "button": "Share with {{count}} contact",
-      "button_plural": "Share with {{count}} contacts"
-    }
-  },
-  "subscription": {
-    "title": "Subscription Plans",
-    "currentPlan": "Current Plan",
-    "upgrade": "Upgrade",
-    "downgrade": "Downgrade"
-  },
-  "admin": {
-    "title": "Administration Panel",
-    "description": "Manage users, files, and system settings",
-    "access": {
-      "denied": {
-        "notLoggedIn": "You must be logged in to access the admin panel",
-        "notAdmin": "You must be an administrator to access this page"
-      }
-    },
-    "stats": {
-      "totalUsers": "Total Users",
-      "usersDescription": "Registered users",
-      "totalFiles": "Total Files",
-      "filesDescription": "Uploaded files",
-      "admins": "Administrators",
-      "adminsDescription": "Admin users",
-      "reports": "Reports",
-      "reportsDescription": "File reports",
-      "activity": "Recent Activity",
-      "activityDescription": "System activity"
-    },
-    "users": {
-      "title": "User Management",
-      "description": "View and manage user accounts, roles, and permissions",
-      "viewAll": "View All Users",
-      "manageRoles": "Manage Roles",
-      "search": {
-        "placeholder": "Search for a user by email..."
-      },
-      "stats": {
-        "total": "Total users",
-        "admins": "Administrators",
-        "users": "Users"
-      },
-      "list": {
-        "title": "User list",
-        "empty": "No users found",
-        "noResults": "No users match your search"
-      },
-      "subscribed": "Subscribed",
-      "actions": {
-        "edit": "Edit",
-        "delete": "Delete"
-      },
-      "delete": {
-        "title": "Delete user",
-        "description": "Are you sure you want to delete user {{email}}? This action is irreversible and will permanently delete the account.",
-        "confirm": "Yes, delete",
-        "success": "User deleted successfully",
-        "error": "Error deleting user"
-      },
-      "role": {
-        "success": "User role updated successfully",
-        "error": "Error updating user role"
-      },
-      "roles": {
-        "user": "User",
-        "admin": "Administrator"
-      }
-    },
-    "files": {
-      "title": "File Management",
-      "description": "Monitor and manage uploaded files and storage",
-      "viewAll": "View All Files",
-      "search": {
-        "placeholder": "Search for a file by name, description or user..."
-      },
-      "stats": {
-        "total": "Total files",
-        "users": "Active users",
-        "size": "Total size"
-      },
-      "list": {
-        "title": "File list",
-        "empty": "No files found",
-        "noResults": "No files match your search"
-      },
-      "sharedBy": "Shared by",
-      "actions": {
-        "download": "Download",
-        "downloadSuccess": "File downloaded successfully",
-        "delete": "Delete"
-      },
-      "delete": {
-        "description": "Are you sure you want to delete the file {{name}}? This action is irreversible.",
-        "success": "File deleted successfully",
-        "error": "Error deleting file"
-      }
-    },
-    "reports": {
-      "title": "Report Management",
-      "description": "Monitor and manage file reports from users",
-      "viewAll": "View all reports",
-      "search": {
-        "placeholder": "Search for a report by user or file..."
-      },
-      "stats": {
-        "total": "Total reports",
-        "pending": "Pending",
-        "resolved": "Resolved"
-      },
-      "list": {
-        "title": "Report List",
-        "empty": "No reports found",
-        "noResults": "No reports match your search"
-      },
-      "details": {
-        "reporter": "Reported by",
-        "fileOwner": "File owner",
-        "fileName": "File name",
-        "reason": "Reason",
-        "content": "Details",
-        "createdAt": "Created on"
-      },
-      "actions": {
-        "resolve": "Resolve",
-        "delete": "Delete"
-      }
-    },
-    "logs": {
-      "title": "Event Logs",
-      "empty": "No recent events",
-      "types": {
+    "common": {
+        "loading": "Loading...",
+        "error": "An error occurred",
         "success": "Success",
-        "error": "Error",
-        "warning": "Warning",
-        "info": "Information"
-      }
-    }
-  },
-  "howItWorks": {
-    "title": "How it works",
-    "step1": {
-      "title": "Create your account",
-      "description": "Sign up for free in seconds to access all our features."
-    },
-    "step2": {
-      "title": "Transfer your files",
-      "description": "Upload your files securely. We support all common formats."
-    },
-    "step3": {
-      "title": "Manage and share",
-      "description": "Organize your files and share them easily with your contacts."
-    },
-    "cta": {
-      "title": "Ready to get started?",
-      "createAccount": "Create an account",
-      "viewSubscriptions": "View our subscriptions"
-    },
-    "features": {
-      "title": "Key features",
-      "security": {
-        "title": "Maximum security",
-        "description": "Your files are encrypted and stored securely."
-      },
-      "transfer": {
-        "title": "Fast transfer",
-        "description": "Transfer your files quickly with our optimized infrastructure."
-      },
-      "contacts": {
-        "title": "Contact management",
-        "description": "Organize your contacts and share your files easily."
-      },
-      "support": {
-        "title": "24/7 Support",
-        "description": "Our team is available to help you at any time."
-      }
-    }
-  },
-  "auth": {
-    "title": "Authentication",
-    "logoutSuccess": "Successfully logged out",
-    "logIn": {
-      "title": "Log In",
-      "email": "Email",
-      "password": "Password",
-      "rememberMe": "Remember me",
-      "forgotPassword": "Forgot password?"
-    },
-    "signUp": {
-      "title": "Sign Up",
-      "email": "Email",
-      "password": "Password",
-      "confirmPassword": "Confirm Password",
-      "terms": "I agree to the terms and conditions"
-    },
-    "form": {
-      "title": "Please log in to continue",
-      "email": {
-        "label": "Email",
-        "placeholder": "example@example.com",
-        "validation": "Please enter a valid email address"
-      },
-      "password": {
-        "label": "Password",
-        "placeholder": "Your password",
-        "validation": {
-          "minLength": "Password must be at least 12 characters",
-          "uppercase": "Must contain at least one uppercase letter",
-          "number": "Must contain at least one number",
-          "special": "Must contain at least one special character"
-        }
-      },
-      "submit": "Validate",
-      "loading": "{{action}} ..."
-    },
-    "login": {
-      "title": "Login",
-      "success": "Login successful",
-      "error": "Login error",
-      "links": {
-        "forgotPassword": "Forgot password?",
-        "createAccount": "Create an account"
-      }
-    },
-    "signup": {
-      "title": "Sign Up",
-      "success": "Please check your email to confirm your account.",
-      "error": "An unknown error occurred.",
-      "links": {
-        "terms": "By clicking \"Validate\", you have read and accept the",
-        "termsLink": "Terms of Service",
-        "and": "and",
-        "privacyLink": "Privacy Policy"
-      }
-    },
-    "confirm": {
-      "title": "Registration verification",
-      "description": "Please check your email to complete your registration.",
-      "resendEmail": "Resend email",
-      "success": "Your email has been confirmed, you can now log in!",
-      "error": "The entered code is incorrect or has expired, please try again."
-    },
-    "protectedRoute": {
-      "error": "You must be logged in to access this page"
-    }
-  },
-  "fileCard": {
-    "sharedBy": "Shared by",
-    "share": {
-      "title": "Share file",
-      "search": {
-        "label": "Search for a contact",
-        "placeholder": "Search by email..."
-      },
-      "noContacts": "No contacts found",
-      "button": "Share with {{count}} contact{{plural}}",
-      "error": {
-        "noSelection": "Please select at least one contact",
-        "sharing": "Error sharing file"
-      },
-      "success": "File shared successfully"
-    },
-    "delete": {
-      "confirm": "Are you sure you want to delete \"{{name}}\"?",
-      "button": "Delete file"
-    },
-    "preview": {
-      "audio": "Your browser does not support audio playback",
-      "video": "Your browser does not support video playback"
-    },
-    "menu": {
-      "info": "Information",
-      "report": "Report"
-    },
-    "info": {
-      "title": "File Information",
-      "name": "File name",
-      "size": "Size",
-      "description": "Description",
-      "owner": "Owner",
-      "url": "URL"
-    },
-    "report": {
-      "title": "Report this file",
-      "description": "Why do you want to report this file?",
-      "reason": "Reason for reporting",
-      "reasons": {
-        "inappropriate": "Inappropriate content",
-        "harassment": "Harassment",
-        "spam": "Spam",
-        "corrupted": "Corrupted or unreadable file",
-        "display": "Display issue",
-        "other": "Other"
-      },
-      "success": "File reported successfully",
-      "error": "Error reporting file",
-      "confirm": {
-        "title": "Confirm Report",
-        "description": "Are you sure you want to report this file for",
+        "save": "Save",
         "cancel": "Cancel",
-        "confirm": "Report"
-      }
-    }
-  },
-  "meta": {
+        "delete": "Delete",
+        "edit": "Edit",
+        "submit": "Submit"
+    },
+    "navigation": {
+        "title": "Navigation",
+        "menu": "Navigation menu",
+        "home": "Home",
+        "about": "About",
+        "contact": "Contact",
+        "profile": "Profile",
+        "files": "My Files",
+        "upload": "Upload Files",
+        "subscription": "Subscription",
+        "howItWorks": "How it works",
+        "logIn": "Login",
+        "signUp": "Sign Up",
+        "logOut": "Log Out",
+        "mySpace": "My Space",
+        "contacts": "My Contacts",
+        "discover": "Discover",
+        "whoAreWe": "Who are we?",
+        "myAccount": "My Account",
+        "admin": "Administration",
+        "administration": "Administration",
+        "login": "Login",
+        "userMenu": "User menu",
+        "notFound": {
+            "title": "404",
+            "description": "Page not found",
+            "backToHome": "Back to home"
+        }
+    },
     "home": {
-      "title": "Home",
-      "description": "Wild Transfer home page"
-    },
-    "login": {
-      "title": "Login",
-      "description": "Login to your Wild Transfer account"
-    },
-    "signup": {
-      "title": "Sign Up",
-      "description": "Create a Wild Transfer account"
-    },
-    "files": {
-      "title": "My Files",
-      "description": "Your files page"
-    },
-    "upload": {
-      "title": "Transfer Files",
-      "description": "File transfer"
-    },
-    "contacts": {
-      "title": "Contacts",
-      "description": "Contacts page"
-    },
-    "forgotPassword": {
-      "title": "Forgot Password",
-      "description": "Password recovery"
-    },
-    "subscription": {
-      "title": "Subscription",
-      "description": "Wild Transfer service subscription"
+        "title": "The simple and fast solution for all your file transfers",
+        "subtitle": "Secure and fast file transfer",
+        "getStarted": "Get Started",
+        "learnMore": "Learn More",
+        "uploadButton": "Transfer your files",
+        "description": "Wild Transfer home page",
+        "disclaimer": "Wildtransfer is a study project created by students from the Wild Code School. For security reasons, we advise you not to provide sensitive or personal information. Use temporary emails to register, as well as passwords different from those you usually use, and do not share sensitive files."
     },
     "about": {
-      "title": "About",
-      "description": "Learn more about Wild Transfer"
+        "title": "About Wild Transfer",
+        "subtitle": "A modern platform to transfer your files with peace of mind",
+        "description1": "is a simple, fast and secure solution for file sharing. It is designed for both professionals and individuals, with an intuitive interface designed for a smooth experience.",
+        "description2": "Our mission is to provide a reliable service that respects your privacy. We use modern technologies to ensure the security and confidentiality of your data.",
+        "description3": "Developed by a team of developers, the platform is constantly evolving to meet new uses and offer features adapted to your needs.",
+        "contactText": "For any questions or suggestions, feel free to contact us via the",
+        "contactLink": "contact page",
+        "description": "Learn more about Wild Transfer"
     },
-    "sitemap": {
-      "title": "Sitemap",
-      "description": "Wild Transfer sitemap"
-    },
-    "terms": {
-      "title": "Terms of Service",
-      "description": "Terms of Service"
-    },
-    "howItWorks": {
-      "title": "How it works",
-      "description": "How it works"
+    "contact": {
+        "title": "My Contacts",
+        "error": "Error loading contacts",
+        "tabs": {
+            "received": "Received Requests",
+            "contacts": "My Contacts",
+            "sent": "Sent Requests"
+        },
+        "empty": {
+            "requests": {
+                "title": "No requests received",
+                "description": "You don't have any new contact requests."
+            },
+            "contacts": {
+                "title": "No contacts",
+                "description": "Start by adding contacts to expand your network."
+            },
+            "sent": {
+                "title": "No sent requests",
+                "description": "You haven't sent any contact requests yet."
+            },
+            "default": {
+                "title": "No items",
+                "description": "No items to display."
+            }
+        },
+        "actions": {
+            "accept": "Accept",
+            "refuse": "Refuse",
+            "remove": "Remove contact",
+            "cancel": "Cancel",
+            "delete": "Delete"
+        },
+        "delete": {
+            "title": "Remove contact",
+            "description": "Are you sure you want to remove {{email}} from your contacts? This action cannot be undone."
+        },
+        "add": {
+            "button": "Add contacts",
+            "title": "Add a contact",
+            "description": "You can add a contact by entering their email address.",
+            "form": {
+                "email": {
+                    "label": "Email address",
+                    "placeholder": "example@email.com",
+                    "invalid": "Invalid email",
+                    "required": "Email is required"
+                }
+            },
+            "actions": {
+                "cancel": "Cancel",
+                "add": "Add",
+                "sending": "Sending..."
+            }
+        }
     },
     "profile": {
-      "title": "Profile",
-      "description": "Profile page"
+        "title": "My Profile",
+        "personalInfo": {
+            "title": "Personal Information",
+            "description": "Edit your personal information."
+        },
+        "form": {
+            "email": {
+                "label": "Email",
+                "placeholder": "Your email address",
+                "readonly": "Email address cannot be modified"
+            },
+            "password": {
+                "label": "Password"
+            }
+        },
+        "actions": {
+            "save": "Save"
+        },
+        "avatar": {
+            "tooltip": "Click to change your profile picture",
+            "upload": "Change profile picture",
+            "uploading": "Uploading...",
+            "success": "Profile picture updated successfully",
+            "error": {
+                "invalidType": "Unsupported file type. Use JPG, PNG, GIF, WebP or SVG.",
+                "tooLarge": "File is too large. Maximum 10 MB.",
+                "upload": "Error updating your profile picture"
+            }
+        },
+        "description": "Profile page"
+    },
+    "files": {
+        "title": {
+            "myFiles": "My available files",
+            "noFiles": "You don't have any files yet",
+            "sharedFiles": "Files shared with me",
+            "noSharedFiles": "No files shared with you"
+        },
+        "actions": {
+            "addFiles": "Add files"
+        },
+        "errors": {
+            "invalidResourceId": "Invalid resource ID",
+            "deleting": "Deleting...",
+            "deleteSuccess": "File successfully deleted",
+            "deleteError": "Error deleting file",
+            "storageDeleteError": "Error deleting file from storage",
+            "loadError": "Error loading files"
+        },
+        "uploadNew": "Upload a new file",
+        "search": "Search files",
+        "filter": "Filter"
+    },
+    "upload": {
+        "title": "Upload a file",
+        "dragDrop": {
+            "title": "Transfer your file",
+            "dropHere": "Drop file here",
+            "releaseToUpload": "Release to upload",
+            "browse": "browse",
+            "supportedTypes": "Supports images, documents, videos, and more"
+        },
+        "selectedFile": {
+            "title": "Selected file",
+            "delete": "Delete file"
+        },
+        "description": {
+            "placeholder": "File description (minimum 4 characters)",
+            "charCount": "{{count}}/4 minimum characters"
+        },
+        "submit": {
+            "uploading": "Uploading...",
+            "save": "Save file"
+        },
+        "success": {
+            "message": "✅ File has been successfully uploaded and saved!",
+            "shareNow": "Share now"
+        },
+        "errors": {
+            "upload": "❌ An error occurred. Please try again.",
+            "fileUpload": "Error uploading file",
+            "share": {
+                "noContacts": "Please select at least one contact",
+                "error": "An error occurred while sharing",
+                "success": "File shared successfully",
+                "failed": "Error sharing file"
+            }
+        },
+        "share": {
+            "title": "Share file",
+            "description": "Select the contacts you want to share this file with.",
+            "search": {
+                "label": "Search for a contact",
+                "placeholder": "Search by email..."
+            },
+            "noContacts": "No contacts found",
+            "button": "Share with {{count}} contact",
+            "button_plural": "Share with {{count}} contacts"
+        }
+    },
+    "subscription": {
+        "title": "Subscription Plans",
+        "currentPlan": "Current Plan",
+        "upgrade": "Upgrade",
+        "downgrade": "Downgrade"
     },
     "admin": {
-      "title": "Administration",
-      "description": "Administration panel for managing users and files"
+        "title": "Administration Panel",
+        "description": "Manage users, files, and system settings",
+        "access": {
+            "denied": {
+                "notLoggedIn": "You must be logged in to access the admin panel",
+                "notAdmin": "You must be an administrator to access this page"
+            }
+        },
+        "stats": {
+            "totalUsers": "Total Users",
+            "usersDescription": "Registered users",
+            "totalFiles": "Total Files",
+            "filesDescription": "Uploaded files",
+            "admins": "Administrators",
+            "adminsDescription": "Admin users",
+            "activity": "Recent Activity",
+            "activityDescription": "System activity"
+        },
+        "users": {
+            "title": "User Management",
+            "description": "View and manage user accounts, roles, and permissions",
+            "viewAll": "View All Users",
+            "manageRoles": "Manage Roles"
+        },
+        "files": {
+            "title": "File Management",
+            "description": "Monitor and manage uploaded files and storage",
+            "viewAll": "View All Files",
+            "manageStorage": "Manage Storage"
+        },
+        "quickActions": {
+            "title": "Quick Actions",
+            "addUser": "Add User",
+            "manageRoles": "Manage Roles",
+            "viewLogs": "View Logs"
+        }
     },
     "userManagement": {
-      "title": "User Management",
-      "description": "Manage user accounts, roles and permissions"
+        "title": "User Management",
+        "description": "Manage user accounts, roles and permissions"
     },
-    "notFound": {
-      "title": "404",
-      "description": "Page not found"
+    "howItWorks": {
+        "title": "How it works",
+        "step1": {
+            "title": "Create your account",
+            "description": "Sign up for free in seconds to access all our features."
+        },
+        "step2": {
+            "title": "Transfer your files",
+            "description": "Upload your files securely. We support all common formats."
+        },
+        "step3": {
+            "title": "Manage and share",
+            "description": "Organize your files and share them easily with your contacts."
+        },
+        "cta": {
+            "title": "Ready to get started?",
+            "createAccount": "Create an account",
+            "viewSubscriptions": "View our subscriptions"
+        },
+        "features": {
+            "title": "Key features",
+            "security": {
+                "title": "Maximum security",
+                "description": "Your files are encrypted and stored securely."
+            },
+            "transfer": {
+                "title": "Fast transfer",
+                "description": "Transfer your files quickly with our optimized infrastructure."
+            },
+            "contacts": {
+                "title": "Contact management",
+                "description": "Organize your contacts and share your files easily."
+            },
+            "support": {
+                "title": "24/7 Support",
+                "description": "Our team is available to help you at any time."
+            }
+        }
+    },
+    "auth": {
+        "title": "Authentication",
+        "logoutSuccess": "Successfully logged out",
+        "logIn": {
+            "title": "Log In",
+            "email": "Email",
+            "password": "Password",
+            "rememberMe": "Remember me",
+            "forgotPassword": "Forgot password?"
+        },
+        "signUp": {
+            "title": "Sign Up",
+            "email": "Email",
+            "password": "Password",
+            "confirmPassword": "Confirm Password",
+            "terms": "I agree to the terms and conditions"
+        },
+        "form": {
+            "title": "Please log in to continue",
+            "email": {
+                "label": "Email",
+                "placeholder": "example@example.com",
+                "validation": "Please enter a valid email address"
+            },
+            "password": {
+                "label": "Password",
+                "placeholder": "Your password",
+                "validation": {
+                    "minLength": "Password must be at least 12 characters",
+                    "uppercase": "Must contain at least one uppercase letter",
+                    "number": "Must contain at least one number",
+                    "special": "Must contain at least one special character"
+                }
+            },
+            "submit": "Validate",
+            "loading": "{{action}} ..."
+        },
+        "login": {
+            "title": "Login",
+            "success": "Login successful",
+            "error": "Login error",
+            "links": {
+                "forgotPassword": "Forgot password?",
+                "createAccount": "Create an account"
+            }
+        },
+        "signup": {
+            "title": "Sign Up",
+            "success": "Please check your email to confirm your account.",
+            "error": "An unknown error occurred.",
+            "links": {
+                "terms": "By clicking \"Validate\", you have read and accept the",
+                "termsLink": "Terms of Service",
+                "and": "and",
+                "privacyLink": "Privacy Policy"
+            }
+        },
+        "confirm": {
+            "title": "Registration verification",
+            "description": "Please check your email to complete your registration.",
+            "resendEmail": "Resend email",
+            "success": "Your email has been confirmed, you can now log in!",
+            "error": "The entered code is incorrect or has expired, please try again."
+        },
+        "protectedRoute": {
+            "error": "You must be logged in to access this page"
+        }
+    },
+    "fileCard": {
+        "sharedBy": "Shared by",
+        "share": {
+            "title": "Share file",
+            "search": {
+                "label": "Search for a contact",
+                "placeholder": "Search by email..."
+            },
+            "noContacts": "No contacts found",
+            "button": "Share with {{count}} contact{{plural}}",
+            "error": {
+                "noSelection": "Please select at least one contact",
+                "sharing": "Error sharing file"
+            },
+            "success": "File shared successfully"
+        },
+        "delete": {
+            "confirm": "Are you sure you want to delete \"{{name}}\"?",
+            "button": "Delete file"
+        },
+        "preview": {
+            "audio": "Your browser does not support audio playback",
+            "video": "Your browser does not support video playback"
+        }
+    },
+    "meta": {
+        "home": {
+            "title": "Home",
+            "description": "Wild Transfer home page"
+        },
+        "login": {
+            "title": "Login",
+            "description": "Login to your Wild Transfer account"
+        },
+        "signup": {
+            "title": "Sign Up",
+            "description": "Create a Wild Transfer account"
+        },
+        "files": {
+            "title": "My Files",
+            "description": "Your files page"
+        },
+        "upload": {
+            "title": "Transfer Files",
+            "description": "File transfer"
+        },
+        "contacts": {
+            "title": "Contacts",
+            "description": "Contacts page"
+        },
+        "forgotPassword": {
+            "title": "Forgot Password",
+            "description": "Password recovery"
+        },
+        "subscription": {
+            "title": "Subscription",
+            "description": "Wild Transfer service subscription"
+        },
+        "about": {
+            "title": "About",
+            "description": "Learn more about Wild Transfer"
+        },
+        "sitemap": {
+            "title": "Sitemap",
+            "description": "Wild Transfer sitemap"
+        },
+        "terms": {
+            "title": "Terms of Service",
+            "description": "Terms of Service"
+        },
+        "howItWorks": {
+            "title": "How it works",
+            "description": "How it works"
+        },
+        "profile": {
+            "title": "Profile",
+            "description": "Profile page"
+        },
+        "admin": {
+            "title": "Administration",
+            "description": "Administration panel for managing users and files"
+        },
+        "notFound": {
+            "title": "404",
+            "description": "Page not found"
+        }
+    },
+    "avatar": {
+        "altWithEmail": "Profile picture of {{email}}",
+        "altWithoutEmail": "User profile picture",
+        "uploadLabel": "Upload new profile picture",
+        "upload": {
+            "title": "Update Profile Picture",
+            "dragDrop": "Drag and drop an image here, or click to select",
+            "selectFile": "Select Image",
+            "uploading": "Uploading...",
+            "success": "Profile picture updated successfully!",
+            "error": "Error uploading image. Please try again.",
+            "invalidType": "Please select an image file (JPG, PNG, GIF)",
+            "tooLarge": "Image is too large. Maximum size is 5MB"
+        }
     }
-  }
 }
