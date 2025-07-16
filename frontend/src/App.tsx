@@ -19,6 +19,7 @@ import HowItWorks from '@/pages/HowitWorks';
 import AdminPage from '@/pages/Admin/Admin';
 import UserManagement from '@/pages/Admin/UserManagement';
 import FileManagement from '@/pages/Admin/FileManagement';
+import ReportManagement from '@/pages/Admin/ReportManagement';
 import AdminRoute from '@/components/AdminRoute';
 import NotFound from '@/pages/Error/NotFound';
 import { useTranslation } from 'react-i18next';
@@ -215,6 +216,20 @@ const App = () => {
                                 >
                                     <AdminRoute>
                                         <FileManagement />
+                                    </AdminRoute>
+                                </PageWrapper>
+                            }
+                        />
+                        <Route
+                            path="/admin/reports"
+                            element={
+                                <PageWrapper
+                                    title={t('admin.reports.title')}
+                                    description={t('admin.reports.description')}
+                                    protected
+                                >
+                                    <AdminRoute>
+                                        <ReportManagement />
                                     </AdminRoute>
                                 </PageWrapper>
                             }

@@ -1,10 +1,11 @@
-import { Send, FileIcon, Trash2, X } from 'lucide-react';
+import { Send, FileIcon, Trash2, X, MoreVertical, Info, Flag } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import music from '@/assets/images/music.png';
 import video from '@/assets/images/video.png';
 import { getFormattedSizeFromUrl } from '@/lib/utils';
 import { Contact, ContactStatus } from '@/generated/graphql-types';
 import { CREATE_USER_ACCESS } from '@/graphql/Resource/mutations';
+import { CREATE_REPORT } from '@/graphql/Report/mutations';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
@@ -21,6 +22,22 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useAuthContext } from '@/context/useAuthContext';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface FileCardProps {
     name: string;
@@ -53,9 +70,13 @@ const FileCard: React.FC<FileCardProps> = ({
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [size, setSize] = useState<string | null>(null);
     const [createUserAccess] = useMutation(CREATE_USER_ACCESS);
+    const [createReport] = useMutation(CREATE_REPORT);
     const [selectedContacts, setSelectedContacts] = useState<Contact[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
     const { user } = useAuthContext();
+    const [showFileInfo, setShowFileInfo] = useState(false);
+    const [showReportDialog, setShowReportDialog] = useState(false);
+    const [pendingReportReason, setPendingReportReason] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchSize = async () => {
@@ -123,6 +144,42 @@ const FileCard: React.FC<FileCardProps> = ({
         });
     };
 
+    const handleReportClick = (reason: string) => {
+        setPendingReportReason(reason);
+    };
+
+    const handleConfirmReport = async () => {
+        if (pendingReportReason && user) {
+            try {
+                await createReport({
+                    variables: {
+                        input: {
+                            userId: user.id,
+                            resourceId: id,
+                            reason: pendingReportReason.toUpperCase(),
+                            content: `Signalement: ${t(`fileCard.report.reasons.${pendingReportReason}`)}`,
+                        },
+                    },
+                });
+                toast.success(t('fileCard.report.success'));
+                setShowReportDialog(false);
+                setPendingReportReason(null);
+            } catch (error) {
+                console.error('Erreur lors du signalement:', error);
+                toast.error(t('fileCard.report.error'));
+            }
+        }
+    };
+
+    const handleCancelReport = () => {
+        setPendingReportReason(null);
+    };
+
+    const handleCloseDropdown = () => {
+        // Force le DropdownMenu à se fermer proprement
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+    };
+
     return (
         <>
             <div className="flex flex-col w-full max-w-4xl relative">
@@ -187,6 +244,42 @@ const FileCard: React.FC<FileCardProps> = ({
 
                         {/* Boutons en bas */}
                         <div className="flex gap-2 items-end justify-end mt-auto">
+                            {/* Menu 3 points pour toutes les cartes */}
+                            <DropdownMenu modal={false}>
+                                <DropdownMenuTrigger asChild>
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className="h-8 w-8 p-0 hover:bg-gray-100 dark:hover:bg-gray-800"
+                                    >
+                                        <MoreVertical className="h-4 w-4" />
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end" className="z-50">
+                                    <DropdownMenuItem 
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            handleCloseDropdown();
+                                            setTimeout(() => setShowFileInfo(true), 100);
+                                        }}
+                                    >
+                                        <Info className="mr-2 h-4 w-4" />
+                                        {t('fileCard.menu.info')}
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem 
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            handleCloseDropdown();
+                                            setTimeout(() => setShowReportDialog(true), 100);
+                                        }}
+                                    >
+                                        <Flag className="mr-2 h-4 w-4" />
+                                        {t('fileCard.menu.report')}
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                             {!isShared && (
                                 <>
                                     <Dialog>
@@ -331,6 +424,129 @@ const FileCard: React.FC<FileCardProps> = ({
                     </div>
                 </div>
             )}
+
+            {/* Dialog pour les informations du fichier */}
+            <Dialog open={showFileInfo} onOpenChange={setShowFileInfo} modal={true}>
+                <DialogContent className="z-50">
+                    <DialogHeader>
+                        <DialogTitle>{t('fileCard.info.title')}</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-4">
+                        <div>
+                            <Label className="text-sm font-medium">{t('fileCard.info.name')}</Label>
+                            <p className="text-sm text-gray-600 dark:text-gray-300">{name}</p>
+                        </div>
+                        {size && (
+                            <div>
+                                <Label className="text-sm font-medium">{t('fileCard.info.size')}</Label>
+                                <p className="text-sm text-gray-600 dark:text-gray-300">{size}</p>
+                            </div>
+                        )}
+                        {description && (
+                            <div>
+                                <Label className="text-sm font-medium">{t('fileCard.info.description')}</Label>
+                                <p className="text-sm text-gray-600 dark:text-gray-300">{description}</p>
+                            </div>
+                        )}
+                        {isShared && owner && (
+                            <div>
+                                <Label className="text-sm font-medium">{t('fileCard.info.owner')}</Label>
+                                <p className="text-sm text-gray-600 dark:text-gray-300">{owner.email}</p>
+                            </div>
+                        )}
+                    </div>
+                </DialogContent>
+            </Dialog>
+
+            {/* Dialog pour le signalement */}
+            <Dialog open={showReportDialog} onOpenChange={setShowReportDialog} modal={true}>
+                <DialogContent className="z-50">
+                    <DialogHeader>
+                        <DialogTitle>{t('fileCard.report.title')}</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-4">
+                        <p className="text-sm text-gray-600 dark:text-gray-300">
+                            {t('fileCard.report.description')}
+                        </p>
+                        <div className="space-y-2">
+                            <Label className="text-sm font-medium">{t('fileCard.report.reason')}</Label>
+                            <div className="space-y-2">
+                                <Button
+                                    variant="outline"
+                                    className="w-full justify-start"
+                                    onClick={() => handleReportClick('corrupted')}
+                                >
+                                    {t('fileCard.report.reasons.corrupted')}
+                                </Button>
+                                <Button
+                                    variant="outline"
+                                    className="w-full justify-start"
+                                    onClick={() => handleReportClick('display')}
+                                >
+                                    {t('fileCard.report.reasons.display')}
+                                </Button>
+                                <Button
+                                    variant="outline"
+                                    className="w-full justify-start"
+                                    onClick={() => handleReportClick('inappropriate')}
+                                >
+                                    {t('fileCard.report.reasons.inappropriate')}
+                                </Button>
+                                <Button
+                                    variant="outline"
+                                    className="w-full justify-start"
+                                    onClick={() => handleReportClick('harassment')}
+                                >
+                                    {t('fileCard.report.reasons.harassment')}
+                                </Button>
+                                <Button
+                                    variant="outline"
+                                    className="w-full justify-start"
+                                    onClick={() => handleReportClick('spam')}
+                                >
+                                    {t('fileCard.report.reasons.spam')}
+                                </Button>
+                                <Button
+                                    variant="outline"
+                                    className="w-full justify-start"
+                                    onClick={() => handleReportClick('other')}
+                                >
+                                    {t('fileCard.report.reasons.other')}
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                </DialogContent>
+            </Dialog>
+
+            {/* Dialog de confirmation pour le signalement */}
+            <AlertDialog open={pendingReportReason !== null} onOpenChange={(open) => !open && handleCancelReport()}>
+                <AlertDialogContent className="bg-gray-50 dark:bg-gray-900">
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>{t('fileCard.report.confirm.title')}</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            {t('fileCard.report.confirm.description')}
+                            {pendingReportReason && (
+                                <span className="font-medium">
+                                    {" "}{t(`fileCard.report.reasons.${pendingReportReason}`).toLowerCase()}
+                                </span>
+                            )}
+                            ?
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel onClick={handleCancelReport}>
+                            {t('fileCard.report.confirm.cancel')}
+                        </AlertDialogCancel>
+                        <AlertDialogAction 
+                            onClick={handleConfirmReport}
+                            className="bg-red-600 hover:bg-red-700 text-white"
+                        >
+                            {t('fileCard.report.confirm.confirm')}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </>
     );
 };

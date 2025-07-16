@@ -4,10 +4,11 @@ import { useQuery } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Users, FileText, Shield, Activity } from 'lucide-react';
+import { Users, FileText, Shield, Activity, Flag } from 'lucide-react';
 import { GET_USER_STATS } from '@/graphql/User/queries';
 import { GET_RESOURCE_STATS } from '@/graphql/Resource/queries';
 import { GET_SYSTEM_LOGS } from '@/graphql/SystemLog/queries';
+import { GET_ALL_REPORTS } from '@/graphql/Report/queries';
 
 const AdminPage: React.FC = () => {
     const { t } = useTranslation();
@@ -16,6 +17,9 @@ const AdminPage: React.FC = () => {
     // Requêtes pour les statistiques
     const { data: userData, loading: userLoading, error: userError } = useQuery(GET_USER_STATS);
     const { data: resourceData, loading: resourceLoading, error: resourceError } = useQuery(GET_RESOURCE_STATS);
+    const { data: reportsData, loading: reportsLoading, error: reportsError } = useQuery(GET_ALL_REPORTS, {
+        errorPolicy: 'ignore'
+    });
     const { data: logsData, loading: logsLoading, error: logsError, refetch: refetchLogs } = useQuery(GET_SYSTEM_LOGS, {
         variables: { limit: 10.0, offset: 0.0 }
     });
@@ -65,8 +69,9 @@ const AdminPage: React.FC = () => {
     const totalUsers = userData?.getAllUsers?.length || 0;
     const totalAdmins = userData?.getAllUsers?.filter((user: { role: string }) => user.role === 'ADMIN')?.length || 0;
     const totalFiles = resourceData?.getAllResources?.length || 0;
+    const totalReports = reportsData?.getAllReports?.length || 0;
 
-    if (userLoading || resourceLoading || logsLoading) {
+    if (userLoading || resourceLoading || reportsLoading || logsLoading) {
         return (
             <div className="container mx-auto py-8">
                 <div className="text-center">
@@ -98,7 +103,7 @@ const AdminPage: React.FC = () => {
                 </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 {/* Statistiques utilisateurs */}
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -146,9 +151,27 @@ const AdminPage: React.FC = () => {
                         </p>
                     </CardContent>
                 </Card>
+
+                {/* Rapports */}
+                {!reportsError && (
+                    <Card>
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <CardTitle className="text-sm font-medium">
+                                {t('admin.stats.reports')}
+                            </CardTitle>
+                            <Flag className="h-4 w-4 text-muted-foreground" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold">{totalReports}</div>
+                            <p className="text-xs text-muted-foreground">
+                                {t('admin.stats.reportsDescription')}
+                            </p>
+                        </CardContent>
+                    </Card>
+                )}
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* Gestion des utilisateurs */}
                 <Card>
                     <CardHeader>
@@ -200,6 +223,34 @@ const AdminPage: React.FC = () => {
                         </div>
                     </CardContent>
                 </Card>
+
+                {/* Gestion des rapports */}
+                {!reportsError && (
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2">
+                                <Flag className="h-5 w-5" />
+                                {t('admin.reports.title')}
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="space-y-4">
+                                <p className="text-sm text-gray-600 dark:text-gray-400">
+                                    {t('admin.reports.description')}
+                                </p>
+                                <div className="flex gap-2">
+                                    <Button 
+                                        variant="outline" 
+                                        size="sm"
+                                        onClick={() => navigate('/admin/reports')}
+                                    >
+                                        {t('admin.reports.viewAll')}
+                                    </Button>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+                )}
             </div>
 
             {/* Section des journaux d'événements */}
