@@ -1,7 +1,13 @@
 import { createContext } from 'react';
 
 interface AuthContext {
-    user: { email: string | null, isSubscribed: boolean, id?: number, role?: 'USER' | 'ADMIN' } | null;
+    user: {
+        email: string | null;
+        isSubscribed: boolean;
+        id?: number;
+        role?: 'USER' | 'ADMIN';
+        profilePicture?: string | null;
+    } | null;
     isAuth: boolean;
     loading: boolean;
     refreshAuth: () => void;
@@ -12,4 +18,4 @@ export const AuthContext = createContext<AuthContext>({
     isAuth: false,
     loading: true,
     refreshAuth: () => {},
-}); 
+});
