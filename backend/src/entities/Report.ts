@@ -7,12 +7,15 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    JoinColumn,
     ManyToOne,
     PrimaryGeneratedColumn,
 } from 'typeorm';
 
 export enum Reason {
-    INNAPROPRIATE = 'inappropriate content',
+    CORRUPTED = 'corrupted',
+    DISPLAY = 'display',
+    INNAPROPRIATE = 'inappropriate',
     HARASSMENT = 'harassment',
     SPAM = 'spam',
     OTHER = 'other',
@@ -31,12 +34,16 @@ export class Report extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Field(() => User)
     @ManyToOne(() => User)
+    @JoinColumn()
     user: User;
 
+    @Field(() => Resource)
     @ManyToOne(() => Resource, (resource) => resource.reports, {
         onDelete: 'CASCADE',
     })
+    @JoinColumn()
     resource: Resource;
 
     @Field(() => String)
@@ -48,6 +55,7 @@ export class Report extends BaseEntity {
     @Column({ type: 'enum', enum: Reason, default: Reason.NONE })
     reason: Reason;
 
+    @Field(() => Date)
     @IsDate()
     @CreateDateColumn()
     createdAt: Date;

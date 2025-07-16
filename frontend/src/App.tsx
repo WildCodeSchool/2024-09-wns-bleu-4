@@ -238,6 +238,20 @@ const App = () => {
                                 </PageWrapper>
                             }
                         />
+                        <Route
+                            path="/admin/reports"
+                            element={
+                                <PageWrapper
+                                    title={t('admin.reports.title')}
+                                    description={t('admin.reports.description')}
+                                    protected
+                                >
+                                    <AdminRoute>
+                                        <ReportManagement />
+                                    </AdminRoute>
+                                </PageWrapper>
+                            }
+                        />
                     </Route>
                     <Route path="*" element={
                         <PageWrapper

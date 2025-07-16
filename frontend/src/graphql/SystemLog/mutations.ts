@@ -8,7 +8,6 @@ export const CREATE_SYSTEM_LOG = gql`
             message
             details
             userId
-            ipAddress
             createdAt
         }
     }
