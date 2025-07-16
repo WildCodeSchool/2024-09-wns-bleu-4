@@ -22,6 +22,7 @@ import FileManagement from '@/pages/Admin/FileManagement';
 import ReportManagement from '@/pages/Admin/ReportManagement';
 import AdminRoute from '@/components/AdminRoute';
 import NotFound from '@/pages/Error/NotFound';
+import ForgotPassword from '@/pages/ForgotPassword/ForgotPassword';
 import { useTranslation } from 'react-i18next';
 
 const App = () => {
@@ -108,7 +109,7 @@ const App = () => {
                                     title={t('meta.forgotPassword.title')}
                                     description={t('meta.forgotPassword.description')}
                                 >
-                                    <div>{t('meta.forgotPassword.title')}</div>
+                                    <ForgotPassword />
                                 </PageWrapper>
                             }
                         />

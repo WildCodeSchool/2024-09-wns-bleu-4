@@ -71,21 +71,23 @@ test.describe('User Login', () => {
         await page.goto('/login');
         
         // Check for forgot password link
-        await expect(page.getByRole('link', { name: 'Mot de passe oublié ?' })).toBeVisible();
+        await expect(page.getByTestId('forgot-password-link')).toBeVisible();
+        await expect(page.getByTestId('forgot-password-link')).toHaveText('Mot de passe oublié ?');
     });
 
     test('should have signup link', async ({ page }) => {
         await page.goto('/login');
         
         // Check for signup link
-        await expect(page.getByRole('link', { name: 'Créer un compte' })).toBeVisible();
+        await expect(page.getByTestId('signup-link')).toBeVisible();
+        await expect(page.getByTestId('signup-link')).toHaveText('Créer un compte');
     });
 
     test('should navigate to signup page', async ({ page }) => {
         await page.goto('/login');
         
         // Click on signup link
-        await page.getByRole('link', { name: 'Créer un compte' }).click();
+        await page.getByTestId('signup-link').click();
         
         // Should navigate to signup page
         await expect(page).toHaveURL('/sign');
@@ -96,7 +98,7 @@ test.describe('User Login', () => {
         await page.goto('/login');
         
         // Click on forgot password link
-        await page.getByRole('link', { name: 'Mot de passe oublié ?' }).click();
+        await page.getByTestId('forgot-password-link').click();
         
         // Should navigate to forgot password page
         await expect(page).toHaveURL('/forgot-password');

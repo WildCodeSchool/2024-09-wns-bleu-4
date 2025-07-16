@@ -36,8 +36,8 @@ const Login = () => {
                 loading={loading}
                 links={
                     <>
-                        <Link to="/forgot-password">{t('auth.login.links.forgotPassword')}</Link>
-                        <Link to="/sign">{t('auth.login.links.createAccount')}</Link>
+                        <Link to="/forgot-password" data-testid="forgot-password-link">{t('auth.login.links.forgotPassword')}</Link>
+                        <Link to="/sign" data-testid="signup-link">{t('auth.login.links.createAccount')}</Link>
                     </>
                 }
             />
