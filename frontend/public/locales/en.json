@@ -9,7 +9,8 @@
     "edit": "Edit",
     "submit": "Submit",
     "back": "Back",
-    "backToHome": "Back to home"
+    "backToHome": "Back to home",
+    "retry": "Retry"
   },
   "navigation": {
     "title": "Navigation",
@@ -547,7 +548,11 @@
     },
     "subscription": {
       "title": "Subscription",
-      "description": "Wild Transfer service subscription"
+      "description": "Wild Transfer service subscription",
+      "success": {
+        "title": "Subscription Activated!",
+        "description": "Your subscription is now active. Thank you for subscribing!"
+      }
     },
     "about": {
       "title": "About",
@@ -571,11 +576,26 @@
     },
     "admin": {
       "title": "Administration",
-      "description": "Administration panel for managing users and files"
+      "description": "Administration panel for managing users and files",
+      "users": {
+        "title": "User Management",
+        "description": "View and manage user accounts, roles, and permissions",
+        "actions": {
+          "delete": "Supprimer l'utilisateur"
+        }
+      },
+      "files": {
+        "title": "File Management",
+        "description": "Monitor and manage uploaded files and storage"
+      }
     },
     "notFound": {
       "title": "404",
       "description": "Page not found"
+    },
+    "payment": {
+      "title": "Subscription Payment",
+      "description": "Complete your subscription payment for Wild Transfer"
     }
   },
   "avatar": {

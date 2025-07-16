@@ -9,7 +9,8 @@
     "edit": "Modifier",
     "submit": "Envoyer",
     "back": "Retour",
-    "backToHome": "Retour à l'accueil"
+    "backToHome": "Retour à l'accueil",
+    "retry": "Réessayer"
   },
   "navigation": {
     "title": "Navigation",
@@ -548,9 +549,17 @@
       "title": "Mot de passe oublié",
       "description": "Récupération de mot de passe"
     },
+    "payment": {
+      "title": "Paiement d'abonnement",
+      "description": "Finalisez votre paiement d'abonnement pour Wild Transfer"
+    },
     "subscription": {
       "title": "Abonnement",
-      "description": "Abonnement au service Wild Transfer"
+      "description": "Abonnement au service Wild Transfer",
+      "success": {
+        "title": "Abonnement activé !",
+        "description": "Votre abonnement est maintenant actif. Merci pour votre souscription !"
+      }
     },
     "about": {
       "title": "À propos",
@@ -574,7 +583,18 @@
     },
     "admin": {
       "title": "Administration",
-      "description": "Panneau d'administration pour gérer les utilisateurs et fichiers"
+      "description": "Panneau d'administration pour gérer les utilisateurs et fichiers",
+      "users": {
+        "title": "Gestion des utilisateurs",
+        "description": "Voir et gérer les comptes utilisateurs, rôles et permissions",
+        "actions": {
+          "delete": "Supprimer l'utilisateur"
+        }
+      },
+      "files": {
+        "title": "Gestion des fichiers",
+        "description": "Surveiller et gérer les fichiers téléchargés et le stockage"
+      }
     },
     "notFound": {
       "title": "404",
