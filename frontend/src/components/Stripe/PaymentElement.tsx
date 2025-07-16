@@ -24,6 +24,7 @@ export const PaymentElement: React.FC<PaymentElementProps> = ({
   const [paymentStatus, setPaymentStatus] = useState<'idle' | 'processing' | 'success' | 'error'>('idle');
   const [paymentError, setPaymentError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isFormComplete, setIsFormComplete] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -54,6 +55,7 @@ export const PaymentElement: React.FC<PaymentElementProps> = ({
         confirmParams: {
           return_url: `${window.location.origin}/subscription/success`,
         },
+        redirect: 'if_required',
       });
 
       if (confirmError) {
@@ -101,7 +103,7 @@ export const PaymentElement: React.FC<PaymentElementProps> = ({
     <div className="max-w-md mx-auto p-6 space-y-6">
       <div className="text-center space-y-2">
         <h2 className="text-2xl font-bold">
-          {t('payment.title', 'Complete Your Payment')}
+          {t('payment.title')}
         </h2>
         <p className="text-gray-600 dark:text-muted-foreground">
           {t('payment.description')}
@@ -134,12 +136,16 @@ export const PaymentElement: React.FC<PaymentElementProps> = ({
                 },
               },
             }}
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            onChange={(event: any) => {
+              setIsFormComplete(!!event.complete);
+            }}
           />
         </div>
 
         <Button
           type="submit"
-          disabled={!stripe || isLoading || paymentStatus === 'processing'}
+          disabled={!stripe || isLoading || paymentStatus === 'processing' || !isFormComplete}
           className="w-full"
         >
           {paymentStatus === 'processing' || isLoading ? (

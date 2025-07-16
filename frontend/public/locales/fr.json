@@ -211,7 +211,8 @@
     "downgrade": "Rétrograder",
     "success": {
       "title": "Abonnement activé !",
-      "description": "Votre abonnement est maintenant actif. Merci pour votre souscription !"
+      "description": "Votre abonnement est maintenant actif. Merci pour votre souscription !",
+      "expiration": "Votre abonnement est valable jusqu'au {{date}}"
     },
     "error": {
       "title": "Erreur d'abonnement",
@@ -246,8 +247,10 @@
     "initializing": "Initialisation du paiement...",
     "loading": "Chargement du formulaire de paiement...",
     "success": {
-      "title": "Paiement réussi !",
-      "description": "Votre abonnement a été activé avec succès."
+      "message": "Votre abonnement a été activé avec succès !"
+    },
+    "error": {
+      "message": "Une erreur est survenue lors du traitement de votre paiement. Veuillez réessayer."
     },
     "security": {
       "notice": "Vos informations de paiement sont sécurisées et cryptées par Stripe"

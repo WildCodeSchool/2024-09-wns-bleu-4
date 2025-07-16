@@ -213,7 +213,8 @@
     "downgrade": "Downgrade",
     "success": {
       "title": "Subscription Activated!",
-      "description": "Your subscription is now active. Thank you for subscribing!"
+      "description": "Your subscription is now active. Thank you for subscribing!",
+      "expiration": "Your subscription will last until {{date}}"
     },
     "error": {
       "title": "Subscription Error",
@@ -248,8 +249,10 @@
     "initializing": "Initializing payment...",
     "loading": "Loading payment form...",
     "success": {
-      "title": "Payment Successful!",
-      "description": "Your subscription has been activated successfully."
+      "message": "Your payment has been successfully processed!"
+    },
+    "error": {
+      "message": "An error occurred while processing your payment. Please try again."
     },
     "security": {
       "notice": "Your payment information is secure and encrypted by Stripe"
@@ -523,7 +526,11 @@
     },
     "subscription": {
       "title": "Subscription",
-      "description": "Wild Transfer service subscription"
+      "description": "Wild Transfer service subscription",
+      "success": {
+        "title": "Subscription Activated",
+        "description": "Your subscription is now active. Thank you for subscribing!"
+      }
     },
     "payment": {
       "title": "Subscription Payment",

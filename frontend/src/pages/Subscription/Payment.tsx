@@ -3,19 +3,21 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { StripeProvider } from '@/components/StripeProvider';
-import { StripeElements } from '@/components/StripeElements';
+import { StripeProvider } from '@/components/Stripe/StripeProvider';
+import { StripeElements } from '@/components/Stripe/StripeElements';
 import { useCheckout } from '@/hooks/useCheckout';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { useCreateSubscriptionMutation } from '@/generated/graphql-types';
 
 export default function Payment() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { user } = useAuth();
   const { createPaymentIntent, isLoading, error } = useCheckout();
+  const [createSubscription] = useCreateSubscriptionMutation();
   
   const [clientSecret, setClientSecret] = useState<string | null>(null);
 
@@ -52,8 +54,16 @@ export default function Payment() {
     initializePayment();
   }, [user, createPaymentIntent, navigate]);
 
-  const handlePaymentSuccess = () => {
-    toast.success('Payment successful');
+  const handlePaymentSuccess = async () => {
+    if (user?.id) {
+      try {
+        await createSubscription({ variables: { userId: user.id.toString() } });
+      } catch {
+        toast.error(t('payment.error.message'));
+      }
+    }
+    toast.success(t('payment.success.message'));
+    navigate('/subscription/success');
   };
 
   const handlePaymentError = (error: string) => {
