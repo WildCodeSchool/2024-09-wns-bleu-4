@@ -88,6 +88,7 @@ const UploadPage = () => {
                 const storageResponse = await fetch(storageUrl, {
                     method: 'POST',
                     body: formData,
+                    credentials: 'include',
                 });
 
                 if (!storageResponse.ok) {

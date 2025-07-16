@@ -68,6 +68,10 @@ const FilesPage: React.FC = () => {
                         )}`,
                         {
                             method: 'DELETE',
+                            credentials: 'include', // pour les cookies
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
                         },
                     );
 

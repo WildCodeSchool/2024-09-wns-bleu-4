@@ -72,7 +72,7 @@ Vous avez deux options :
   cd backend
 ```
 ```
-  npm run dev
+  npm run start:dev
 ```
 
 ### Terminal 3 - Storage API
@@ -113,7 +113,7 @@ Adminer pour la gestion de la base de données : port 8080
 ```
   npm test
 ```
-## Interface de test d'emails :.
+## Interface de test d'emails :
 ### Terminal - Backend
 ```
   npm email

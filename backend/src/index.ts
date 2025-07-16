@@ -10,6 +10,7 @@ import UserResolver from '@/resolvers/UserResolver';
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
 import * as cookie from 'cookie';
+import cors from 'cors';
 import 'dotenv/config';
 import jwt, { Secret } from 'jsonwebtoken';
 import 'reflect-metadata';
@@ -52,6 +53,21 @@ const start = async () => {
     const { url } = await startStandaloneServer(server, {
         listen: { port: 4000 },
         context: async ({ req, res }) => {
+            // Configuration cors
+            const corsOptions = {
+                origin: [
+                    'http://localhost:5173', // Frontend en développement local
+                    'http://localhost:7007', // Via Nginx en local
+                    'http://frontend:5173',  // Frontend dans Docker
+                ],
+                credentials: true,
+                methods: ['GET', 'POST', 'OPTIONS'],
+                allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
+            };
+
+            // Appliquer CORS
+            cors(corsOptions)(req, res, () => {});
+
             if (req.headers.cookie) {
                 const cookies = cookie.parse(req.headers.cookie as string);
                 if (cookies.token) {

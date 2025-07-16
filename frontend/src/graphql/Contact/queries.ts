@@ -10,10 +10,12 @@ export const GET_MY_CONTACTS = gql`
                 sourceUser {
                     id
                     email
+                    role
                 }
                 targetUser {
                     id
                     email
+                    role
                 }
             }
             pendingRequestsReceived {
@@ -23,10 +25,12 @@ export const GET_MY_CONTACTS = gql`
                 sourceUser {
                     id
                     email
+                    role
                 }
                 targetUser {
                     id
                     email
+                    role
                 }
             }
             pendingRequestsSent {
@@ -36,10 +40,12 @@ export const GET_MY_CONTACTS = gql`
                 sourceUser {
                     id
                     email
+                    role
                 }
                 targetUser {
                     id
                     email
+                    role
                 }
             }
         }

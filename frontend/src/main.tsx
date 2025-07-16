@@ -10,7 +10,7 @@ import React from 'react';
 const client = new ApolloClient({
     uri: 'http://localhost:7007/api',
     cache: new InMemoryCache(),
-    credentials: 'include',
+    credentials: 'include', // Important pour les cookies
 });
 
 const rootElement = document.getElementById('root') as HTMLElement;
