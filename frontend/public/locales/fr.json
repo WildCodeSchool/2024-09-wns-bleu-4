@@ -379,6 +379,32 @@
         "warning": "Avertissement",
         "info": "Information"
       }
+    },
+    "reports": {
+      "title": "Rapports",
+      "description": "Générer des rapports sur l'activité des utilisateurs et les fichiers",
+      "viewAll": "Voir tous les rapports",
+      "search": {
+        "placeholder": "Rechercher un rapport par utilisateur, fichier ou date..."
+      },
+      "stats": {
+        "total": "Total rapports",
+        "resolved": "Résolus",
+        "pending": "En attente"
+      },
+      "details": {
+        "reporter": "Auteur du rapport",
+        "fileOwner": "Propriétaire du fichier",
+        "fileName": "Nom du fichier"
+      },
+      "reasons": {
+        "corrupted": "Fichier corrompu ou illisible",
+        "display": "Problème d'affichage du fichier",
+        "inappropriate": "Contenu inapproprié ou offensant",
+        "harrassment": "Harcèlement",
+        "spam": "Spam",
+        "other": "Other"
+      }
     }
   },
   "userManagement": {

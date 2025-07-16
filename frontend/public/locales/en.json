@@ -294,7 +294,9 @@
       "admins": "Administrators",
       "adminsDescription": "Admin users",
       "activity": "Recent Activity",
-      "activityDescription": "System activity"
+      "activityDescription": "System activity",
+      "reports": "Reports",
+      "reportsDescription": "User reports and issues"
     },
     "users": {
       "title": "User Management",
@@ -378,6 +380,32 @@
         "error": "Error",
         "warning": "Warning",
         "info": "Information"
+      }
+    },
+    "reports": {
+      "title": "User Reports",
+      "description": "View and manage user reports and issues",
+      "viewAll": "View All Reports",
+      "search": {
+        "placeholder": "Search for a report by user or issue..."
+      },
+      "stats": {
+        "total": "Total reports",
+        "resolved": "Resolved reports",
+        "pending": "Pending reports"
+      },
+      "details": {
+        "reporter": "Reported by",
+        "fileOwner": "File owner",
+        "fileName": "File name"
+      },
+      "reasons": {
+        "corrupted": "Corrupted file",
+        "display": "Display issue",
+        "inappropriate": "Inappropriate content",
+        "harrassment": "Inappropriate content",
+        "spam": "Spam",
+        "other": "Other"
       }
     }
   },

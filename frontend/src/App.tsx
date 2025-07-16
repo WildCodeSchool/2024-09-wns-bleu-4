@@ -22,7 +22,8 @@ import FileManagement from '@/pages/Admin/FileManagement';
 import NotFound from '@/pages/Error/NotFound';
 import { useTranslation } from 'react-i18next';
 import Payment from '@/pages/Subscription/Payment';
-import SubscriptionSuccess from './pages/Subscription/SubscriptionSuccess';
+import SubscriptionSuccess from '@/pages/Subscription/SubscriptionSuccess';
+import ReportManagement from '@/pages/Admin/ReportManagement';
 
 const App = () => {
     const { t } = useTranslation();
@@ -244,11 +245,9 @@ const App = () => {
                                 <PageWrapper
                                     title={t('admin.reports.title')}
                                     description={t('admin.reports.description')}
-                                    protected
+                                    adminOnly
                                 >
-                                    <AdminRoute>
-                                        <ReportManagement />
-                                    </AdminRoute>
+                                    <ReportManagement />
                                 </PageWrapper>
                             }
                         />
@@ -286,10 +285,10 @@ const PageWrapper = ({
     const { t } = useTranslation();
     const location = useLocation();
 
-    // Block access to /subscription/payment and /subscription/success if already subscribed
+    // Block access to /subscription/payment if already subscribed
     if (
         user?.isSubscribed &&
-        (location.pathname === '/subscription/payment' || location.pathname === '/subscription/success')
+        (location.pathname === '/subscription/payment')
     ) {
         toast.error(t('subscription.alreadySubscribed'));
         return <Navigate to="/subscription" replace />;
