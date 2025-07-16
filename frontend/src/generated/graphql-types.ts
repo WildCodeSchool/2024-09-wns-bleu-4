@@ -515,6 +515,39 @@ export type GetReportsByResourceQueryVariables = Exact<{
 
 export type GetReportsByResourceQuery = { __typename?: 'Query', getReportsByResource: Array<{ __typename?: 'Report', id: string, reason: Reason, content: string, createdAt: any, user: { __typename?: 'User', id: string, email: string }, resource: { __typename?: 'Resource', id: number, name: string, url: string, user: { __typename?: 'User', id: string, email: string } } }> };
 
+export type CreateReportByIdsMutationVariables = Exact<{
+  input: CreateReportInput;
+}>;
+
+
+export type CreateReportByIdsMutation = { __typename?: 'Mutation', createReportByIds: { __typename?: 'Report', id: string, reason: Reason, content: string, createdAt: any, user: { __typename?: 'User', id: string, email: string }, resource: { __typename?: 'Resource', id: number, name: string, user: { __typename?: 'User', id: string, email: string } } } };
+
+export type DeleteReportMutationVariables = Exact<{
+  reportToDelete: ReportInput;
+}>;
+
+
+export type DeleteReportMutation = { __typename?: 'Mutation', deleteReport: string };
+
+export type GetAllReportsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllReportsQuery = { __typename?: 'Query', getAllReports: Array<{ __typename?: 'Report', id: string, reason: Reason, content: string, createdAt: any, user: { __typename?: 'User', id: string, email: string }, resource: { __typename?: 'Resource', id: number, name: string, url: string, user: { __typename?: 'User', id: string, email: string } } }> };
+
+export type GetReportsByUserQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type GetReportsByUserQuery = { __typename?: 'Query', getReportsByUser: Array<{ __typename?: 'Report', id: string, reason: Reason, content: string, createdAt: any, user: { __typename?: 'User', id: string, email: string }, resource: { __typename?: 'Resource', id: number, name: string, url: string, user: { __typename?: 'User', id: string, email: string } } }> };
+
+export type GetReportsByResourceQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type GetReportsByResourceQuery = { __typename?: 'Query', getReportsByResource: Array<{ __typename?: 'Report', id: string, reason: Reason, content: string, createdAt: any, user: { __typename?: 'User', id: string, email: string }, resource: { __typename?: 'Resource', id: number, name: string, url: string, user: { __typename?: 'User', id: string, email: string } } }> };
+
 export type CreateResourceMutationVariables = Exact<{
   data: ResourceInput;
 }>;
