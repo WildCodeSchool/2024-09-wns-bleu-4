@@ -18,7 +18,7 @@ const ForgotPassword = () => {
         try {
             // TODO: Implement password reset functionality
             toast.success(t('auth.forgotPassword.success'));
-        } catch (error) {
+        } catch {
             toast.error(t('auth.forgotPassword.error'));
         } finally {
             setLoading(false);
