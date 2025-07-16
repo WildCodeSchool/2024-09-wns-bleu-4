@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { AvatarUploader } from '@/components/AvatarUploader';
 import { Button } from '@/components/ui/button';
 import {
     Card,
@@ -10,7 +10,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { useAuthContext } from '@/context/useAuthContext';
-import { Plus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 export const Profile = () => {
@@ -33,22 +32,22 @@ export const Profile = () => {
                 </CardHeader>
                 <Separator className="" />
                 <CardContent className="flex flex-col gap-2 my-4">
+                    <AvatarUploader
+                        user={{
+                            email: user?.email,
+                            profilePicture: user?.profilePicture,
+                            id: user?.id,
+                        }}
+                        size="lg"
+                    />
                     <div>
-                        <Avatar className="cursor-pointer w-16 h-16">
-                            <AvatarImage src="https://github.com/shadcn.png" />
-                            <AvatarFallback>PDP</AvatarFallback>
-                        </Avatar>
-                        <Plus
-                            size={24}
-                            className="text-black fill-black relative bottom-6 bg-white rounded-full left-10 cursor-pointer"
-                        />
-                    </div>
-                    <div>
-                        <Label htmlFor="email">{t('profile.form.email.label')}</Label>
+                        <Label htmlFor="email">
+                            {t('profile.form.email.label')}
+                        </Label>
                         <Input
                             id="email"
                             type="email"
-                            value={user?.email ?? ""}
+                            value={user?.email ?? ''}
                             placeholder={t('profile.form.email.placeholder')}
                             readOnly
                             className="bg-muted cursor-not-allowed"
@@ -64,7 +63,9 @@ export const Profile = () => {
                 </CardContent>
                 <Separator className="" />
                 <CardFooter>
-                    <Button className="cursor-pointer">{t('profile.actions.save')}</Button>
+                    <Button className="cursor-pointer">
+                        {t('profile.actions.save')}
+                    </Button>
                 </CardFooter>
             </Card>
         </section>

@@ -66,6 +66,14 @@ export class User extends BaseEntity {
     })
     password: string;
 
+    @Field(() => String, { nullable: true })
+    @Column({
+        type: 'varchar',
+        length: 255,
+        nullable: true,
+    })
+    profilePicture: string | null;
+
     @IsDate()
     @CreateDateColumn()
     lastLoggedAt: Date;

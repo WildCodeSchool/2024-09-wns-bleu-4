@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start": "node --loader tsx src/server.ts",
+    "start": "node --import tsx src/server.ts",
     "start:prod": "node --import tsx src/server.ts",
     "dev": "tsx src/server.ts",
     "build": "tsc"
