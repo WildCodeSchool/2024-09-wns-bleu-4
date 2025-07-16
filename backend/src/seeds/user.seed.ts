@@ -42,7 +42,6 @@ export const seedUsers = async () => {
 
     const premiumUserCount = await User.count({
         where: {
-            role: UserRole.ADMIN,
             subscription: { status: SubscriptionStatus.ACTIVE },
         },
     });
