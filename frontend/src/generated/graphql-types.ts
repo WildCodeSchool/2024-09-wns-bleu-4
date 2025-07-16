@@ -61,16 +61,10 @@ export type ContactsResponse = {
 
 export type CreateLogInput = {
   details?: InputMaybe<Scalars['String']['input']>;
+  ipAddress?: InputMaybe<Scalars['String']['input']>;
   message: Scalars['String']['input'];
   type: LogType;
   userId?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type CreateReportInput = {
-  content?: InputMaybe<Scalars['String']['input']>;
-  reason: Reason;
-  resourceId: Scalars['ID']['input'];
-  userId: Scalars['ID']['input'];
 };
 
 export type Like = {
@@ -96,13 +90,16 @@ export enum LogType {
 export type Mutation = {
   __typename?: 'Mutation';
   acceptContactRequest: Contact;
+  cancelSubscription: Scalars['Boolean']['output'];
   clearSystemLogs: Scalars['String']['output'];
   confirmEmail: Scalars['String']['output'];
+  confirmPayment: Scalars['Boolean']['output'];
   createComment: Comment;
   createLike: Like;
+  createPaymentIntent: Scalars['String']['output'];
   createReport: Report;
-  createReportByIds: Report;
   createResource: Resource;
+  createStripeSubscription: Scalars['String']['output'];
   createSubscription: Subscription;
   createSystemLog: SystemLog;
   createUser: User;
@@ -131,8 +128,19 @@ export type MutationAcceptContactRequestArgs = {
 };
 
 
+export type MutationCancelSubscriptionArgs = {
+  subscriptionId: Scalars['String']['input'];
+};
+
+
 export type MutationConfirmEmailArgs = {
   codeByUser: Scalars['String']['input'];
+};
+
+
+export type MutationConfirmPaymentArgs = {
+  clientSecret: Scalars['String']['input'];
+  paymentMethodId: Scalars['String']['input'];
 };
 
 
@@ -146,18 +154,26 @@ export type MutationCreateLikeArgs = {
 };
 
 
+export type MutationCreatePaymentIntentArgs = {
+  amount: Scalars['Float']['input'];
+  currency?: Scalars['String']['input'];
+  description?: Scalars['String']['input'];
+  metadata?: InputMaybe<Scalars['String']['input']>;
+};
+
+
 export type MutationCreateReportArgs = {
   newReport: ReportInput;
 };
 
 
-export type MutationCreateReportByIdsArgs = {
-  input: CreateReportInput;
+export type MutationCreateResourceArgs = {
+  data: ResourceInput;
 };
 
 
-export type MutationCreateResourceArgs = {
-  data: ResourceInput;
+export type MutationCreateStripeSubscriptionArgs = {
+  priceId: Scalars['String']['input'];
 };
 
 
@@ -261,7 +277,6 @@ export type MutationUpdateUserRoleArgs = {
 
 export type Query = {
   __typename?: 'Query';
-  getAllReports: Array<Report>;
   getAllResources: Array<Resource>;
   getAllUsers: Array<User>;
   getCommentsByResource: Array<Comment>;
@@ -269,6 +284,7 @@ export type Query = {
   getLikesByResource: Array<Like>;
   getLikesByUser: Array<Like>;
   getMyContacts: ContactsResponse;
+  getPaymentIntent: Scalars['String']['output'];
   getReportsByResource: Array<Report>;
   getReportsByUser: Array<Report>;
   getResourceById?: Maybe<Resource>;
@@ -277,6 +293,7 @@ export type Query = {
   getSystemLogs: Array<SystemLog>;
   getUserInfo: UserInfo;
   getUserSharedResources: Array<Resource>;
+  getUserStripeCustomerId?: Maybe<Scalars['String']['output']>;
   getUserSubscription?: Maybe<Subscription>;
   getUsersWithAccess: Array<User>;
 };
@@ -299,6 +316,11 @@ export type QueryGetLikesByResourceArgs = {
 
 export type QueryGetLikesByUserArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QueryGetPaymentIntentArgs = {
+  paymentIntentId: Scalars['String']['input'];
 };
 
 
@@ -350,8 +372,6 @@ export type QueryGetUsersWithAccessArgs = {
 
 /** The reasons for reporting a resource */
 export enum Reason {
-  Corrupted = 'CORRUPTED',
-  Display = 'DISPLAY',
   Harassment = 'HARASSMENT',
   Innapropriate = 'INNAPROPRIATE',
   None = 'NONE',
@@ -362,11 +382,8 @@ export enum Reason {
 export type Report = {
   __typename?: 'Report';
   content: Scalars['String']['output'];
-  createdAt: Scalars['DateTimeISO']['output'];
   id: Scalars['ID']['output'];
   reason: Reason;
-  resource: Resource;
-  user: User;
 };
 
 export type ReportInput = {
@@ -403,6 +420,9 @@ export type Subscription = {
   endAt: Scalars['DateTimeISO']['output'];
   id: Scalars['ID']['output'];
   paidAt: Scalars['DateTimeISO']['output'];
+  status: Scalars['String']['output'];
+  stripePriceId?: Maybe<Scalars['String']['output']>;
+  stripeSubscriptionId?: Maybe<Scalars['String']['output']>;
 };
 
 export type SystemLog = {
@@ -410,6 +430,7 @@ export type SystemLog = {
   createdAt: Scalars['String']['output'];
   details?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
+  ipAddress?: Maybe<Scalars['String']['output']>;
   message: Scalars['String']['output'];
   type: LogType;
   userId?: Maybe<Scalars['String']['output']>;
@@ -425,6 +446,7 @@ export type User = {
   id: Scalars['ID']['output'];
   profilePicture?: Maybe<Scalars['String']['output']>;
   role: UserRole;
+  stripeCustomerId?: Maybe<Scalars['String']['output']>;
   subscription?: Maybe<Subscription>;
 };
 
@@ -482,38 +504,49 @@ export type GetMyContactsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetMyContactsQuery = { __typename?: 'Query', getMyContacts: { __typename?: 'ContactsResponse', acceptedContacts: Array<{ __typename?: 'Contact', id: string, status: ContactStatus, createdAt: any, sourceUser: { __typename?: 'User', id: string, email: string, role: UserRole }, targetUser: { __typename?: 'User', id: string, email: string } }>, pendingRequestsReceived: Array<{ __typename?: 'Contact', id: string, status: ContactStatus, createdAt: any, sourceUser: { __typename?: 'User', id: string, email: string }, targetUser: { __typename?: 'User', id: string, email: string } }>, pendingRequestsSent: Array<{ __typename?: 'Contact', id: string, status: ContactStatus, createdAt: any, sourceUser: { __typename?: 'User', id: string, email: string }, targetUser: { __typename?: 'User', id: string, email: string } }> } };
 
-export type CreateReportByIdsMutationVariables = Exact<{
-  input: CreateReportInput;
+export type CreatePaymentIntentMutationVariables = Exact<{
+  amount: Scalars['Float']['input'];
+  currency?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  metadata?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type CreateReportByIdsMutation = { __typename?: 'Mutation', createReportByIds: { __typename?: 'Report', id: string, reason: Reason, content: string, createdAt: any, user: { __typename?: 'User', id: string, email: string }, resource: { __typename?: 'Resource', id: number, name: string, user: { __typename?: 'User', id: string, email: string } } } };
+export type CreatePaymentIntentMutation = { __typename?: 'Mutation', createPaymentIntent: string };
 
-export type DeleteReportMutationVariables = Exact<{
-  reportToDelete: ReportInput;
+export type ConfirmPaymentMutationVariables = Exact<{
+  clientSecret: Scalars['String']['input'];
+  paymentMethodId: Scalars['String']['input'];
 }>;
 
 
-export type DeleteReportMutation = { __typename?: 'Mutation', deleteReport: string };
+export type ConfirmPaymentMutation = { __typename?: 'Mutation', confirmPayment: boolean };
 
-export type GetAllReportsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetAllReportsQuery = { __typename?: 'Query', getAllReports: Array<{ __typename?: 'Report', id: string, reason: Reason, content: string, createdAt: any, user: { __typename?: 'User', id: string, email: string }, resource: { __typename?: 'Resource', id: number, name: string, url: string, user: { __typename?: 'User', id: string, email: string } } }> };
-
-export type GetReportsByUserQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
+export type CreateStripeSubscriptionMutationVariables = Exact<{
+  priceId: Scalars['String']['input'];
 }>;
 
 
-export type GetReportsByUserQuery = { __typename?: 'Query', getReportsByUser: Array<{ __typename?: 'Report', id: string, reason: Reason, content: string, createdAt: any, user: { __typename?: 'User', id: string, email: string }, resource: { __typename?: 'Resource', id: number, name: string, url: string, user: { __typename?: 'User', id: string, email: string } } }> };
+export type CreateStripeSubscriptionMutation = { __typename?: 'Mutation', createStripeSubscription: string };
 
-export type GetReportsByResourceQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
+export type CancelSubscriptionMutationVariables = Exact<{
+  subscriptionId: Scalars['String']['input'];
 }>;
 
 
-export type GetReportsByResourceQuery = { __typename?: 'Query', getReportsByResource: Array<{ __typename?: 'Report', id: string, reason: Reason, content: string, createdAt: any, user: { __typename?: 'User', id: string, email: string }, resource: { __typename?: 'Resource', id: number, name: string, url: string, user: { __typename?: 'User', id: string, email: string } } }> };
+export type CancelSubscriptionMutation = { __typename?: 'Mutation', cancelSubscription: boolean };
+
+export type GetPaymentIntentQueryVariables = Exact<{
+  paymentIntentId: Scalars['String']['input'];
+}>;
+
+
+export type GetPaymentIntentQuery = { __typename?: 'Query', getPaymentIntent: string };
+
+export type GetUserStripeCustomerIdQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetUserStripeCustomerIdQuery = { __typename?: 'Query', getUserStripeCustomerId?: string | null };
 
 export type CreateResourceMutationVariables = Exact<{
   data: ResourceInput;
@@ -587,7 +620,7 @@ export type CreateSystemLogMutationVariables = Exact<{
 }>;
 
 
-export type CreateSystemLogMutation = { __typename?: 'Mutation', createSystemLog: { __typename?: 'SystemLog', id: string, type: LogType, message: string, details?: string | null, userId?: string | null, createdAt: string } };
+export type CreateSystemLogMutation = { __typename?: 'Mutation', createSystemLog: { __typename?: 'SystemLog', id: string, type: LogType, message: string, details?: string | null, userId?: string | null, ipAddress?: string | null, createdAt: string } };
 
 export type DeleteSystemLogMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -608,14 +641,14 @@ export type GetSystemLogsQueryVariables = Exact<{
 }>;
 
 
-export type GetSystemLogsQuery = { __typename?: 'Query', getSystemLogs: Array<{ __typename?: 'SystemLog', id: string, type: LogType, message: string, details?: string | null, userId?: string | null, createdAt: string }> };
+export type GetSystemLogsQuery = { __typename?: 'Query', getSystemLogs: Array<{ __typename?: 'SystemLog', id: string, type: LogType, message: string, details?: string | null, userId?: string | null, ipAddress?: string | null, createdAt: string }> };
 
 export type GetSystemLogByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetSystemLogByIdQuery = { __typename?: 'Query', getSystemLogById?: { __typename?: 'SystemLog', id: string, type: LogType, message: string, details?: string | null, userId?: string | null, createdAt: string } | null };
+export type GetSystemLogByIdQuery = { __typename?: 'Query', getSystemLogById?: { __typename?: 'SystemLog', id: string, type: LogType, message: string, details?: string | null, userId?: string | null, ipAddress?: string | null, createdAt: string } | null };
 
 export type LoginMutationVariables = Exact<{
   data: UserInput;
@@ -897,252 +930,214 @@ export type GetMyContactsQueryHookResult = ReturnType<typeof useGetMyContactsQue
 export type GetMyContactsLazyQueryHookResult = ReturnType<typeof useGetMyContactsLazyQuery>;
 export type GetMyContactsSuspenseQueryHookResult = ReturnType<typeof useGetMyContactsSuspenseQuery>;
 export type GetMyContactsQueryResult = Apollo.QueryResult<GetMyContactsQuery, GetMyContactsQueryVariables>;
-export const CreateReportByIdsDocument = gql`
-    mutation CreateReportByIds($input: CreateReportInput!) {
-  createReportByIds(input: $input) {
-    id
-    reason
-    content
-    createdAt
-    user {
-      id
-      email
-    }
-    resource {
-      id
-      name
-      user {
-        id
-        email
-      }
-    }
-  }
+export const CreatePaymentIntentDocument = gql`
+    mutation CreatePaymentIntent($amount: Float!, $currency: String, $description: String, $metadata: String) {
+  createPaymentIntent(
+    amount: $amount
+    currency: $currency
+    description: $description
+    metadata: $metadata
+  )
 }
     `;
-export type CreateReportByIdsMutationFn = Apollo.MutationFunction<CreateReportByIdsMutation, CreateReportByIdsMutationVariables>;
+export type CreatePaymentIntentMutationFn = Apollo.MutationFunction<CreatePaymentIntentMutation, CreatePaymentIntentMutationVariables>;
 
 /**
- * __useCreateReportByIdsMutation__
+ * __useCreatePaymentIntentMutation__
  *
- * To run a mutation, you first call `useCreateReportByIdsMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateReportByIdsMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreatePaymentIntentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatePaymentIntentMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createReportByIdsMutation, { data, loading, error }] = useCreateReportByIdsMutation({
+ * const [createPaymentIntentMutation, { data, loading, error }] = useCreatePaymentIntentMutation({
  *   variables: {
- *      input: // value for 'input'
+ *      amount: // value for 'amount'
+ *      currency: // value for 'currency'
+ *      description: // value for 'description'
+ *      metadata: // value for 'metadata'
  *   },
  * });
  */
-export function useCreateReportByIdsMutation(baseOptions?: Apollo.MutationHookOptions<CreateReportByIdsMutation, CreateReportByIdsMutationVariables>) {
+export function useCreatePaymentIntentMutation(baseOptions?: Apollo.MutationHookOptions<CreatePaymentIntentMutation, CreatePaymentIntentMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateReportByIdsMutation, CreateReportByIdsMutationVariables>(CreateReportByIdsDocument, options);
+        return Apollo.useMutation<CreatePaymentIntentMutation, CreatePaymentIntentMutationVariables>(CreatePaymentIntentDocument, options);
       }
-export type CreateReportByIdsMutationHookResult = ReturnType<typeof useCreateReportByIdsMutation>;
-export type CreateReportByIdsMutationResult = Apollo.MutationResult<CreateReportByIdsMutation>;
-export type CreateReportByIdsMutationOptions = Apollo.BaseMutationOptions<CreateReportByIdsMutation, CreateReportByIdsMutationVariables>;
-export const DeleteReportDocument = gql`
-    mutation DeleteReport($reportToDelete: ReportInput!) {
-  deleteReport(reportToDelete: $reportToDelete)
+export type CreatePaymentIntentMutationHookResult = ReturnType<typeof useCreatePaymentIntentMutation>;
+export type CreatePaymentIntentMutationResult = Apollo.MutationResult<CreatePaymentIntentMutation>;
+export type CreatePaymentIntentMutationOptions = Apollo.BaseMutationOptions<CreatePaymentIntentMutation, CreatePaymentIntentMutationVariables>;
+export const ConfirmPaymentDocument = gql`
+    mutation ConfirmPayment($clientSecret: String!, $paymentMethodId: String!) {
+  confirmPayment(clientSecret: $clientSecret, paymentMethodId: $paymentMethodId)
 }
     `;
-export type DeleteReportMutationFn = Apollo.MutationFunction<DeleteReportMutation, DeleteReportMutationVariables>;
+export type ConfirmPaymentMutationFn = Apollo.MutationFunction<ConfirmPaymentMutation, ConfirmPaymentMutationVariables>;
 
 /**
- * __useDeleteReportMutation__
+ * __useConfirmPaymentMutation__
  *
- * To run a mutation, you first call `useDeleteReportMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteReportMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useConfirmPaymentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useConfirmPaymentMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [deleteReportMutation, { data, loading, error }] = useDeleteReportMutation({
+ * const [confirmPaymentMutation, { data, loading, error }] = useConfirmPaymentMutation({
  *   variables: {
- *      reportToDelete: // value for 'reportToDelete'
+ *      clientSecret: // value for 'clientSecret'
+ *      paymentMethodId: // value for 'paymentMethodId'
  *   },
  * });
  */
-export function useDeleteReportMutation(baseOptions?: Apollo.MutationHookOptions<DeleteReportMutation, DeleteReportMutationVariables>) {
+export function useConfirmPaymentMutation(baseOptions?: Apollo.MutationHookOptions<ConfirmPaymentMutation, ConfirmPaymentMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteReportMutation, DeleteReportMutationVariables>(DeleteReportDocument, options);
+        return Apollo.useMutation<ConfirmPaymentMutation, ConfirmPaymentMutationVariables>(ConfirmPaymentDocument, options);
       }
-export type DeleteReportMutationHookResult = ReturnType<typeof useDeleteReportMutation>;
-export type DeleteReportMutationResult = Apollo.MutationResult<DeleteReportMutation>;
-export type DeleteReportMutationOptions = Apollo.BaseMutationOptions<DeleteReportMutation, DeleteReportMutationVariables>;
-export const GetAllReportsDocument = gql`
-    query GetAllReports {
-  getAllReports {
-    id
-    reason
-    content
-    createdAt
-    user {
-      id
-      email
-    }
-    resource {
-      id
-      name
-      url
-      user {
-        id
-        email
+export type ConfirmPaymentMutationHookResult = ReturnType<typeof useConfirmPaymentMutation>;
+export type ConfirmPaymentMutationResult = Apollo.MutationResult<ConfirmPaymentMutation>;
+export type ConfirmPaymentMutationOptions = Apollo.BaseMutationOptions<ConfirmPaymentMutation, ConfirmPaymentMutationVariables>;
+export const CreateStripeSubscriptionDocument = gql`
+    mutation CreateStripeSubscription($priceId: String!) {
+  createStripeSubscription(priceId: $priceId)
+}
+    `;
+export type CreateStripeSubscriptionMutationFn = Apollo.MutationFunction<CreateStripeSubscriptionMutation, CreateStripeSubscriptionMutationVariables>;
+
+/**
+ * __useCreateStripeSubscriptionMutation__
+ *
+ * To run a mutation, you first call `useCreateStripeSubscriptionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateStripeSubscriptionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createStripeSubscriptionMutation, { data, loading, error }] = useCreateStripeSubscriptionMutation({
+ *   variables: {
+ *      priceId: // value for 'priceId'
+ *   },
+ * });
+ */
+export function useCreateStripeSubscriptionMutation(baseOptions?: Apollo.MutationHookOptions<CreateStripeSubscriptionMutation, CreateStripeSubscriptionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateStripeSubscriptionMutation, CreateStripeSubscriptionMutationVariables>(CreateStripeSubscriptionDocument, options);
       }
-    }
-  }
+export type CreateStripeSubscriptionMutationHookResult = ReturnType<typeof useCreateStripeSubscriptionMutation>;
+export type CreateStripeSubscriptionMutationResult = Apollo.MutationResult<CreateStripeSubscriptionMutation>;
+export type CreateStripeSubscriptionMutationOptions = Apollo.BaseMutationOptions<CreateStripeSubscriptionMutation, CreateStripeSubscriptionMutationVariables>;
+export const CancelSubscriptionDocument = gql`
+    mutation CancelSubscription($subscriptionId: String!) {
+  cancelSubscription(subscriptionId: $subscriptionId)
+}
+    `;
+export type CancelSubscriptionMutationFn = Apollo.MutationFunction<CancelSubscriptionMutation, CancelSubscriptionMutationVariables>;
+
+/**
+ * __useCancelSubscriptionMutation__
+ *
+ * To run a mutation, you first call `useCancelSubscriptionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCancelSubscriptionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [cancelSubscriptionMutation, { data, loading, error }] = useCancelSubscriptionMutation({
+ *   variables: {
+ *      subscriptionId: // value for 'subscriptionId'
+ *   },
+ * });
+ */
+export function useCancelSubscriptionMutation(baseOptions?: Apollo.MutationHookOptions<CancelSubscriptionMutation, CancelSubscriptionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CancelSubscriptionMutation, CancelSubscriptionMutationVariables>(CancelSubscriptionDocument, options);
+      }
+export type CancelSubscriptionMutationHookResult = ReturnType<typeof useCancelSubscriptionMutation>;
+export type CancelSubscriptionMutationResult = Apollo.MutationResult<CancelSubscriptionMutation>;
+export type CancelSubscriptionMutationOptions = Apollo.BaseMutationOptions<CancelSubscriptionMutation, CancelSubscriptionMutationVariables>;
+export const GetPaymentIntentDocument = gql`
+    query GetPaymentIntent($paymentIntentId: String!) {
+  getPaymentIntent(paymentIntentId: $paymentIntentId)
 }
     `;
 
 /**
- * __useGetAllReportsQuery__
+ * __useGetPaymentIntentQuery__
  *
- * To run a query within a React component, call `useGetAllReportsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetAllReportsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetPaymentIntentQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPaymentIntentQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetAllReportsQuery({
+ * const { data, loading, error } = useGetPaymentIntentQuery({
  *   variables: {
+ *      paymentIntentId: // value for 'paymentIntentId'
  *   },
  * });
  */
-export function useGetAllReportsQuery(baseOptions?: Apollo.QueryHookOptions<GetAllReportsQuery, GetAllReportsQueryVariables>) {
+export function useGetPaymentIntentQuery(baseOptions: Apollo.QueryHookOptions<GetPaymentIntentQuery, GetPaymentIntentQueryVariables> & ({ variables: GetPaymentIntentQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetAllReportsQuery, GetAllReportsQueryVariables>(GetAllReportsDocument, options);
+        return Apollo.useQuery<GetPaymentIntentQuery, GetPaymentIntentQueryVariables>(GetPaymentIntentDocument, options);
       }
-export function useGetAllReportsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllReportsQuery, GetAllReportsQueryVariables>) {
+export function useGetPaymentIntentLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPaymentIntentQuery, GetPaymentIntentQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetAllReportsQuery, GetAllReportsQueryVariables>(GetAllReportsDocument, options);
+          return Apollo.useLazyQuery<GetPaymentIntentQuery, GetPaymentIntentQueryVariables>(GetPaymentIntentDocument, options);
         }
-export function useGetAllReportsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAllReportsQuery, GetAllReportsQueryVariables>) {
+export function useGetPaymentIntentSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetPaymentIntentQuery, GetPaymentIntentQueryVariables>) {
           const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetAllReportsQuery, GetAllReportsQueryVariables>(GetAllReportsDocument, options);
+          return Apollo.useSuspenseQuery<GetPaymentIntentQuery, GetPaymentIntentQueryVariables>(GetPaymentIntentDocument, options);
         }
-export type GetAllReportsQueryHookResult = ReturnType<typeof useGetAllReportsQuery>;
-export type GetAllReportsLazyQueryHookResult = ReturnType<typeof useGetAllReportsLazyQuery>;
-export type GetAllReportsSuspenseQueryHookResult = ReturnType<typeof useGetAllReportsSuspenseQuery>;
-export type GetAllReportsQueryResult = Apollo.QueryResult<GetAllReportsQuery, GetAllReportsQueryVariables>;
-export const GetReportsByUserDocument = gql`
-    query GetReportsByUser($id: ID!) {
-  getReportsByUser(id: $id) {
-    id
-    reason
-    content
-    createdAt
-    user {
-      id
-      email
-    }
-    resource {
-      id
-      name
-      url
-      user {
-        id
-        email
-      }
-    }
-  }
+export type GetPaymentIntentQueryHookResult = ReturnType<typeof useGetPaymentIntentQuery>;
+export type GetPaymentIntentLazyQueryHookResult = ReturnType<typeof useGetPaymentIntentLazyQuery>;
+export type GetPaymentIntentSuspenseQueryHookResult = ReturnType<typeof useGetPaymentIntentSuspenseQuery>;
+export type GetPaymentIntentQueryResult = Apollo.QueryResult<GetPaymentIntentQuery, GetPaymentIntentQueryVariables>;
+export const GetUserStripeCustomerIdDocument = gql`
+    query GetUserStripeCustomerId {
+  getUserStripeCustomerId
 }
     `;
 
 /**
- * __useGetReportsByUserQuery__
+ * __useGetUserStripeCustomerIdQuery__
  *
- * To run a query within a React component, call `useGetReportsByUserQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetReportsByUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetUserStripeCustomerIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserStripeCustomerIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetReportsByUserQuery({
+ * const { data, loading, error } = useGetUserStripeCustomerIdQuery({
  *   variables: {
- *      id: // value for 'id'
  *   },
  * });
  */
-export function useGetReportsByUserQuery(baseOptions: Apollo.QueryHookOptions<GetReportsByUserQuery, GetReportsByUserQueryVariables> & ({ variables: GetReportsByUserQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+export function useGetUserStripeCustomerIdQuery(baseOptions?: Apollo.QueryHookOptions<GetUserStripeCustomerIdQuery, GetUserStripeCustomerIdQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetReportsByUserQuery, GetReportsByUserQueryVariables>(GetReportsByUserDocument, options);
+        return Apollo.useQuery<GetUserStripeCustomerIdQuery, GetUserStripeCustomerIdQueryVariables>(GetUserStripeCustomerIdDocument, options);
       }
-export function useGetReportsByUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetReportsByUserQuery, GetReportsByUserQueryVariables>) {
+export function useGetUserStripeCustomerIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserStripeCustomerIdQuery, GetUserStripeCustomerIdQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetReportsByUserQuery, GetReportsByUserQueryVariables>(GetReportsByUserDocument, options);
+          return Apollo.useLazyQuery<GetUserStripeCustomerIdQuery, GetUserStripeCustomerIdQueryVariables>(GetUserStripeCustomerIdDocument, options);
         }
-export function useGetReportsByUserSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetReportsByUserQuery, GetReportsByUserQueryVariables>) {
+export function useGetUserStripeCustomerIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetUserStripeCustomerIdQuery, GetUserStripeCustomerIdQueryVariables>) {
           const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetReportsByUserQuery, GetReportsByUserQueryVariables>(GetReportsByUserDocument, options);
+          return Apollo.useSuspenseQuery<GetUserStripeCustomerIdQuery, GetUserStripeCustomerIdQueryVariables>(GetUserStripeCustomerIdDocument, options);
         }
-export type GetReportsByUserQueryHookResult = ReturnType<typeof useGetReportsByUserQuery>;
-export type GetReportsByUserLazyQueryHookResult = ReturnType<typeof useGetReportsByUserLazyQuery>;
-export type GetReportsByUserSuspenseQueryHookResult = ReturnType<typeof useGetReportsByUserSuspenseQuery>;
-export type GetReportsByUserQueryResult = Apollo.QueryResult<GetReportsByUserQuery, GetReportsByUserQueryVariables>;
-export const GetReportsByResourceDocument = gql`
-    query GetReportsByResource($id: ID!) {
-  getReportsByResource(id: $id) {
-    id
-    reason
-    content
-    createdAt
-    user {
-      id
-      email
-    }
-    resource {
-      id
-      name
-      url
-      user {
-        id
-        email
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useGetReportsByResourceQuery__
- *
- * To run a query within a React component, call `useGetReportsByResourceQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetReportsByResourceQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetReportsByResourceQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetReportsByResourceQuery(baseOptions: Apollo.QueryHookOptions<GetReportsByResourceQuery, GetReportsByResourceQueryVariables> & ({ variables: GetReportsByResourceQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetReportsByResourceQuery, GetReportsByResourceQueryVariables>(GetReportsByResourceDocument, options);
-      }
-export function useGetReportsByResourceLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetReportsByResourceQuery, GetReportsByResourceQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetReportsByResourceQuery, GetReportsByResourceQueryVariables>(GetReportsByResourceDocument, options);
-        }
-export function useGetReportsByResourceSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetReportsByResourceQuery, GetReportsByResourceQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetReportsByResourceQuery, GetReportsByResourceQueryVariables>(GetReportsByResourceDocument, options);
-        }
-export type GetReportsByResourceQueryHookResult = ReturnType<typeof useGetReportsByResourceQuery>;
-export type GetReportsByResourceLazyQueryHookResult = ReturnType<typeof useGetReportsByResourceLazyQuery>;
-export type GetReportsByResourceSuspenseQueryHookResult = ReturnType<typeof useGetReportsByResourceSuspenseQuery>;
-export type GetReportsByResourceQueryResult = Apollo.QueryResult<GetReportsByResourceQuery, GetReportsByResourceQueryVariables>;
+export type GetUserStripeCustomerIdQueryHookResult = ReturnType<typeof useGetUserStripeCustomerIdQuery>;
+export type GetUserStripeCustomerIdLazyQueryHookResult = ReturnType<typeof useGetUserStripeCustomerIdLazyQuery>;
+export type GetUserStripeCustomerIdSuspenseQueryHookResult = ReturnType<typeof useGetUserStripeCustomerIdSuspenseQuery>;
+export type GetUserStripeCustomerIdQueryResult = Apollo.QueryResult<GetUserStripeCustomerIdQuery, GetUserStripeCustomerIdQueryVariables>;
 export const CreateResourceDocument = gql`
     mutation CreateResource($data: ResourceInput!) {
   createResource(data: $data) {
@@ -1537,6 +1532,7 @@ export const CreateSystemLogDocument = gql`
     message
     details
     userId
+    ipAddress
     createdAt
   }
 }
@@ -1636,6 +1632,7 @@ export const GetSystemLogsDocument = gql`
     message
     details
     userId
+    ipAddress
     createdAt
   }
 }
@@ -1683,6 +1680,7 @@ export const GetSystemLogByIdDocument = gql`
     message
     details
     userId
+    ipAddress
     createdAt
   }
 }

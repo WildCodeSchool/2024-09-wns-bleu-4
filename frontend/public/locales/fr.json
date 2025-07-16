@@ -5,11 +5,12 @@
     "success": "Succès",
     "save": "Enregistrer",
     "cancel": "Annuler",
-    "add": "Ajouter",
-    "sending": "Envoi...",
     "delete": "Supprimer",
     "edit": "Modifier",
-    "submit": "Envoyer"
+    "submit": "Envoyer",
+    "back": "Retour",
+    "backToHome": "Retour à l'accueil",
+    "retry": "Réessayer"
   },
   "navigation": {
     "title": "Navigation",
@@ -40,70 +41,83 @@
       "backToHome": "Retour à l'accueil"
     }
   },
-  "auth": {
-    "title": "Authentification",
-    "logoutSuccess": "Déconnexion réussie",
-    "form": {
-      "title": "Veuillez vous connecter pour continuer",
-      "email": {
-        "label": "Email",
-        "placeholder": "exemple@exemple.com",
-        "validation": "Veuillez saisir une adresse email valide"
+  "home": {
+    "title": "La solution simple et rapide pour tous vos transferts de fichiers",
+    "subtitle": "Transfert de fichiers sécurisé et rapide",
+    "getStarted": "Commencer",
+    "learnMore": "En savoir plus",
+    "uploadButton": "Transférer vos fichiers",
+    "description": "Page d'accueil de Wild Transfer",
+    "disclaimer": "Wildtransfer est un projet d'étude réalisé par des étudiants de la Wild Code School. Pour des raisons de sécurité nous vous conseillons de ne pas fournir des informations sensibles ou personnelles. Utilisez des emails temporaires pour vous inscrire ainsi que des mots de passe différents de ceux utilisés habituellement et ne partagez pas de fichiers sensibles."
+  },
+  "about": {
+    "title": "À propos de Wild Transfer",
+    "subtitle": "Une plateforme moderne pour transférer vos fichiers en toute sérénité",
+    "description1": "est une solution simple, rapide et sécurisée pour le partage de fichiers. Elle s'adresse aussi bien aux professionnels qu'aux particuliers, avec une interface intuitive pensée pour une expérience fluide.",
+    "description2": "Notre mission est de garantir un service fiable et respectueux de votre vie privée. Nous utilisons des technologies modernes pour assurer la sécurité et la confidentialité de vos données.",
+    "description3": "Développée par une équipe de développeurs, la plateforme évolue en permanence pour répondre aux nouveaux usages et proposer des fonctionnalités adaptées à vos besoins.",
+    "contactText": "Pour toute question ou suggestion, n'hésitez pas à nous contacter via la",
+    "contactLink": "page de contact",
+    "description": "En savoir plus sur Wild Transfer"
+  },
+  "contact": {
+    "title": "Mes contacts",
+    "error": "Erreur lors du chargement des contacts",
+    "tabs": {
+      "received": "Demandes reçues",
+      "contacts": "Mes contacts",
+      "sent": "Demandes envoyées"
+    },
+    "empty": {
+      "requests": {
+        "title": "Aucune demande reçue",
+        "description": "Vous n'avez pas de nouvelles demandes de contact."
       },
-      "password": {
-        "label": "Mot de passe",
-        "placeholder": "Votre mot de passe",
-        "validation": {
-          "minLength": "Le mot de passe doit contenir au moins 12 caractères",
-          "uppercase": "Doit contenir au moins une majuscule",
-          "number": "Doit contenir au moins un chiffre",
-          "special": "Doit contenir au moins un caractère spécial"
+      "contacts": {
+        "title": "Aucun contact",
+        "description": "Commencez par ajouter des contacts pour élargir votre réseau."
+      },
+      "sent": {
+        "title": "Aucune demande envoyée",
+        "description": "Vous n'avez pas encore envoyé de demandes de contact."
+      },
+      "default": {
+        "title": "Aucun élément",
+        "description": "Aucun élément à afficher."
+      }
+    },
+    "actions": {
+      "accept": "Accepter",
+      "refuse": "Refuser",
+      "remove": "Supprimer le contact",
+      "cancel": "Annuler",
+      "delete": "Supprimer"
+    },
+    "delete": {
+      "title": "Supprimer le contact",
+      "description": "Êtes-vous sûr de vouloir supprimer {{email}} de vos contacts ? Cette action est irréversible."
+    },
+    "add": {
+      "button": "Ajouter des contacts",
+      "title": "Ajouter un contact",
+      "description": "Vous pouvez ajouter un contact en entrant son adresse e-mail.",
+      "form": {
+        "email": {
+          "label": "Adresse e-mail",
+          "placeholder": "exemple@email.com",
+          "invalid": "Email invalide",
+          "required": "L'email est requis"
         }
       },
-      "submit": "Valider",
-      "loading": "{{action}} ..."
-    },
-    "login": {
-      "title": "Connexion",
-      "email": "Email",
-      "password": "Mot de passe",
-      "rememberMe": "Se souvenir de moi",
-      "forgotPassword": "Mot de passe oublié ?",
-      "success": "Connexion réussie",
-      "error": "Erreur de connexion",
-      "links": {
-        "createAccount": "Créer un compte"
+      "actions": {
+        "cancel": "Annuler",
+        "add": "Ajouter",
+        "sending": "Envoi..."
       }
-    },
-    "signup": {
-      "title": "Inscription",
-      "email": "Email",
-      "password": "Mot de passe",
-      "confirmPassword": "Confirmer le mot de passe",
-      "terms": "J'accepte les conditions générales",
-      "success": "Veuillez vérifier votre email pour confirmer votre compte.",
-      "error": "Une erreur inconnue est survenue.",
-      "links": {
-        "terms": "En appuyant sur \"Valider\", vous avez lu et vous acceptez les",
-        "termsLink": "CGU",
-        "and": "et la",
-        "privacyLink": "Politique de Confidentialité"
-      }
-    },
-    "confirm": {
-      "title": "Vérification inscription",
-      "description": "Veuillez vérifier votre boîte mail afin de finaliser votre inscription.",
-      "resendEmail": "Renvoyer un email",
-      "success": "Votre email a bien été confirmé, vous pouvez vous connecter !",
-      "error": "Le code saisie est incorrect ou a expiré, veuillez réessayer."
-    },
-    "protectedRoute": {
-      "error": "Vous devez être connecté pour accéder à cette page"
     }
   },
   "profile": {
     "title": "Mon profil",
-    "description": "Page de profil",
     "personalInfo": {
       "title": "Informations personnelles",
       "description": "Modifiez vos informations personnelles."
@@ -126,15 +140,13 @@
       "upload": "Changer la photo de profil",
       "uploading": "Téléchargement...",
       "success": "Photo de profil mise à jour avec succès",
-      "altWithEmail": "Photo de profil de {{email}}",
-      "altWithoutEmail": "Photo de profil utilisateur",
-      "uploadLabel": "Télécharger une nouvelle photo de profil",
       "error": {
         "invalidType": "Type de fichier non supporté. Utilisez JPG, PNG, GIF, WebP ou SVG.",
         "tooLarge": "Le fichier est trop volumineux. Maximum 10 Mo.",
         "upload": "Erreur lors de la mise à jour de votre photo de profil"
       }
-    }
+    },
+    "description": "Page de profil"
   },
   "files": {
     "title": {
@@ -205,125 +217,65 @@
       "button_plural": "Partager avec {{count}} contacts"
     }
   },
-  "fileCard": {
-    "sharedBy": "Partagé par",
-    "share": {
-      "title": "Partager le fichier",
-      "search": {
-        "label": "Rechercher un contact",
-        "placeholder": "Rechercher par email..."
-      },
-      "noContacts": "Aucun contact trouvé",
-      "button": "Partager avec {{count}} contact{{plural}}",
-      "error": {
-        "noSelection": "Veuillez sélectionner au moins un contact",
-        "sharing": "Erreur lors du partage du fichier"
-      },
-      "success": "Fichier partagé avec succès"
-    },
-    "delete": {
-      "confirm": "Voulez-vous vraiment supprimer \"{{name}}\" ?",
-      "button": "Supprimer le fichier"
-    },
-    "preview": {
-      "audio": "Votre navigateur ne supporte pas la lecture audio",
-      "video": "Votre navigateur ne supporte pas la lecture vidéo"
-    },
-    "menu": {
-      "info": "Informations",
-      "report": "Signaler"
-    },
-    "info": {
-      "title": "Informations sur le fichier",
-      "name": "Nom du fichier",
-      "size": "Taille",
-      "description": "Description",
-      "owner": "Propriétaire",
-      "url": "URL"
-    },
-    "report": {
-      "title": "Signaler ce fichier",
-      "description": "Pourquoi souhaitez-vous signaler ce fichier ?",
-      "reason": "Raison du signalement",
-      "reasons": {
-        "inappropriate": "Contenu inapproprié",
-        "harassment": "Harcèlement",
-        "spam": "Spam",
-        "corrupted": "Fichier corrompu ou illisible",
-        "display": "Problème d'affichage",
-        "other": "Autre"
-      },
-      "success": "Fichier signalé avec succès",
-      "error": "Erreur lors du signalement",
-      "confirm": {
-        "title": "Confirmer le signalement",
-        "description": "Êtes-vous sûr de vouloir signaler ce fichier pour",
-        "cancel": "Annuler",
-        "confirm": "Signaler"
-      }
-    }
-  },
-  "contacts": {
-    "title": "Mes contacts",
-    "error": "Erreur lors du chargement des contacts",
-    "tabs": {
-      "received": "Demandes reçues",
-      "contacts": "Mes contacts",
-      "sent": "Demandes envoyées"
-    },
-    "empty": {
-      "requests": {
-        "title": "Aucune demande reçue",
-        "description": "Vous n'avez pas de nouvelles demandes de contact."
-      },
-      "contacts": {
-        "title": "Aucun contact",
-        "description": "Commencez par ajouter des contacts pour élargir votre réseau."
-      },
-      "sent": {
-        "title": "Aucune demande envoyée",
-        "description": "Vous n'avez pas encore envoyé de demandes de contact."
-      },
-      "default": {
-        "title": "Aucun élément",
-        "description": "Aucun élément à afficher."
-      }
-    },
-    "actions": {
-      "accept": "Accepter",
-      "refuse": "Refuser",
-      "remove": "Supprimer le contact",
-      "cancel": "Annuler",
-      "delete": "Supprimer"
-    },
-    "delete": {
-      "title": "Supprimer le contact",
-      "description": "Êtes-vous sûr de vouloir supprimer {{email}} de vos contacts ? Cette action est irréversible."
-    },
-    "add": {
-      "button": "Ajouter des contacts",
-      "title": "Ajouter un contact",
-      "description": "Vous pouvez ajouter un contact en entrant son adresse e-mail.",
-      "form": {
-        "email": {
-          "label": "Adresse e-mail",
-          "placeholder": "exemple@email.com",
-          "invalid": "Email invalide",
-          "required": "L'email est requis"
-        }
-      },
-      "actions": {
-        "cancel": "Annuler",
-        "add": "Ajouter",
-        "sending": "Envoi..."
-      }
-    }
-  },
   "subscription": {
     "title": "Plans d'abonnement",
     "currentPlan": "Plan actuel",
     "upgrade": "Améliorer",
-    "downgrade": "Rétrograder"
+    "downgrade": "Rétrograder",
+    "alreadySubscribed": "Vous êtes déjà abonné",
+    "success": {
+      "title": "Abonnement activé !",
+      "description": "Votre abonnement est maintenant actif. Merci pour votre souscription !",
+      "expiration": "Votre abonnement est valable jusqu'au {{date}}"
+    },
+    "error": {
+      "title": "Erreur d'abonnement",
+      "description": "Un problème est survenu lors de l'activation de votre abonnement. Veuillez réessayer ou contacter le support."
+    },
+    "premiumPlan": {
+      "name": "ABONNEMENT PREMIUM",
+      "description": "Accès complet à la plateforme de transfert de fichiers",
+      "startNow": "Commencer maintenant",
+      "perMonth": "par mois"
+    },
+    "feature": {
+      "unlimitedTransfer": "Transfert de fichiers illimité",
+      "shareWithContacts": "Partage avec vos contacts",
+      "emailSupport": "Support par email",
+      "allFeatures": "Accès à toutes les fonctionnalités",
+      "modernUI": "Interface moderne et intuitive",
+      "enhancedSecurity": "Sécurité renforcée"
+    },
+    "simpleEffectiveTitle": "Abonnement simple et efficace",
+    "simpleEffectiveDescription": "Un seul plan pour tous vos besoins de transfert de fichiers. Accès complet à toutes les fonctionnalités de la plateforme."
+  },
+  "payment": {
+    "page": {
+      "title": "Finalisez votre abonnement",
+      "description": "Vous n'êtes qu'à une étape d'accéder à toutes les fonctionnalités premium"
+    },
+    "title": "Finalisez votre paiement",
+    "description": "Saisissez vos informations de paiement pour finaliser votre abonnement",
+    "processing": "Traitement en cours...",
+    "pay": "Payer maintenant",
+    "initializing": "Initialisation du paiement...",
+    "loading": "Chargement du formulaire de paiement...",
+    "success": {
+      "message": "Votre abonnement a été activé avec succès !"
+    },
+    "error": {
+      "message": "Une erreur est survenue lors du traitement de votre paiement. Veuillez réessayer."
+    },
+    "security": {
+      "notice": "Vos informations de paiement sont sécurisées et cryptées par Stripe"
+    }
+  },
+  "pricing": {
+    "yearlyBilling": "Facturation annuelle",
+    "save20Percent": "(Économisez 20%)",
+    "monthlyBilling": "facturation mensuelle",
+    "popular": "Populaire",
+    "threeMonths": "3 mois"
   },
   "admin": {
     "title": "Panneau d'administration",
@@ -341,8 +293,6 @@
       "filesDescription": "Fichiers téléchargés",
       "admins": "Administrateurs",
       "adminsDescription": "Utilisateurs administrateurs",
-      "reports": "Signalements",
-      "reportsDescription": "Signalements de fichiers",
       "activity": "Activité récente",
       "activityDescription": "Activité système"
     },
@@ -367,7 +317,7 @@
       "subscribed": "Abonné",
       "actions": {
         "edit": "Modifier",
-        "delete": "Supprimer"
+        "submit": "Envoyer"
       },
       "delete": {
         "title": "Supprimer l'utilisateur",
@@ -389,7 +339,6 @@
       "title": "Gestion des fichiers",
       "description": "Surveiller et gérer les fichiers téléchargés et le stockage",
       "viewAll": "Voir tous les fichiers",
-      "manageStorage": "Gérer le stockage",
       "search": {
         "placeholder": "Rechercher un fichier par nom, description ou utilisateur..."
       },
@@ -415,35 +364,11 @@
         "error": "Erreur lors de la suppression du fichier"
       }
     },
-    "reports": {
-      "title": "Gestion des signalements",
-      "description": "Surveiller et gérer les signalements de fichiers par les utilisateurs",
-      "viewAll": "Voir tous les signalements",
-      "search": {
-        "placeholder": "Rechercher un signalement par utilisateur ou fichier..."
-      },
-      "stats": {
-        "total": "Total signalements",
-        "pending": "En attente",
-        "resolved": "Résolus"
-      },
-      "list": {
-        "title": "Liste des signalements",
-        "empty": "Aucun signalement trouvé",
-        "noResults": "Aucun signalement ne correspond à votre recherche"
-      },
-      "details": {
-        "reporter": "Signalé par",
-        "fileOwner": "Propriétaire du fichier",
-        "fileName": "Nom du fichier",
-        "reason": "Raison",
-        "content": "Détails",
-        "createdAt": "Créé le"
-      },
-      "actions": {
-        "resolve": "Résoudre",
-        "delete": "Supprimer"
-      }
+    "quickActions": {
+      "title": "Actions rapides",
+      "addUser": "Ajouter un utilisateur",
+      "manageRoles": "Gérer les rôles",
+      "viewLogs": "Voir les journaux"
     },
     "logs": {
       "title": "Journaux d'événements",
@@ -454,13 +379,11 @@
         "warning": "Avertissement",
         "info": "Information"
       }
-    },
-    "quickActions": {
-      "title": "Actions rapides",
-      "addUser": "Ajouter un utilisateur",
-      "manageRoles": "Gérer les rôles",
-      "viewLogs": "Voir les journaux"
     }
+  },
+  "userManagement": {
+    "title": "Gestion des utilisateurs",
+    "description": "Gérer les comptes utilisateurs, rôles et permissions"
   },
   "howItWorks": {
     "title": "Comment ça marche ?",
@@ -501,40 +424,100 @@
       }
     }
   },
-  "pages": {
-    "home": {
-      "title": "La solution simple et rapide pour tous vos transferts de fichiers",
-      "subtitle": "Transfert de fichiers sécurisé et rapide",
-      "getStarted": "Commencer",
-      "learnMore": "En savoir plus",
-      "uploadButton": "Transférer vos fichiers",
-      "description": "Page d'accueil de Wild Transfer",
-      "disclaimer": "Wildtransfer est un projet d'étude réalisé par des étudiants de la Wild Code School. Pour des raisons de sécurité nous vous conseillons de ne pas fournir des informations sensibles ou personnelles. Utilisez des emails temporaires pour vous inscrire ainsi que des mots de passe différents de ceux utilisés habituellement et ne partagez pas de fichiers sensibles."
+  "auth": {
+    "title": "Authentification",
+    "logoutSuccess": "Déconnexion réussie",
+    "logIn": {
+      "title": "Connexion",
+      "email": "Email",
+      "password": "Mot de passe",
+      "rememberMe": "Se souvenir de moi",
+      "forgotPassword": "Mot de passe oublié ?",
+      "description": "Connexion à un compte Wild Transfer"
     },
-    "about": {
-      "title": "À propos de Wild Transfer",
-      "subtitle": "Une plateforme moderne pour transférer vos fichiers en toute sérénité",
-      "description": "En savoir plus sur Wild Transfer",
-      "description1": "est une solution simple, rapide et sécurisée pour le partage de fichiers. Elle s'adresse aussi bien aux professionnels qu'aux particuliers, avec une interface intuitive pensée pour une expérience fluide.",
-      "description2": "Notre mission est de garantir un service fiable et respectueux de votre vie privée. Nous utilisons des technologies modernes pour assurer la sécurité et la confidentialité de vos données.",
-      "description3": "Développée par une équipe de développeurs, la plateforme évolue en permanence pour répondre aux nouveaux usages et proposer des fonctionnalités adaptées à vos besoins.",
-      "contactText": "Pour toute question ou suggestion, n'hésitez pas à nous contacter via la",
-      "contactLink": "page de contact"
+    "signUp": {
+      "title": "Inscription",
+      "email": "Email",
+      "password": "Mot de passe",
+      "confirmPassword": "Confirmer le mot de passe",
+      "terms": "J'accepte les conditions générales",
+      "description": "Création de compte Wild Transfer"
+    },
+    "form": {
+      "title": "Veuillez vous connecter pour continuer",
+      "email": {
+        "label": "Email",
+        "placeholder": "exemple@exemple.com",
+        "validation": "Veuillez saisir une adresse email valide"
+      },
+      "password": {
+        "label": "Mot de passe",
+        "placeholder": "Votre mot de passe",
+        "validation": {
+          "minLength": "Le mot de passe doit contenir au moins 12 caractères",
+          "uppercase": "Doit contenir au moins une majuscule",
+          "number": "Doit contenir au moins un chiffre",
+          "special": "Doit contenir au moins un caractère spécial"
+        }
+      },
+      "submit": "Valider",
+      "loading": "{{action}} ..."
+    },
+    "login": {
+      "title": "Connexion",
+      "success": "Connexion réussie",
+      "error": "Erreur de connexion",
+      "links": {
+        "forgotPassword": "Mot de passe oublié ?",
+        "createAccount": "Créer un compte"
+      }
+    },
+    "signup": {
+      "title": "Inscription",
+      "success": "Veuillez vérifier votre email pour confirmer votre compte.",
+      "error": "Une erreur inconnue est survenue.",
+      "links": {
+        "terms": "En appuyant sur \"Valider\", vous avez lu et vous acceptez les",
+        "termsLink": "CGU",
+        "and": "et la",
+        "privacyLink": "Politique de Confidentialité"
+      },
+      "description": "Création de compte Wild Transfer"
+    },
+    "confirm": {
+      "title": "Vérification inscription",
+      "description": "Veuillez vérifier votre boîte mail afin de finaliser votre inscription.",
+      "resendEmail": "Renvoyer un email",
+      "success": "Votre email a bien été confirmé, vous pouvez vous connecter !",
+      "error": "Le code saisie est incorrect ou a expiré, veuillez réessayer."
+    },
+    "protectedRoute": {
+      "error": "Vous devez être connecté pour accéder à cette page"
     }
   },
-  "avatar": {
-    "altWithEmail": "Photo de profil de {{email}}",
-    "altWithoutEmail": "Photo de profil utilisateur",
-    "uploadLabel": "Télécharger une nouvelle photo de profil",
-    "upload": {
-      "title": "Mettre à jour la photo de profil",
-      "dragDrop": "Glissez-déposez une image ici, ou cliquez pour sélectionner",
-      "selectFile": "Sélectionner une image",
-      "uploading": "Téléchargement...",
-      "success": "Photo de profil mise à jour avec succès !",
-      "error": "Erreur lors du téléchargement de l'image. Veuillez réessayer.",
-      "invalidType": "Veuillez sélectionner un fichier image (JPG, PNG, GIF)",
-      "tooLarge": "L'image est trop volumineuse. Taille maximale : 5 Mo"
+  "fileCard": {
+    "sharedBy": "Partagé par",
+    "share": {
+      "title": "Partager le fichier",
+      "search": {
+        "label": "Rechercher un contact",
+        "placeholder": "Rechercher par email..."
+      },
+      "noContacts": "Aucun contact trouvé",
+      "button": "Partager avec {{count}} contact{{plural}}",
+      "error": {
+        "noSelection": "Veuillez sélectionner au moins un contact",
+        "sharing": "Erreur lors du partage du fichier"
+      },
+      "success": "Fichier partagé avec succès"
+    },
+    "delete": {
+      "confirm": "Voulez-vous vraiment supprimer \"{{name}}\" ?",
+      "button": "Supprimer le fichier"
+    },
+    "preview": {
+      "audio": "Votre navigateur ne supporte pas la lecture audio",
+      "video": "Votre navigateur ne supporte pas la lecture vidéo"
     }
   },
   "meta": {
@@ -566,9 +549,17 @@
       "title": "Mot de passe oublié",
       "description": "Récupération de mot de passe"
     },
+    "payment": {
+      "title": "Paiement d'abonnement",
+      "description": "Finalisez votre paiement d'abonnement pour Wild Transfer"
+    },
     "subscription": {
       "title": "Abonnement",
-      "description": "Abonnement au service Wild Transfer"
+      "description": "Abonnement au service Wild Transfer",
+      "success": {
+        "title": "Abonnement activé !",
+        "description": "Votre abonnement est maintenant actif. Merci pour votre souscription !"
+      }
     },
     "about": {
       "title": "À propos",
@@ -592,15 +583,38 @@
     },
     "admin": {
       "title": "Administration",
-      "description": "Panneau d'administration pour gérer les utilisateurs et fichiers"
-    },
-    "userManagement": {
-      "title": "Gestion des utilisateurs",
-      "description": "Gérer les comptes utilisateurs, rôles et permissions"
+      "description": "Panneau d'administration pour gérer les utilisateurs et fichiers",
+      "users": {
+        "title": "Gestion des utilisateurs",
+        "description": "Voir et gérer les comptes utilisateurs, rôles et permissions",
+        "actions": {
+          "delete": "Supprimer l'utilisateur"
+        }
+      },
+      "files": {
+        "title": "Gestion des fichiers",
+        "description": "Surveiller et gérer les fichiers téléchargés et le stockage"
+      }
     },
     "notFound": {
       "title": "404",
       "description": "Page non trouvée"
     }
+  },
+  "avatar": {
+    "altWithEmail": "Photo de profil de {{email}}",
+    "altWithoutEmail": "Photo de profil utilisateur",
+    "uploadLabel": "Télécharger une nouvelle photo de profil",
+    "upload": {
+      "title": "Mettre à jour la photo de profil",
+      "dragDrop": "Glissez-déposez une image ici, ou cliquez pour sélectionner",
+      "selectFile": "Sélectionner une image",
+      "uploading": "Téléchargement...",
+      "success": "Photo de profil mise à jour avec succès !",
+      "error": "Erreur lors du téléchargement de l'image. Veuillez réessayer.",
+      "invalidType": "Veuillez sélectionner un fichier image (JPG, PNG, GIF)",
+      "tooLarge": "L'image est trop volumineuse. Taille maximale : 5 Mo"
+    }
   }
 }
+  

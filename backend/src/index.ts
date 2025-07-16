@@ -2,6 +2,7 @@ import { dataSource } from '@/db';
 import CommentResolver from '@/resolvers/CommentResolver';
 import ContactResolver from '@/resolvers/ContactResolver';
 import LikeResolver from '@/resolvers/LikeResolver';
+import PaymentResolver from '@/resolvers/PaymentResolver';
 import ReportResolver from '@/resolvers/ReportResolver';
 import ResourceResolver from '@/resolvers/ResourceResolver';
 import SubscriptionResolver from '@/resolvers/SubscriptionResolver';
@@ -19,6 +20,16 @@ const start = async () => {
     if (!process.env.JWT_SECRET_KEY) {
         throw Error('no jwt secret');
     }
+
+    // Validate Stripe environment variables
+    if (!process.env.STRIPE_SECRET_KEY) {
+        console.warn('STRIPE_SECRET_KEY not found. Stripe functionality will be disabled.');
+    }
+
+    if (!process.env.STRIPE_WEBHOOK_SECRET) {
+        console.warn('STRIPE_WEBHOOK_SECRET not found. Webhook verification will be disabled.');
+    }
+
     await dataSource.initialize();
     const schema = await buildSchema({
         validate: true,
@@ -31,6 +42,7 @@ const start = async () => {
             SubscriptionResolver,
             ResourceResolver,
             SystemLogResolver,
+            PaymentResolver,
         ],
         authChecker: ({ context }, rolesForOperation) => {
             if (context.email) {

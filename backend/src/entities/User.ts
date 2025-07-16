@@ -110,6 +110,14 @@ export class User extends BaseEntity {
     @JoinColumn()
     subscription: Subscription | null;
 
+    @Field(() => String, { nullable: true })
+    @Column({
+        type: 'varchar',
+        length: 255,
+        nullable: true,
+    })
+    stripeCustomerId: string | null;
+
     @IsDate()
     @CreateDateColumn()
     createdAt: Date;
