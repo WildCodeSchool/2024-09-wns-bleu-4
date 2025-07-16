@@ -209,6 +209,7 @@
     "currentPlan": "Plan actuel",
     "upgrade": "Améliorer",
     "downgrade": "Rétrograder",
+    "alreadySubscribed": "Vous êtes déjà abonné",
     "success": {
       "title": "Abonnement activé !",
       "description": "Votre abonnement est maintenant actif. Merci pour votre souscription !",
@@ -555,7 +556,15 @@
     },
     "admin": {
       "title": "Administration",
-      "description": "Panneau d'administration pour gérer les utilisateurs et fichiers"
+      "description": "Panneau d'administration pour gérer les utilisateurs et fichiers",
+      "users": {
+        "title": "Gestion des utilisateurs",
+        "description": "Voir et gérer les comptes utilisateurs, rôles et permissions"
+      },
+      "files": {
+        "title": "Gestion des fichiers",
+        "description": "Surveiller et gérer les fichiers téléchargés et le stockage"
+      }
     },
     "userManagement": {
       "title": "Gestion des utilisateurs",

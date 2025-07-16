@@ -11,7 +11,7 @@ import Sign from '@/pages/Sign/sign';
 import UploadPage from '@/pages/Upload/UploadPage';
 import About from '@/pages/About/about';
 import { useEffect } from 'react';
-import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useNavigate, useLocation, Navigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '@/hooks/useAuth';
 import { Profile } from '@/pages/Profile/profile';
@@ -19,7 +19,6 @@ import HowItWorks from '@/pages/HowitWorks';
 import AdminPage from '@/pages/Admin/Admin';
 import UserManagement from '@/pages/Admin/UserManagement';
 import FileManagement from '@/pages/Admin/FileManagement';
-import AdminRoute from '@/components/AdminRoute';
 import NotFound from '@/pages/Error/NotFound';
 import { useTranslation } from 'react-i18next';
 import Payment from '@/pages/Subscription/Payment';
@@ -72,7 +71,7 @@ const App = () => {
                                 <PageWrapper
                                     title={t('meta.files.title')}
                                     description={t('meta.files.description')}
-                                    protected
+                                    requireAuth
                                 >
                                     <FilesPage />
                                 </PageWrapper>
@@ -84,7 +83,7 @@ const App = () => {
                                 <PageWrapper
                                     title={t('meta.upload.title')}
                                     description={t('meta.upload.description')}
-                                    protected
+                                    requireAuth
                                 >
                                     <UploadPage />
                                 </PageWrapper>
@@ -96,7 +95,7 @@ const App = () => {
                                 <PageWrapper
                                     title={t('meta.contacts.title')}
                                     description={t('meta.contacts.description')}
-                                    protected
+                                    requireAuth
                                 >
                                     <Contacts />
                                 </PageWrapper>
@@ -130,7 +129,7 @@ const App = () => {
                                 <PageWrapper
                                     title={t('meta.payment.title')}
                                     description={t('meta.payment.description')}
-                                    protected
+                                    requireAuth
                                 >
                                     <Payment />
                                 </PageWrapper>
@@ -142,7 +141,7 @@ const App = () => {
                                 <PageWrapper
                                     title={t('meta.subscription.success.title')}
                                     description={t('meta.subscription.success.description')}
-                                    protected
+                                    requireAuth
                                 >
                                     <SubscriptionSuccess />
                                 </PageWrapper>
@@ -197,7 +196,7 @@ const App = () => {
                                 <PageWrapper
                                     title={t('meta.profile.title')}
                                     description={t('meta.profile.description')}
-                                    protected
+                                    requireAuth
                                 >
                                     <Profile />
                                 </PageWrapper>
@@ -209,11 +208,9 @@ const App = () => {
                                 <PageWrapper
                                     title={t('meta.admin.title')}
                                     description={t('meta.admin.description')}
-                                    protected
+                                    adminOnly
                                 >
-                                    <AdminRoute>
-                                        <AdminPage />
-                                    </AdminRoute>
+                                    <AdminPage />
                                 </PageWrapper>
                             }
                         />
@@ -221,13 +218,11 @@ const App = () => {
                             path="/admin/users"
                             element={
                                 <PageWrapper
-                                    title={t('admin.users.title')}
-                                    description={t('admin.users.description')}
-                                    protected
+                                    title={t('meta.admin.users.title')}
+                                    description={t('meta.admin.users.description')}
+                                    adminOnly
                                 >
-                                    <AdminRoute>
-                                        <UserManagement />
-                                    </AdminRoute>
+                                    <UserManagement />
                                 </PageWrapper>
                             }
                         />
@@ -235,13 +230,11 @@ const App = () => {
                             path="/admin/files"
                             element={
                                 <PageWrapper
-                                    title={t('admin.files.title')}
-                                    description={t('admin.files.description')}
-                                    protected
+                                    title={t('meta.admin.files.title')}
+                                    description={t('meta.admin.files.description')}
+                                    adminOnly
                                 >
-                                    <AdminRoute>
-                                        <FileManagement />
-                                    </AdminRoute>
+                                    <FileManagement />
                                 </PageWrapper>
                             }
                         />
@@ -264,28 +257,47 @@ interface PageWrapperProps {
     children: React.ReactNode;
     title: string;
     description: string;
-    protected?: boolean;
+    requireAuth?: boolean;
+    adminOnly?: boolean;
 }
 
 const PageWrapper = ({
     children,
     title,
     description,
-    protected: isProtected,
-}: PageWrapperProps) =>
-    isProtected ? (
-        <ProtectedRoute>
-            <HeadMeta title={title} description={description} />
-            {children}
-        </ProtectedRoute>
-    ) : (
+    requireAuth,
+    adminOnly,
+}: PageWrapperProps) => {
+    const { user } = useAuth();
+    const { t } = useTranslation();
+    const location = useLocation();
+
+    // Block access to /subscription/payment and /subscription/success if already subscribed
+    if (
+        user?.isSubscribed &&
+        (location.pathname === '/subscription/payment' || location.pathname === '/subscription/success')
+    ) {
+        toast.error(t('subscription.alreadySubscribed'));
+        return <Navigate to="/subscription" replace />;
+    }
+
+    if (requireAuth || adminOnly) {
+        return (
+            <RequireAuthRoute>
+                <HeadMeta title={title} description={description} />
+                {adminOnly ? <AdminOnlyRoute>{children}</AdminOnlyRoute> : children}
+            </RequireAuthRoute>
+        );
+    }
+    return (
         <>
             <HeadMeta title={title} description={description} />
             {children}
         </>
     );
+};
 
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+const RequireAuthRoute = ({ children }: { children: React.ReactNode }) => {
     const { t } = useTranslation();
     const { isAuth, loading } = useAuth();
     const navigate = useNavigate();
@@ -299,6 +311,34 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
     if (loading) return <Loader />;
     return isAuth ? children : null;
+};
+
+const AdminOnlyRoute = ({ children }: { children: React.ReactNode }) => {
+    const { t } = useTranslation();
+    const { user, isAuth, loading } = useAuth();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!loading) {
+            if (!isAuth) {
+                toast.error(t('admin.access.denied.notLoggedIn'));
+                navigate('/login');
+            } else if (user?.role !== 'ADMIN') {
+                toast.error(t('admin.access.denied.notAdmin'));
+                navigate('/');
+            }
+        }
+    }, [isAuth, loading, user, navigate, t]);
+
+    if (loading) {
+        return <Loader />;
+    }
+
+    if (!isAuth || user?.role !== 'ADMIN') {
+        return null;
+    }
+
+    return <>{children}</>;
 };
 
 export default App;

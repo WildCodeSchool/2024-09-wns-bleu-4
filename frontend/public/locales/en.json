@@ -211,6 +211,7 @@
     "currentPlan": "Current Plan",
     "upgrade": "Upgrade",
     "downgrade": "Downgrade",
+    "alreadySubscribed": "You are already subscribed",
     "success": {
       "title": "Subscription Activated!",
       "description": "Your subscription is now active. Thank you for subscribing!",
@@ -558,7 +559,15 @@
     },
     "admin": {
       "title": "Administration",
-      "description": "Administration panel for managing users and files"
+      "description": "Administration panel for managing users and files",
+      "users": {
+        "title": "User Management",
+        "description": "View and manage user accounts, roles, and permissions"
+      },
+      "files": {
+        "title": "File Management",
+        "description": "Monitor and manage uploaded files and storage"
+      }
     },
     "userManagement": {
       "title": "User Management",

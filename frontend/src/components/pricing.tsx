@@ -10,6 +10,7 @@ import { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { buttonVariants } from './ui/variants';
+import { useAuth } from '@/hooks/useAuth';
 
 interface PricingPlan {
     name: string;
@@ -39,6 +40,7 @@ export function Pricing({
     const isDesktop = useMediaQuery('(min-width: 768px)');
     const switchRef = useRef<HTMLButtonElement>(null);
     const isSinglePlan = plans.length === 1;
+    const { user } = useAuth();
 
     const handleToggle = (checked: boolean) => {
         setIsMonthly(!checked);
@@ -238,20 +240,35 @@ export function Pricing({
 
                                 <hr className="w-full my-4" />
 
-                                <Link
-                                    to={plan.href}
-                                    className={cn(
-                                        buttonVariants({ variant: 'outline' }),
-                                        'group relative w-full gap-2 overflow-hidden text-lg font-semibold tracking-tighter',
-                                        'transform-gpu ring-offset-current transition-all duration-300 ease-out hover:ring-2 hover:ring-primary hover:ring-offset-1 hover:bg-primary hover:text-primary-foreground',
-                                        plan.isPopular
-                                            ? 'bg-primary text-primary-foreground'
-                                            : 'bg-background text-foreground',
-                                        isSinglePlan && 'text-xl py-4'
-                                    )}
-                                >
-                                    {plan.buttonText}
-                                </Link>
+                                {user?.isSubscribed ? (
+                                    <span
+                                        className={cn(
+                                            buttonVariants({ variant: 'outline' }),
+                                            'group relative w-full gap-2 overflow-hidden text-lg font-semibold tracking-tighter opacity-60 cursor-not-allowed',
+                                            plan.isPopular
+                                                ? 'bg-primary text-primary-foreground'
+                                                : 'bg-background text-foreground',
+                                            isSinglePlan && 'text-xl py-4'
+                                        )}
+                                    >
+                                        {t('subscription.alreadySubscribed')}
+                                    </span>
+                                ) : (
+                                    <Link
+                                        to={plan.href}
+                                        className={cn(
+                                            buttonVariants({ variant: 'outline' }),
+                                            'group relative w-full gap-2 overflow-hidden text-lg font-semibold tracking-tighter',
+                                            'transform-gpu ring-offset-current transition-all duration-300 ease-out hover:ring-2 hover:ring-primary hover:ring-offset-1 hover:bg-primary hover:text-primary-foreground',
+                                            plan.isPopular
+                                                ? 'bg-primary text-primary-foreground'
+                                                : 'bg-background text-foreground',
+                                            isSinglePlan && 'text-xl py-4'
+                                        )}
+                                    >
+                                        {plan.buttonText}
+                                    </Link>
+                                )}
                                 <p className={cn(
                                     "mt-6 text-xs leading-5 text-muted-foreground",
                                     isSinglePlan && "text-sm mt-8"
