@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
 //Login
 export const LOGIN = gql`
@@ -36,5 +36,14 @@ export const DELETE_USER = gql`
 export const UPDATE_USER_ROLE = gql`
     mutation UpdateUserRole($id: ID!, $role: UserRole!) {
         updateUserRole(id: $id, role: $role)
+    }
+`;
+export const UPDATE_PROFILE_PICTURE = gql`
+    mutation UpdateProfilePicture($data: UpdateProfilePictureInput!) {
+        updateProfilePicture(data: $data) {
+            id
+            email
+            profilePicture
+        }
     }
 `;

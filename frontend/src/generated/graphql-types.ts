@@ -114,6 +114,7 @@ export type Mutation = {
   removeContact: Scalars['Boolean']['output'];
   resetSendCode: Scalars['String']['output'];
   sendContactRequest: Contact;
+  updateProfilePicture: User;
   updateUserRole: Scalars['String']['output'];
 };
 
@@ -233,6 +234,11 @@ export type MutationResetSendCodeArgs = {
 
 export type MutationSendContactRequestArgs = {
   contactToCreate: ContactInput;
+};
+
+
+export type MutationUpdateProfilePictureArgs = {
+  data: UpdateProfilePictureInput;
 };
 
 
@@ -392,10 +398,15 @@ export type SystemLog = {
   userId?: Maybe<Scalars['String']['output']>;
 };
 
+export type UpdateProfilePictureInput = {
+  profilePictureUrl: Scalars['String']['input'];
+};
+
 export type User = {
   __typename?: 'User';
   email: Scalars['String']['output'];
   id: Scalars['ID']['output'];
+  profilePicture?: Maybe<Scalars['String']['output']>;
   role: UserRole;
   subscription?: Maybe<Subscription>;
 };
@@ -406,6 +417,7 @@ export type UserInfo = {
   id?: Maybe<Scalars['ID']['output']>;
   isLoggedIn: Scalars['Boolean']['output'];
   isSubscribed?: Maybe<Scalars['Boolean']['output']>;
+  profilePicture?: Maybe<Scalars['String']['output']>;
   role?: Maybe<UserRole>;
 };
 
@@ -597,6 +609,13 @@ export type UpdateUserRoleMutationVariables = Exact<{
 
 export type UpdateUserRoleMutation = { __typename?: 'Mutation', updateUserRole: string };
 
+export type UpdateProfilePictureMutationVariables = Exact<{
+  data: UpdateProfilePictureInput;
+}>;
+
+
+export type UpdateProfilePictureMutation = { __typename?: 'Mutation', updateProfilePicture: { __typename?: 'User', id: string, email: string, profilePicture?: string | null } };
+
 export type GetAllUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -605,7 +624,7 @@ export type GetAllUsersQuery = { __typename?: 'Query', getAllUsers: Array<{ __ty
 export type GetUserInfoQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUserInfoQuery = { __typename?: 'Query', getUserInfo: { __typename?: 'UserInfo', email?: string | null, isLoggedIn: boolean, id?: string | null, isSubscribed?: boolean | null, role?: UserRole | null } };
+export type GetUserInfoQuery = { __typename?: 'Query', getUserInfo: { __typename?: 'UserInfo', email?: string | null, isLoggedIn: boolean, id?: string | null, isSubscribed?: boolean | null, role?: UserRole | null, profilePicture?: string | null } };
 
 export type GetUserIdQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1595,6 +1614,41 @@ export function useUpdateUserRoleMutation(baseOptions?: Apollo.MutationHookOptio
 export type UpdateUserRoleMutationHookResult = ReturnType<typeof useUpdateUserRoleMutation>;
 export type UpdateUserRoleMutationResult = Apollo.MutationResult<UpdateUserRoleMutation>;
 export type UpdateUserRoleMutationOptions = Apollo.BaseMutationOptions<UpdateUserRoleMutation, UpdateUserRoleMutationVariables>;
+export const UpdateProfilePictureDocument = gql`
+    mutation UpdateProfilePicture($data: UpdateProfilePictureInput!) {
+  updateProfilePicture(data: $data) {
+    id
+    email
+    profilePicture
+  }
+}
+    `;
+export type UpdateProfilePictureMutationFn = Apollo.MutationFunction<UpdateProfilePictureMutation, UpdateProfilePictureMutationVariables>;
+
+/**
+ * __useUpdateProfilePictureMutation__
+ *
+ * To run a mutation, you first call `useUpdateProfilePictureMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateProfilePictureMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateProfilePictureMutation, { data, loading, error }] = useUpdateProfilePictureMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateProfilePictureMutation(baseOptions?: Apollo.MutationHookOptions<UpdateProfilePictureMutation, UpdateProfilePictureMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateProfilePictureMutation, UpdateProfilePictureMutationVariables>(UpdateProfilePictureDocument, options);
+      }
+export type UpdateProfilePictureMutationHookResult = ReturnType<typeof useUpdateProfilePictureMutation>;
+export type UpdateProfilePictureMutationResult = Apollo.MutationResult<UpdateProfilePictureMutation>;
+export type UpdateProfilePictureMutationOptions = Apollo.BaseMutationOptions<UpdateProfilePictureMutation, UpdateProfilePictureMutationVariables>;
 export const GetAllUsersDocument = gql`
     query getAllUsers {
   getAllUsers {
@@ -1647,6 +1701,7 @@ export const GetUserInfoDocument = gql`
     id
     isSubscribed
     role
+    profilePicture
   }
 }
     `;

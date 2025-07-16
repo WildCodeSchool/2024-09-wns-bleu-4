@@ -1,6 +1,7 @@
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 import Logo from '@/components/Logo';
 import { ModeToggle } from '@/components/mode-toggle';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import SubscribedLogo from '@/components/SubscribedLogo';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -11,14 +12,26 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { NavigationMenu } from '@/components/ui/navigation-menu';
+import { UserAvatar } from '@/components/UserAvatar';
 import { useAuthContext } from '@/context/useAuthContext';
 import { useLogoutMutation } from '@/generated/graphql-types';
-import { ChevronDown, CreditCard, Files, HelpCircle, Info, LogOut, Menu, Upload, User, UserIcon, Users, Shield } from 'lucide-react';
+import {
+    ChevronDown,
+    CreditCard,
+    Files,
+    HelpCircle,
+    Info,
+    LogOut,
+    Menu,
+    Shield,
+    Upload,
+    User,
+    UserIcon,
+    Users,
+} from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import SubscribedLogo from '@/components/SubscribedLogo';
-import { useTranslation } from 'react-i18next';
-import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 const Header = () => {
     const [logout] = useLogoutMutation();
@@ -41,29 +54,43 @@ const Header = () => {
                 {isAuth && (
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="flex cursor-pointer items-center gap-1">
+                            <Button
+                                variant="ghost"
+                                className="flex cursor-pointer items-center gap-1"
+                            >
                                 <Files className="h-4 w-4" />
                                 {t('navigation.files')}
                                 <ChevronDown className="h-4 w-4" />
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="start" className="w-52">
-                            <DropdownMenuLabel>{t('navigation.mySpace')}</DropdownMenuLabel>
+                            <DropdownMenuLabel>
+                                {t('navigation.mySpace')}
+                            </DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem asChild>
-                                <Link to="/files" className="flex items-center gap-2">
+                                <Link
+                                    to="/files"
+                                    className="flex items-center gap-2"
+                                >
                                     <Files className="h-4 w-4" />
                                     {t('navigation.files')}
                                 </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild>
-                                <Link to="/upload" className="flex items-center gap-2">
+                                <Link
+                                    to="/upload"
+                                    className="flex items-center gap-2"
+                                >
                                     <Upload className="h-4 w-4" />
                                     {t('navigation.upload')}
                                 </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild>
-                                <Link to="/contacts" className="flex items-center gap-2">
+                                <Link
+                                    to="/contacts"
+                                    className="flex items-center gap-2"
+                                >
                                     <Users className="h-4 w-4" />
                                     {t('navigation.contacts')}
                                 </Link>
@@ -71,26 +98,37 @@ const Header = () => {
                         </DropdownMenuContent>
                     </DropdownMenu>
                 )}
-                
+
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="flex cursor-pointer items-center gap-1">
+                        <Button
+                            variant="ghost"
+                            className="flex cursor-pointer items-center gap-1"
+                        >
                             <Info className="h-4 w-4" />
                             {t('navigation.discover')}
                             <ChevronDown className="h-4 w-4" />
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start" className="w-52">
-                        <DropdownMenuLabel>{t('navigation.about')}</DropdownMenuLabel>
+                        <DropdownMenuLabel>
+                            {t('navigation.about')}
+                        </DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem asChild>
-                            <Link to="/about" className="flex items-center gap-2">
+                            <Link
+                                to="/about"
+                                className="flex items-center gap-2"
+                            >
                                 <Info className="h-4 w-4" />
                                 {t('navigation.whoAreWe')}
                             </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild>
-                            <Link to="/how-it-works" className="flex items-center gap-2">
+                            <Link
+                                to="/how-it-works"
+                                className="flex items-center gap-2"
+                            >
                                 <HelpCircle className="h-4 w-4" />
                                 {t('navigation.howItWorks')}
                             </Link>
@@ -99,12 +137,15 @@ const Header = () => {
                 </DropdownMenu>
 
                 <Button variant="ghost" asChild>
-                    <Link to="/subscription" className="flex items-center gap-2">
+                    <Link
+                        to="/subscription"
+                        className="flex items-center gap-2"
+                    >
                         <CreditCard className="h-4 w-4" />
                         {t('navigation.subscription')}
                     </Link>
                 </Button>
-                
+
                 {isAuth && user?.role === 'ADMIN' && (
                     <Button variant="ghost" asChild>
                         <Link to="/admin" className="flex items-center gap-2">
@@ -121,35 +162,51 @@ const Header = () => {
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="sm">
                             <Menu className="h-5 w-5" />
-                            <span className="sr-only">{t('navigation.menu')}</span>
+                            <span className="sr-only">
+                                {t('navigation.menu')}
+                            </span>
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-56">
-                        <DropdownMenuLabel>{t('navigation.title')}</DropdownMenuLabel>
+                        <DropdownMenuLabel>
+                            {t('navigation.title')}
+                        </DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         {isAuth && (
                             <>
                                 <DropdownMenuItem asChild>
-                                    <Link to="/files" className="flex items-center gap-2">
+                                    <Link
+                                        to="/files"
+                                        className="flex items-center gap-2"
+                                    >
                                         <Files className="h-4 w-4" />
                                         {t('navigation.files')}
                                     </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem asChild>
-                                    <Link to="/upload" className="flex items-center gap-2">
+                                    <Link
+                                        to="/upload"
+                                        className="flex items-center gap-2"
+                                    >
                                         <Upload className="h-4 w-4" />
                                         {t('navigation.upload')}
                                     </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem asChild>
-                                    <Link to="/contacts" className="flex items-center gap-2">
+                                    <Link
+                                        to="/contacts"
+                                        className="flex items-center gap-2"
+                                    >
                                         <Users className="h-4 w-4" />
                                         {t('navigation.contacts')}
                                     </Link>
                                 </DropdownMenuItem>
                                 {user?.role === 'ADMIN' && (
                                     <DropdownMenuItem asChild>
-                                        <Link to="/admin" className="flex items-center gap-2">
+                                        <Link
+                                            to="/admin"
+                                            className="flex items-center gap-2"
+                                        >
                                             <Shield className="h-4 w-4" />
                                             {t('navigation.administration')}
                                         </Link>
@@ -159,19 +216,28 @@ const Header = () => {
                             </>
                         )}
                         <DropdownMenuItem asChild>
-                            <Link to="/subscription" className="flex items-center gap-2">
+                            <Link
+                                to="/subscription"
+                                className="flex items-center gap-2"
+                            >
                                 <CreditCard className="h-4 w-4" />
                                 {t('navigation.subscription')}
                             </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild>
-                            <Link to="/about" className="flex items-center gap-2">
+                            <Link
+                                to="/about"
+                                className="flex items-center gap-2"
+                            >
                                 <Info className="h-4 w-4" />
                                 {t('navigation.whoAreWe')}
                             </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild>
-                            <Link to="/how-it-works" className="flex items-center gap-2">
+                            <Link
+                                to="/how-it-works"
+                                className="flex items-center gap-2"
+                            >
                                 <HelpCircle className="h-4 w-4" />
                                 {t('navigation.howItWorks')}
                             </Link>
@@ -182,27 +248,30 @@ const Header = () => {
 
             <div className="flex items-center gap-4">
                 <DropdownMenu>
-                    {isAuth && user?.isSubscribed && (
-                        <SubscribedLogo />
-                    )}
+                    {isAuth && user?.isSubscribed && <SubscribedLogo />}
                     <DropdownMenuTrigger asChild>
-                        <Button 
-                            variant="ghost" 
+                        <Button
+                            variant="ghost"
                             size="sm"
                             className="relative h-10 w-10 rounded-full cursor-pointer"
-                            aria-label={isAuth ? t('navigation.userMenu') : t('navigation.login')}
+                            aria-label={
+                                isAuth
+                                    ? t('navigation.userMenu')
+                                    : t('navigation.login')
+                            }
                         >
                             {isAuth ? (
-                                <Avatar className="h-10 w-10">
-                                    <AvatarImage src="https://github.com/shadcn.png" />
-                                    <AvatarFallback>CN</AvatarFallback>
-                                </Avatar>
+                                <UserAvatar user={user} size="md" />
                             ) : (
                                 <UserIcon className="h-5 w-5" />
                             )}
                         </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-56" align="end" forceMount>
+                    <DropdownMenuContent
+                        className="w-56"
+                        align="end"
+                        forceMount
+                    >
                         {!isAuth ? (
                             <>
                                 <DropdownMenuLabel>

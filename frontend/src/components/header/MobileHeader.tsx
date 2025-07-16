@@ -1,7 +1,6 @@
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import Logo from '@/components/Logo';
 import { ModeToggle } from '@/components/mode-toggle';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -18,6 +17,7 @@ import {
     SheetTitle,
     SheetTrigger,
 } from '@/components/ui/sheet';
+import { UserAvatar } from '@/components/UserAvatar';
 import { useAuthContext } from '@/context/useAuthContext';
 import { useLogoutMutation } from '@/generated/graphql-types';
 import {
@@ -138,12 +138,10 @@ const HeaderMobile = () => {
                                             >
                                                 {isAuth ? (
                                                     <>
-                                                        <Avatar className="h-8 w-8">
-                                                            <AvatarImage src="https://github.com/shadcn.png" />
-                                                            <AvatarFallback>
-                                                                CN
-                                                            </AvatarFallback>
-                                                        </Avatar>
+                                                        <UserAvatar
+                                                            user={user}
+                                                            size="sm"
+                                                        />
                                                         <div className="flex flex-col items-start">
                                                             <span className="text-sm font-medium">
                                                                 {t(
