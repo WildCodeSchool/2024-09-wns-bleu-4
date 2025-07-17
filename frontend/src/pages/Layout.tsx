@@ -24,10 +24,12 @@ const Layout = () => {
 
     return (
         <ThemeProvider>
+            {/* HeaderBands */}
             {isFeatureEnabled('homeDisclaimer') && !getItem('homeDisclaimerClosed') && (
                 <HeaderBand type="warning" text={t('home.disclaimer')} onClick={handleClose} />
             )}
 
+            {/* Main Content */}
             <main>
                 <div className="hidden md:block">
                     <Header />
