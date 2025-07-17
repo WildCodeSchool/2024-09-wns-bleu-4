@@ -8,7 +8,12 @@ import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import React from 'react';
 
 const client = new ApolloClient({
-    uri: 'http://localhost:7007/api',
+    uri:
+    import.meta.env.NODE_ENV === "production"
+      ? "https://wildtransfer.cloud/api"
+      : import.meta.env.NODE_ENV === "staging"
+      ? "https://staging.wildtransfer.cloud/api"
+      : "http://localhost:7007/api",
     cache: new InMemoryCache(),
 });
 
