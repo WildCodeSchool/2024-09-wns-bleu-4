@@ -1,11 +1,12 @@
 import { useMemo } from 'react';
 
-export type Environment = 'DEV' | 'PROD';
+export type Environment = 'DEV' | 'STAGING' | 'PROD';
 
 interface EnvironmentConfig {
   environment: Environment;
   stripePublishableKey: string;
   isDev: boolean;
+  isStaging: boolean;
   isProd: boolean;
   features: {
     debugMode: boolean;
@@ -37,16 +38,18 @@ export const useEnv = (): UseEnvReturn => {
     const stripePublishableKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY ?? '';
     
     const isDev = environment === 'DEV';
+    const isStaging = environment === 'STAGING';
     const isProd = environment === 'PROD';
 
     return {
       environment,
       stripePublishableKey,
       isDev,
+      isStaging,
       isProd,
       features: {
         debugMode: isDev,
-        stripe: Boolean(stripePublishableKey) && isDev,
+        stripe: Boolean(stripePublishableKey) && (isDev || isStaging),
         errorReporting: isDev,
         homeDisclaimer: isProd,
       },
@@ -79,8 +82,8 @@ export const useEnv = (): UseEnvReturn => {
     
     // Check if environment is valid
     const env = import.meta.env.VITE_ENVIRONMENT;
-    if (env && env !== 'DEV' && env !== 'PROD') {
-      errors.push(`Invalid VITE_ENVIRONMENT value: ${env}. Must be 'DEV' or 'PROD'`);
+    if (env && env !== 'DEV' && env !== 'STAGING' && env !== 'PROD') {
+      errors.push(`Invalid VITE_ENVIRONMENT value: ${env}. Must be 'DEV', 'STAGING' or 'PROD'`);
     }
     
     // Check Stripe key in production
@@ -116,11 +119,12 @@ export const useEnv = (): UseEnvReturn => {
 export const isFeatureEnabled = (feature: keyof EnvironmentConfig['features']): boolean => {
   const env = (import.meta.env.VITE_ENVIRONMENT as Environment) || 'DEV';
   const isDev = env === 'DEV';
+  const isStaging = env === 'STAGING';
   const isProd = env === 'PROD';
   
   const features = {
     debugMode: isDev,
-    stripe: Boolean(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY) && isDev,
+    stripe: Boolean(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY) && (isDev || isStaging),
     errorReporting: isDev,
     homeDisclaimer: isProd,
   };
