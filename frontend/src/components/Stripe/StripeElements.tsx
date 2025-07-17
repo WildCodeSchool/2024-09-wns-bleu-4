@@ -1,6 +1,6 @@
 import React from 'react';
 import { Elements } from '@stripe/react-stripe-js';
-import { useStripe } from './StripeProvider';
+import { useStripe } from '@/hooks/useStripe';
 import { PaymentElement } from './PaymentElement';
 import { useTheme } from '@/hooks/useTheme';
 

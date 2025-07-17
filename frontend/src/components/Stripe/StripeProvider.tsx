@@ -1,17 +1,7 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { loadStripe, Stripe } from '@stripe/stripe-js';
-
-interface StripeContextType {
-  stripe: Stripe | null;
-  isLoading: boolean;
-  error: string | null;
-}
-
-const StripeContext = createContext<StripeContextType>({
-  stripe: null,
-  isLoading: true,
-  error: null,
-});
+import { StripeContext } from '@/context/StripeContext';
+import { StripeContextType } from '@/context/StripeContext';
 
 interface StripeProviderProps {
   children: React.ReactNode;
@@ -66,14 +56,4 @@ export const StripeProvider: React.FC<StripeProviderProps> = ({
       {children}
     </StripeContext.Provider>
   );
-};
-
-export const useStripe = () => {
-  const context = useContext(StripeContext);
-  
-  if (context === undefined) {
-    throw new Error('useStripe must be used within a StripeProvider');
-  }
-  
-  return context;
 }; 
