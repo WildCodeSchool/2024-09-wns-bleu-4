@@ -6,6 +6,218 @@
         "save": "Enregistrer",
         "cancel": "Annuler",
         "delete": "Supprimer",
+        "add": "Ajouter",
+        "sending": "Envoi..."
+      }
+    }
+  },
+  "profile": {
+    "title": "Mon profil",
+    "personalInfo": {
+      "title": "Informations personnelles",
+      "description": "Modifiez vos informations personnelles."
+    },
+    "form": {
+      "email": {
+        "label": "E-mail",
+        "placeholder": "Votre adresse e-mail",
+        "readonly": "L'adresse e-mail ne peut pas être modifiée"
+      },
+      "password": {
+        "label": "Mot-de-passe"
+      }
+    },
+    "actions": {
+      "save": "Enregistrer"
+    },
+    "avatar": {
+      "tooltip": "Cliquez pour changer votre photo de profil",
+      "upload": "Changer la photo de profil",
+      "uploading": "Téléchargement...",
+      "success": "Photo de profil mise à jour avec succès",
+      "error": {
+        "invalidType": "Type de fichier non supporté. Utilisez JPG, PNG, GIF, WebP ou SVG.",
+        "tooLarge": "Le fichier est trop volumineux. Maximum 10 Mo.",
+        "upload": "Erreur lors de la mise à jour de votre photo de profil"
+      }
+    },
+    "description": "Page de profil"
+  },
+  "files": {
+    "title": {
+      "myFiles": "Mes fichiers disponibles",
+      "noFiles": "Vous n'avez pas encore de fichiers",
+      "sharedFiles": "Fichiers partagés avec moi",
+      "noSharedFiles": "Aucun fichier partagé avec vous"
+    },
+    "actions": {
+      "addFiles": "Ajouter des fichiers"
+    },
+    "errors": {
+      "invalidResourceId": "ID de ressource non valide",
+      "deleting": "Suppression en cours...",
+      "deleteSuccess": "Fichier supprimé avec succès",
+      "deleteError": "Erreur lors de la suppression",
+      "storageDeleteError": "Erreur lors de la suppression du fichier du stockage",
+      "loadError": "Erreur lors du chargement des fichiers"
+    },
+    "uploadNew": "Télécharger un nouveau fichier",
+    "search": "Rechercher des fichiers",
+    "filter": "Filtrer"
+  },
+  "upload": {
+    "title": "Télécharger un fichier",
+    "dragDrop": {
+      "title": "Transférez votre fichier",
+      "dropHere": "Déposez le fichier ici",
+      "releaseToUpload": "Relâchez pour télécharger",
+      "browse": "parcourez",
+      "supportedTypes": "Supporte les images, documents, vidéos, et plus"
+    },
+    "selectedFile": {
+      "title": "Fichier sélectionné",
+      "delete": "Supprimer le fichier"
+    },
+    "description": {
+      "placeholder": "Description du fichier (minimum 4 caractères)",
+      "charCount": "{{count}}/4 caractères minimum"
+    },
+    "submit": {
+      "uploading": "Envoi en cours...",
+      "save": "Enregistrer le fichier"
+    },
+    "success": {
+      "message": "✅ Le fichier a été envoyé et enregistré avec succès !",
+      "shareNow": "Partager maintenant"
+    },
+    "errors": {
+      "upload": "❌ Une erreur s'est produite. Veuillez réessayer.",
+      "fileUpload": "Erreur lors de l'upload du fichier",
+      "share": {
+        "noContacts": "Veuillez sélectionner au moins un contact",
+        "error": "Une erreur est survenue lors du partage",
+        "success": "Fichier partagé avec succès",
+        "failed": "Erreur lors du partage du fichier"
+      }
+    },
+    "share": {
+      "title": "Partager le fichier",
+      "description": "Sélectionnez les contacts avec lesquels vous souhaitez partager ce fichier.",
+      "search": {
+        "label": "Rechercher un contact",
+        "placeholder": "Rechercher par email..."
+      },
+      "noContacts": "Aucun contact trouvé",
+      "button": "Partager avec {{count}} contact",
+      "button_plural": "Partager avec {{count}} contacts"
+    }
+  },
+  "subscription": {
+    "title": "Plans d'abonnement",
+    "currentPlan": "Plan actuel",
+    "upgrade": "Améliorer",
+    "downgrade": "Rétrograder",
+    "alreadySubscribed": "Vous êtes déjà abonné",
+    "success": {
+      "title": "Abonnement activé !",
+      "description": "Votre abonnement est maintenant actif. Merci pour votre souscription !",
+      "expiration": "Votre abonnement est valable jusqu'au {{date}}"
+    },
+    "error": {
+      "title": "Erreur d'abonnement",
+      "description": "Un problème est survenu lors de l'activation de votre abonnement. Veuillez réessayer ou contacter le support."
+    },
+    "premiumPlan": {
+      "name": "ABONNEMENT PREMIUM",
+      "description": "Accès complet à la plateforme de transfert de fichiers",
+      "startNow": "Commencer maintenant",
+      "perMonth": "par mois"
+    },
+    "feature": {
+      "unlimitedTransfer": "Transfert de fichiers illimité",
+      "shareWithContacts": "Partage avec vos contacts",
+      "emailSupport": "Support par email",
+      "allFeatures": "Accès à toutes les fonctionnalités",
+      "modernUI": "Interface moderne et intuitive",
+      "enhancedSecurity": "Sécurité renforcée"
+    },
+    "simpleEffectiveTitle": "Abonnement simple et efficace",
+    "simpleEffectiveDescription": "Un seul plan pour tous vos besoins de transfert de fichiers. Accès complet à toutes les fonctionnalités de la plateforme."
+  },
+  "payment": {
+    "page": {
+      "title": "Finalisez votre abonnement",
+      "description": "Vous n'êtes qu'à une étape d'accéder à toutes les fonctionnalités premium"
+    },
+    "title": "Finalisez votre paiement",
+    "description": "Saisissez vos informations de paiement pour finaliser votre abonnement",
+    "processing": "Traitement en cours...",
+    "pay": "Payer maintenant",
+    "initializing": "Initialisation du paiement...",
+    "loading": "Chargement du formulaire de paiement...",
+    "success": {
+      "message": "Votre abonnement a été activé avec succès !"
+    },
+    "error": {
+      "message": "Une erreur est survenue lors du traitement de votre paiement. Veuillez réessayer."
+    },
+    "security": {
+      "notice": "Vos informations de paiement sont sécurisées et cryptées par Stripe"
+    },
+    "stripe_unavailable": {
+      "title": "Système de paiement indisponible",
+      "description": "Nous sommes en train de mettre en place notre système de paiement. Veuillez réessayer plus tard ou contacter le support pour obtenir de l'aide.",
+      "return": "Retour à l'abonnement",
+      "home": "Aller à l'accueil"
+    }
+  },
+  "pricing": {
+    "yearlyBilling": "Facturation annuelle",
+    "save20Percent": "(Économisez 20%)",
+    "monthlyBilling": "facturation mensuelle",
+    "popular": "Populaire",
+    "threeMonths": "3 mois"
+  },
+  "admin": {
+    "title": "Panneau d'administration",
+    "description": "Gérer les utilisateurs, fichiers et paramètres système",
+    "access": {
+      "denied": {
+        "notLoggedIn": "Vous devez être connecté pour accéder au panneau d'administration",
+        "notAdmin": "Vous devez être administrateur pour accéder à cette page"
+      }
+    },
+    "stats": {
+      "totalUsers": "Utilisateurs totaux",
+      "usersDescription": "Utilisateurs enregistrés",
+      "totalFiles": "Fichiers totaux",
+      "filesDescription": "Fichiers téléchargés",
+      "admins": "Administrateurs",
+      "adminsDescription": "Utilisateurs administrateurs",
+      "activity": "Activité récente",
+      "activityDescription": "Activité système"
+    },
+    "users": {
+      "title": "Gestion des utilisateurs",
+      "description": "Voir et gérer les comptes utilisateurs, rôles et permissions",
+      "viewAll": "Voir tous les utilisateurs",
+      "manageRoles": "Gérer les rôles",
+      "search": {
+        "placeholder": "Rechercher un utilisateur par email..."
+      },
+      "stats": {
+        "total": "Total utilisateurs",
+        "admins": "Administrateurs",
+        "users": "Utilisateurs"
+      },
+      "list": {
+        "title": "Liste des utilisateurs",
+        "empty": "Aucun utilisateur trouvé",
+        "noResults": "Aucun utilisateur ne correspond à votre recherche"
+      },
+      "subscribed": "Abonné",
+      "actions": {
+        "delete": "Supprimer",
         "edit": "Modifier",
         "submit": "Envoyer",
         "back": "Retour",

@@ -1,16 +1,16 @@
-export const useLocalStorage = () => {
+export const useSessionStorage = () => {
 
   const setItem = (key: string, value: string) => {
-    localStorage.setItem(key, value);
+    sessionStorage.setItem(key, value);
   };
 
   const getItem = (key: string) => {
-    const value = localStorage.getItem(key);
+    const value = sessionStorage.getItem(key);
     return value;
   };
 
   const removeItem = (key: string) => {
-    localStorage.removeItem(key);
+    sessionStorage.removeItem(key);
   };
 
   return { setItem, getItem, removeItem };

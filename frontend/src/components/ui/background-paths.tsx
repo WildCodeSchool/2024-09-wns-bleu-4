@@ -68,10 +68,6 @@ export function BackgroundPaths({ title }: BackgroundPathsProps) {
                     transition={{ duration: 2 }}
                     className="mx-auto"
                     >
-                    <p className='bg-white dark:bg-neutral-950 mb-2 p-4 rounded-lg border-2 border-red-600 text-xl'>
-                        {t('home.disclaimer')}
-                    </p>
-
                     <h1 className="text-5xl sm:text-7xl md:text-8xl font-bold mb-8 tracking-tighter inline-block mr-4 last:mr-0 text-transparent bg-clip-text bg-gradient-to-r from-neutral-900 to-neutral-700/80 dark:from-white dark:to-white/80">
                         {title}
                     </h1>
