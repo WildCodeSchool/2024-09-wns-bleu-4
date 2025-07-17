@@ -268,6 +268,12 @@
     },
     "security": {
       "notice": "Vos informations de paiement sont sécurisées et cryptées par Stripe"
+    },
+    "stripe_unavailable": {
+      "title": "Système de paiement indisponible",
+      "description": "Nous sommes en train de mettre en place notre système de paiement. Veuillez réessayer plus tard ou contacter le support pour obtenir de l'aide.",
+      "return": "Retour à l'abonnement",
+      "home": "Aller à l'accueil"
     }
   },
   "pricing": {

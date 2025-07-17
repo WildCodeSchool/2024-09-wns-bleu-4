@@ -92,10 +92,10 @@ export default function Payment() {
                 </svg>
               </div>
               <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                Payment System Unavailable
+                {t('payment.stripe_unavailable.title')}
               </h2>
               <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
-                We're currently setting up our payment system. Please check back later or contact support for assistance.
+                {t('payment.stripe_unavailable.description')}
               </p>
             </div>
             
@@ -104,14 +104,14 @@ export default function Payment() {
                 onClick={() => navigate('/subscription')}
                 className="w-full bg-primary hover:bg-primary/90 cursor-pointer"
               >
-                Return to Subscription
+                {t('payment.stripe_unavailable.return')}
               </Button>
               <Button 
                 variant="outline" 
                 onClick={() => navigate('/')}
                 className="w-full cursor-pointer"
               >
-                Go to Home
+                {t('payment.stripe_unavailable.home')}
               </Button>
             </div>
           </div>
