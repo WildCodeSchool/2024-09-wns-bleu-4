@@ -14,7 +14,7 @@ const HeaderBand = ({ type, text, onClick }: { type: HeaderBandType, text: strin
                 'border-green-600 hover:border-green-500': type === 'success',
             }
         )}
-            onClick={() => onClick()}
+            onClick={onClick}
         >
             <p className="
                 text-nowrap p-4 flex items-center justify-center md:justify-start
