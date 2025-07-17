@@ -7,6 +7,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import UserHoverCard from '@/components/UserHoverCard';
 import { Contact } from '@/generated/graphql-types';
 import { getFormattedSizeFromUrl } from '@/lib/utils';
 import {
@@ -20,11 +21,10 @@ import {
 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import FileDeleteDialog from './File/FileDeleteDialog';
-import FileInfoDialog from './File/FileInfoDialog';
-import FileReportDialog from './File/FileReportDialog';
-import FileShareDialog from './File/FileShareDialog';
-import UserHoverCard from './File/UserHoverCard';
+import FileDeleteDialog from './FileDeleteDialog';
+import FileInfoDialog from './FileInfoDialog';
+import FileReportDialog from './FileReportDialog';
+import FileShareDialog from './FileShareDialog';
 
 interface FileCardProps {
     name: string;

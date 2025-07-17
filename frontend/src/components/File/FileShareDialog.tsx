@@ -104,7 +104,7 @@ const FileShareDialog: React.FC<FileShareDialogProps> = ({
                 <DialogHeader>
                     <DialogTitle>{t('fileCard.share.title')}</DialogTitle>
                     <DialogDescription>
-                        Partager "{fileName}" avec vos contacts
+                        {t('fileCard.share.description', { fileName })}
                     </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4">

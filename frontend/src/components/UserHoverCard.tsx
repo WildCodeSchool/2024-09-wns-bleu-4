@@ -18,14 +18,14 @@ interface UserHoverCardProps {
 }
 
 const UserHoverCard: React.FC<UserHoverCardProps> = ({ children, user }) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     const formatDate = (dateString?: string) => {
         if (!dateString) return t('userHoverCard.unknownDate');
 
         try {
             const date = new Date(dateString);
-            return new Intl.DateTimeFormat('fr-FR', {
+            return new Intl.DateTimeFormat(i18n.language, {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric',

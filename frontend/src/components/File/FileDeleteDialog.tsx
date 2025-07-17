@@ -13,6 +13,7 @@ import { DELETE_RESOURCE } from '@/graphql/Resource/mutations';
 import { useMutation } from '@apollo/client';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
 interface FileDeleteDialogProps {
     trigger: React.ReactNode;
@@ -71,11 +72,11 @@ const FileDeleteDialog: React.FC<FileDeleteDialogProps> = ({
                 console.error(
                     'Erreur lors de la suppression de la base de données',
                 );
-                alert('Erreur lors de la suppression du fichier');
+                toast.error('Erreur lors de la suppression du fichier');
             }
         } catch (error) {
             console.error('Erreur lors de la suppression:', error);
-            alert('Erreur lors de la suppression du fichier');
+            toast.error('Erreur lors de la suppression du fichier');
         }
     };
 

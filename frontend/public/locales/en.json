@@ -545,6 +545,7 @@
         },
         "share": {
             "title": "Share file",
+            "description": "Share \"{{fileName}}\" with your contacts",
             "search": {
                 "label": "Search for a contact",
                 "placeholder": "Search by email..."

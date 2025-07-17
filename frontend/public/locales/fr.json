@@ -546,6 +546,7 @@
         },
         "share": {
             "title": "Partager le fichier",
+            "description": "Partager \"{{fileName}}\" avec vos contacts",
             "search": {
                 "label": "Rechercher un contact",
                 "placeholder": "Rechercher par email..."
