@@ -81,7 +81,7 @@ const FileShareDialog: React.FC<FileShareDialogProps> = ({
             setSearchQuery('');
             // Le dialog se fermera automatiquement
         } catch (error) {
-            console.error('Error sharing file:', error);
+            console.error(t('fileCard.share.error.console'), error);
             toast.error(t('fileCard.share.error.sharing'));
         }
     };

@@ -121,7 +121,9 @@ const FileCard: React.FC<FileCardProps> = ({
                                 className="flex-shrink-0"
                             >
                                 <Download className="h-4 w-4" />
-                                <span className="sr-only">Télécharger</span>
+                                <span className="sr-only">
+                                    {t('fileCard.download')}
+                                </span>
                             </Button>
 
                             <DropdownMenu>
@@ -133,7 +135,7 @@ const FileCard: React.FC<FileCardProps> = ({
                                     >
                                         <MoreVertical className="h-4 w-4" />
                                         <span className="sr-only">
-                                            Plus d'options
+                                            {t('fileCard.moreOptions')}
                                         </span>
                                     </Button>
                                 </DropdownMenuTrigger>

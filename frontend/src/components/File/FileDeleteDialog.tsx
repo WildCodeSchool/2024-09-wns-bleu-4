@@ -51,32 +51,33 @@ const FileDeleteDialog: React.FC<FileDeleteDialogProps> = ({
                     );
 
                     if (response.ok) {
-                        console.log('Fichier supprimé avec succès du stockage');
+                        console.log(t('fileCard.deleteDialog.storageSuccess'));
                     } else {
                         const errorData = await response.json();
                         console.error(
-                            'Erreur lors de la suppression du stockage:',
+                            t('fileCard.deleteDialog.storageError'),
                             errorData.message,
                         );
                     }
                 } catch (storageError) {
                     console.error(
-                        'Erreur lors de la suppression du stockage:',
+                        t('fileCard.deleteDialog.storageError'),
                         storageError,
                     );
                 }
 
                 // 3. Notifier le parent que le fichier a été supprimé (même si le stockage échoue)
                 onFileDeleted?.();
+
+                // 4. Afficher le toast de succès
+                toast.success(t('fileCard.deleteDialog.success'));
             } else {
-                console.error(
-                    'Erreur lors de la suppression de la base de données',
-                );
-                toast.error('Erreur lors de la suppression du fichier');
+                console.error(t('fileCard.deleteDialog.databaseError'));
+                toast.error(t('fileCard.deleteDialog.error'));
             }
         } catch (error) {
-            console.error('Erreur lors de la suppression:', error);
-            toast.error('Erreur lors de la suppression du fichier');
+            console.error(t('fileCard.deleteDialog.error'), error);
+            toast.error(t('fileCard.deleteDialog.error'));
         }
     };
 

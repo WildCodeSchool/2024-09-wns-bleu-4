@@ -529,6 +529,8 @@
         }
     },
     "fileCard": {
+        "download": "Télécharger",
+        "moreOptions": "Plus d'options",
         "sharedBy": "Partagé par",
         "menu": {
             "info": "Informations",
@@ -555,7 +557,8 @@
             "button": "Partager avec {{count}} contact{{plural}}",
             "error": {
                 "noSelection": "Veuillez sélectionner au moins un contact",
-                "sharing": "Erreur lors du partage du fichier"
+                "sharing": "Erreur lors du partage du fichier",
+                "console": "Erreur lors du partage du fichier"
             },
             "success": "Fichier partagé avec succès"
         },
@@ -578,13 +581,19 @@
                 "confirm": "Signaler"
             },
             "success": "Fichier signalé avec succès",
-            "error": "Erreur lors du signalement"
+            "error": "Erreur lors du signalement",
+            "console": "Erreur lors du signalement"
         },
         "deleteDialog": {
             "title": "Confirmer la suppression",
             "description": "Êtes-vous sûr de vouloir supprimer le fichier \"{{fileName}}\" ? Cette action est irréversible.",
             "cancel": "Annuler",
-            "confirm": "Supprimer"
+            "confirm": "Supprimer",
+            "error": "Erreur lors de la suppression du fichier",
+            "success": "Fichier supprimé avec succès",
+            "storageSuccess": "Fichier supprimé avec succès du stockage",
+            "storageError": "Erreur lors de la suppression du stockage",
+            "databaseError": "Erreur lors de la suppression de la base de données"
         },
         "delete": {
             "confirm": "Voulez-vous vraiment supprimer \"{{name}}\" ?",

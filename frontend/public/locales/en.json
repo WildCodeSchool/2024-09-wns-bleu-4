@@ -528,6 +528,8 @@
         }
     },
     "fileCard": {
+        "download": "Download",
+        "moreOptions": "More options",
         "sharedBy": "Shared by",
         "menu": {
             "info": "Information",
@@ -554,7 +556,8 @@
             "button": "Share with {{count}} contact{{plural}}",
             "error": {
                 "noSelection": "Please select at least one contact",
-                "sharing": "Error sharing file"
+                "sharing": "Error sharing file",
+                "console": "Error sharing file"
             },
             "success": "File shared successfully"
         },
@@ -577,13 +580,19 @@
                 "confirm": "Report"
             },
             "success": "File reported successfully",
-            "error": "Error reporting file"
+            "error": "Error reporting file",
+            "console": "Error reporting file"
         },
         "deleteDialog": {
             "title": "Confirm Deletion",
             "description": "Are you sure you want to delete the file \"{{fileName}}\"? This action is irreversible.",
             "cancel": "Cancel",
-            "confirm": "Delete"
+            "confirm": "Delete",
+            "error": "Error deleting file",
+            "success": "File successfully deleted",
+            "storageSuccess": "File successfully deleted from storage",
+            "storageError": "Error deleting from storage",
+            "databaseError": "Error deleting from database"
         },
         "preview": {
             "audio": "Your browser does not support audio playback",
