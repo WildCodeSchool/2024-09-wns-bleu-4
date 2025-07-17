@@ -80,8 +80,7 @@ const FileShareDialog: React.FC<FileShareDialogProps> = ({
             setSelectedContacts([]);
             setSearchQuery('');
             // Le dialog se fermera automatiquement
-        } catch (error) {
-            console.error(t('fileCard.share.error.console'), error);
+        } catch {
             toast.error(t('fileCard.share.error.sharing'));
         }
     };

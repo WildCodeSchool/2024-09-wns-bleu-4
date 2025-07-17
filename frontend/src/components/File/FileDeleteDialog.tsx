@@ -33,50 +33,34 @@ const FileDeleteDialog: React.FC<FileDeleteDialogProps> = ({
 
     const handleDelete = async () => {
         try {
-            // 1. Supprimer de la base de données via GraphQL
             const { data } = await deleteResourceMutation({
                 variables: { deleteResourceId: resourceId.toString() },
             });
 
-            if (data && data.deleteResource === 'Resource deleted') {
-                // 2. Supprimer le fichier du stockage
-                try {
-                    const response = await fetch(
-                        `/storage/delete/${encodeURIComponent(
-                            fileName.replace(/ /g, '_'),
-                        )}`,
-                        {
-                            method: 'DELETE',
-                        },
-                    );
-
-                    if (response.ok) {
-                        console.log(t('fileCard.deleteDialog.storageSuccess'));
-                    } else {
-                        const errorData = await response.json();
-                        console.error(
-                            t('fileCard.deleteDialog.storageError'),
-                            errorData.message,
+            if (data?.deleteResource === 'Resource deleted') {
+                const storageDelete = async () => {
+                    try {
+                        const response = await fetch(
+                            `/storage/delete/${encodeURIComponent(
+                                fileName.replace(/ /g, '_'),
+                            )}`,
+                            { method: 'DELETE' },
                         );
+                        if (!response.ok) {
+                            toast.warn(t('fileCard.deleteDialog.storageError'));
+                        }
+                    } catch {
+                        toast.warn(t('fileCard.deleteDialog.storageError'));
                     }
-                } catch (storageError) {
-                    console.error(
-                        t('fileCard.deleteDialog.storageError'),
-                        storageError,
-                    );
-                }
+                };
+                await storageDelete();
 
-                // 3. Notifier le parent que le fichier a été supprimé (même si le stockage échoue)
                 onFileDeleted?.();
-
-                // 4. Afficher le toast de succès
                 toast.success(t('fileCard.deleteDialog.success'));
             } else {
-                console.error(t('fileCard.deleteDialog.databaseError'));
                 toast.error(t('fileCard.deleteDialog.error'));
             }
-        } catch (error) {
-            console.error(t('fileCard.deleteDialog.error'), error);
+        } catch {
             toast.error(t('fileCard.deleteDialog.error'));
         }
     };

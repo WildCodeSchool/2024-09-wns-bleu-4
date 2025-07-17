@@ -60,8 +60,8 @@ const FileCard: React.FC<FileCardProps> = ({
             try {
                 const size = await getFormattedSizeFromUrl(url);
                 setFileSize(size);
-            } catch (error) {
-                console.error('Error fetching file size:', error);
+            } catch {
+                // Erreur lors de la récupération de la taille du fichier
             }
         };
         fetchSize();

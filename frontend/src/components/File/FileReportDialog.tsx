@@ -68,8 +68,7 @@ const FileReportDialog: React.FC<FileReportDialogProps> = ({
                 toast.success(t('fileCard.report.success'));
                 setShowConfirmDialog(false);
                 setSelectedReason(null);
-            } catch (error) {
-                console.error(t('fileCard.report.error'), error);
+            } catch {
                 toast.error(t('fileCard.report.error'));
             }
         }
