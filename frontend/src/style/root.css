@@ -153,3 +153,24 @@
     display: block;
     fill: currentColor;
 }
+
+/* Custom text selection styles */
+::selection {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+::-moz-selection {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+.dark ::selection {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+.dark ::-moz-selection {
+    background-color: #ffffff;
+    color: #000000;
+}

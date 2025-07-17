@@ -118,6 +118,7 @@ export class User extends BaseEntity {
     })
     stripeCustomerId: string | null;
 
+    @Field(() => Date)
     @IsDate()
     @CreateDateColumn()
     createdAt: Date;

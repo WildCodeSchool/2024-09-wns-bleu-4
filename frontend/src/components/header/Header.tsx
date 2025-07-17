@@ -48,7 +48,7 @@ const Header = () => {
     };
 
     return (
-        <header className="flex lg:w-[80%] mx-auto justify-between items-center px-4 py-4 rounded-lg lg:mt-2">
+        <header className="flex lg:w-[80%] mx-auto justify-between items-center py-4 rounded-lg lg:mt-2">
             <Logo />
             <NavigationMenu className="hidden md:flex gap-2">
                 {isAuth && (

@@ -1,0 +1,112 @@
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import { DELETE_RESOURCE } from '@/graphql/Resource/mutations';
+import { useMutation } from '@apollo/client';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+
+interface FileDeleteDialogProps {
+    trigger: React.ReactNode;
+    fileName: string;
+    resourceId: number;
+    onFileDeleted?: () => void;
+}
+
+const FileDeleteDialog: React.FC<FileDeleteDialogProps> = ({
+    trigger,
+    fileName,
+    resourceId,
+    onFileDeleted,
+}) => {
+    const { t } = useTranslation();
+    const [deleteResourceMutation] = useMutation(DELETE_RESOURCE);
+
+    const handleDelete = async () => {
+        try {
+            // 1. Supprimer de la base de données via GraphQL
+            const { data } = await deleteResourceMutation({
+                variables: { deleteResourceId: resourceId.toString() },
+            });
+
+            if (data && data.deleteResource === 'Resource deleted') {
+                // 2. Supprimer le fichier du stockage
+                try {
+                    const response = await fetch(
+                        `/storage/delete/${encodeURIComponent(
+                            fileName.replace(/ /g, '_'),
+                        )}`,
+                        {
+                            method: 'DELETE',
+                        },
+                    );
+
+                    if (response.ok) {
+                        console.log('Fichier supprimé avec succès du stockage');
+                    } else {
+                        const errorData = await response.json();
+                        console.error(
+                            'Erreur lors de la suppression du stockage:',
+                            errorData.message,
+                        );
+                    }
+                } catch (storageError) {
+                    console.error(
+                        'Erreur lors de la suppression du stockage:',
+                        storageError,
+                    );
+                }
+
+                // 3. Notifier le parent que le fichier a été supprimé (même si le stockage échoue)
+                onFileDeleted?.();
+            } else {
+                console.error(
+                    'Erreur lors de la suppression de la base de données',
+                );
+                alert('Erreur lors de la suppression du fichier');
+            }
+        } catch (error) {
+            console.error('Erreur lors de la suppression:', error);
+            alert('Erreur lors de la suppression du fichier');
+        }
+    };
+
+    return (
+        <AlertDialog>
+            <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>
+                        {t('fileCard.deleteDialog.title')}
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                        {t('fileCard.deleteDialog.description', {
+                            fileName,
+                        })}
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <AlertDialogCancel>
+                        {t('fileCard.deleteDialog.cancel')}
+                    </AlertDialogCancel>
+                    <AlertDialogAction
+                        onClick={handleDelete}
+                        className="bg-destructive hover:bg-destructive/90"
+                    >
+                        {t('fileCard.deleteDialog.confirm')}
+                    </AlertDialogAction>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
+    );
+};
+
+export default FileDeleteDialog;
