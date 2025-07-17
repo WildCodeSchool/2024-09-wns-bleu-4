@@ -15,8 +15,7 @@ export const useSessionStorage = () => {
 
   const removeItem = (key: string) => {
     sessionStorage.removeItem(key);
-    setValue(null);
   };
 
-  return { value, setItem, getItem, removeItem };
+  return { setItem, getItem, removeItem };
 };
