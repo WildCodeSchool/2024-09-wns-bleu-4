@@ -10,8 +10,8 @@ interface EnvironmentConfig {
   features: {
     debugMode: boolean;
     stripe: boolean;
-    analytics: boolean;
     errorReporting: boolean;
+    homeDisclaimer: boolean;
   };
 }
 
@@ -33,8 +33,8 @@ interface UseEnvReturn extends EnvironmentConfig {
  */
 export const useEnv = (): UseEnvReturn => {
   const config = useMemo((): EnvironmentConfig => {
-    const environment = (import.meta.env.VITE_ENVIRONMENT as Environment) || 'DEV';
-    const stripePublishableKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || '';
+    const environment = (import.meta.env.VITE_ENVIRONMENT as Environment) ?? 'DEV';
+    const stripePublishableKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY ?? '';
     
     const isDev = environment === 'DEV';
     const isProd = environment === 'PROD';
@@ -47,8 +47,8 @@ export const useEnv = (): UseEnvReturn => {
       features: {
         debugMode: isDev,
         stripe: Boolean(stripePublishableKey),
-        analytics: isProd,
-        errorReporting: isProd,
+        errorReporting: isDev,
+        homeDisclaimer: isDev,
       },
     };
   }, []);
@@ -121,8 +121,8 @@ export const isFeatureEnabled = (feature: keyof EnvironmentConfig['features']): 
   const features = {
     debugMode: isDev,
     stripe: Boolean(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY),
-    analytics: isProd,
     errorReporting: isProd,
+    homeDisclaimer: isDev,
   };
   
   return features[feature];

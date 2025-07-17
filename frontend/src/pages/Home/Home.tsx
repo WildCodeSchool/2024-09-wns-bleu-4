@@ -3,12 +3,8 @@ import { useTranslation } from 'react-i18next';
 
 const Home = () => {
     const { t } = useTranslation();
-    
-    return (
-        <BackgroundPaths
-            title={t('home.title')}
-        />
-    );
+
+    return <BackgroundPaths title={t('home.title')} />;
 };
 
 export default Home;
