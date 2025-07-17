@@ -2,11 +2,23 @@ import FileCard from '@/components/File/FileCard';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Contact, Resource } from '@/generated/graphql-types';
+import { Contact } from '@/generated/graphql-types';
 import { LucideIcon, Plus } from 'lucide-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+
+type Resource = {
+    id: number;
+    name: string;
+    description: string;
+    path: string;
+    url: string;
+    user?: {
+        id: number;
+        email: string;
+    };
+};
 
 interface FileSectionProps {
     title: string;
@@ -71,12 +83,7 @@ const FileSection: React.FC<FileSectionProps> = ({
                                 url={file.url}
                                 description={file.description}
                                 isShared={isShared}
-                                owner={{
-                                    ...file.user,
-                                    id: Number(file.user.id),
-                                    profilePicture:
-                                        file.user.profilePicture ?? undefined,
-                                }}
+                                owner={file.user}
                                 onFileDeleted={onFileDeleted}
                                 myContacts={myContacts}
                             />
