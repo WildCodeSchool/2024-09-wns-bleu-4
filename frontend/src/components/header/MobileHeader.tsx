@@ -51,7 +51,7 @@ const HeaderMobile = () => {
 
     return (
         <div className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b md:hidden">
-            <div className="flex items-center justify-between px-4 py-3">
+            <div className="flex items-center w-[90%] mx-auto justify-between py-3">
                 <Logo />
                 <div className="flex items-center gap-2">
                     <LanguageSwitcher />
