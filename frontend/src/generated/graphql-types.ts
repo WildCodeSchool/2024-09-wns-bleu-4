@@ -459,6 +459,7 @@ export type UpdateProfilePictureInput = {
 
 export type User = {
   __typename?: 'User';
+  createdAt: Scalars['DateTimeISO']['output'];
   email: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   profilePicture?: Maybe<Scalars['String']['output']>;
@@ -637,7 +638,7 @@ export type GetUserSharedResourcesQueryVariables = Exact<{
 }>;
 
 
-export type GetUserSharedResourcesQuery = { __typename?: 'Query', getUserSharedResources: Array<{ __typename?: 'Resource', id: number, name: string, description: string, path: string, url: string, user: { __typename?: 'User', id: string, email: string } }> };
+export type GetUserSharedResourcesQuery = { __typename?: 'Query', getUserSharedResources: Array<{ __typename?: 'Resource', id: number, name: string, description: string, path: string, url: string, user: { __typename?: 'User', id: string, email: string, createdAt: any, profilePicture?: string | null } }> };
 
 export type GetResourceStatsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1636,6 +1637,8 @@ export const GetUserSharedResourcesDocument = gql`
     user {
       id
       email
+      createdAt
+      profilePicture
     }
   }
 }

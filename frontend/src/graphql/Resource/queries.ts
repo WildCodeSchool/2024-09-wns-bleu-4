@@ -39,6 +39,8 @@ export const GET_SHARED_RESOURCES = gql`
             user {
                 id
                 email
+                createdAt
+                profilePicture
             }
         }
     }
