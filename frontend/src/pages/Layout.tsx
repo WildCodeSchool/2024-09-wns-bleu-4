@@ -3,6 +3,7 @@ import Header from '@/components/header/Header';
 import HeaderMobile from '@/components/header/MobileHeader';
 import { ThemeProvider } from '@/components/themeProvider';
 import { useEnv } from '@/hooks/useEnv';
+import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { useTheme } from '@/hooks/useTheme';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
@@ -15,11 +16,16 @@ const Layout = () => {
     const { theme } = useTheme();
     const { isFeatureEnabled } = useEnv();
     const { t } = useTranslation();
+    const { setItem, getItem } = useSessionStorage();
+
+    const handleClose = () => {
+        setItem('homeDisclaimerClosed', 'true');
+    };
 
     return (
         <ThemeProvider>
-            {isFeatureEnabled('homeDisclaimer') && (
-                <HeaderBand type="warning" text={t('home.disclaimer')} />
+            {isFeatureEnabled('homeDisclaimer') && !getItem('homeDisclaimerClosed') && (
+                <HeaderBand type="warning" text={t('home.disclaimer')} onClick={handleClose} />
             )}
 
             <main>
