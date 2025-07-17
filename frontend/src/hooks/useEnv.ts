@@ -46,9 +46,9 @@ export const useEnv = (): UseEnvReturn => {
       isProd,
       features: {
         debugMode: isDev,
-        stripe: Boolean(stripePublishableKey),
+        stripe: Boolean(stripePublishableKey) && isDev,
         errorReporting: isDev,
-        homeDisclaimer: isDev,
+        homeDisclaimer: isProd,
       },
     };
   }, []);
@@ -120,9 +120,9 @@ export const isFeatureEnabled = (feature: keyof EnvironmentConfig['features']): 
   
   const features = {
     debugMode: isDev,
-    stripe: Boolean(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY),
-    errorReporting: isProd,
-    homeDisclaimer: isDev,
+    stripe: Boolean(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY) && isDev,
+    errorReporting: isDev,
+    homeDisclaimer: isProd,
   };
   
   return features[feature];

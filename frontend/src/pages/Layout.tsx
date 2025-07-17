@@ -18,7 +18,7 @@ const Layout = () => {
     const { t } = useTranslation();
     const { setItem, getItem } = useSessionStorage();
 
-    const handleClose = () => {
+    const handleHomeDisclaimerClose = () => {
         setItem('homeDisclaimerClosed', 'true');
     };
 
@@ -26,7 +26,7 @@ const Layout = () => {
         <ThemeProvider>
             {/* HeaderBands */}
             {isFeatureEnabled('homeDisclaimer') && !getItem('homeDisclaimerClosed') && (
-                <HeaderBand type="warning" text={t('home.disclaimer')} onClick={handleClose} />
+                <HeaderBand type="warning" text={t('home.disclaimer')} onClick={handleHomeDisclaimerClose} />
             )}
 
             {/* Main Content */}
