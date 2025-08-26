@@ -5,26 +5,40 @@ export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
 
-export const getFormattedSizeFromUrl = async (
-    url: string,
-): Promise<string | null> => {
-    try {
-        const response = await fetch(url, { method: 'HEAD' });
-        const size = response.headers.get('content-length');
-        if (!size) return null;
+/**
+ * Converts bytes to a human-readable string
+ * @param bytes - The size in bytes
+ * @param decimals - Number of decimal places (default: 2)
+ * @returns Formatted string (e.g., "1.5 MB", "2.3 GB")
+ */
+export const formatFileSize = (bytes: number, decimals: number = 2): string => {
+    if (bytes === 0) return '0 Bytes';
 
-        const bytes = parseInt(size);
-        const units = ['B', 'KB', 'MB', 'GB', 'TB'];
-        let value = bytes;
-        let unitIndex = 0;
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 
-        while (value >= 1024 && unitIndex < units.length - 1) {
-            value /= 1024;
-            unitIndex++;
-        }
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
 
-        return `${value.toFixed(1)} ${units[unitIndex]}`;
-    } catch (error) {
-        throw new Error(error as string);
-    }
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+};
+
+/**
+ * Converts bytes to MB
+ * @param bytes - The size in bytes
+ * @param decimals - Number of decimal places (default: 2)
+ * @returns Size in MB
+ */
+export const bytesToMB = (bytes: number, decimals: number = 2): number => {
+    return parseFloat((bytes / (1024 * 1024)).toFixed(decimals));
+};
+
+/**
+ * Converts bytes to GB
+ * @param bytes - The size in bytes
+ * @param decimals - Number of decimal places (default: 2)
+ * @returns Size in GB
+ */
+export const bytesToGB = (bytes: number, decimals: number = 2): number => {
+    return parseFloat((bytes / (1024 * 1024 * 1024)).toFixed(decimals));
 };

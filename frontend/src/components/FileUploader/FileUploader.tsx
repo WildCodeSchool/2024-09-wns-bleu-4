@@ -23,6 +23,7 @@ interface FileWithPreview {
 
 interface FileUploaderProps {
     onFileChange: (file: File | null) => void;
+    onFileSizeChange: (size: number | null) => void;
     onDescriptionChange: (description: string) => void;
     description: string;
     isUploading: boolean;
@@ -33,6 +34,7 @@ interface FileUploaderProps {
 
 export default function FileUploader({
     onFileChange,
+    onFileSizeChange,
     onDescriptionChange,
     description,
     isUploading,
@@ -64,6 +66,7 @@ export default function FileUploader({
         setFiles([newFile]); // Replace any existing file
         simulateUpload(newFile.id);
         onFileChange(file); // Pass the file to the parent component
+        onFileSizeChange(file.size); // Pass the file size to the parent component
     };
 
     // Simulate upload progress (visual only)
@@ -106,6 +109,7 @@ export default function FileUploader({
         e.stopPropagation();
         setFiles([]);
         onFileChange(null);
+        onFileSizeChange(null);
         onDescriptionChange('');
     };
 

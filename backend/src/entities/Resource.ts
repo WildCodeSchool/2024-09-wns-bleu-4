@@ -78,6 +78,13 @@ export class Resource extends BaseEntity {
     })
     description: string;
 
+    @Field(() => Number)
+    @Column({
+        type: 'bigint',
+        nullable: false,
+    })
+    size: number;
+
     @Field(() => [User])
     @ManyToMany(() => User, (User) => User.sharedResources)
     @JoinTable()

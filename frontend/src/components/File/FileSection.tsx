@@ -12,6 +12,7 @@ type Resource = {
     id: number;
     name: string;
     description: string;
+    size: number;
     path: string;
     url: string;
     user?: {
@@ -82,6 +83,7 @@ const FileSection: React.FC<FileSectionProps> = ({
                                 name={file.name}
                                 url={file.url}
                                 description={file.description}
+                                size={file.size}
                                 isShared={isShared}
                                 owner={file.user}
                                 onFileDeleted={onFileDeleted}

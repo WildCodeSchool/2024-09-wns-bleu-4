@@ -13,6 +13,7 @@ import { mutate } from 'swr';
 const UploadPage = () => {
     const { t } = useTranslation();
     const [file, setFile] = useState<File | null>(null);
+    const [fileSize, setFileSize] = useState<number | null>(null);
     const [description, setDescription] = useState<string>('');
     const [isUploading, setIsUploading] = useState(false);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -58,6 +59,7 @@ const UploadPage = () => {
                         description:
                             description || `Fichier uploadé : ${file.name}`,
                         userId: user.id,
+                        size: fileSize || file.size,
                     },
                 },
             });
@@ -103,6 +105,7 @@ const UploadPage = () => {
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <FileUploader
                         onFileChange={setFile}
+                        onFileSizeChange={setFileSize}
                         onDescriptionChange={setDescription}
                         description={description}
                         isUploading={isUploading}
