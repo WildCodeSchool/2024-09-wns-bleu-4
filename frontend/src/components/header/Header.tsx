@@ -33,10 +33,11 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useAuth } from '@/hooks/useAuth';
 
 const Header = () => {
     const [logout] = useLogoutMutation();
-    const { refreshAuth, isAuth } = useAuthContext();
+    const { refreshAuth, isAuth } = useAuth();
     const navigate = useNavigate();
     const { t } = useTranslation();
     const { user } = useAuthContext();
