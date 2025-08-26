@@ -22,7 +22,7 @@ const UploadPage = () => {
         string | null
     >(null);
     const [uploadedFileName, setUploadedFileName] = useState<string>('');
-    const { user } = useAuth();
+    const { user, refreshAuth } = useAuth();
 
     const { acceptedContacts } = useMyContacts();
     const [createResource] = useMutation(CREATE_RESOURCE);
@@ -94,6 +94,7 @@ const UploadPage = () => {
             setErrorMessage(t('upload.errors.upload'));
         } finally {
             setIsUploading(false);
+            refreshAuth();
         }
     };
 

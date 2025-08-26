@@ -6,6 +6,7 @@ import {
     GET_SHARED_RESOURCES,
 } from '@/graphql/Resource/queries';
 import { GET_USER_ID } from '@/graphql/User/queries';
+import { useAuthContext } from '@/context/useAuthContext';
 import { useMyContacts } from '@/hooks/useMyContacts';
 import { useQuery } from '@apollo/client';
 import { FolderOpen, Plus, Users } from 'lucide-react';
@@ -15,6 +16,7 @@ import { Link } from 'react-router-dom';
 const FilesPage: React.FC = () => {
     const { t } = useTranslation();
     const { data: userData } = useQuery(GET_USER_ID);
+    const { refreshAuth } = useAuthContext();
     const {
         data: resources,
         loading,
@@ -44,6 +46,7 @@ const FilesPage: React.FC = () => {
 
     const handleFileDeleted = () => {
         refetchMyFiles();
+        refreshAuth();
     };
 
     return (

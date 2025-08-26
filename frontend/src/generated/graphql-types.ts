@@ -478,12 +478,13 @@ export type User = {
 
 export type UserInfo = {
   __typename?: 'UserInfo';
-  email?: Maybe<Scalars['String']['output']>;
-  id?: Maybe<Scalars['ID']['output']>;
+  email: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
   isLoggedIn: Scalars['Boolean']['output'];
   isSubscribed?: Maybe<Scalars['Boolean']['output']>;
   profilePicture?: Maybe<Scalars['String']['output']>;
-  role?: Maybe<UserRole>;
+  role: UserRole;
+  storage: UserStorage;
 };
 
 export type UserInput = {
@@ -496,6 +497,12 @@ export enum UserRole {
   Admin = 'ADMIN',
   User = 'USER'
 }
+
+export type UserStorage = {
+  __typename?: 'UserStorage';
+  bytesUsed: Scalars['Float']['output'];
+  percentage: Scalars['Float']['output'];
+};
 
 export type SendContactRequestMutationVariables = Exact<{
   contactToCreate: ContactInput;
@@ -660,13 +667,6 @@ export type GetUserTotalFileSizeQueryVariables = Exact<{
 
 export type GetUserTotalFileSizeQuery = { __typename?: 'Query', getUserTotalFileSize: number };
 
-export type GetResourceByIdQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-
-export type GetResourceByIdQuery = { __typename?: 'Query', getResourceById?: { __typename?: 'Resource', id: number, name: string, description: string, path: string, url: string, size: number, user: { __typename?: 'User', id: string, email: string } } | null };
-
 export type CreateSubscriptionMutationVariables = Exact<{
   userId: Scalars['ID']['input'];
 }>;
@@ -780,12 +780,12 @@ export type GetAllUsersQuery = { __typename?: 'Query', getAllUsers: Array<{ __ty
 export type GetUserInfoQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUserInfoQuery = { __typename?: 'Query', getUserInfo: { __typename?: 'UserInfo', email?: string | null, isLoggedIn: boolean, id?: string | null, isSubscribed?: boolean | null, role?: UserRole | null, profilePicture?: string | null } };
+export type GetUserInfoQuery = { __typename?: 'Query', getUserInfo: { __typename?: 'UserInfo', email: string, isLoggedIn: boolean, id: string, isSubscribed?: boolean | null, role: UserRole, profilePicture?: string | null, storage: { __typename?: 'UserStorage', bytesUsed: number, percentage: number } } };
 
 export type GetUserIdQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUserIdQuery = { __typename?: 'Query', getUserInfo: { __typename?: 'UserInfo', id?: string | null, email?: string | null } };
+export type GetUserIdQuery = { __typename?: 'Query', getUserInfo: { __typename?: 'UserInfo', id: string, email: string } };
 
 export type GetUserStatsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1778,55 +1778,6 @@ export type GetUserTotalFileSizeQueryHookResult = ReturnType<typeof useGetUserTo
 export type GetUserTotalFileSizeLazyQueryHookResult = ReturnType<typeof useGetUserTotalFileSizeLazyQuery>;
 export type GetUserTotalFileSizeSuspenseQueryHookResult = ReturnType<typeof useGetUserTotalFileSizeSuspenseQuery>;
 export type GetUserTotalFileSizeQueryResult = Apollo.QueryResult<GetUserTotalFileSizeQuery, GetUserTotalFileSizeQueryVariables>;
-export const GetResourceByIdDocument = gql`
-    query GetResourceById($id: ID!) {
-  getResourceById(id: $id) {
-    id
-    name
-    description
-    path
-    url
-    size
-    user {
-      id
-      email
-    }
-  }
-}
-    `;
-
-/**
- * __useGetResourceByIdQuery__
- *
- * To run a query within a React component, call `useGetResourceByIdQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetResourceByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetResourceByIdQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetResourceByIdQuery(baseOptions: Apollo.QueryHookOptions<GetResourceByIdQuery, GetResourceByIdQueryVariables> & ({ variables: GetResourceByIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetResourceByIdQuery, GetResourceByIdQueryVariables>(GetResourceByIdDocument, options);
-      }
-export function useGetResourceByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetResourceByIdQuery, GetResourceByIdQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetResourceByIdQuery, GetResourceByIdQueryVariables>(GetResourceByIdDocument, options);
-        }
-export function useGetResourceByIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetResourceByIdQuery, GetResourceByIdQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetResourceByIdQuery, GetResourceByIdQueryVariables>(GetResourceByIdDocument, options);
-        }
-export type GetResourceByIdQueryHookResult = ReturnType<typeof useGetResourceByIdQuery>;
-export type GetResourceByIdLazyQueryHookResult = ReturnType<typeof useGetResourceByIdLazyQuery>;
-export type GetResourceByIdSuspenseQueryHookResult = ReturnType<typeof useGetResourceByIdSuspenseQuery>;
-export type GetResourceByIdQueryResult = Apollo.QueryResult<GetResourceByIdQuery, GetResourceByIdQueryVariables>;
 export const CreateSubscriptionDocument = gql`
     mutation CreateSubscription($userId: ID!) {
   createSubscription(userId: $userId) {
@@ -2401,6 +2352,10 @@ export const GetUserInfoDocument = gql`
     isSubscribed
     role
     profilePicture
+    storage {
+      bytesUsed
+      percentage
+    }
   }
 }
     `;

@@ -9,7 +9,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import UserHoverCard from '@/components/UserHoverCard';
 import { Contact } from '@/generated/graphql-types';
-import { formatFileSize } from '@/lib/utils';
 import {
     Download,
     FileText,
@@ -78,7 +77,7 @@ const FileCard: React.FC<FileCardProps> = ({
                                 </h3>
                                 <div className="text-xs text-muted-foreground space-y-1">
                                     <p className="font-medium">
-                                        {formatFileSize(size)}
+                                        {size}
                                     </p>
                                     {description && (
                                         <p className="truncate line-clamp-2">
@@ -142,7 +141,7 @@ const FileCard: React.FC<FileCardProps> = ({
                                             </DropdownMenuItem>
                                         }
                                         fileName={name}
-                                        fileSize={formatFileSize(size)}
+                                        fileSize={size.toString()}
                                         description={description}
                                         owner={owner}
                                         isShared={isShared}

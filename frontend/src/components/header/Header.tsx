@@ -2,6 +2,7 @@ import LanguageSwitcher from '@/components/LanguageSwitcher';
 import Logo from '@/components/Logo';
 import { ModeToggle } from '@/components/mode-toggle';
 import SubscribedLogo from '@/components/SubscribedLogo';
+import StorageProgress from '@/components/StorageProgress';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -248,7 +249,16 @@ const Header = () => {
 
             <div className="flex items-center gap-4">
                 <DropdownMenu>
-                    {isAuth && user?.isSubscribed && <SubscribedLogo />}
+                    {isAuth && (
+                        user?.isSubscribed ? (
+                            <SubscribedLogo />
+                        ) : (
+                            <StorageProgress
+                                bytesUsed={user?.storage?.bytesUsed ?? 0}
+                                percentage={user?.storage?.percentage ?? 0}
+                            />
+                        )
+                    )}
                     <DropdownMenuTrigger asChild>
                         <Button
                             variant="ghost"
