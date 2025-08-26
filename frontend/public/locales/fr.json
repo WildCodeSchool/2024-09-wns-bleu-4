@@ -91,6 +91,7 @@
         "errors": {
             "upload": "❌ Une erreur s'est produite. Veuillez réessayer.",
             "fileUpload": "Erreur lors de l'upload du fichier",
+            "storageLimitExceeded": "❌ Limite de stockage dépassée. Ce fichier dépasserait votre limite de 20MB.",
             "share": {
                 "noContacts": "Veuillez sélectionner au moins un contact",
                 "error": "Une erreur est survenue lors du partage",

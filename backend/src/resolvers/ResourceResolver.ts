@@ -66,7 +66,10 @@ class ResourceResolver {
             .where('resource.user.id = :userId', { userId })
             .getRawOne();
         
-        return result?.totalSize ? parseInt(result.totalSize) : 0;
+        const totalSize = result?.totalSize ? Number(result.totalSize) : 0;
+        console.log(`[getUserTotalFileSize] User ${userId}: raw result =`, result, 'totalSize =', totalSize);
+        
+        return totalSize;
     }
 
     @Query(() => [User])
@@ -74,7 +77,7 @@ class ResourceResolver {
         @Arg('resourceId', () => ID) resourceId: number,
     ): Promise<User[]> {
         const resource = await Resource.findOne({ where: { id: resourceId }, relations: ['usersWithAccess'] });
-        return resource?.usersWithAccess ?? [];
+        return resource?.usersWithAccess || [];
     }
 
     @Mutation(() => String)
@@ -134,6 +137,19 @@ class ResourceResolver {
             const user = await User.findOne({ where: { id: data.userId } });
             if (!user) {
                 throw new Error('L\'utilisateur demandé n\'a pas été trouvé');
+            }
+
+            // Check storage limit before creating resource
+            const MAX_STORAGE_BYTES = 20971520; // 20MB = 20 × 1024 × 1024 = 20,971,520 bytes
+            
+            // Get current user's total file size
+            const currentTotalSize = await this.getUserTotalFileSize(data.userId);
+            
+            console.log(`[createResource] User ${data.userId}: currentTotalSize = ${currentTotalSize}, newFileSize = ${data.size}, total = ${currentTotalSize + data.size}, limit = ${MAX_STORAGE_BYTES}`);
+            
+            // Check if adding this file would exceed the limit
+            if (currentTotalSize + data.size > MAX_STORAGE_BYTES) {
+                throw new Error('Storage limit exceeded. This file would exceed your 20MB storage limit.');
             }
 
             const resource = Resource.create({ ...data, user, size: data.size });

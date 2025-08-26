@@ -1,11 +1,11 @@
 /**
  * Calculates the storage percentage used based on the provided bytes value
- * @param bytesUsed - The number of bytes used (between 0 and 20,000,000)
+ * @param bytesUsed - The number of bytes used (between 0 and 20,971,520)
  * @returns The percentage used as a number between 0 and 100
  */
 export function calculateStoragePercentage(bytesUsed: number): number {
-    // Maximum storage limit: 20MB = 20,000,000 bytes
-    const MAX_STORAGE_BYTES = 20000000;
+    // Maximum storage limit: 20MB = 20 × 1024 × 1024 = 20,971,520 bytes
+    const MAX_STORAGE_BYTES = 20971520;
     
     // Ensure bytesUsed is within valid range
     if (bytesUsed < 0) {
@@ -25,16 +25,12 @@ export function calculateStoragePercentage(bytesUsed: number): number {
  * @param decimals - Number of decimal places (default: 2)
  * @returns Formatted string (e.g., "1.5 MB", "2.3 GB")
  */
-export const formatFileSize = (bytes: number, decimals: number = 2): string => {
-    if (bytes === 0) return '0 Bytes';
-
+export const formatFileSize = (bytes: number): string => {
+    if (!bytes) return '0 Bytes';
     const k = 1024;
-    const dm = decimals < 0 ? 0 : decimals;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+    return `${(bytes / Math.pow(k, i)).toFixed(2)} ${sizes[i]}`;
 };
 
 /**

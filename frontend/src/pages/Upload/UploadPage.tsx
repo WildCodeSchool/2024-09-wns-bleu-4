@@ -91,10 +91,19 @@ const UploadPage = () => {
             }
         } catch (error) {
             console.error("Erreur lors de l'upload:", error);
-            setErrorMessage(t('upload.errors.upload'));
+            
+            // Check if it's a storage limit error from the backend
+            if (error instanceof Error && error.message.includes('Storage limit exceeded')) {
+                setErrorMessage(t('upload.errors.storageLimitExceeded'));
+            } else {
+                setErrorMessage(t('upload.errors.upload'));
+            }
         } finally {
             setIsUploading(false);
-            refreshAuth();
+            // Add a small delay to ensure database transaction is fully committed
+            setTimeout(() => {
+                refreshAuth();
+            }, 500);
         }
     };
 

@@ -230,14 +230,16 @@ class UserResolver {
                 where: { email: context.email },
             });
             if (user) {
-                // Calculate total bytes used from user's resources
-                const userResources = await Resource.find({
-                    where: { user: { id: user.id } },
-                    select: ['size']
-                });
+                // Calculate total bytes used from user's resources using the same method as ResourceResolver
+                const result = await Resource.createQueryBuilder('resource')
+                    .select('SUM(resource.size)', 'totalSize')
+                    .where('resource.user.id = :userId', { userId: user.id })
+                    .getRawOne();
                 
-                const totalBytesUsed = userResources.reduce((total, resource) => total + resource.size, 0);
+                const totalBytesUsed = result?.totalSize ? Number(result.totalSize) : 0;
                 const storagePercentage = calculateStoragePercentage(totalBytesUsed);
+                
+                console.log(`[getUserInfo] User ${user.id}: totalBytesUsed =`, totalBytesUsed, 'storagePercentage =', storagePercentage);
                 
                 return {
                     isLoggedIn: true,
