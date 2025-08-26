@@ -500,7 +500,7 @@ export enum UserRole {
 
 export type UserStorage = {
   __typename?: 'UserStorage';
-  bytesUsed: Scalars['Float']['output'];
+  bytesUsed: Scalars['String']['output'];
   percentage: Scalars['Float']['output'];
 };
 
@@ -780,7 +780,7 @@ export type GetAllUsersQuery = { __typename?: 'Query', getAllUsers: Array<{ __ty
 export type GetUserInfoQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUserInfoQuery = { __typename?: 'Query', getUserInfo: { __typename?: 'UserInfo', email: string, isLoggedIn: boolean, id: string, isSubscribed?: boolean | null, role: UserRole, profilePicture?: string | null, storage: { __typename?: 'UserStorage', bytesUsed: number, percentage: number } } };
+export type GetUserInfoQuery = { __typename?: 'Query', getUserInfo: { __typename?: 'UserInfo', email: string, isLoggedIn: boolean, id: string, isSubscribed?: boolean | null, role: UserRole, profilePicture?: string | null, storage: { __typename?: 'UserStorage', bytesUsed: string, percentage: number } } };
 
 export type GetUserIdQueryVariables = Exact<{ [key: string]: never; }>;
 
