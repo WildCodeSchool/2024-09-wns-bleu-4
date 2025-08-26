@@ -421,6 +421,7 @@ export type Resource = {
   __typename?: 'Resource';
   comments: Array<Comment>;
   description: Scalars['String']['output'];
+  formattedSize: Scalars['String']['output'];
   id: Scalars['Float']['output'];
   likes: Array<Like>;
   name: Scalars['String']['output'];
@@ -639,21 +640,21 @@ export type CreateUserAccessMutation = { __typename?: 'Mutation', createUserAcce
 export type GetAllResourcesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllResourcesQuery = { __typename?: 'Query', getAllResources: Array<{ __typename?: 'Resource', id: number, name: string, description: string, path: string, url: string, size: number, user: { __typename?: 'User', id: string, email: string } }> };
+export type GetAllResourcesQuery = { __typename?: 'Query', getAllResources: Array<{ __typename?: 'Resource', id: number, name: string, description: string, path: string, url: string, size: number, formattedSize: string, user: { __typename?: 'User', id: string, email: string } }> };
 
 export type GetResourcesByUserIdQueryVariables = Exact<{
   userId: Scalars['ID']['input'];
 }>;
 
 
-export type GetResourcesByUserIdQuery = { __typename?: 'Query', getResourcesByUserId: Array<{ __typename?: 'Resource', description: string, id: number, name: string, path: string, url: string, size: number }> };
+export type GetResourcesByUserIdQuery = { __typename?: 'Query', getResourcesByUserId: Array<{ __typename?: 'Resource', description: string, id: number, name: string, path: string, url: string, size: number, formattedSize: string }> };
 
 export type GetUserSharedResourcesQueryVariables = Exact<{
   userId: Scalars['ID']['input'];
 }>;
 
 
-export type GetUserSharedResourcesQuery = { __typename?: 'Query', getUserSharedResources: Array<{ __typename?: 'Resource', id: number, name: string, description: string, path: string, url: string, size: number, user: { __typename?: 'User', id: string, email: string, createdAt: any, profilePicture?: string | null } }> };
+export type GetUserSharedResourcesQuery = { __typename?: 'Query', getUserSharedResources: Array<{ __typename?: 'Resource', id: number, name: string, description: string, path: string, url: string, size: number, formattedSize: string, user: { __typename?: 'User', id: string, email: string, createdAt: any, profilePicture?: string | null } }> };
 
 export type GetResourceStatsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1566,6 +1567,7 @@ export const GetAllResourcesDocument = gql`
     path
     url
     size
+    formattedSize
     user {
       id
       email
@@ -1614,6 +1616,7 @@ export const GetResourcesByUserIdDocument = gql`
     path
     url
     size
+    formattedSize
   }
 }
     `;
@@ -1659,6 +1662,7 @@ export const GetUserSharedResourcesDocument = gql`
     path
     url
     size
+    formattedSize
     user {
       id
       email

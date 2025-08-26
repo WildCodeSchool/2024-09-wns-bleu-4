@@ -30,7 +30,7 @@ interface FileCardProps {
     url: string;
     id: number;
     description?: string;
-    size: number;
+    formattedSize: string;
     isShared?: boolean;
     owner?: {
         id: number;
@@ -47,7 +47,7 @@ const FileCard: React.FC<FileCardProps> = ({
     url,
     id,
     description,
-    size,
+    formattedSize,
     isShared = false,
     owner,
     onFileDeleted,
@@ -77,7 +77,7 @@ const FileCard: React.FC<FileCardProps> = ({
                                 </h3>
                                 <div className="text-xs text-muted-foreground space-y-1">
                                     <p className="font-medium">
-                                        {size}
+                                        {formattedSize}
                                     </p>
                                     {description && (
                                         <p className="truncate line-clamp-2">
@@ -141,7 +141,7 @@ const FileCard: React.FC<FileCardProps> = ({
                                             </DropdownMenuItem>
                                         }
                                         fileName={name}
-                                        fileSize={size.toString()}
+                                        fileSize={formattedSize}
                                         description={description}
                                         owner={owner}
                                         isShared={isShared}

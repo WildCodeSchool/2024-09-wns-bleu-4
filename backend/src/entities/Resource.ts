@@ -2,6 +2,7 @@ import { Comment } from '@/entities/Comment';
 import { Like } from '@/entities/Like';
 import { Report } from '@/entities/Report';
 import { User } from '@/entities/User';
+import { formatFileSize } from '@/utils/storageUtils';
 import { IsDate, IsEnum, Length, MaxLength } from 'class-validator';
 import { Field, ObjectType } from 'type-graphql';
 import {
@@ -84,6 +85,11 @@ export class Resource extends BaseEntity {
         nullable: false,
     })
     size: number;
+
+    @Field(() => String)
+    get formattedSize(): string {
+        return formatFileSize(this.size);
+    }
 
     @Field(() => [User])
     @ManyToMany(() => User, (User) => User.sharedResources)
