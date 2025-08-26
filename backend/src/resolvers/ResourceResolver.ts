@@ -134,22 +134,27 @@ class ResourceResolver {
         @Arg('data', () => ResourceInput) data: ResourceInput,
     ): Promise<Resource> {
         try {
-            const user = await User.findOne({ where: { id: data.userId } });
+            const user = await User.findOne({ 
+                where: { id: data.userId },
+                relations: ['subscription']
+            });
             if (!user) {
                 throw new Error('L\'utilisateur demandé n\'a pas été trouvé');
             }
 
-            // Check storage limit before creating resource
-            const MAX_STORAGE_BYTES = 20971520; // 20MB = 20 × 1024 × 1024 = 20,971,520 bytes
-            
-            // Get current user's total file size
-            const currentTotalSize = await this.getUserTotalFileSize(data.userId);
-            
-            console.log(`[createResource] User ${data.userId}: currentTotalSize = ${currentTotalSize}, newFileSize = ${data.size}, total = ${currentTotalSize + data.size}, limit = ${MAX_STORAGE_BYTES}`);
-            
-            // Check if adding this file would exceed the limit
-            if (currentTotalSize + data.size > MAX_STORAGE_BYTES) {
-                throw new Error('Storage limit exceeded. This file would exceed your 20MB storage limit.');
+            // Only check storage limit for non-subscribed users
+            if (!user.subscription) {
+                const MAX_STORAGE_BYTES = 20971520; // 20MB = 20 × 1024 × 1024 = 20,971,520 bytes
+                
+                // Get current user's total file size
+                const currentTotalSize = await this.getUserTotalFileSize(data.userId);
+                
+                console.log(`[createResource] User ${data.userId}: currentTotalSize = ${currentTotalSize}, newFileSize = ${data.size}, total = ${currentTotalSize + data.size}, limit = ${MAX_STORAGE_BYTES}`);
+                
+                // Check if adding this file would exceed the limit
+                if (currentTotalSize + data.size > MAX_STORAGE_BYTES) {
+                    throw new Error('Storage limit exceeded. This file would exceed your 20MB storage limit.');
+                }
             }
 
             const resource = Resource.create({ ...data, user, size: data.size });
