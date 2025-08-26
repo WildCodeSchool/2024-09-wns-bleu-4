@@ -660,13 +660,6 @@ export type GetUserTotalFileSizeQueryVariables = Exact<{
 
 export type GetUserTotalFileSizeQuery = { __typename?: 'Query', getUserTotalFileSize: number };
 
-export type GetResourceByIdQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-
-export type GetResourceByIdQuery = { __typename?: 'Query', getResourceById?: { __typename?: 'Resource', id: number, name: string, description: string, path: string, url: string, size: number, user: { __typename?: 'User', id: string, email: string } } | null };
-
 export type CreateSubscriptionMutationVariables = Exact<{
   userId: Scalars['ID']['input'];
 }>;
@@ -1778,55 +1771,6 @@ export type GetUserTotalFileSizeQueryHookResult = ReturnType<typeof useGetUserTo
 export type GetUserTotalFileSizeLazyQueryHookResult = ReturnType<typeof useGetUserTotalFileSizeLazyQuery>;
 export type GetUserTotalFileSizeSuspenseQueryHookResult = ReturnType<typeof useGetUserTotalFileSizeSuspenseQuery>;
 export type GetUserTotalFileSizeQueryResult = Apollo.QueryResult<GetUserTotalFileSizeQuery, GetUserTotalFileSizeQueryVariables>;
-export const GetResourceByIdDocument = gql`
-    query GetResourceById($id: ID!) {
-  getResourceById(id: $id) {
-    id
-    name
-    description
-    path
-    url
-    size
-    user {
-      id
-      email
-    }
-  }
-}
-    `;
-
-/**
- * __useGetResourceByIdQuery__
- *
- * To run a query within a React component, call `useGetResourceByIdQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetResourceByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetResourceByIdQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetResourceByIdQuery(baseOptions: Apollo.QueryHookOptions<GetResourceByIdQuery, GetResourceByIdQueryVariables> & ({ variables: GetResourceByIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetResourceByIdQuery, GetResourceByIdQueryVariables>(GetResourceByIdDocument, options);
-      }
-export function useGetResourceByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetResourceByIdQuery, GetResourceByIdQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetResourceByIdQuery, GetResourceByIdQueryVariables>(GetResourceByIdDocument, options);
-        }
-export function useGetResourceByIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetResourceByIdQuery, GetResourceByIdQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetResourceByIdQuery, GetResourceByIdQueryVariables>(GetResourceByIdDocument, options);
-        }
-export type GetResourceByIdQueryHookResult = ReturnType<typeof useGetResourceByIdQuery>;
-export type GetResourceByIdLazyQueryHookResult = ReturnType<typeof useGetResourceByIdLazyQuery>;
-export type GetResourceByIdSuspenseQueryHookResult = ReturnType<typeof useGetResourceByIdSuspenseQuery>;
-export type GetResourceByIdQueryResult = Apollo.QueryResult<GetResourceByIdQuery, GetResourceByIdQueryVariables>;
 export const CreateSubscriptionDocument = gql`
     mutation CreateSubscription($userId: ID!) {
   createSubscription(userId: $userId) {
