@@ -239,8 +239,6 @@ class UserResolver {
                 const totalBytesUsed = result?.totalSize ? Number(result.totalSize) : 0;
                 const storagePercentage = calculateStoragePercentage(totalBytesUsed);
                 
-                console.log(`[getUserInfo] User ${user.id}: totalBytesUsed =`, totalBytesUsed, 'storagePercentage =', storagePercentage);
-                
                 return {
                     isLoggedIn: true,
                     email: context.email,

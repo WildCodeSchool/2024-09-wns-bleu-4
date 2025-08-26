@@ -255,7 +255,7 @@ const Header = () => {
                             <SubscribedLogo />
                         ) : (
                             <StorageProgress
-                                bytesUsed={user?.storage?.bytesUsed ?? 0}
+                                bytesUsed={user?.storage?.bytesUsed ?? '0 Bytes'}
                                 percentage={user?.storage?.percentage ?? 0}
                             />
                         )

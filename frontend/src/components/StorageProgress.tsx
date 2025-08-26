@@ -11,7 +11,7 @@ const StorageProgress = ({
     bytesUsed,
     percentage,
 }: {
-    bytesUsed: number;
+    bytesUsed: string;
     percentage: number;
 }) => {
     const [progress, setProgress] = useState(percentage);

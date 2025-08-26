@@ -8,7 +8,7 @@ interface AuthContext {
         role?: 'USER' | 'ADMIN';
         profilePicture?: string | null;
         storage: {
-            bytesUsed: number;
+            bytesUsed: string;
             percentage: number;
         }
     } | null;

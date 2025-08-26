@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               role: data?.getUserInfo.role ?? undefined,
               profilePicture: data?.getUserInfo.profilePicture ?? null,
               storage: {
-                bytesUsed: Number(data?.getUserInfo.storage?.bytesUsed) || 0,
+                bytesUsed: data?.getUserInfo.storage?.bytesUsed || '0 Bytes',
                 percentage: data?.getUserInfo.storage?.percentage || 0,
             },
           }

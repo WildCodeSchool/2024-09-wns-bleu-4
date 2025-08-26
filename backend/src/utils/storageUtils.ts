@@ -32,23 +32,3 @@ export const formatFileSize = (bytes: number): string => {
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return `${(bytes / Math.pow(k, i)).toFixed(2)} ${sizes[i]}`;
 };
-
-/**
- * Converts bytes to MB
- * @param bytes - The size in bytes
- * @param decimals - Number of decimal places (default: 2)
- * @returns Size in MB
- */
-export const bytesToMB = (bytes: number, decimals: number = 2): number => {
-    return parseFloat((bytes / (1024 * 1024)).toFixed(decimals));
-};
-
-/**
- * Converts bytes to GB
- * @param bytes - The size in bytes
- * @param decimals - Number of decimal places (default: 2)
- * @returns Size in GB
- */
-export const bytesToGB = (bytes: number, decimals: number = 2): number => {
-    return parseFloat((bytes / (1024 * 1024 * 1024)).toFixed(decimals));
-};
