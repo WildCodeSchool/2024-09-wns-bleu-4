@@ -4,7 +4,14 @@ WORKDIR /app
 
 COPY package.json package.json
 COPY package-lock.json package-lock.json
-RUN npm install
+# Retry npm install avec délai en cas d'erreur E429 (rate limiting)
+RUN npm config set registry https://registry.npmjs.org/ && \
+    for i in 1 2 3; do \
+    npm ci && break || { \
+    echo "npm install failed, attempt $i/3. Retrying in 30 seconds..." && \
+    sleep 30; \
+    } \
+    done
 
 COPY public public
 COPY src src
