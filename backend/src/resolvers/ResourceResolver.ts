@@ -28,6 +28,9 @@ export class ResourceInput implements Partial<Resource> {
 
     @Field(() => String)
     path: string;
+
+    @Field(() => Number, { nullable: false })
+    size: number;
 }
 
 @Resolver(Resource)
@@ -52,6 +55,18 @@ class ResourceResolver {
             where: { user: { id: userId } },
             relations: ['user'],
         });
+    }
+
+    @Query(() => Number)
+    async getUserTotalFileSize(
+        @Arg('userId', () => ID) userId: number,
+    ): Promise<number> {
+        const result = await Resource.createQueryBuilder('resource')
+            .select('SUM(resource.size)', 'totalSize')
+            .where('resource.user.id = :userId', { userId })
+            .getRawOne();
+        
+        return result?.totalSize ? parseInt(result.totalSize) : 0;
     }
 
     @Query(() => [User])
@@ -121,7 +136,7 @@ class ResourceResolver {
                 throw new Error('L\'utilisateur demandé n\'a pas été trouvé');
             }
 
-            const resource = Resource.create({ ...data, user });
+            const resource = Resource.create({ ...data, user, size: data.size });
 
             console.log('Creating resource with data:', resource);
 

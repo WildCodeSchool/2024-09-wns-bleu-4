@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import UserHoverCard from '@/components/UserHoverCard';
 import { Contact } from '@/generated/graphql-types';
-import { getFormattedSizeFromUrl } from '@/lib/utils';
+import { formatFileSize } from '@/lib/utils';
 import {
     Download,
     FileText,
@@ -19,7 +19,7 @@ import {
     Share2,
     Trash2,
 } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import FileDeleteDialog from './FileDeleteDialog';
 import FileInfoDialog from './FileInfoDialog';
@@ -31,6 +31,7 @@ interface FileCardProps {
     url: string;
     id: number;
     description?: string;
+    size: number;
     isShared?: boolean;
     owner?: {
         id: number;
@@ -47,25 +48,13 @@ const FileCard: React.FC<FileCardProps> = ({
     url,
     id,
     description,
+    size,
     isShared = false,
     owner,
     onFileDeleted,
     myContacts = [],
 }) => {
     const { t } = useTranslation();
-    const [fileSize, setFileSize] = useState<string | null>(null);
-
-    useEffect(() => {
-        const fetchSize = async () => {
-            try {
-                const size = await getFormattedSizeFromUrl(url);
-                setFileSize(size);
-            } catch {
-                // Erreur lors de la récupération de la taille du fichier
-            }
-        };
-        fetchSize();
-    }, [url]);
 
     const handleDownload = () => {
         const link = document.createElement('a');
@@ -88,11 +77,9 @@ const FileCard: React.FC<FileCardProps> = ({
                                     {name}
                                 </h3>
                                 <div className="text-xs text-muted-foreground space-y-1">
-                                    {fileSize && (
-                                        <p className="font-medium">
-                                            {fileSize}
-                                        </p>
-                                    )}
+                                    <p className="font-medium">
+                                        {formatFileSize(size)}
+                                    </p>
                                     {description && (
                                         <p className="truncate line-clamp-2">
                                             {description}
@@ -155,7 +142,7 @@ const FileCard: React.FC<FileCardProps> = ({
                                             </DropdownMenuItem>
                                         }
                                         fileName={name}
-                                        fileSize={fileSize || undefined}
+                                        fileSize={formatFileSize(size)}
                                         description={description}
                                         owner={owner}
                                         isShared={isShared}

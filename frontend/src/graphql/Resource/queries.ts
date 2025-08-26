@@ -8,6 +8,7 @@ export const GET_ALL_RESOURCES = gql`
             description
             path
             url
+            size
             user {
                 id
                 email
@@ -24,6 +25,7 @@ export const GET_RESOURCES_BY_USER_ID = gql`
             name
             path
             url
+            size
         }
     }
 `;
@@ -36,6 +38,7 @@ export const GET_SHARED_RESOURCES = gql`
             description
             path
             url
+            size
             user {
                 id
                 email
@@ -51,5 +54,11 @@ export const GET_RESOURCE_STATS = gql`
         getAllResources {
             id
         }
+    }
+`;
+
+export const GET_USER_TOTAL_FILE_SIZE = gql`
+    query GetUserTotalFileSize($userId: ID!) {
+        getUserTotalFileSize(userId: $userId)
     }
 `;
