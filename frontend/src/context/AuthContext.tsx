@@ -14,6 +14,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               isSubscribed: data?.getUserInfo.isSubscribed ? true : false,
               role: data?.getUserInfo.role ?? undefined,
               profilePicture: data?.getUserInfo.profilePicture ?? null,
+              storage: {
+                bytesUsed: data?.getUserInfo.storage?.bytesUsed || '0 Bytes',
+                percentage: data?.getUserInfo.storage?.percentage || 0,
+            },
           }
         : null;
 
