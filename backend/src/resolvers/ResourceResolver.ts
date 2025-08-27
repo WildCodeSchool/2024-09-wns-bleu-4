@@ -67,7 +67,6 @@ class ResourceResolver {
             .getRawOne();
         
         const totalSize = result?.totalSize ? Number(result.totalSize) : 0;
-        console.log(`[getUserTotalFileSize] User ${userId}: raw result =`, result, 'totalSize =', totalSize);
         
         return totalSize;
     }
@@ -148,9 +147,7 @@ class ResourceResolver {
                 
                 // Get current user's total file size
                 const currentTotalSize = await this.getUserTotalFileSize(data.userId);
-                
-                console.log(`[createResource] User ${data.userId}: currentTotalSize = ${currentTotalSize}, newFileSize = ${data.size}, total = ${currentTotalSize + data.size}, limit = ${MAX_STORAGE_BYTES}`);
-                
+                                
                 // Check if adding this file would exceed the limit
                 if (currentTotalSize + data.size > MAX_STORAGE_BYTES) {
                     throw new Error('Storage limit exceeded. This file would exceed your 20MB storage limit.');
@@ -158,8 +155,6 @@ class ResourceResolver {
             }
 
             const resource = Resource.create({ ...data, user, size: data.size });
-
-            console.log('Creating resource with data:', resource);
 
             const savedResource = await Resource.save(resource);
 

@@ -100,10 +100,7 @@ const UploadPage = () => {
             }
         } finally {
             setIsUploading(false);
-            // Add a small delay to ensure database transaction is fully committed
-            setTimeout(() => {
-                refreshAuth();
-            }, 500);
+            refreshAuth();
         }
     };
 
