@@ -1,5 +1,7 @@
 import FileShareDialog from '@/components/File/FileShareDialog';
+import BlockedFileUploader from '@/components/FileUploader/BlockedFileUploader';
 import FileUploader from '@/components/FileUploader/FileUploader';
+import TempLinkGenerator from '@/components/FileUploader/TempLinkGenerator';
 import { Button } from '@/components/ui/button';
 import { CREATE_RESOURCE } from '@/graphql/Resource/mutations';
 import { useAuth } from '@/hooks/useAuth';
@@ -12,6 +14,7 @@ import { mutate } from 'swr';
 
 const UploadPage = () => {
     const { t } = useTranslation();
+    const { isAuth } = useAuth();
     const [file, setFile] = useState<File | null>(null);
     const [fileSize, setFileSize] = useState<number | null>(null);
     const [description, setDescription] = useState<string>('');
@@ -98,43 +101,60 @@ const UploadPage = () => {
     };
 
     return (
-        <div className="mx-auto grid grid-cols-1 gap-8 items-start max-w-2xl">
-            <div>
-                <h1 className="text-2xl font-bold my-8">{t('upload.title')}</h1>
+        <div className="mx-auto grid grid-cols-2 gap-8 items-start">
+            {/* Persistent Uploader */}
+            { isAuth ? (
+                <section className="">
+                    <h1 className="text-2xl font-bold my-8">
+                        {t('upload.title')}
+                    </h1>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    <FileUploader
-                        onFileChange={setFile}
-                        onFileSizeChange={setFileSize}
-                        onDescriptionChange={setDescription}
-                        description={description}
-                        isUploading={isUploading}
-                        successMessage={successMessage}
-                        errorMessage={errorMessage}
-                        acceptedFileTypes={acceptedFileTypes}
-                    />
-                    {successMessage && lastUploadedResourceId && (
-                        <div className="flex items-center gap-4">
-                            <span>{successMessage}</span>
-                            <FileShareDialog
-                                trigger={
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        className="flex items-center gap-2"
-                                    >
-                                        <Share2 className="w-4 h-4" />
-                                        {t('upload.success.shareNow')}
-                                    </Button>
-                                }
-                                resourceId={lastUploadedResourceId}
-                                fileName={uploadedFileName}
-                                myContacts={acceptedContacts}
-                            />
-                        </div>
-                    )}
-                </form>
-            </div>
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                        <FileUploader
+                            onFileChange={setFile}
+                            onFileSizeChange={setFileSize}
+                            onDescriptionChange={setDescription}
+                            description={description}
+                            isUploading={isUploading}
+                            successMessage={successMessage}
+                            errorMessage={errorMessage}
+                            acceptedFileTypes={acceptedFileTypes}
+                        />
+                        {successMessage && lastUploadedResourceId && (
+                            <div className="flex items-center gap-4">
+                                <span>{successMessage}</span>
+                                <FileShareDialog
+                                    trigger={
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            className="flex items-center gap-2"
+                                        >
+                                            <Share2 className="w-4 h-4" />
+                                            {t('upload.success.shareNow')}
+                                        </Button>
+                                    }
+                                    resourceId={lastUploadedResourceId}
+                                    fileName={uploadedFileName}
+                                    myContacts={acceptedContacts}
+                                />
+                            </div>
+                        )}
+                    </form>
+                </section>
+            ) : (
+                <section>
+                    <h1 className="text-2xl font-bold my-8">
+                        {t('upload.title')}
+                    </h1>
+                    <BlockedFileUploader />
+                </section>
+            )}
+
+            {/* Temporary Link Generator */}
+            <section>
+                <TempLinkGenerator />
+            </section>
         </div>
     );
 };
