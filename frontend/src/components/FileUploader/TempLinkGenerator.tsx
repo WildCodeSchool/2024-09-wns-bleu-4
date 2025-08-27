@@ -1,5 +1,4 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { useTranslation } from 'react-i18next';
 import {
     CheckCircle,
     Copy,
@@ -8,8 +7,9 @@ import {
     Loader,
     Trash2,
 } from 'lucide-react';
-import { ChangeEvent, DragEvent, useRef, useState } from 'react';
+import { ChangeEvent, DragEvent, useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 
 interface FileWithPreview {
@@ -31,13 +31,83 @@ interface TempLink {
     fileSize: number;
 }
 
+const STORAGE_KEY = 'tempLinks';
+
 const TempLinkGenerator = () => {
-    const { t } = useTranslation();
+    const { setItem, getItem } = useLocalStorage();
     const [files, setFiles] = useState<FileWithPreview[]>([]);
     const [isDragging, setIsDragging] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
     const [tempLinks, setTempLinks] = useState<TempLink[]>([]);
     const inputRef = useRef<HTMLInputElement>(null);
+
+    // Load temp links from localStorage on component mount
+    useEffect(() => {
+        loadTempLinksFromStorage();
+    }, []);
+
+    // Save temp links to localStorage whenever they change
+    useEffect(() => {
+        if (tempLinks.length > 0) {
+            saveTempLinksToStorage();
+        }
+    }, [tempLinks]);
+
+    // Add event listener for when the page becomes visible again
+    useEffect(() => {
+        const handleVisibilityChange = () => {
+            if (!document.hidden) {
+                loadTempLinksFromStorage();
+            }
+        };
+
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        
+        // Also listen for focus events (when user returns to tab)
+        const handleFocus = () => {
+            loadTempLinksFromStorage();
+        };
+
+        window.addEventListener('focus', handleFocus);
+
+        return () => {
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+            window.removeEventListener('focus', handleFocus);
+        };
+    }, []);
+
+    const loadTempLinksFromStorage = () => {
+        try {
+            const stored = getItem(STORAGE_KEY);
+            if (stored) {
+                const parsed = JSON.parse(stored);
+                // Convert string dates back to Date objects and filter out expired links
+                const validLinks = parsed
+                    .map((link: Omit<TempLink, 'expiresAt'> & { expiresAt: string }) => ({
+                        ...link,
+                        expiresAt: new Date(link.expiresAt)
+                    }))
+                    .filter((link: TempLink) => new Date(link.expiresAt) > new Date());
+                
+                setTempLinks(validLinks);
+                
+                // If some links were expired, update storage
+                if (validLinks.length !== parsed.length) {
+                    setItem(STORAGE_KEY, JSON.stringify(validLinks));
+                }
+            }
+        } catch (error) {
+            console.error('Error loading temp links from localStorage:', error);
+        }
+    };
+
+    const saveTempLinksToStorage = () => {
+        try {
+            setItem(STORAGE_KEY, JSON.stringify(tempLinks));
+        } catch (error) {
+            console.error('Error saving temp links to localStorage:', error);
+        }
+    };
 
     const handleFiles = (fileList: FileList) => {
         if (fileList.length === 0) return;
@@ -58,6 +128,7 @@ const TempLinkGenerator = () => {
         simulateUpload(newFile.id);
     };
 
+    // Simulate upload progress (visual only)
     const simulateUpload = (id: string) => {
         let progress = 0;
         const interval = setInterval(() => {
@@ -154,10 +225,10 @@ const TempLinkGenerator = () => {
 
             setTempLinks(prev => [newTempLink, ...prev]);
             setFiles([]);
-            toast.success(t('upload.success.message'));
+            toast.success('Temporary link generated successfully!');
         } catch (error) {
             console.error('Error generating temporary link:', error);
-            toast.error(t('upload.errors.upload'));
+            toast.error('Failed to generate temporary link. Please try again.');
         } finally {
             setIsUploading(false);
         }
@@ -166,10 +237,16 @@ const TempLinkGenerator = () => {
     const copyToClipboard = async (url: string) => {
         try {
             await navigator.clipboard.writeText(url);
-            // You could add a toast notification here
+            toast.success('Link copied to clipboard!');
         } catch (error) {
             console.error('Failed to copy to clipboard:', error);
+            toast.error('Failed to copy link');
         }
+    };
+
+    const removeTempLink = (id: string) => {
+        setTempLinks(prev => prev.filter(link => link.id !== id));
+        toast.success('Link removed');
     };
 
     const acceptedFileTypes = {
@@ -451,6 +528,13 @@ const TempLinkGenerator = () => {
                                         >
                                             <LinkIcon className="w-4 h-4" />
                                         </a>
+                                        <button
+                                            onClick={() => removeTempLink(link.id)}
+                                            className="p-2 text-zinc-500 hover:text-red-500 transition-colors duration-200"
+                                            title="Remove link"
+                                        >
+                                            <Trash2 className="w-4 h-4" />
+                                        </button>
                                     </div>
                                 </div>
                             </motion.div>
