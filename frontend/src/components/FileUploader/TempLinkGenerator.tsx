@@ -12,7 +12,8 @@ import {
 import { ChangeEvent, DragEvent, useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
-
+import { useTranslation } from 'react-i18next';
+import FadeClock from '@/components/Icons/FadeClock';
 
 interface FileWithPreview {
     id: string;
@@ -37,6 +38,7 @@ interface TempLink {
 const STORAGE_KEY = 'tempLinks';
 
 const TempLinkGenerator = () => {
+    const { t } = useTranslation();
     const { setItem, getItem } = useLocalStorage();
     const [files, setFiles] = useState<FileWithPreview[]>([]);
     const [isDragging, setIsDragging] = useState(false);
@@ -207,8 +209,8 @@ const TempLinkGenerator = () => {
         const hours = Math.floor(diff / (1000 * 60 * 60));
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
 
-        if (hours > 0) return `${hours}h ${minutes}m remaining`;
-        return `${minutes}m remaining`;
+        if (hours > 0) return `${hours}h ${minutes}m ${t('upload.page.tempLink.remaining')}`;
+        return `${minutes}m ${t('upload.page.tempLink.remaining')}`;
     };
 
     const getFileDisplayType = (fileName: string): 'browser' | 'download' => {
@@ -270,7 +272,7 @@ const TempLinkGenerator = () => {
             const newTempLink: TempLink = {
                 id: result.tempId,
                 url: `${window.location.origin}/storage${result.accessUrl}`,
-                expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
+                expiresAt: new Date(Date.now() + 1 * 60 * 1000), // 1 minute
                 fileName: result.originalName,
                 fileSize: result.fileSize,
                 isExpired: false,
@@ -278,10 +280,10 @@ const TempLinkGenerator = () => {
 
             setTempLinks(prev => [newTempLink, ...prev]);
             setFiles([]);
-            toast.success('Temporary link generated successfully!');
+            toast.success(t('upload.page.tempLink.toast.success'));
         } catch (error) {
             console.error('Error generating temporary link:', error);
-            toast.error('Failed to generate temporary link. Please try again.');
+            toast.error(t('upload.page.tempLink.toast.error'));
         } finally {
             setIsUploading(false);
         }
@@ -290,16 +292,16 @@ const TempLinkGenerator = () => {
     const copyToClipboard = async (url: string) => {
         try {
             await navigator.clipboard.writeText(url);
-            toast.success('Link copied to clipboard!');
+            toast.success(t('upload.page.tempLink.toast.copy'));
         } catch (error) {
             console.error('Failed to copy to clipboard:', error);
-            toast.error('Failed to copy link');
+            toast.error(t('upload.page.tempLink.toast.error'));
         }
     };
 
     const removeTempLink = (id: string) => {
         setTempLinks(prev => prev.filter(link => link.id !== id));
-        toast.success('Link removed');
+        toast.info(t('upload.page.tempLink.toast.delete'));
     };
 
     const acceptedFileTypes = {
@@ -354,49 +356,28 @@ const TempLinkGenerator = () => {
                                     display: isDragging ? 'block' : 'none',
                                 }}
                             />
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                className="lucide lucide-clock-fading-icon lucide-clock-fading w-16 h-16 md:w-20 md:h-20 drop-shadow-sm text-zinc-700 dark:text-zinc-300 group-hover:text-blue-500 transition-colors duration-300"
-                            >
-                                <path d="M12 2a10 10 0 0 1 7.38 16.75" />
-                                <path d="M12 6v6l4 2" />
-                                <path d="M2.5 8.875a10 10 0 0 0-.5 3" />
-                                <path d="M2.83 16a10 10 0 0 0 2.43 3.4" />
-                                <path d="M4.636 5.235a10 10 0 0 1 .891-.857" />
-                                <path d="M8.644 21.42a10 10 0 0 0 7.631-.38" />
-                            </svg>
+                            <FadeClock className="lucide lucide-clock-fading-icon lucide-clock-fading w-16 h-16 md:w-20 md:h-20 drop-shadow-sm text-zinc-700 dark:text-zinc-300 group-hover:text-blue-500 transition-colors duration-300" />
                         </motion.div>
 
                         <div className="space-y-2">
                             <h3 className="text-xl md:text-2xl font-semibold text-zinc-800 dark:text-zinc-100">
                                 {isDragging
-                                    ? 'Drop here to upload'
-                                    : 'Upload a file'}
+                                    ? t('upload.dragDrop.dropHere')
+                                    : t('upload.title')}
                             </h3>
                             <p className="text-zinc-600 dark:text-zinc-300 md:text-lg max-w-md mx-auto">
                                 {isDragging ? (
                                     <span className="font-medium text-blue-500">
-                                        Release to upload
+                                        {t('upload.dragDrop.dropHere')}
                                     </span>
                                 ) : (
-                                    <>
-                                        Drag and drop a file here or{' '}
-                                        <span className="text-blue-500 font-medium">
-                                            browse
-                                        </span>
-                                    </>
+                                    <span className="font-medium text-zinc-500 dark:text-zinc-400">
+                                        {t('upload.title')}
+                                    </span>
                                 )}
                             </p>
                             <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                                File will be available for 24 hours
+                                {t('upload.dragDrop.supportedTypes')}
                             </p>
                         </div>
 
@@ -513,12 +494,12 @@ const TempLinkGenerator = () => {
                                     {isUploading ? (
                                         <>
                                             <Loader className="w-4 h-4 animate-spin" />
-                                            Generating Link...
+                                            {t('upload.page.tempLink.generating')}
                                         </>
                                     ) : (
                                         <>
                                             <LinkIcon className="w-4 h-4" />
-                                            Generate Temporary Link
+                                            {t('upload.page.tempLink.actions.generate')}
                                         </>
                                     )}
                                 </button>
@@ -532,7 +513,7 @@ const TempLinkGenerator = () => {
             {tempLinks.length > 0 && (
                 <div className="space-y-4">
                     <h3 className="text-lg font-semibold text-zinc-800 dark:text-zinc-200">
-                        Generated Links
+                        {t('upload.page.tempLink.generatedLinks')}
                     </h3>
                     <div className="space-y-3">
                         {tempLinks.map((link) => (
@@ -553,11 +534,6 @@ const TempLinkGenerator = () => {
                                             <span className="font-medium text-zinc-800 dark:text-zinc-200 truncate">
                                                 {link.fileName}
                                             </span>
-                                            {link.isExpired && (
-                                                <span className="px-2 py-1 text-xs font-medium bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-200 rounded-full">
-                                                    EXPIRED
-                                                </span>
-                                            )}
                                         </div>
                                         <div className="flex items-center gap-4 text-sm text-zinc-500 dark:text-zinc-400">
                                             <span>
@@ -566,15 +542,15 @@ const TempLinkGenerator = () => {
                                             <span className={`flex items-center gap-1 ${
                                                 link.isExpired ? 'text-red-500 dark:text-red-400' : ''
                                             }`}>
-                                                <LinkIcon className="w-3 h-3" />
-                                                {link.isExpired ? 'Expired' : formatTimeRemaining(link.expiresAt)}
+                                                <FadeClock className="w-3 h-3" />
+                                                {link.isExpired ? t('upload.page.tempLink.expired') : formatTimeRemaining(link.expiresAt)}
                                             </span>
                                             <span className={`px-2 py-1 text-xs font-medium rounded-full ${
                                                 getFileDisplayType(link.fileName) === 'browser'
                                                     ? 'bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-200'
                                                     : 'bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200'
                                             }`}>
-                                                {getFileDisplayType(link.fileName) === 'browser' ? 'View in Browser' : 'Download Only'}
+                                                {getFileDisplayType(link.fileName) === 'browser' ? t('upload.page.tempLink.type.browser') : t('upload.page.tempLink.type.download')}
                                             </span>
                                         </div>
                                     </div>
@@ -587,9 +563,9 @@ const TempLinkGenerator = () => {
                                             className={`p-2 transition-colors duration-200 ${
                                                 link.isExpired
                                                     ? 'text-zinc-400 dark:text-zinc-500'
-                                                    : 'text-zinc-500 hover:text-blue-500 cursor-pointer'
+                                                    : 'text-zinc-500 hover:text-yellow-500 cursor-pointer'
                                             }`}
-                                            title={link.isExpired ? 'Link expired' : 'Copy link'}
+                                            title={link.isExpired ? t('upload.page.tempLink.linkExpired') : t('upload.page.tempLink.actions.copy')}
                                         >
                                             <Copy className="w-4 h-4" />
                                         </button>
@@ -605,7 +581,7 @@ const TempLinkGenerator = () => {
                                                         ? 'text-zinc-400 dark:text-zinc-500 pointer-events-none'
                                                         : 'text-zinc-500 hover:text-green-500'
                                                 }`}
-                                                title={link.isExpired ? 'Link expired' : 'Open in browser'}
+                                                title={link.isExpired ? t('upload.page.tempLink.linkExpired') : t('upload.page.tempLink.actions.open')}
                                             >
                                                 <EyeIcon className="w-4 h-4" />
                                             </a>
@@ -619,9 +595,9 @@ const TempLinkGenerator = () => {
                                             className={`p-2 transition-colors duration-200 ${
                                                 link.isExpired
                                                     ? 'text-zinc-400 dark:text-zinc-500 pointer-events-none'
-                                                    : 'text-zinc-500 hover:text-yellow-500'
+                                                    : 'text-zinc-500 hover:text-blue-500'
                                             }`}
-                                            title={link.isExpired ? 'Link expired' : 'Download file'}
+                                            title={link.isExpired ? t('upload.page.tempLink.linkExpired') : t('upload.page.tempLink.actions.download')}
                                         >
                                             <DownloadIcon className="w-4 h-4" />
                                         </a>
@@ -629,7 +605,7 @@ const TempLinkGenerator = () => {
                                         <button
                                             onClick={() => removeTempLink(link.id)}
                                             className="p-2 text-zinc-500 hover:text-red-500 transition-colors duration-200 cursor-pointer"
-                                            title="Remove link"
+                                            title={t('upload.page.tempLink.actions.delete')}
                                         >
                                             <Trash2 className="w-4 h-4" />
                                         </button>

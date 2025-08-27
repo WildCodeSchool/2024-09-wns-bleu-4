@@ -21,42 +21,30 @@ const UploadPage = () => {
     return (
         <div className="mx-auto grid grid-cols-2 gap-8 items-start">
             {/* Persistent Uploader */}
-            {isAuth ? (
-                <section className="">
-                    <div className="mb-8">
-                        <h2 className="text-2xl font-bold text-zinc-800 dark:text-zinc-200 mb-2">
-                            {t('upload.title')}
-                        </h2>
-                        <p className="text-zinc-600 dark:text-zinc-400">
-                            Upload a file to share it with your contacts
-                        </p>
-                    </div>
-
+            <section className="col-span-2 md:col-span-1">
+                <div className="mb-8">
+                    <h2 className="text-2xl font-bold text-zinc-800 dark:text-zinc-200 mb-2">
+                        {t('upload.page.deposit.title')}
+                    </h2>
+                    <p className="text-zinc-600 dark:text-zinc-400">
+                        {t('upload.page.deposit.description')}
+                    </p>
+                </div>
+                {isAuth ? (
                     <FileUploader acceptedFileTypes={acceptedFileTypes} />
-                </section>
-            ) : (
-                <section>
-                    <div className="mb-8">
-                        <h2 className="text-2xl font-bold text-zinc-800 dark:text-zinc-200 mb-2">
-                            {t('upload.title')}
-                        </h2>
-                        <p className="text-zinc-600 dark:text-zinc-400">
-                            Upload a file to share it with your contacts
-                        </p>
-                    </div>
+                ) : (
                     <BlockedFileUploader />
-                </section>
-            )}
+                )}
+            </section>
 
             {/* Temporary Link Generator */}
             <section>
                 <div className="mb-8">
                     <h2 className="text-2xl font-bold text-zinc-800 dark:text-zinc-200 mb-2">
-                        Generate a temporary link
+                        {t('upload.page.tempLink.title')}
                     </h2>
                     <p className="text-zinc-600 dark:text-zinc-400">
-                        Upload a file to generate a temporary link that expires
-                        in 24 hours
+                        {t('upload.page.tempLink.description')}
                     </p>
                 </div>
                 <TempLinkGenerator />
