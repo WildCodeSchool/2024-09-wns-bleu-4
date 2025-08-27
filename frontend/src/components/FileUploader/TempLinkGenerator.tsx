@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import {
     CheckCircle,
     Copy,
@@ -31,12 +32,11 @@ interface TempLink {
 }
 
 const TempLinkGenerator = () => {
+    const { t } = useTranslation();
     const [files, setFiles] = useState<FileWithPreview[]>([]);
     const [isDragging, setIsDragging] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
     const [tempLinks, setTempLinks] = useState<TempLink[]>([]);
-    const [successMessage, setSuccessMessage] = useState<string | null>(null);
-    const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
 
     const handleFiles = (fileList: FileList) => {
@@ -123,8 +123,6 @@ const TempLinkGenerator = () => {
         if (files.length === 0) return;
 
         setIsUploading(true);
-        setSuccessMessage(null);
-        setErrorMessage(null);
 
         try {
             const file = files[0];
@@ -156,10 +154,10 @@ const TempLinkGenerator = () => {
 
             setTempLinks(prev => [newTempLink, ...prev]);
             setFiles([]);
-            toast.success('Temporary link generated successfully!');
+            toast.success(t('upload.success.message'));
         } catch (error) {
             console.error('Error generating temporary link:', error);
-            toast.error('Failed to generate temporary link. Please try again.');
+            toast.error(t('upload.errors.upload'));
         } finally {
             setIsUploading(false);
         }
@@ -186,30 +184,6 @@ const TempLinkGenerator = () => {
 
     return (
         <div className="space-y-6">
-            <AnimatePresence>
-                {successMessage && (
-                    <motion.div
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0 }}
-                        className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-lg"
-                    >
-                        {successMessage}
-                    </motion.div>
-                )}
-
-                {errorMessage && (
-                    <motion.div
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0 }}
-                        className="p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg"
-                    >
-                        {errorMessage}
-                    </motion.div>
-                )}
-            </AnimatePresence>
-
             {files.length === 0 && (
                 <motion.div
                     onDragOver={onDragOver}

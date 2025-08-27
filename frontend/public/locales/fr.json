@@ -85,11 +85,11 @@
             "save": "Enregistrer le fichier"
         },
         "success": {
-            "message": "✅ Le fichier a été envoyé et enregistré avec succès !",
+            "message": "Le fichier a été envoyé et enregistré avec succès !",
             "shareNow": "Partager maintenant"
         },
         "errors": {
-            "upload": "❌ Une erreur s'est produite. Veuillez réessayer.",
+            "upload": "Une erreur s'est produite. Veuillez réessayer.",
             "fileUpload": "Erreur lors de l'upload du fichier",
             "share": {
                 "noContacts": "Veuillez sélectionner au moins un contact",

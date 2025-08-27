@@ -17,6 +17,7 @@ import { Share2 } from 'lucide-react';
 import { mutate } from 'swr';
 import FileShareDialog from '@/components/File/FileShareDialog';
 import { Button } from '@/components/ui/button';
+import { toast } from 'react-toastify';
 
 interface FileWithPreview {
     id: string;
@@ -45,8 +46,6 @@ export default function FileUploader({
     const [isDragging, setIsDragging] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
     const [description, setDescription] = useState<string>('');
-    const [successMessage, setSuccessMessage] = useState<string | null>(null);
-    const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [lastUploadedResourceId, setLastUploadedResourceId] = useState<string | null>(null);
     const [uploadedFileName, setUploadedFileName] = useState<string>('');
     const inputRef = useRef<HTMLInputElement>(null);
@@ -127,8 +126,6 @@ export default function FileUploader({
         if (!files[0]?.file || !user?.id) return;
 
         setIsUploading(true);
-        setSuccessMessage(null);
-        setErrorMessage(null);
 
         try {
             const file = files[0].file;
@@ -167,11 +164,11 @@ export default function FileUploader({
                 setFiles([]);
                 setDescription('');
                 mutate('/storage/files');
-                setSuccessMessage(t('upload.success.message'));
+                toast.success(t('upload.success.message'));
             }
         } catch (error) {
             console.error("Erreur lors de l'upload:", error);
-            setErrorMessage(t('upload.errors.upload'));
+            toast.error(t('upload.errors.upload'));
         } finally {
             setIsUploading(false);
         }
@@ -192,30 +189,6 @@ export default function FileUploader({
     return (
         <div className="">
             <form onSubmit={handleSubmit} className="space-y-6">
-                <AnimatePresence>
-                    {successMessage && (
-                        <motion.div
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0 }}
-                            className="mb-4 p-3 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-lg"
-                        >
-                            {successMessage}
-                        </motion.div>
-                    )}
-
-                    {errorMessage && (
-                        <motion.div
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0 }}
-                            className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg"
-                        >
-                            {errorMessage}
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-
                 {files.length === 0 && (
                     <motion.div
                         onDragOver={onDragOver}
@@ -473,13 +446,13 @@ export default function FileUploader({
                 </AnimatePresence>
 
                 {/* Success message with share dialog */}
-                {successMessage && lastUploadedResourceId && (
+                {lastUploadedResourceId && (
                     <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         className="flex items-center gap-4"
                     >
-                        <span>{successMessage}</span>
+                        <span>{t('upload.success.message')}</span>
                         <FileShareDialog
                             trigger={
                                 <Button
