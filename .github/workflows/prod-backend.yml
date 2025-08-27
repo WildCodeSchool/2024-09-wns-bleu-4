@@ -1,4 +1,4 @@
-name: Compile and push backend image to production
+name: Compile and push backend image
 
 on:
   pull_request:
@@ -27,4 +27,4 @@ jobs:
           context: ./backend
           file: ./backend/Dockerfile.prod
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROD_BACKEND_IMAGE }}:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.STAGING_BACK_IMAGE }}:latest
