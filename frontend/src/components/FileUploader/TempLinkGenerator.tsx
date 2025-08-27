@@ -8,6 +8,7 @@ import {
     Trash2,
 } from 'lucide-react';
 import { ChangeEvent, DragEvent, useRef, useState } from 'react';
+import { toast } from 'react-toastify';
 
 
 interface FileWithPreview {
@@ -155,13 +156,10 @@ const TempLinkGenerator = () => {
 
             setTempLinks(prev => [newTempLink, ...prev]);
             setFiles([]);
-            setSuccessMessage('Temporary link generated successfully!');
-            
-            // Clear success message after 5 seconds
-            setTimeout(() => setSuccessMessage(null), 5000);
+            toast.success('Temporary link generated successfully!');
         } catch (error) {
             console.error('Error generating temporary link:', error);
-            setErrorMessage('Failed to generate temporary link. Please try again.');
+            toast.error('Failed to generate temporary link. Please try again.');
         } finally {
             setIsUploading(false);
         }
@@ -188,16 +186,6 @@ const TempLinkGenerator = () => {
 
     return (
         <div className="space-y-6">
-            <div className="text-center">
-                <h2 className="text-2xl font-bold text-zinc-800 dark:text-zinc-200 mb-2">
-                    Generate a temporary link
-                </h2>
-                <p className="text-zinc-600 dark:text-zinc-400">
-                    Upload a file to generate a temporary link that expires in
-                    24 hours
-                </p>
-            </div>
-
             <AnimatePresence>
                 {successMessage && (
                     <motion.div
