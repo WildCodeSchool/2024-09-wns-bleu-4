@@ -36,9 +36,14 @@ const UploadPage = () => {
                 </section>
             ) : (
                 <section>
-                    <h1 className="text-2xl font-bold my-8">
-                        {t('upload.title')}
-                    </h1>
+                    <div className="mb-8">
+                        <h2 className="text-2xl font-bold text-zinc-800 dark:text-zinc-200 mb-2">
+                            {t('upload.title')}
+                        </h2>
+                        <p className="text-zinc-600 dark:text-zinc-400">
+                            Upload a file to share it with your contacts
+                        </p>
+                    </div>
                     <BlockedFileUploader />
                 </section>
             )}
@@ -50,7 +55,8 @@ const UploadPage = () => {
                         Generate a temporary link
                     </h2>
                     <p className="text-zinc-600 dark:text-zinc-400">
-                        Upload a file to generate a temporary link that expires in 24 hours
+                        Upload a file to generate a temporary link that expires
+                        in 24 hours
                     </p>
                 </div>
                 <TempLinkGenerator />

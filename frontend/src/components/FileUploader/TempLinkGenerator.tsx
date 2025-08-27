@@ -29,6 +29,7 @@ interface TempLink {
     expiresAt: Date;
     fileName: string;
     fileSize: number;
+    isExpired?: boolean;
 }
 
 const STORAGE_KEY = 'tempLinks';
@@ -48,9 +49,7 @@ const TempLinkGenerator = () => {
 
     // Save temp links to localStorage whenever they change
     useEffect(() => {
-        if (tempLinks.length > 0) {
-            saveTempLinksToStorage();
-        }
+        saveTempLinksToStorage();
     }, [tempLinks]);
 
     // Add event listener for when the page becomes visible again
@@ -76,23 +75,43 @@ const TempLinkGenerator = () => {
         };
     }, []);
 
+    // Periodically check for expired links (every minute)
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setTempLinks(prev => 
+                prev.map(link => ({
+                    ...link,
+                    isExpired: new Date() > link.expiresAt
+                }))
+            );
+        }, 60000); // Check every minute
+
+        return () => clearInterval(interval);
+    }, []);
+
     const loadTempLinksFromStorage = () => {
         try {
             const stored = getItem(STORAGE_KEY);
             if (stored) {
                 const parsed = JSON.parse(stored);
-                // Convert string dates back to Date objects and filter out expired links
-                const validLinks = parsed
-                    .map((link: Omit<TempLink, 'expiresAt'> & { expiresAt: string }) => ({
-                        ...link,
-                        expiresAt: new Date(link.expiresAt)
-                    }))
-                    .filter((link: TempLink) => new Date(link.expiresAt) > new Date());
+                // Convert string dates back to Date objects and check expiration
+                const linksWithExpiration = parsed
+                    .map((link: Omit<TempLink, 'expiresAt'> & { expiresAt: string }) => {
+                        const expiresAt = new Date(link.expiresAt);
+                        const isExpired = new Date() > expiresAt;
+                        return {
+                            ...link,
+                            expiresAt,
+                            isExpired
+                        };
+                    });
                 
-                setTempLinks(validLinks);
+                // Keep all links but mark expired ones
+                setTempLinks(linksWithExpiration);
                 
-                // If some links were expired, update storage
-                if (validLinks.length !== parsed.length) {
+                // Clean up expired links from storage (optional - you can keep them for reference)
+                const validLinks = linksWithExpiration.filter((link: TempLink) => !link.isExpired);
+                if (validLinks.length !== linksWithExpiration.length) {
                     setItem(STORAGE_KEY, JSON.stringify(validLinks));
                 }
             }
@@ -218,9 +237,10 @@ const TempLinkGenerator = () => {
             const newTempLink: TempLink = {
                 id: result.tempId,
                 url: `${window.location.origin}/storage${result.accessUrl}`,
-                expiresAt: new Date(result.expiresAt),
+                expiresAt: new Date(Date.now() + 2 * 60 * 1000),
                 fileName: result.originalName,
                 fileSize: result.fileSize,
+                isExpired: false,
             };
 
             setTempLinks(prev => [newTempLink, ...prev]);
@@ -487,7 +507,11 @@ const TempLinkGenerator = () => {
                                 key={link.id}
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="p-4 bg-zinc-50 dark:bg-zinc-800/80 rounded-lg border border-zinc-200 dark:border-zinc-700"
+                                className={`p-4 rounded-lg border transition-all duration-200 ${
+                                    link.isExpired
+                                        ? 'bg-red-50/50 dark:bg-red-900/20 border-red-200 dark:border-red-800 opacity-60'
+                                        : 'bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700'
+                                }`}
                             >
                                 <div className="flex items-center justify-between gap-4">
                                     <div className="flex-1 min-w-0">
@@ -496,16 +520,21 @@ const TempLinkGenerator = () => {
                                             <span className="font-medium text-zinc-800 dark:text-zinc-200 truncate">
                                                 {link.fileName}
                                             </span>
+                                            {link.isExpired && (
+                                                <span className="px-2 py-1 text-xs font-medium bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-200 rounded-full">
+                                                    EXPIRED
+                                                </span>
+                                            )}
                                         </div>
                                         <div className="flex items-center gap-4 text-sm text-zinc-500 dark:text-zinc-400">
                                             <span>
                                                 {formatFileSize(link.fileSize)}
                                             </span>
-                                            <span className="flex items-center gap-1">
+                                            <span className={`flex items-center gap-1 ${
+                                                link.isExpired ? 'text-red-500 dark:text-red-400' : ''
+                                            }`}>
                                                 <LinkIcon className="w-3 h-3" />
-                                                {formatTimeRemaining(
-                                                    link.expiresAt,
-                                                )}
+                                                {link.isExpired ? 'Expired' : formatTimeRemaining(link.expiresAt)}
                                             </span>
                                         </div>
                                     </div>
@@ -514,17 +543,26 @@ const TempLinkGenerator = () => {
                                             onClick={() =>
                                                 copyToClipboard(link.url)
                                             }
-                                            className="p-2 text-zinc-500 hover:text-blue-500 transition-colors duration-200"
-                                            title="Copy link"
+                                            disabled={link.isExpired}
+                                            className={`p-2 transition-colors duration-200 ${
+                                                link.isExpired
+                                                    ? 'text-zinc-400 dark:text-zinc-500 cursor-not-allowed'
+                                                    : 'text-zinc-500 hover:text-blue-500'
+                                            }`}
+                                            title={link.isExpired ? 'Link expired' : 'Copy link'}
                                         >
                                             <Copy className="w-4 h-4" />
                                         </button>
                                         <a
-                                            href={link.url}
+                                            href={link.isExpired ? '#' : link.url}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="p-2 text-zinc-500 hover:text-blue-500 transition-colors duration-200"
-                                            title="Open link"
+                                            className={`p-2 transition-colors duration-200 ${
+                                                link.isExpired
+                                                    ? 'text-zinc-400 dark:text-zinc-500 cursor-not-allowed pointer-events-none'
+                                                    : 'text-zinc-500 hover:text-blue-500'
+                                            }`}
+                                            title={link.isExpired ? 'Link expired' : 'Open link'}
                                         >
                                             <LinkIcon className="w-4 h-4" />
                                         </a>
