@@ -272,7 +272,7 @@ const TempLinkGenerator = () => {
             const newTempLink: TempLink = {
                 id: result.tempId,
                 url: `${window.location.origin}/storage${result.accessUrl}`,
-                expiresAt: new Date(Date.now() + 1 * 60 * 1000), // 1 minute
+                expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
                 fileName: result.originalName,
                 fileSize: result.fileSize,
                 isExpired: false,
