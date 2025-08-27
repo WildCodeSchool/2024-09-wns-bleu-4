@@ -22,7 +22,7 @@ const UploadPage = () => {
         string | null
     >(null);
     const [uploadedFileName, setUploadedFileName] = useState<string>('');
-    const { user } = useAuth();
+    const { user, refreshAuth } = useAuth();
 
     const { acceptedContacts } = useMyContacts();
     const [createResource] = useMutation(CREATE_RESOURCE);
@@ -91,9 +91,16 @@ const UploadPage = () => {
             }
         } catch (error) {
             console.error("Erreur lors de l'upload:", error);
-            setErrorMessage(t('upload.errors.upload'));
+            
+            // Check if it's a storage limit error from the backend
+            if (error instanceof Error && error.message.includes('Storage limit exceeded')) {
+                setErrorMessage(t('upload.errors.storageLimitExceeded'));
+            } else {
+                setErrorMessage(t('upload.errors.upload'));
+            }
         } finally {
             setIsUploading(false);
+            refreshAuth();
         }
     };
 

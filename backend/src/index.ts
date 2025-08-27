@@ -67,20 +67,24 @@ const start = async () => {
             if (req.headers.cookie) {
                 const cookies = cookie.parse(req.headers.cookie as string);
                 if (cookies.token) {
-                    const payload: any = jwt.verify(
-                        cookies.token,
-                        process.env.JWT_SECRET_KEY as Secret,
-                    );
-                    console.log('payload in context', payload);
-                    if (payload) {
-                        console.log(
-                            'payload was found and returned to resolver',
+                    try {
+                        const payload: any = jwt.verify(
+                            cookies.token,
+                            process.env.JWT_SECRET_KEY as Secret,
                         );
-                        return {
-                            email: payload.email,
-                            userRole: payload.userRole,
-                            res: res,
-                        };
+                        console.log('payload in context', payload);
+                        if (payload) {
+                            console.log(
+                                'payload was found and returned to resolver',
+                            );
+                            return {
+                                email: payload.email,
+                                userRole: payload.userRole,
+                                res: res,
+                            };
+                        }
+                    } catch (error) {
+                        console.log('JWT verification failed:', error.message);
                     }
                 }
             }

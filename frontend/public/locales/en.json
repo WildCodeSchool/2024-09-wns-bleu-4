@@ -98,6 +98,7 @@
         "errors": {
             "upload": "❌ An error occurred. Please try again.",
             "fileUpload": "Error uploading file",
+            "storageLimitExceeded": "❌ Storage limit exceeded. This file would exceed your 20MB storage limit.",
             "share": {
                 "noContacts": "Please select at least one contact",
                 "error": "An error occurred while sharing",

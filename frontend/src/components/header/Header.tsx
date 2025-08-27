@@ -2,6 +2,7 @@ import LanguageSwitcher from '@/components/LanguageSwitcher';
 import Logo from '@/components/Logo';
 import { ModeToggle } from '@/components/mode-toggle';
 import SubscribedLogo from '@/components/SubscribedLogo';
+import StorageProgress from '@/components/StorageProgress';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -32,10 +33,11 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useAuth } from '@/hooks/useAuth';
 
 const Header = () => {
     const [logout] = useLogoutMutation();
-    const { refreshAuth, isAuth } = useAuthContext();
+    const { refreshAuth, isAuth } = useAuth();
     const navigate = useNavigate();
     const { t } = useTranslation();
     const { user } = useAuthContext();
@@ -248,7 +250,16 @@ const Header = () => {
 
             <div className="flex items-center gap-4">
                 <DropdownMenu>
-                    {isAuth && user?.isSubscribed && <SubscribedLogo />}
+                    {isAuth && (
+                        user?.isSubscribed ? (
+                            <SubscribedLogo />
+                        ) : (
+                            <StorageProgress
+                                bytesUsed={user?.storage?.bytesUsed ?? '0 Bytes'}
+                                percentage={user?.storage?.percentage ?? 0}
+                            />
+                        )
+                    )}
                     <DropdownMenuTrigger asChild>
                         <Button
                             variant="ghost"

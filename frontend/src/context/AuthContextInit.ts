@@ -7,6 +7,10 @@ interface AuthContext {
         id?: number;
         role?: 'USER' | 'ADMIN';
         profilePicture?: string | null;
+        storage: {
+            bytesUsed: string;
+            percentage: number;
+        }
     } | null;
     isAuth: boolean;
     loading: boolean;

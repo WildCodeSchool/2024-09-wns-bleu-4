@@ -22,6 +22,15 @@ export enum UserRole {
     ADMIN = 'admin',
 }
 
+@ObjectType()
+export class UserStorage {
+    @Field(() => String)
+    bytesUsed: string;
+
+    @Field(() => Number)
+    percentage: number;
+}
+
 registerEnumType(UserRole, {
     name: 'UserRole',
     description: 'User role enum',
