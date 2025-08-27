@@ -1,4 +1,4 @@
-name: Compile and push storage api image
+name: Compile and push storage api image to production
 
 on:
   pull_request:

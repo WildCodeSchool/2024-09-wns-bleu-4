@@ -1,4 +1,4 @@
-name: Compile and push backend image
+name: Compile and push backend image to production
 
 on:
   pull_request:
