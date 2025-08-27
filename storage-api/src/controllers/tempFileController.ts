@@ -76,12 +76,8 @@ export const uploadTempFile = (req: Request, res: Response): void => {
         tempLinks.push(tempLink);
         fs.writeFileSync(tempLinksFile, JSON.stringify(tempLinks, null, 2));
 
-        // Schedule cleanup
-        setTimeout(() => {
-            cleanupExpiredFile(tempId);
-        }, 24 * 60 * 60 * 1000);
-
         console.log(`Temporary file uploaded: ${originalName} -> ${tempId} (${tempFilename})`);
+        console.log(`File will expire at: ${expiresAt.toISOString()}`);
 
         res.json({
             message: 'Temporary file uploaded successfully!',
@@ -99,6 +95,7 @@ export const uploadTempFile = (req: Request, res: Response): void => {
 
 export const getTempFile = (req: Request, res: Response): void => {
     const tempId = req.params.tempId;
+    const forceDownload = req.query.download === 'true';
     
     try {
         const tempLinks = JSON.parse(fs.readFileSync(tempLinksFile, 'utf8'));
@@ -111,7 +108,7 @@ export const getTempFile = (req: Request, res: Response): void => {
 
         // Check if expired
         if (new Date() > new Date(tempLink.expiresAt)) {
-            // Remove expired link
+            // Remove expired link and file immediately
             cleanupExpiredFile(tempId);
             res.status(410).json({ message: 'Temporary link has expired' });
             return;
@@ -129,16 +126,95 @@ export const getTempFile = (req: Request, res: Response): void => {
             return;
         }
 
-        // Set headers for file download
-        res.setHeader('Content-Disposition', `attachment; filename="${tempLink.originalName}"`);
-        res.setHeader('Content-Type', 'application/octet-stream');
+        // Determine content type based on file extension
+        const fileExtension = path.extname(tempLink.originalName).toLowerCase();
+        let contentType = 'application/octet-stream'; // Default fallback
+        
+        // Map common file extensions to MIME types
+        const mimeTypes: Record<string, string> = {
+            '.html': 'text/html',
+            '.htm': 'text/html',
+            '.css': 'text/css',
+            '.js': 'application/javascript',
+            '.json': 'application/json',
+            '.xml': 'application/xml',
+            '.txt': 'text/plain',
+            '.md': 'text/markdown',
+            '.pdf': 'application/pdf',
+            '.doc': 'application/msword',
+            '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            '.xls': 'application/vnd.ms-excel',
+            '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            '.ppt': 'application/vnd.ms-powerpoint',
+            '.pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+            '.png': 'image/png',
+            '.jpg': 'image/jpeg',
+            '.jpeg': 'image/jpeg',
+            '.gif': 'image/gif',
+            '.bmp': 'image/bmp',
+            '.svg': 'image/svg+xml',
+            '.webp': 'image/webp',
+            '.ico': 'image/x-icon',
+            '.mp3': 'audio/mpeg',
+            '.wav': 'audio/wav',
+            '.ogg': 'audio/ogg',
+            '.mp4': 'video/mp4',
+            '.avi': 'video/x-msvideo',
+            '.mov': 'video/quicktime',
+            '.wmv': 'video/x-ms-wmv',
+            '.flv': 'video/x-flv',
+            '.webm': 'video/webm',
+            '.zip': 'application/zip',
+            '.rar': 'application/vnd.rar',
+            '.7z': 'application/x-7z-compressed',
+            '.tar': 'application/x-tar',
+            '.gz': 'application/gzip'
+        };
+
+        // Set content type based on file extension
+        if (mimeTypes[fileExtension]) {
+            contentType = mimeTypes[fileExtension];
+        }
+
+        // Set appropriate headers for browser display
+        res.setHeader('Content-Type', contentType);
         res.setHeader('Content-Length', tempLink.fileSize);
+        
+        // Determine how to serve the file
+        let contentDisposition: string;
+        
+        if (forceDownload) {
+            // Force download if requested
+            contentDisposition = `attachment; filename="${tempLink.originalName}"`;
+        } else {
+            // For certain file types, we want to display in browser
+            // For others (like executables, archives), we might want to download
+            const browserDisplayableTypes = [
+                'text/', 'image/', 'video/', 'audio/', 'application/pdf', 
+                'application/json', 'application/xml', 'text/html', 'text/css'
+            ];
+            
+            const shouldDisplayInBrowser = browserDisplayableTypes.some(type => 
+                contentType.startsWith(type)
+            );
+
+            if (shouldDisplayInBrowser) {
+                // Display in browser
+                contentDisposition = `inline; filename="${tempLink.originalName}"`;
+            } else {
+                // Force download for potentially dangerous or non-displayable files
+                contentDisposition = `attachment; filename="${tempLink.originalName}"`;
+            }
+        }
+        
+        res.setHeader('Content-Disposition', contentDisposition);
 
         // Stream the file
         const fileStream = fs.createReadStream(filePath);
         fileStream.pipe(res);
 
-        console.log(`Temporary file accessed: ${tempId} (${tempLink.originalName})`);
+        const action = contentDisposition.startsWith('inline') ? 'displayed' : 'downloaded';
+        console.log(`Temporary file ${action}: ${tempId} (${tempLink.originalName}) - Content-Type: ${contentType}`);
     } catch (error) {
         console.error('Error serving temporary file:', error);
         res.status(500).json({ message: 'Error serving temporary file' });
@@ -179,6 +255,10 @@ export const getTempFileInfo = (req: Request, res: Response): void => {
     }
 };
 
+/**
+ * Clean up a specific expired file
+ * This function is called when accessing expired files or can be called manually
+ */
 const cleanupExpiredFile = (tempId: string): void => {
     try {
         const tempLinks = JSON.parse(fs.readFileSync(tempLinksFile, 'utf8'));
@@ -189,7 +269,7 @@ const cleanupExpiredFile = (tempId: string): void => {
             const filePath = path.join(tempUploadDir, tempLink.filename);
             if (fs.existsSync(filePath)) {
                 fs.unlinkSync(filePath);
-                console.log(`Removed file: ${filePath}`);
+                console.log(`Removed expired file: ${filePath}`);
             }
 
             // Remove from temp links

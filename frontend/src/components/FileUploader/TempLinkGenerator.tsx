@@ -2,6 +2,8 @@ import { AnimatePresence, motion } from 'framer-motion';
 import {
     CheckCircle,
     Copy,
+    DownloadIcon,
+    EyeIcon,
     File as FileIcon,
     Link as LinkIcon,
     Loader,
@@ -209,6 +211,37 @@ const TempLinkGenerator = () => {
         return `${minutes}m remaining`;
     };
 
+    const getFileDisplayType = (fileName: string): 'browser' | 'download' => {
+        const extension = fileName.toLowerCase().split('.').pop();
+        const browserDisplayableExtensions = [
+            'html', 'htm', 'css', 'js', 'json', 'xml', 'txt', 'md', 'pdf',
+            'png', 'jpg', 'jpeg', 'gif', 'bmp', 'svg', 'webp', 'ico',
+            'mp3', 'wav', 'ogg', 'mp4', 'avi', 'mov', 'wmv', 'flv', 'webm'
+        ];
+        
+        return browserDisplayableExtensions.includes(extension || '') ? 'browser' : 'download';
+    };
+
+    const getFileIcon = (fileName: string) => {
+        const extension = fileName.toLowerCase().split('.').pop();
+        
+        if (['png', 'jpg', 'jpeg', 'gif', 'bmp', 'svg', 'webp', 'ico'].includes(extension || '')) {
+            return '🖼️';
+        } else if (['mp4', 'avi', 'mov', 'wmv', 'flv', 'webm'].includes(extension || '')) {
+            return '🎥';
+        } else if (['mp3', 'wav', 'ogg'].includes(extension || '')) {
+            return '🎵';
+        } else if (['pdf'].includes(extension || '')) {
+            return '📄';
+        } else if (['doc', 'docx'].includes(extension || '')) {
+            return '📝';
+        } else if (['zip', 'rar', '7z', 'tar', 'gz'].includes(extension || '')) {
+            return '📦';
+        } else {
+            return '📁';
+        }
+    };
+
     const generateTempLink = async () => {
         if (files.length === 0) return;
 
@@ -237,7 +270,7 @@ const TempLinkGenerator = () => {
             const newTempLink: TempLink = {
                 id: result.tempId,
                 url: `${window.location.origin}/storage${result.accessUrl}`,
-                expiresAt: new Date(Date.now() + 2 * 60 * 1000),
+                expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
                 fileName: result.originalName,
                 fileSize: result.fileSize,
                 isExpired: false,
@@ -516,7 +549,7 @@ const TempLinkGenerator = () => {
                                 <div className="flex items-center justify-between gap-4">
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-2 mb-1">
-                                            <FileIcon className="w-4 h-4 text-blue-500" />
+                                            <span className="text-lg">{getFileIcon(link.fileName)}</span>
                                             <span className="font-medium text-zinc-800 dark:text-zinc-200 truncate">
                                                 {link.fileName}
                                             </span>
@@ -536,6 +569,13 @@ const TempLinkGenerator = () => {
                                                 <LinkIcon className="w-3 h-3" />
                                                 {link.isExpired ? 'Expired' : formatTimeRemaining(link.expiresAt)}
                                             </span>
+                                            <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                                                getFileDisplayType(link.fileName) === 'browser'
+                                                    ? 'bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-200'
+                                                    : 'bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200'
+                                            }`}>
+                                                {getFileDisplayType(link.fileName) === 'browser' ? 'View in Browser' : 'Download Only'}
+                                            </span>
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-2">
@@ -546,29 +586,49 @@ const TempLinkGenerator = () => {
                                             disabled={link.isExpired}
                                             className={`p-2 transition-colors duration-200 ${
                                                 link.isExpired
-                                                    ? 'text-zinc-400 dark:text-zinc-500 cursor-not-allowed'
-                                                    : 'text-zinc-500 hover:text-blue-500'
+                                                    ? 'text-zinc-400 dark:text-zinc-500'
+                                                    : 'text-zinc-500 hover:text-blue-500 cursor-pointer'
                                             }`}
                                             title={link.isExpired ? 'Link expired' : 'Copy link'}
                                         >
                                             <Copy className="w-4 h-4" />
                                         </button>
+                                        
+                                        {/* View/Open button */}
+                                        {getFileDisplayType(link.fileName) === 'browser' && (
+                                            <a
+                                                href={link.isExpired ? '#' : link.url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className={`p-2 transition-colors duration-200 ${
+                                                    link.isExpired
+                                                        ? 'text-zinc-400 dark:text-zinc-500 pointer-events-none'
+                                                        : 'text-zinc-500 hover:text-green-500'
+                                                }`}
+                                                title={link.isExpired ? 'Link expired' : 'Open in browser'}
+                                            >
+                                                <EyeIcon className="w-4 h-4" />
+                                            </a>
+                                        )}
+                                        
+                                        {/* Download button */}
                                         <a
-                                            href={link.isExpired ? '#' : link.url}
+                                            href={link.isExpired ? '#' : `${link.url}?download=true`}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className={`p-2 transition-colors duration-200 ${
                                                 link.isExpired
-                                                    ? 'text-zinc-400 dark:text-zinc-500 cursor-not-allowed pointer-events-none'
-                                                    : 'text-zinc-500 hover:text-blue-500'
+                                                    ? 'text-zinc-400 dark:text-zinc-500 pointer-events-none'
+                                                    : 'text-zinc-500 hover:text-yellow-500'
                                             }`}
-                                            title={link.isExpired ? 'Link expired' : 'Open link'}
+                                            title={link.isExpired ? 'Link expired' : 'Download file'}
                                         >
-                                            <LinkIcon className="w-4 h-4" />
+                                            <DownloadIcon className="w-4 h-4" />
                                         </a>
+                                        
                                         <button
                                             onClick={() => removeTempLink(link.id)}
-                                            className="p-2 text-zinc-500 hover:text-red-500 transition-colors duration-200"
+                                            className="p-2 text-zinc-500 hover:text-red-500 transition-colors duration-200 cursor-pointer"
                                             title="Remove link"
                                         >
                                             <Trash2 className="w-4 h-4" />
