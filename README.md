@@ -91,6 +91,10 @@ Un compte administrateur sera crée via Faker automatiquement avec Docker :
 email: admin@example.com
 mdp : Admin@123456
 
+Un compte premium + admin :
+email: premium@example.com
+mdp : Premium@123456
+
 En développement local :
 Frontend : port 5173 en développement local  
 Backend : port 4000  
@@ -113,7 +117,7 @@ Adminer pour la gestion de la base de données : port 8080
 ```
   npm test
 ```
-## Interface de test d'emails :
+## Interface de test d'emails :.
 ### Terminal - Backend
 ```
   npm email

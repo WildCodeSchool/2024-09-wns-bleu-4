@@ -1,4 +1,5 @@
 import { Pricing } from '@/components/pricing';
+<<<<<<< HEAD
 
 const demoPlans = [
     {
@@ -60,13 +61,46 @@ const demoPlans = [
 ];
 
 const Subscription = () => {
+=======
+import { useTranslation } from 'react-i18next';
+
+const Subscription = () => {
+    const { t } = useTranslation();
+    const subscriptionPlan = [
+        {
+            name: t('subscription.premiumPlan.name'),
+            price: '9',
+            yearlyPrice: '7',
+            period: t('subscription.premiumPlan.perMonth'),
+            features: [
+                t('subscription.feature.unlimitedTransfer'),
+                t('subscription.feature.shareWithContacts'),
+                t('subscription.feature.emailSupport'),
+                t('subscription.feature.allFeatures'),
+                t('subscription.feature.modernUI'),
+                t('subscription.feature.enhancedSecurity'),
+            ],
+            description: t('subscription.premiumPlan.description'),
+            buttonText: t('subscription.premiumPlan.startNow'),
+            href: '/subscription/payment',
+            isPopular: false,
+        },
+    ];
+
+>>>>>>> origin/dev
     return (
         <div className="min-h-screen px-4 flex justify-center">
             <div className="w-full max-w-5xl">
                 <Pricing
+<<<<<<< HEAD
                     plans={demoPlans}
                     title="Tarifs simples et transparents"
                     description="Choisissez le plan qui vous convient. Tous les abonnements incluent un accès complet à la plateforme."
+=======
+                    plans={subscriptionPlan}
+                    title={t('subscription.simpleEffectiveTitle')}
+                    description={t('subscription.simpleEffectiveDescription')}
+>>>>>>> origin/dev
                 />
             </div>
         </div>

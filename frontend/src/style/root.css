@@ -129,6 +129,18 @@
     100% {
         transform: translateY(0);
     }
+<<<<<<< HEAD
+=======
+}
+
+@keyframes infinite-scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+>>>>>>> origin/dev
 }
 
 @layer base {
@@ -153,3 +165,27 @@
     display: block;
     fill: currentColor;
 }
+<<<<<<< HEAD
+=======
+
+/* Custom text selection styles */
+::selection {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+::-moz-selection {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+.dark ::selection {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+.dark ::-moz-selection {
+    background-color: #ffffff;
+    color: #000000;
+}
+>>>>>>> origin/dev

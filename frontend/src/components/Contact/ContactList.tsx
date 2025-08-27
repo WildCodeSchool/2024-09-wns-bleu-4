@@ -21,6 +21,10 @@ import { gql, useMutation } from '@apollo/client';
 import { Check, Clock, Mail, UserMinus, Users, X } from 'lucide-react';
 import React from 'react';
 import CardContact from './CardContact';
+<<<<<<< HEAD
+=======
+import { useTranslation } from 'react-i18next';
+>>>>>>> origin/dev
 
 const REMOVE_CONTACT = gql`
     mutation RemoveContact($contactId: ID!) {
@@ -39,6 +43,10 @@ const ContactList: React.FC<ContactListProps> = ({
     type,
     onContactUpdated,
 }) => {
+<<<<<<< HEAD
+=======
+    const { t } = useTranslation();
+>>>>>>> origin/dev
     const { user } = useAuthContext();
 
     const mapContactStatusToCardStatus = (
@@ -140,29 +148,49 @@ const ContactList: React.FC<ContactListProps> = ({
             case 'requests':
                 return {
                     icon: <Mail className="w-12 h-12 text-gray-400" />,
+<<<<<<< HEAD
                     title: 'Aucune demande reçue',
                     description:
                         "Vous n'avez pas de nouvelles demandes de contact.",
+=======
+                    title: t('contact.empty.requests.title'),
+                    description: t('contact.empty.requests.description'),
+>>>>>>> origin/dev
                 };
             case 'contacts':
                 return {
                     icon: <Users className="w-12 h-12 text-gray-400" />,
+<<<<<<< HEAD
                     title: 'Aucun contact',
                     description:
                         'Commencez par ajouter des contacts pour élargir votre réseau.',
+=======
+                    title: t('contact.empty.contacts.title'),
+                    description: t('contact.empty.contacts.description'),
+>>>>>>> origin/dev
                 };
             case 'sent':
                 return {
                     icon: <Clock className="w-12 h-12 text-gray-400" />,
+<<<<<<< HEAD
                     title: 'Aucune demande envoyée',
                     description:
                         "Vous n'avez pas encore envoyé de demandes de contact.",
+=======
+                    title: t('contact.empty.sent.title'),
+                    description: t('contact.empty.sent.description'),
+>>>>>>> origin/dev
                 };
             default:
                 return {
                     icon: <Users className="w-12 h-12 text-gray-400" />,
+<<<<<<< HEAD
                     title: 'Aucun élément',
                     description: 'Aucun élément à afficher.',
+=======
+                    title: t('contact.empty.default.title'),
+                    description: t('contact.empty.default.description'),
+>>>>>>> origin/dev
                 };
         }
     };
@@ -201,7 +229,11 @@ const ContactList: React.FC<ContactListProps> = ({
                                 className="flex-1"
                             >
                                 <Check className="w-4 h-4 mr-1" />
+<<<<<<< HEAD
                                 Accepter
+=======
+                                {t('contact.actions.accept')}
+>>>>>>> origin/dev
                             </Button>
                             <Button
                                 size="sm"
@@ -210,7 +242,11 @@ const ContactList: React.FC<ContactListProps> = ({
                                 className="flex-1"
                             >
                                 <X className="w-4 h-4 mr-1" />
+<<<<<<< HEAD
                                 Refuser
+=======
+                                {t('contact.actions.refuse')}
+>>>>>>> origin/dev
                             </Button>
                         </>
                     );
@@ -229,29 +265,48 @@ const ContactList: React.FC<ContactListProps> = ({
                                     className="w-full"
                                 >
                                     <UserMinus className="w-4 h-4 mr-2" />
+<<<<<<< HEAD
                                     Supprimer le contact
+=======
+                                    {t('contact.actions.remove')}
+>>>>>>> origin/dev
                                 </Button>
                             </AlertDialogTrigger>
                             <AlertDialogContent>
                                 <AlertDialogHeader>
                                     <AlertDialogTitle>
+<<<<<<< HEAD
                                         Supprimer le contact
                                     </AlertDialogTitle>
                                     <AlertDialogDescription>
                                         Êtes-vous sûr de vouloir supprimer{' '}
                                         {contactInfo.email} de vos contacts ?
                                         Cette action est irréversible.
+=======
+                                        {t('contact.delete.title')}
+                                    </AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        {t('contact.delete.description', { email: contactInfo.email })}
+>>>>>>> origin/dev
                                     </AlertDialogDescription>
                                 </AlertDialogHeader>
                                 <AlertDialogFooter>
                                     <AlertDialogCancel>
+<<<<<<< HEAD
                                         Annuler
+=======
+                                        {t('contact.actions.cancel')}
+>>>>>>> origin/dev
                                     </AlertDialogCancel>
                                     <AlertDialogAction
                                         onClick={() => handleRemove(contact.id)}
                                         className="bg-red-600 hover:bg-red-700"
                                     >
+<<<<<<< HEAD
                                         Supprimer
+=======
+                                        {t('contact.actions.delete')}
+>>>>>>> origin/dev
                                     </AlertDialogAction>
                                 </AlertDialogFooter>
                             </AlertDialogContent>

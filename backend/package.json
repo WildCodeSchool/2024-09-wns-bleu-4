@@ -7,8 +7,9 @@
     "scripts": {
         "build": "tsc",
         "seed": "tsx ./src/seeds/index.ts",
+        "create-admin": "tsx ./src/seeds/createAdmin.ts",
         "start:dev": "npm run seed && tsx ./src/index.ts",
-        "start:prod": "tsx ./src/index.ts",
+        "start:prod": "npm run seed && tsx ./src/index.ts",
         "lint": "eslint .",
         "test": "jest --passWithNoTests",
         "test:ci": "jest --ci --passWithNoTests",
@@ -33,9 +34,12 @@
         "react-jsx": "^1.0.0",
         "reflect-metadata": "^0.2.2",
         "resend": "^4.1.2",
+        "stripe": "^14.21.0",
         "type-graphql": "^2.0.0-rc.2",
         "typeorm": "^0.3.20",
-        "uuid": "^11.0.5"
+        "uuid": "^11.0.5",
+        "express-rate-limit": "^7.1.5",
+        "express": "^4.18.2"
     },
     "devDependencies": {
         "@faker-js/faker": "^9.6.0",

@@ -3,6 +3,7 @@ import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
+<<<<<<< HEAD
 }
 
 export const getFormattedSizeFromUrl = async (
@@ -28,3 +29,6 @@ export const getFormattedSizeFromUrl = async (
         throw new Error(error as string);
     }
 };
+=======
+}
+>>>>>>> origin/dev

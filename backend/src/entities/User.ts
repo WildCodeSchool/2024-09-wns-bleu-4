@@ -4,7 +4,7 @@ import { Report } from '@/entities/Report';
 import { Resource } from '@/entities/Resource';
 import { Subscription } from '@/entities/Subscription';
 import { IsDate, IsEnum, Length } from 'class-validator';
-import { Field, ID, ObjectType } from 'type-graphql';
+import { Field, ID, ObjectType, registerEnumType } from 'type-graphql';
 import {
     BaseEntity,
     Column,
@@ -21,6 +21,20 @@ export enum UserRole {
     USER = 'user',
     ADMIN = 'admin',
 }
+
+@ObjectType()
+export class UserStorage {
+    @Field(() => String)
+    bytesUsed: string;
+
+    @Field(() => Number)
+    percentage: number;
+}
+
+registerEnumType(UserRole, {
+    name: 'UserRole',
+    description: 'User role enum',
+});
 
 @Entity()
 export class TempUser extends BaseEntity {
@@ -61,10 +75,19 @@ export class User extends BaseEntity {
     })
     password: string;
 
+    @Field(() => String, { nullable: true })
+    @Column({
+        type: 'varchar',
+        length: 255,
+        nullable: true,
+    })
+    profilePicture: string | null;
+
     @IsDate()
     @CreateDateColumn()
     lastLoggedAt: Date;
 
+    @Field(() => UserRole)
     @IsEnum(UserRole)
     @Column({
         type: 'enum',
@@ -96,6 +119,15 @@ export class User extends BaseEntity {
     @JoinColumn()
     subscription: Subscription | null;
 
+    @Field(() => String, { nullable: true })
+    @Column({
+        type: 'varchar',
+        length: 255,
+        nullable: true,
+    })
+    stripeCustomerId: string | null;
+
+    @Field(() => Date)
     @IsDate()
     @CreateDateColumn()
     createdAt: Date;

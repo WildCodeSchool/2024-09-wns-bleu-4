@@ -8,6 +8,10 @@ import {
     UploadCloud,
 } from 'lucide-react';
 import { ChangeEvent, DragEvent, useRef, useState } from 'react';
+<<<<<<< HEAD
+=======
+import { useTranslation } from 'react-i18next';
+>>>>>>> origin/dev
 
 interface FileWithPreview {
     id: string;
@@ -22,6 +26,10 @@ interface FileWithPreview {
 
 interface FileUploaderProps {
     onFileChange: (file: File | null) => void;
+<<<<<<< HEAD
+=======
+    onFileSizeChange: (size: number | null) => void;
+>>>>>>> origin/dev
     onDescriptionChange: (description: string) => void;
     description: string;
     isUploading: boolean;
@@ -32,6 +40,10 @@ interface FileUploaderProps {
 
 export default function FileUploader({
     onFileChange,
+<<<<<<< HEAD
+=======
+    onFileSizeChange,
+>>>>>>> origin/dev
     onDescriptionChange,
     description,
     isUploading,
@@ -39,6 +51,10 @@ export default function FileUploader({
     errorMessage,
     acceptedFileTypes,
 }: FileUploaderProps) {
+<<<<<<< HEAD
+=======
+    const { t } = useTranslation();
+>>>>>>> origin/dev
     const [files, setFiles] = useState<FileWithPreview[]>([]);
     const [isDragging, setIsDragging] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -62,6 +78,10 @@ export default function FileUploader({
         setFiles([newFile]); // Replace any existing file
         simulateUpload(newFile.id);
         onFileChange(file); // Pass the file to the parent component
+<<<<<<< HEAD
+=======
+        onFileSizeChange(file.size); // Pass the file size to the parent component
+>>>>>>> origin/dev
     };
 
     // Simulate upload progress (visual only)
@@ -104,6 +124,10 @@ export default function FileUploader({
         e.stopPropagation();
         setFiles([]);
         onFileChange(null);
+<<<<<<< HEAD
+=======
+        onFileSizeChange(null);
+>>>>>>> origin/dev
         onDescriptionChange('');
     };
 
@@ -207,12 +231,18 @@ export default function FileUploader({
                         <div className="space-y-2">
                             <h3 className="text-xl md:text-2xl font-semibold text-zinc-800 dark:text-zinc-100">
                                 {isDragging
+<<<<<<< HEAD
                                     ? 'Déposez le fichier ici'
                                     : 'Transférez votre fichier'}
+=======
+                                    ? t('upload.dragDrop.dropHere')
+                                    : t('upload.dragDrop.title')}
+>>>>>>> origin/dev
                             </h3>
                             <p className="text-zinc-600 dark:text-zinc-300 md:text-lg max-w-md mx-auto">
                                 {isDragging ? (
                                     <span className="font-medium text-blue-500">
+<<<<<<< HEAD
                                         Relâchez pour télécharger
                                     </span>
                                 ) : (
@@ -220,12 +250,25 @@ export default function FileUploader({
                                         Glissez-déposez votre fichier ici, ou{' '}
                                         <span className="text-blue-500 font-medium">
                                             parcourez
+=======
+                                        {t('upload.dragDrop.releaseToUpload')}
+                                    </span>
+                                ) : (
+                                    <>
+                                        {t('upload.dragDrop.title')}{' '}
+                                        <span className="text-blue-500 font-medium">
+                                            {t('upload.dragDrop.browse')}
+>>>>>>> origin/dev
                                         </span>
                                     </>
                                 )}
                             </p>
                             <p className="text-sm text-zinc-500 dark:text-zinc-400">
+<<<<<<< HEAD
                                 Supporte les images, documents, vidéos, et plus
+=======
+                                {t('upload.dragDrop.supportedTypes')}
+>>>>>>> origin/dev
                             </p>
                         </div>
 
@@ -254,7 +297,11 @@ export default function FileUploader({
                                 className="flex justify-between items-center mb-3 px-2"
                             >
                                 <h3 className="font-semibold text-lg md:text-xl text-zinc-800 dark:text-zinc-200">
+<<<<<<< HEAD
                                     Fichier sélectionné
+=======
+                                    {t('upload.selectedFile.title')}
+>>>>>>> origin/dev
                                 </h3>
                             </motion.div>
 
@@ -333,7 +380,11 @@ export default function FileUploader({
                                                         onClick={(e) =>
                                                             removeFile(e)
                                                         }
+<<<<<<< HEAD
                                                         aria-label="Supprimer le fichier"
+=======
+                                                        aria-label={t('upload.selectedFile.delete')}
+>>>>>>> origin/dev
                                                     />
                                                 )}
                                             </span>
@@ -363,7 +414,11 @@ export default function FileUploader({
 
                                     <div className="mt-4">
                                         <textarea
+<<<<<<< HEAD
                                             placeholder="Description du fichier (minimum 4 caractères)"
+=======
+                                            placeholder={t('upload.description.placeholder')}
+>>>>>>> origin/dev
                                             value={description}
                                             onChange={(e) =>
                                                 onDescriptionChange(
@@ -376,8 +431,12 @@ export default function FileUploader({
                                             required
                                         />
                                         <div className="flex justify-end mt-1 text-xs text-zinc-500">
+<<<<<<< HEAD
                                             {description.length}/4 caractères
                                             minimum
+=======
+                                            {t('upload.description.charCount', { count: description.length })}
+>>>>>>> origin/dev
                                         </div>
                                     </div>
                                 </div>
@@ -409,10 +468,17 @@ export default function FileUploader({
                             {isUploading ? (
                                 <span className="flex items-center gap-2">
                                     <Loader className="w-4 h-4 animate-spin" />
+<<<<<<< HEAD
                                     Envoi en cours...
                                 </span>
                             ) : (
                                 'Enregistrer le fichier'
+=======
+                                    {t('upload.submit.uploading')}
+                                </span>
+                            ) : (
+                                t('upload.submit.save')
+>>>>>>> origin/dev
                             )}
                         </button>
                     </motion.div>

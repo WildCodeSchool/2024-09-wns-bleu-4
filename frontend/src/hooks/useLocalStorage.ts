@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useState } from "react";
 
 export const useLocalStorage = () => {
@@ -6,6 +7,12 @@ export const useLocalStorage = () => {
   const setItem = (key: string, value: string) => {
     localStorage.setItem(key, value);
     setValue(value);
+=======
+export const useLocalStorage = () => {
+
+  const setItem = (key: string, value: string) => {
+    localStorage.setItem(key, value);
+>>>>>>> origin/dev
   };
 
   const getItem = (key: string) => {
@@ -15,8 +22,14 @@ export const useLocalStorage = () => {
 
   const removeItem = (key: string) => {
     localStorage.removeItem(key);
+<<<<<<< HEAD
     setValue(null);
   };
 
   return { value, setItem, getItem, removeItem };
+=======
+  };
+
+  return { setItem, getItem, removeItem };
+>>>>>>> origin/dev
 };

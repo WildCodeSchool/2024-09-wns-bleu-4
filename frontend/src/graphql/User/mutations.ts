@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
 //Login
 export const LOGIN = gql`
@@ -15,8 +15,8 @@ export const LOGOUT = gql`
 
 //Register
 export const REGISTER = gql`
-    mutation Register($data: UserInput!) {
-        register(data: $data)
+    mutation Register($data: UserInput!, $lang: String!) {
+        register(data: $data, lang: $lang)
     }
 `;
 
@@ -24,5 +24,26 @@ export const REGISTER = gql`
 export const CONFIRM_EMAIL = gql`
     mutation ConfirmEmail($codeByUser: String!) {
         confirmEmail(codeByUser: $codeByUser)
+    }
+`;
+
+export const DELETE_USER = gql`
+    mutation DeleteUser($id: ID!) {
+        deleteUser(id: $id)
+    }
+`;
+
+export const UPDATE_USER_ROLE = gql`
+    mutation UpdateUserRole($id: ID!, $role: UserRole!) {
+        updateUserRole(id: $id, role: $role)
+    }
+`;
+export const UPDATE_PROFILE_PICTURE = gql`
+    mutation UpdateProfilePicture($data: UpdateProfilePictureInput!) {
+        updateProfilePicture(data: $data) {
+            id
+            email
+            profilePicture
+        }
     }
 `;

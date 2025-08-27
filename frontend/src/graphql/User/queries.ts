@@ -5,6 +5,13 @@ export const GET_ALL_USERS = gql`
         getAllUsers {
             id
             email
+<<<<<<< HEAD
+=======
+            role
+            subscription {
+                id
+            }
+>>>>>>> origin/dev
         }
     }
 `;
@@ -15,6 +22,16 @@ export const GET_USER_INFO = gql`
             email
             isLoggedIn
             id
+<<<<<<< HEAD
+=======
+            isSubscribed
+            role
+            profilePicture
+            storage {
+                bytesUsed
+                percentage
+            }
+>>>>>>> origin/dev
         }
     }
 `;
@@ -27,3 +44,18 @@ export const GET_USER_ID = gql`
         }
     }
 `;
+<<<<<<< HEAD
+=======
+
+export const GET_USER_STATS = gql`
+    query GetUserStats {
+        getAllUsers {
+            id
+            role
+            subscription {
+                id
+            }
+        }
+    }
+`;
+>>>>>>> origin/dev

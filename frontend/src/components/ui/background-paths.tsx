@@ -1,6 +1,10 @@
 'use client';
 
 import { motion } from 'framer-motion';
+<<<<<<< HEAD
+=======
+import { useTranslation } from 'react-i18next';
+>>>>>>> origin/dev
 
 function FloatingPaths({ position }: { position: number }) {
     const paths = Array.from({ length: 36 }, (_, i) => ({
@@ -46,7 +50,17 @@ function FloatingPaths({ position }: { position: number }) {
     );
 }
 
+<<<<<<< HEAD
 export function BackgroundPaths() {
+=======
+interface BackgroundPathsProps {
+    title: string;
+}
+
+export function BackgroundPaths({ title }: BackgroundPathsProps) {
+    const { t } = useTranslation();
+
+>>>>>>> origin/dev
     return (
         <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-white dark:bg-neutral-950">
             <div className="absolute inset-0">
@@ -60,10 +74,16 @@ export function BackgroundPaths() {
                     animate={{ opacity: 1 }}
                     transition={{ duration: 2 }}
                     className="mx-auto"
+<<<<<<< HEAD
                 >
                     <h1 className="text-5xl sm:text-7xl md:text-8xl font-bold mb-8 tracking-tighter inline-block mr-4 last:mr-0 text-transparent bg-clip-text bg-gradient-to-r from-neutral-900 to-neutral-700/80 dark:from-white dark:to-white/80">
                         La solution simple et rapide pour tous vos
                         transferts de fichiers
+=======
+                    >
+                    <h1 className="text-5xl sm:text-7xl md:text-8xl font-bold mb-8 tracking-tighter inline-block mr-4 last:mr-0 text-transparent bg-clip-text bg-gradient-to-r from-neutral-900 to-neutral-700/80 dark:from-white dark:to-white/80">
+                        {title}
+>>>>>>> origin/dev
                     </h1>
 
                     <div
@@ -79,7 +99,11 @@ export function BackgroundPaths() {
                             hover:shadow-md dark:hover:shadow-neutral-800/50"
                         >
                             <span className="opacity-90 group-hover:opacity-100 transition-opacity">
+<<<<<<< HEAD
                                 Transférer vos fichiers
+=======
+                                {t('home.uploadButton')}
+>>>>>>> origin/dev
                             </span>
                             <span
                                 className="ml-3 opacity-70 group-hover:opacity-100 group-hover:translate-x-1.5 

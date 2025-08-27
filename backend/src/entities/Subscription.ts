@@ -9,6 +9,13 @@ import {
 import { User } from './User';
 import { IsDate } from 'class-validator';
 
+export enum SubscriptionStatus {
+    ACTIVE = 'active',
+    CANCELLED = 'cancelled',
+    PAST_DUE = 'past_due',
+    UNPAID = 'unpaid',
+}
+
 @ObjectType()
 @Entity()
 export class Subscription extends BaseEntity {
@@ -25,6 +32,30 @@ export class Subscription extends BaseEntity {
     @Field(() => Date)
     @Column('timestamp')
     endAt: Date;
+
+    @Field(() => String, { nullable: true })
+    @Column({
+        type: 'varchar',
+        length: 255,
+        nullable: true,
+    })
+    stripeSubscriptionId: string | null;
+
+    @Field(() => String, { nullable: true })
+    @Column({
+        type: 'varchar',
+        length: 255,
+        nullable: true,
+    })
+    stripePriceId: string | null;
+
+    @Field(() => String)
+    @Column({
+        type: 'enum',
+        enum: SubscriptionStatus,
+        default: SubscriptionStatus.ACTIVE,
+    })
+    status: SubscriptionStatus;
 
     @OneToOne(() => User, { nullable: true })
     user: User;

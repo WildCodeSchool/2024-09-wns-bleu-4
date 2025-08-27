@@ -2,9 +2,11 @@ import { dataSource } from '@/db';
 import CommentResolver from '@/resolvers/CommentResolver';
 import ContactResolver from '@/resolvers/ContactResolver';
 import LikeResolver from '@/resolvers/LikeResolver';
+import PaymentResolver from '@/resolvers/PaymentResolver';
 import ReportResolver from '@/resolvers/ReportResolver';
 import ResourceResolver from '@/resolvers/ResourceResolver';
 import SubscriptionResolver from '@/resolvers/SubscriptionResolver';
+import SystemLogResolver from '@/resolvers/SystemLogResolver';
 import UserResolver from '@/resolvers/UserResolver';
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
@@ -18,6 +20,16 @@ const start = async () => {
     if (!process.env.JWT_SECRET_KEY) {
         throw Error('no jwt secret');
     }
+
+    // Validate Stripe environment variables
+    if (!process.env.STRIPE_SECRET_KEY) {
+        console.warn('STRIPE_SECRET_KEY not found. Stripe functionality will be disabled.');
+    }
+
+    if (!process.env.STRIPE_WEBHOOK_SECRET) {
+        console.warn('STRIPE_WEBHOOK_SECRET not found. Webhook verification will be disabled.');
+    }
+
     await dataSource.initialize();
     const schema = await buildSchema({
         validate: true,
@@ -29,6 +41,8 @@ const start = async () => {
             ReportResolver,
             SubscriptionResolver,
             ResourceResolver,
+            SystemLogResolver,
+            PaymentResolver,
         ],
         authChecker: ({ context }, rolesForOperation) => {
             if (context.email) {
@@ -53,6 +67,7 @@ const start = async () => {
             if (req.headers.cookie) {
                 const cookies = cookie.parse(req.headers.cookie as string);
                 if (cookies.token) {
+<<<<<<< HEAD
                     const payload: any = jwt.verify(
                         cookies.token,
                         process.env.JWT_SECRET_KEY as Secret,
@@ -61,12 +76,26 @@ const start = async () => {
                     if (payload) {
                         console.log(
                             'payload was found and returned to resolver',
+=======
+                    try {
+                        const payload: any = jwt.verify(
+                            cookies.token,
+                            process.env.JWT_SECRET_KEY as Secret,
+>>>>>>> origin/dev
                         );
-                        return {
-                            email: payload.email,
-                            userRole: payload.userRole,
-                            res: res,
-                        };
+                        console.log('payload in context', payload);
+                        if (payload) {
+                            console.log(
+                                'payload was found and returned to resolver',
+                            );
+                            return {
+                                email: payload.email,
+                                userRole: payload.userRole,
+                                res: res,
+                            };
+                        }
+                    } catch (error) {
+                        console.log('JWT verification failed:', error.message);
                     }
                 }
             }

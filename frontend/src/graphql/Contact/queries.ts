@@ -10,6 +10,10 @@ export const GET_MY_CONTACTS = gql`
                 sourceUser {
                     id
                     email
+<<<<<<< HEAD
+=======
+                    role
+>>>>>>> origin/dev
                 }
                 targetUser {
                     id

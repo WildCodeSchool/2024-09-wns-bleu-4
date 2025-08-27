@@ -1,13 +1,17 @@
 import { faker } from '@faker-js/faker';
 import { User, UserRole } from '../entities/User';
 import * as argon2 from 'argon2';
+import { Subscription, SubscriptionStatus } from '@/entities/Subscription';
 
 const generateSecurePassword = () => {
     const length = faker.number.int({ min: 12, max: 16 });
     const uppercase = faker.string.alpha({ length: 1, casing: 'upper' });
-    const lowercase = faker.string.alpha({ length: length - 4, casing: 'lower' });
+    const lowercase = faker.string.alpha({
+        length: length - 4,
+        casing: 'lower',
+    });
     const numbers = faker.string.numeric(2);
-    const special = faker.helpers.arrayElement(['!', '@', '#', '$', '%', '&', '*', '-', '_', '+', '=']);
+    const special = faker.helpers.arrayElement(['!', '@', '#', '$', '%', '&', '*', '-', '_', '+', '=', '?', '/']);
 
     return (uppercase + lowercase + numbers + special)
         .split('')
@@ -36,12 +40,44 @@ export const seedUsers = async () => {
         console.log(`ℹ️ Admin(s) already exist: ${adminCount}`);
     }
 
+    const premiumUserCount = await User.count({
+        where: {
+            subscription: { status: SubscriptionStatus.ACTIVE },
+        },
+    });
+
+    if (premiumUserCount === 0) {
+        // Creation d'un user avec un abonnement premium + Admin
+        const subscription = Subscription.create({
+            status: SubscriptionStatus.ACTIVE,
+            paidAt: new Date(),
+            endAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 jours
+        });
+        await subscription.save();
+
+        const premiumUserPassword = await argon2.hash('Premium@123456');
+        const premiumUser = User.create({
+            email: 'premium@example.com',
+            password: premiumUserPassword,
+            role: UserRole.ADMIN,
+            lastLoggedAt: new Date(),
+            createdAt: new Date(),
+            subscription,
+        });
+        await premiumUser.save();
+        console.log('✅ Premium user created');
+    } else {
+        console.log(`ℹ️ Premium user(s) already exist: ${premiumUserCount}`);
+    }
+
     // Vérifier combien d'utilisateurs USER il y a
     const userCount = await User.count({ where: { role: UserRole.USER } });
     const usersToCreate = 10 - userCount;
 
     if (usersToCreate > 0) {
-        console.log(`ℹ️ Found ${userCount} users. Creating ${usersToCreate} more...`);
+        console.log(
+            `ℹ️ Found ${userCount} users. Creating ${usersToCreate} more...`,
+        );
         const users = [];
 
         for (let i = 0; i < usersToCreate; i++) {

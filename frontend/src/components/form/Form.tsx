@@ -4,6 +4,10 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
+<<<<<<< HEAD
+=======
+import { useTranslation } from 'react-i18next';
+>>>>>>> origin/dev
 import { Button } from '../ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Input } from '../ui/input';
@@ -30,6 +34,7 @@ interface FormProps {
 }
 
 const Form = ({ title, onSubmit, loading, links, error }: FormProps) => {
+    const { t } = useTranslation();
     const [showPassword, setShowPassword] = useState(false);
 
     const {
@@ -57,13 +62,18 @@ const Form = ({ title, onSubmit, loading, links, error }: FormProps) => {
             <CardHeader>
                 <CardTitle className="text-2xl">{title}</CardTitle>
                 <CardTitle className="text-sm font-normal text-muted-foreground">
+<<<<<<< HEAD
                     Veuillez vous connecter pour continuer
+=======
+                    {t('auth.form.title')}
+>>>>>>> origin/dev
                 </CardTitle>
             </CardHeader>
             <CardContent className="grid gap-y-4">
                 <form
                     onSubmit={handleSubmit(submitForm)}
                     className="grid gap-4"
+<<<<<<< HEAD
                 >
                     <div className="space-y-2">
                         <Label htmlFor="email">Email</Label>
@@ -71,6 +81,16 @@ const Form = ({ title, onSubmit, loading, links, error }: FormProps) => {
                             id="email"
                             type="email"
                             placeholder="exemple@exemple.com"
+=======
+                    data-testid="form"
+                >
+                    <div className="space-y-2">
+                        <Label htmlFor="email">{t('auth.form.email.label')}</Label>
+                        <Input
+                            id="email"
+                            type="email"
+                            placeholder={t('auth.form.email.placeholder')}
+>>>>>>> origin/dev
                             {...register('email')}
                         />
                         {errors.email && (
@@ -81,12 +101,20 @@ const Form = ({ title, onSubmit, loading, links, error }: FormProps) => {
                     </div>
 
                     <div className="space-y-2">
+<<<<<<< HEAD
                         <Label htmlFor="password">Mot de passe</Label>
+=======
+                        <Label htmlFor="password">{t('auth.form.password.label')}</Label>
+>>>>>>> origin/dev
                         <div className="relative">
                             <Input
                                 id="password"
                                 type={showPassword ? 'text' : 'password'}
+<<<<<<< HEAD
                                 placeholder="Votre mot de passe"
+=======
+                                placeholder={t('auth.form.password.placeholder')}
+>>>>>>> origin/dev
                                 className="pr-10"
                                 {...register('password')}
                             />
@@ -96,6 +124,10 @@ const Form = ({ title, onSubmit, loading, links, error }: FormProps) => {
                                 size="icon"
                                 className="absolute right-0 top-0 h-full px-3"
                                 onClick={() => setShowPassword(!showPassword)}
+<<<<<<< HEAD
+=======
+                                data-testid="password-toggle"
+>>>>>>> origin/dev
                             >
                                 {showPassword ? (
                                     <EyeOff
@@ -111,7 +143,11 @@ const Form = ({ title, onSubmit, loading, links, error }: FormProps) => {
                             </Button>
                         </div>
                         {errors.password && (
+<<<<<<< HEAD
                             <span className="text-sm text-red-500">
+=======
+                            <span className="text-sm text-red-500" data-testid="password-error">
+>>>>>>> origin/dev
                                 {errors.password.message}
                             </span>
                         )}
@@ -126,7 +162,11 @@ const Form = ({ title, onSubmit, loading, links, error }: FormProps) => {
                         type="submit"
                         className="mt-2 cursor-pointer"
                     >
+<<<<<<< HEAD
                         {loading ? `${title} ...` : 'Valider'}
+=======
+                        {loading ? t('auth.form.loading', { action: title }) : t('auth.form.submit')}
+>>>>>>> origin/dev
                     </Button>
 
                     {links && (

@@ -2,6 +2,7 @@ import { Comment } from '@/entities/Comment';
 import { Like } from '@/entities/Like';
 import { Report } from '@/entities/Report';
 import { User } from '@/entities/User';
+import { formatFileSize } from '@/utils/storageUtils';
 import { IsDate, IsEnum, Length, MaxLength } from 'class-validator';
 import { Field, ObjectType } from 'type-graphql';
 import {
@@ -28,6 +29,7 @@ export class Resource extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Field(() => User)
     @ManyToOne(() => User, { onDelete: 'CASCADE' })
     user: User;
 
@@ -76,6 +78,18 @@ export class Resource extends BaseEntity {
         nullable: true,
     })
     description: string;
+
+    @Field(() => Number)
+    @Column({
+        type: 'bigint',
+        nullable: false,
+    })
+    size: number;
+
+    @Field(() => String)
+    get formattedSize(): string {
+        return formatFileSize(this.size);
+    }
 
     @Field(() => [User])
     @ManyToMany(() => User, (User) => User.sharedResources)

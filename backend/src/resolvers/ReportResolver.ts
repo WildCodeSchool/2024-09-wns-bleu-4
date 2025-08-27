@@ -1,8 +1,11 @@
 import { Reason, Report } from '@/entities/Report';
 import { Resource } from '@/entities/Resource';
 import { User } from '@/entities/User';
+import SystemLogResolver from './SystemLogResolver';
+import { LogType } from '@/entities/SystemLog';
 import {
     Arg,
+    Authorized,
     Field,
     ID,
     InputType,
@@ -24,6 +27,21 @@ export class ReportInput implements Partial<Report> {
 
     @Field(() => Reason)
     reason?: Reason | undefined;
+}
+
+@InputType()
+export class CreateReportInput {
+    @Field(() => ID)
+    userId: number;
+
+    @Field(() => ID)
+    resourceId: number;
+
+    @Field(() => String, { nullable: true })
+    content?: string;
+
+    @Field(() => Reason)
+    reason: Reason;
 }
 
 @Resolver(Report)
@@ -50,6 +68,16 @@ class ReportResolver {
         return reports;
     }
 
+    @Authorized('admin')
+    @Query(() => [Report])
+    async getAllReports(): Promise<Report[]> {
+        const reports = await Report.find({
+            relations: ['user', 'resource', 'resource.user'],
+            order: { createdAt: 'DESC' },
+        });
+        return reports;
+    }
+
     @Mutation(() => Report)
     async createReport(
         @Arg('newReport', () => ReportInput) newReport: Report,
@@ -59,12 +87,107 @@ class ReportResolver {
         return report;
     }
 
+    @Mutation(() => Report)
+    async createReportByIds(
+        @Arg('input', () => CreateReportInput) input: CreateReportInput,
+    ): Promise<Report> {
+        try {
+            const user = await User.findOne({ where: { id: input.userId } });
+            const resource = await Resource.findOne({ where: { id: input.resourceId }, relations: ['user'] });
+            
+            if (!user) {
+                throw new Error('Utilisateur non trouvé');
+            }
+            
+            if (!resource) {
+                throw new Error('Ressource non trouvée');
+            }
+
+            const report = Report.create({
+                user,
+                resource,
+                content: input.content,
+                reason: input.reason,
+            });
+            
+            await report.save();
+            
+            // Recharger le report avec toutes ses relations
+            const savedReport = await Report.findOne({
+                where: { id: report.id },
+                relations: ['user', 'resource', 'resource.user'],
+            });
+            
+            if (!savedReport) {
+                throw new Error('Erreur lors de la création du signalement');
+            }
+
+            // Traduction des raisons en français
+            const reasonTranslations = {
+                'corrupted': 'Fichier corrompu',
+                'display': 'Problème d\'affichage',
+                'inappropriate': 'Contenu inapproprié',
+                'harassment': 'Harcèlement',
+                'spam': 'Spam',
+                'other': 'Autre',
+                'none': 'Aucune raison'
+            };
+
+            // Log de l'événement
+            await SystemLogResolver.logEvent(
+                LogType.WARNING,
+                'Signalement créé',
+                `Signalement créé par ${user.email} pour le fichier "${resource.name}" (raison: ${reasonTranslations[input.reason] || input.reason})`,
+                user.email
+            );
+            
+            return savedReport;
+        } catch (error) {
+            // Log de l'erreur
+            await SystemLogResolver.logEvent(
+                LogType.ERROR,
+                'Erreur lors de la création de signalement',
+                `Erreur lors de la création du signalement: ${error}`,
+                undefined
+            );
+            throw error;
+        }
+    }
+
     @Mutation(() => String)
     async deleteReport(
         @Arg('reportToDelete', () => ReportInput) reportToDelete: ReportInput,
     ): Promise<string> {
-        await Report.delete(reportToDelete);
-        return 'Signalement supprimé';
+        try {
+            // Récupérer le signalement avec ses relations avant suppression
+            const report = await Report.findOne({
+                where: { id: reportToDelete.user.id },
+                relations: ['user', 'resource']
+            });
+
+            await Report.delete(reportToDelete);
+
+            // Log de l'événement
+            if (report) {
+                await SystemLogResolver.logEvent(
+                    LogType.SUCCESS,
+                    'Signalement supprimé',
+                    `Signalement supprimé pour le fichier "${report.resource.name}"`,
+                    report.user.email
+                );
+            }
+
+            return 'Signalement supprimé';
+        } catch (error) {
+            // Log de l'erreur
+            await SystemLogResolver.logEvent(
+                LogType.ERROR,
+                'Erreur lors de la suppression de signalement',
+                `Erreur lors de la suppression du signalement: ${error}`,
+                undefined
+            );
+            throw error;
+        }
     }
 }
 

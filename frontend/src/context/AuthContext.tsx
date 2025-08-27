@@ -1,4 +1,5 @@
 import { AuthContext } from '@/context/AuthContextInit';
+<<<<<<< HEAD
 import { useGetUserIdQuery } from '@/generated/graphql-types';
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -9,6 +10,29 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         email: data?.getUserInfo.email ?? null,
         id: data?.getUserInfo.id ? Number(data.getUserInfo.id) : undefined
     } : null;
+=======
+import { useGetUserInfoQuery } from '@/generated/graphql-types';
+
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+    const { data, loading, refetch } = useGetUserInfoQuery();
+
+    const isAuth = !!data?.getUserInfo.id;
+    const user = isAuth
+        ? {
+              email: data?.getUserInfo.email ?? null,
+              id: data?.getUserInfo.id
+                  ? Number(data.getUserInfo.id)
+                  : undefined,
+              isSubscribed: data?.getUserInfo.isSubscribed ? true : false,
+              role: data?.getUserInfo.role ?? undefined,
+              profilePicture: data?.getUserInfo.profilePicture ?? null,
+              storage: {
+                bytesUsed: data?.getUserInfo.storage?.bytesUsed || '0 Bytes',
+                percentage: data?.getUserInfo.storage?.percentage || 0,
+            },
+          }
+        : null;
+>>>>>>> origin/dev
 
     const refreshAuth = () => {
         refetch();

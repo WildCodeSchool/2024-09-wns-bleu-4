@@ -3,10 +3,17 @@ import { gql } from '@apollo/client';
 export const GET_ALL_RESOURCES = gql`
     query GetAllResources {
         getAllResources {
+            id
             name
             description
             path
             url
+            size
+            formattedSize
+            user {
+                id
+                email
+            }
         }
     }
 `;
@@ -19,6 +26,8 @@ export const GET_RESOURCES_BY_USER_ID = gql`
             name
             path
             url
+            size
+            formattedSize
         }
     }
 `;
@@ -31,6 +40,34 @@ export const GET_SHARED_RESOURCES = gql`
             description
             path
             url
+<<<<<<< HEAD
         }
     }
 `;
+=======
+            size
+            formattedSize
+            user {
+                id
+                email
+                createdAt
+                profilePicture
+            }
+        }
+    }
+`;
+
+export const GET_RESOURCE_STATS = gql`
+    query GetResourceStats {
+        getAllResources {
+            id
+        }
+    }
+`;
+
+export const GET_USER_TOTAL_FILE_SIZE = gql`
+    query GetUserTotalFileSize($userId: ID!) {
+        getUserTotalFileSize(userId: $userId)
+    }
+`;
+>>>>>>> origin/dev

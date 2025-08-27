@@ -1,4 +1,5 @@
 import { BackgroundPaths } from '@/components/ui/background-paths';
+<<<<<<< HEAD
 
 const Home = () => {
     return (
@@ -7,6 +8,14 @@ const Home = () => {
                 transferts de fichiers"
         />
     );
+=======
+import { useTranslation } from 'react-i18next';
+
+const Home = () => {
+    const { t } = useTranslation();
+
+    return <BackgroundPaths title={t('home.title')} />;
+>>>>>>> origin/dev
 };
 
 export default Home;
