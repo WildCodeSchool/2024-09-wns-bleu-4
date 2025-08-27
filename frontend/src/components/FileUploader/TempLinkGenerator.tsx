@@ -6,7 +6,6 @@ import {
     Link as LinkIcon,
     Loader,
     Trash2,
-    UploadCloud,
 } from 'lucide-react';
 import { ChangeEvent, DragEvent, useRef, useState } from 'react';
 
@@ -109,12 +108,12 @@ const TempLinkGenerator = () => {
     const formatTimeRemaining = (expiresAt: Date): string => {
         const now = new Date();
         const diff = expiresAt.getTime() - now.getTime();
-        
+
         if (diff <= 0) return 'Expired';
-        
+
         const hours = Math.floor(diff / (1000 * 60 * 60));
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        
+
         if (hours > 0) return `${hours}h ${minutes}m remaining`;
         return `${minutes}m remaining`;
     };
@@ -127,18 +126,31 @@ const TempLinkGenerator = () => {
         setErrorMessage(null);
 
         try {
-            // Simulate API call delay
-            await new Promise(resolve => setTimeout(resolve, 2000));
-
             const file = files[0];
-            const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours from now
             
+            // Create FormData for file upload
+            const formData = new FormData();
+            formData.append('file', file.file!);
+
+            // Upload file to storage-api
+            const response = await fetch('/storage/temp/upload', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to upload file');
+            }
+
+            const result = await response.json();
+            
+            // Create new temp link with real data
             const newTempLink: TempLink = {
-                id: `temp-${Date.now()}`,
-                url: `https://wild-transfer.com/temp/${Math.random().toString(36).substr(2, 9)}`,
-                expiresAt,
-                fileName: file.name,
-                fileSize: file.size,
+                id: result.tempId,
+                url: `${window.location.origin}/storage${result.accessUrl}`,
+                expiresAt: new Date(result.expiresAt),
+                fileName: result.originalName,
+                fileSize: result.fileSize,
             };
 
             setTempLinks(prev => [newTempLink, ...prev]);
@@ -147,8 +159,9 @@ const TempLinkGenerator = () => {
             
             // Clear success message after 5 seconds
             setTimeout(() => setSuccessMessage(null), 5000);
-        } catch {
-            setErrorMessage('Failed to generate temporary link');
+        } catch (error) {
+            console.error('Error generating temporary link:', error);
+            setErrorMessage('Failed to generate temporary link. Please try again.');
         } finally {
             setIsUploading(false);
         }
@@ -167,7 +180,8 @@ const TempLinkGenerator = () => {
         'application/pdf': ['.pdf'],
         'image/*': ['.png', '.jpg', '.jpeg'],
         'application/msword': ['.doc'],
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+            ['.docx'],
         'audio/*': ['.mp3', '.wav'],
         'video/*': ['.mp4', '.mov'],
     };
@@ -176,10 +190,11 @@ const TempLinkGenerator = () => {
         <div className="space-y-6">
             <div className="text-center">
                 <h2 className="text-2xl font-bold text-zinc-800 dark:text-zinc-200 mb-2">
-                    Temporary Link Generator
+                    Generate a temporary link
                 </h2>
                 <p className="text-zinc-600 dark:text-zinc-400">
-                    Upload a file to generate a temporary link that expires in 24 hours
+                    Upload a file to generate a temporary link that expires in
+                    24 hours
                 </p>
             </div>
 
@@ -247,12 +262,32 @@ const TempLinkGenerator = () => {
                                     display: isDragging ? 'block' : 'none',
                                 }}
                             />
-                            <UploadCloud className="w-16 h-16 md:w-20 md:h-20 drop-shadow-sm text-zinc-700 dark:text-zinc-300 group-hover:text-blue-500 transition-colors duration-300" />
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                className="lucide lucide-clock-fading-icon lucide-clock-fading w-16 h-16 md:w-20 md:h-20 drop-shadow-sm text-zinc-700 dark:text-zinc-300 group-hover:text-blue-500 transition-colors duration-300"
+                            >
+                                <path d="M12 2a10 10 0 0 1 7.38 16.75" />
+                                <path d="M12 6v6l4 2" />
+                                <path d="M2.5 8.875a10 10 0 0 0-.5 3" />
+                                <path d="M2.83 16a10 10 0 0 0 2.43 3.4" />
+                                <path d="M4.636 5.235a10 10 0 0 1 .891-.857" />
+                                <path d="M8.644 21.42a10 10 0 0 0 7.631-.38" />
+                            </svg>
                         </motion.div>
 
                         <div className="space-y-2">
                             <h3 className="text-xl md:text-2xl font-semibold text-zinc-800 dark:text-zinc-100">
-                                {isDragging ? 'Drop here to upload' : 'Upload a file'}
+                                {isDragging
+                                    ? 'Drop here to upload'
+                                    : 'Upload a file'}
                             </h3>
                             <p className="text-zinc-600 dark:text-zinc-300 md:text-lg max-w-md mx-auto">
                                 {isDragging ? (
@@ -355,10 +390,17 @@ const TempLinkGenerator = () => {
                                 <div className="w-full h-2 bg-zinc-200 dark:bg-zinc-700 rounded-full overflow-hidden">
                                     <motion.div
                                         initial={{ width: 0 }}
-                                        animate={{ width: `${files[0].progress}%` }}
-                                        transition={{ duration: 0.4, ease: 'easeOut' }}
+                                        animate={{
+                                            width: `${files[0].progress}%`,
+                                        }}
+                                        transition={{
+                                            duration: 0.4,
+                                            ease: 'easeOut',
+                                        }}
                                         className={`h-full rounded-full ${
-                                            files[0].progress < 100 ? 'bg-blue-500' : 'bg-emerald-500'
+                                            files[0].progress < 100
+                                                ? 'bg-blue-500'
+                                                : 'bg-emerald-500'
                                         }`}
                                     />
                                 </div>
@@ -417,16 +459,22 @@ const TempLinkGenerator = () => {
                                             </span>
                                         </div>
                                         <div className="flex items-center gap-4 text-sm text-zinc-500 dark:text-zinc-400">
-                                            <span>{formatFileSize(link.fileSize)}</span>
+                                            <span>
+                                                {formatFileSize(link.fileSize)}
+                                            </span>
                                             <span className="flex items-center gap-1">
                                                 <LinkIcon className="w-3 h-3" />
-                                                {formatTimeRemaining(link.expiresAt)}
+                                                {formatTimeRemaining(
+                                                    link.expiresAt,
+                                                )}
                                             </span>
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <button
-                                            onClick={() => copyToClipboard(link.url)}
+                                            onClick={() =>
+                                                copyToClipboard(link.url)
+                                            }
                                             className="p-2 text-zinc-500 hover:text-blue-500 transition-colors duration-200"
                                             title="Copy link"
                                         >

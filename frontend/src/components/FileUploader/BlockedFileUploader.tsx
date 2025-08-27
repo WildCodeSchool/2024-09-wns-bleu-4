@@ -39,9 +39,6 @@ export default function BlockedFileUploader() {
                 {/* Glass overlay on hover */}
                 <div className="absolute inset-0 rounded-2xl bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                     <div className="text-center p-6 max-w-sm">
-                        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
-                            <UploadCloud className="w-8 h-8 text-red-500" />
-                        </div>
                         <h3 className="text-lg font-semibold text-zinc-800 dark:text-zinc-200 mb-2">
                             File deposit is blocked
                         </h3>
