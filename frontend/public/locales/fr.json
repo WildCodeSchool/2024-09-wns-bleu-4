@@ -42,10 +42,13 @@
         "description": "Page de profil"
     },
     "files": {
+        "description": "Gérez vos fichiers et ceux partagés avec vous",
         "title": {
             "myFiles": "Mes fichiers disponibles",
+            "myFilesSection": "Mes fichiers",
             "noFiles": "Vous n'avez pas encore de fichiers",
             "sharedFiles": "Fichiers partagés avec moi",
+            "sharedFilesSection": "Fichiers partagés",
             "noSharedFiles": "Aucun fichier partagé avec vous"
         },
         "actions": {
@@ -61,7 +64,11 @@
         },
         "uploadNew": "Télécharger un nouveau fichier",
         "search": "Rechercher des fichiers",
-        "filter": "Filtrer"
+        "filter": "Filtrer",
+        "emptyState": {
+            "noFilesDescription": "Téléchargez votre premier fichier pour le partager avec vos contacts.",
+            "noSharedFilesDescription": "Vos contacts n'ont pas encore partagé de fichiers avec vous."
+        }
     },
     "upload": {
         "title": "Télécharger un fichier",
@@ -193,7 +200,70 @@
             "admins": "Administrateurs",
             "adminsDescription": "Utilisateurs administrateurs",
             "activity": "Activité récente",
-            "activityDescription": "Activité système"
+            "activityDescription": "Activité système",
+            "reports": "Signalements",
+            "reportsDescription": "Signalements et problèmes des utilisateurs"
+        },
+        "users": {
+            "title": "Gestion des utilisateurs",
+            "description": "Voir et gérer les comptes utilisateurs, rôles et permissions",
+            "viewAll": "Voir tous les utilisateurs",
+            "search": {
+                "placeholder": "Rechercher un utilisateur par email..."
+            },
+            "stats": {
+                "total": "Total utilisateurs",
+                "admins": "Administrateurs",
+                "users": "Utilisateurs"
+            },
+            "list": {
+                "title": "Liste des utilisateurs"
+            },
+            "subscribed": "Abonné",
+            "roles": {
+                "user": "Utilisateur",
+                "admin": "Administrateur"
+            },
+            "actions": {
+                "delete": "Supprimer"
+            }
+        },
+        "files": {
+            "title": "Gestion des fichiers",
+            "description": "Surveiller et gérer les fichiers téléchargés et le stockage",
+            "viewAll": "Voir tous les fichiers",
+            "search": {
+                "placeholder": "Rechercher un fichier par nom..."
+            },
+            "stats": {
+                "total": "Total fichiers",
+                "size": "Espace utilisé"
+            },
+            "list": {
+                "title": "Liste des fichiers",
+                "empty": "Aucun fichier trouvé",
+                "noResults": "Aucun fichier ne correspond à votre recherche"
+            }
+        },
+        "reports": {
+            "title": "Gestion des signalements",
+            "description": "Voir et gérer les signalements et problèmes des utilisateurs",
+            "viewAll": "Voir tous les signalements",
+            "stats": {
+                "total": "Total signalements"
+            },
+            "search": {
+                "placeholder": "Rechercher un signalement..."
+            },
+            "list": {
+                "title": "Liste des signalements",
+                "empty": "Aucun signalement trouvé",
+                "noResults": "Aucun signalement ne correspond à votre recherche"
+            }
+        },
+        "logs": {
+            "title": "Journaux système",
+            "empty": "Aucun événement récent"
         }
     },
     "users": {
