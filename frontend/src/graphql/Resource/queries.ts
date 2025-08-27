@@ -9,6 +9,7 @@ export const GET_ALL_RESOURCES = gql`
             path
             url
             size
+            formattedSize
             user {
                 id
                 email
@@ -26,6 +27,7 @@ export const GET_RESOURCES_BY_USER_ID = gql`
             path
             url
             size
+            formattedSize
         }
     }
 `;
@@ -39,6 +41,7 @@ export const GET_SHARED_RESOURCES = gql`
             path
             url
             size
+            formattedSize
             user {
                 id
                 email

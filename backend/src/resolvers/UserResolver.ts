@@ -2,8 +2,9 @@ import { ResetPasswordEmail } from '@/emails/ResetPassword';
 import { VerifyAccountEmail } from '@/emails/VerifyAccount';
 import { Resource } from '@/entities/Resource';
 import { LogType } from '@/entities/SystemLog';
-import { TempUser, User, UserRole } from '@/entities/User';
+import { TempUser, User, UserRole, UserStorage } from '@/entities/User';
 import SystemLogResolver from '@/resolvers/SystemLogResolver';
+import { calculateStoragePercentage, formatFileSize } from '@/utils/storageUtils';
 import * as argon2 from 'argon2';
 import { IsEmail, Length, Matches } from 'class-validator';
 import jwt, { Secret } from 'jsonwebtoken';
@@ -46,20 +47,23 @@ export class UserInfo {
     @Field(() => Boolean)
     isLoggedIn: boolean;
 
-    @Field(() => String, { nullable: true })
+    @Field(() => String, { nullable: false })
     email?: String;
 
-    @Field(() => ID, { nullable: true })
+    @Field(() => ID, { nullable: false })
     id?: number;
 
     @Field(() => Boolean, { nullable: true })
     isSubscribed?: boolean;
 
-    @Field(() => UserRole, { nullable: true })
+    @Field(() => UserRole, { nullable: false })
     role?: UserRole;
 
     @Field(() => String, { nullable: true })
     profilePicture?: string | null;
+
+    @Field(() => UserStorage, { nullable: false })
+    storage?: UserStorage;
 }
 
 @Resolver(User)
@@ -187,10 +191,11 @@ class UserResolver {
                 const token = jwt.sign(
                     { email: user.email, userRole: user.role },
                     process.env.JWT_SECRET_KEY as Secret,
+                    { expiresIn: '1h' }
                 );
                 context.res.setHeader(
                     'Set-Cookie',
-                    `token=${token}; Secure; HttpOnly`,
+                    `token=${token}; Secure; HttpOnly; SameSite=Strict; Path=/`,
                 );
 
                 return 'The user has been logged in!';
@@ -226,6 +231,15 @@ class UserResolver {
                 where: { email: context.email },
             });
             if (user) {
+                // Calculate total bytes used from user's resources using the same method as ResourceResolver
+                const result = await Resource.createQueryBuilder('resource')
+                    .select('SUM(resource.size)', 'totalSize')
+                    .where('resource.user.id = :userId', { userId: user.id })
+                    .getRawOne();
+                
+                const totalBytesUsed = result?.totalSize ? Number(result.totalSize) : 0;
+                const storagePercentage = calculateStoragePercentage(totalBytesUsed);
+                
                 return {
                     isLoggedIn: true,
                     email: context.email,
@@ -233,6 +247,10 @@ class UserResolver {
                     isSubscribed: user.subscription ? true : false,
                     role: user.role,
                     profilePicture: user.profilePicture,
+                    storage: {
+                        bytesUsed: formatFileSize(totalBytesUsed),
+                        percentage: storagePercentage,
+                    },
                 };
             }
         }

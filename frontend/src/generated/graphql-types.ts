@@ -421,6 +421,7 @@ export type Resource = {
   __typename?: 'Resource';
   comments: Array<Comment>;
   description: Scalars['String']['output'];
+  formattedSize: Scalars['String']['output'];
   id: Scalars['Float']['output'];
   likes: Array<Like>;
   name: Scalars['String']['output'];
@@ -478,12 +479,13 @@ export type User = {
 
 export type UserInfo = {
   __typename?: 'UserInfo';
-  email?: Maybe<Scalars['String']['output']>;
-  id?: Maybe<Scalars['ID']['output']>;
+  email: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
   isLoggedIn: Scalars['Boolean']['output'];
   isSubscribed?: Maybe<Scalars['Boolean']['output']>;
   profilePicture?: Maybe<Scalars['String']['output']>;
-  role?: Maybe<UserRole>;
+  role: UserRole;
+  storage: UserStorage;
 };
 
 export type UserInput = {
@@ -496,6 +498,12 @@ export enum UserRole {
   Admin = 'ADMIN',
   User = 'USER'
 }
+
+export type UserStorage = {
+  __typename?: 'UserStorage';
+  bytesUsed: Scalars['String']['output'];
+  percentage: Scalars['Float']['output'];
+};
 
 export type SendContactRequestMutationVariables = Exact<{
   contactToCreate: ContactInput;
@@ -632,21 +640,21 @@ export type CreateUserAccessMutation = { __typename?: 'Mutation', createUserAcce
 export type GetAllResourcesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllResourcesQuery = { __typename?: 'Query', getAllResources: Array<{ __typename?: 'Resource', id: number, name: string, description: string, path: string, url: string, size: number, user: { __typename?: 'User', id: string, email: string } }> };
+export type GetAllResourcesQuery = { __typename?: 'Query', getAllResources: Array<{ __typename?: 'Resource', id: number, name: string, description: string, path: string, url: string, size: number, formattedSize: string, user: { __typename?: 'User', id: string, email: string } }> };
 
 export type GetResourcesByUserIdQueryVariables = Exact<{
   userId: Scalars['ID']['input'];
 }>;
 
 
-export type GetResourcesByUserIdQuery = { __typename?: 'Query', getResourcesByUserId: Array<{ __typename?: 'Resource', description: string, id: number, name: string, path: string, url: string, size: number }> };
+export type GetResourcesByUserIdQuery = { __typename?: 'Query', getResourcesByUserId: Array<{ __typename?: 'Resource', description: string, id: number, name: string, path: string, url: string, size: number, formattedSize: string }> };
 
 export type GetUserSharedResourcesQueryVariables = Exact<{
   userId: Scalars['ID']['input'];
 }>;
 
 
-export type GetUserSharedResourcesQuery = { __typename?: 'Query', getUserSharedResources: Array<{ __typename?: 'Resource', id: number, name: string, description: string, path: string, url: string, size: number, user: { __typename?: 'User', id: string, email: string, createdAt: any, profilePicture?: string | null } }> };
+export type GetUserSharedResourcesQuery = { __typename?: 'Query', getUserSharedResources: Array<{ __typename?: 'Resource', id: number, name: string, description: string, path: string, url: string, size: number, formattedSize: string, user: { __typename?: 'User', id: string, email: string, createdAt: any, profilePicture?: string | null } }> };
 
 export type GetResourceStatsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -773,12 +781,12 @@ export type GetAllUsersQuery = { __typename?: 'Query', getAllUsers: Array<{ __ty
 export type GetUserInfoQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUserInfoQuery = { __typename?: 'Query', getUserInfo: { __typename?: 'UserInfo', email?: string | null, isLoggedIn: boolean, id?: string | null, isSubscribed?: boolean | null, role?: UserRole | null, profilePicture?: string | null } };
+export type GetUserInfoQuery = { __typename?: 'Query', getUserInfo: { __typename?: 'UserInfo', email: string, isLoggedIn: boolean, id: string, isSubscribed?: boolean | null, role: UserRole, profilePicture?: string | null, storage: { __typename?: 'UserStorage', bytesUsed: string, percentage: number } } };
 
 export type GetUserIdQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUserIdQuery = { __typename?: 'Query', getUserInfo: { __typename?: 'UserInfo', id?: string | null, email?: string | null } };
+export type GetUserIdQuery = { __typename?: 'Query', getUserInfo: { __typename?: 'UserInfo', id: string, email: string } };
 
 export type GetUserStatsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1559,6 +1567,7 @@ export const GetAllResourcesDocument = gql`
     path
     url
     size
+    formattedSize
     user {
       id
       email
@@ -1607,6 +1616,7 @@ export const GetResourcesByUserIdDocument = gql`
     path
     url
     size
+    formattedSize
   }
 }
     `;
@@ -1652,6 +1662,7 @@ export const GetUserSharedResourcesDocument = gql`
     path
     url
     size
+    formattedSize
     user {
       id
       email
@@ -2345,6 +2356,10 @@ export const GetUserInfoDocument = gql`
     isSubscribed
     role
     profilePicture
+    storage {
+      bytesUsed
+      percentage
+    }
   }
 }
     `;

@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next';
 const UploadPage = () => {
     const { t } = useTranslation();
     const { isAuth } = useAuth();
-
     const acceptedFileTypes = {
         'application/pdf': ['.pdf'],
         'image/*': ['.png', '.jpg', '.jpeg'],
@@ -17,7 +16,7 @@ const UploadPage = () => {
         'audio/*': ['.mp3', '.wav'],
         'video/*': ['.mp4', '.mov'],
     };
-
+    
     return (
         <div className="mx-auto grid grid-cols-2 gap-8 items-start">
             {/* Persistent Uploader */}
