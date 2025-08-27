@@ -542,7 +542,7 @@ const TempLinkGenerator = () => {
                                             <span className={`flex items-center gap-1 ${
                                                 link.isExpired ? 'text-red-500 dark:text-red-400' : ''
                                             }`}>
-                                                <FadeClock className="w-3 h-3" />
+                                                <FadeClock className="w-4 h-4 text-zinc-500 dark:text-zinc-400" />
                                                 {link.isExpired ? t('upload.page.tempLink.expired') : formatTimeRemaining(link.expiresAt)}
                                             </span>
                                             <span className={`px-2 py-1 text-xs font-medium rounded-full ${
