@@ -42,10 +42,13 @@
         "description": "Profile page"
     },
     "files": {
+        "description": "Manage your files and those shared with you",
         "title": {
             "myFiles": "My available files",
+            "myFilesSection": "My Files",
             "noFiles": "You don't have any files yet",
             "sharedFiles": "Files shared with me",
+            "sharedFilesSection": "Shared Files",
             "noSharedFiles": "No files shared with you"
         },
         "actions": {
@@ -61,7 +64,11 @@
         },
         "uploadNew": "Upload a new file",
         "search": "Search files",
-        "filter": "Filter"
+        "filter": "Filter",
+        "emptyState": {
+            "noFilesDescription": "Upload your first file to share it with your contacts.",
+            "noSharedFilesDescription": "Your contacts haven't shared any files with you yet."
+        }
     },
     "upload": {
         "title": "Upload a file",
@@ -196,6 +203,67 @@
             "activityDescription": "System activity",
             "reports": "Reports",
             "reportsDescription": "User reports and issues"
+        },
+        "users": {
+            "title": "User Management",
+            "description": "View and manage user accounts, roles, and permissions",
+            "viewAll": "View All Users",
+            "search": {
+                "placeholder": "Search for a user by email..."
+            },
+            "stats": {
+                "total": "Total users",
+                "admins": "Administrators",
+                "users": "Users"
+            },
+            "list": {
+                "title": "User list"
+            },
+            "subscribed": "Subscribed",
+            "roles": {
+                "user": "User",
+                "admin": "Administrator"
+            },
+            "actions": {
+                "delete": "Delete"
+            }
+        },
+        "files": {
+            "title": "File Management",
+            "description": "Monitor and manage uploaded files and storage",
+            "viewAll": "View All Files",
+            "search": {
+                "placeholder": "Search for a file by name..."
+            },
+            "stats": {
+                "total": "Total files",
+                "size": "Storage used"
+            },
+            "list": {
+                "title": "File list",
+                "empty": "No files found",
+                "noResults": "No files match your search"
+            }
+        },
+        "reports": {
+            "title": "Report Management",
+            "description": "View and manage user reports and issues",
+            "viewAll": "View All Reports",
+            "stats": {
+                "total": "Total reports"
+            },
+            "search": {
+                "placeholder": "Search for a report..."
+            },
+            "list": {
+                "title": "Report list",
+                "empty": "No reports found",
+                "noResults": "No reports match your search"
+            }
+        },
+        "logs": {
+            "title": "System Logs",
+            "empty": "No recent events"
         }
     },
     "users": {
