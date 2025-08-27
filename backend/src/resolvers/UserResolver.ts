@@ -187,10 +187,11 @@ class UserResolver {
                 const token = jwt.sign(
                     { email: user.email, userRole: user.role },
                     process.env.JWT_SECRET_KEY as Secret,
+                    { expiresIn: '1h' }
                 );
                 context.res.setHeader(
                     'Set-Cookie',
-                    `token=${token}; Secure; HttpOnly`,
+                    `token=${token}; Secure; HttpOnly; SameSite=Strict; Path=/`,
                 );
 
                 return 'The user has been logged in!';
