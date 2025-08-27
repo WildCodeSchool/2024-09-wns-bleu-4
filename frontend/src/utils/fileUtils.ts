@@ -1,0 +1,173 @@
+import {
+    File,
+    FileCode,
+    FileImage,
+    FileSpreadsheet,
+    FileText,
+    FileVideo,
+    FolderArchive,
+    LucideIcon,
+    Music,
+} from 'lucide-react';
+
+export interface FileTypeInfo {
+    icon: LucideIcon;
+    color: string;
+    isImage: boolean;
+    isVideo: boolean;
+    isPdf: boolean;
+}
+
+export const getFileTypeInfo = (fileName: string): FileTypeInfo => {
+    const extension = fileName.toLowerCase().split('.').pop() || '';
+
+    // Images
+    const imageExtensions = [
+        'jpg',
+        'jpeg',
+        'png',
+        'gif',
+        'svg',
+        'webp',
+        'bmp',
+        'ico',
+    ];
+    if (imageExtensions.includes(extension)) {
+        return {
+            icon: FileImage,
+            color: 'text-foreground',
+            isImage: true,
+            isVideo: false,
+            isPdf: false,
+        };
+    }
+
+    // Vidéos
+    const videoExtensions = [
+        'mp4',
+        'avi',
+        'mov',
+        'wmv',
+        'flv',
+        'webm',
+        'mkv',
+        'm4v',
+    ];
+    if (videoExtensions.includes(extension)) {
+        return {
+            icon: FileVideo,
+            color: 'text-foreground',
+            isImage: false,
+            isVideo: true,
+            isPdf: false,
+        };
+    }
+
+    // Audio
+    const audioExtensions = ['mp3', 'wav', 'flac', 'aac', 'ogg', 'm4a'];
+    if (audioExtensions.includes(extension)) {
+        return {
+            icon: Music,
+            color: 'text-foreground',
+            isImage: false,
+            isVideo: false,
+            isPdf: false,
+        };
+    }
+
+    // Documents PDF
+    if (extension === 'pdf') {
+        return {
+            icon: FileText,
+            color: 'text-foreground',
+            isImage: false,
+            isVideo: false,
+            isPdf: true,
+        };
+    }
+
+    // Tableurs
+    const spreadsheetExtensions = ['xls', 'xlsx', 'csv', 'ods'];
+    if (spreadsheetExtensions.includes(extension)) {
+        return {
+            icon: FileSpreadsheet,
+            color: 'text-foreground',
+            isImage: false,
+            isVideo: false,
+            isPdf: false,
+        };
+    }
+
+    // Code
+    const codeExtensions = [
+        'js',
+        'jsx',
+        'ts',
+        'tsx',
+        'html',
+        'css',
+        'scss',
+        'json',
+        'xml',
+        'sql',
+        'py',
+        'java',
+        'c',
+        'cpp',
+        'php',
+        'rb',
+        'go',
+        'rs',
+    ];
+    if (codeExtensions.includes(extension)) {
+        return {
+            icon: FileCode,
+            color: 'text-foreground',
+            isImage: false,
+            isVideo: false,
+            isPdf: false,
+        };
+    }
+
+    // Archives
+    const archiveExtensions = ['zip', 'rar', '7z', 'tar', 'gz', 'bz2', 'xz'];
+    if (archiveExtensions.includes(extension)) {
+        return {
+            icon: FolderArchive,
+            color: 'text-foreground',
+            isImage: false,
+            isVideo: false,
+            isPdf: false,
+        };
+    }
+
+    // Documents texte et autres
+    const documentExtensions = ['doc', 'docx', 'txt', 'rtf', 'odt'];
+    if (documentExtensions.includes(extension)) {
+        return {
+            icon: FileText,
+            color: 'text-foreground',
+            isImage: false,
+            isVideo: false,
+            isPdf: false,
+        };
+    }
+
+    // Défaut
+    return {
+        icon: File,
+        color: 'text-foreground',
+        isImage: false,
+        isVideo: false,
+        isPdf: false,
+    };
+};
+
+// Fonction utilitaire pour formater la taille des fichiers
+export const formatFileSize = (bytes: number): string => {
+    if (!bytes) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return `${(bytes / Math.pow(k, i)).toFixed(2)} ${sizes[i]}`;
+};
