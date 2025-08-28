@@ -1,13 +1,9 @@
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from '@/components/ui/popover';
-import { GET_USER_SUBSCRIPTION } from '@/graphql/Subscription/queries';
-import { GET_USER_INFO } from '@/graphql/User/queries';
-import { cn } from '@/utils/globalUtils';
-import { useQuery } from '@apollo/client';
-import { Crown } from 'lucide-react';
+import { cn } from "@/utils/globalUtils";
+import { Crown } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { useQuery } from "@apollo/client";
+import { GET_USER_SUBSCRIPTION } from "@/graphql/Subscription/queries";
+import { GET_USER_INFO } from "@/graphql/User/queries";
 
 const SubscribedLogo = () => {
     const { data: userData } = useQuery(GET_USER_INFO);

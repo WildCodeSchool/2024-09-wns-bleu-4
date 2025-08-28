@@ -123,7 +123,8 @@ export type Mutation = {
   refuseContactRequest: Contact;
   register: Scalars['String']['output'];
   removeContact: Scalars['Boolean']['output'];
-  resetSendCode: Scalars['String']['output'];
+  resetPassword: Scalars['String']['output'];
+  resetPasswordSendCode: Scalars['String']['output'];
   sendContactRequest: Contact;
   updateProfilePicture: User;
   updateUserRole: Scalars['String']['output'];
@@ -266,7 +267,13 @@ export type MutationRemoveContactArgs = {
 };
 
 
-export type MutationResetSendCodeArgs = {
+export type MutationResetPasswordArgs = {
+  newPassword: Scalars['String']['input'];
+  token: Scalars['String']['input'];
+};
+
+
+export type MutationResetPasswordSendCodeArgs = {
   email: Scalars['String']['input'];
   lang: Scalars['String']['input'];
 };
@@ -289,6 +296,7 @@ export type MutationUpdateUserRoleArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  checkUserExists: Scalars['Boolean']['output'];
   getAllReports: Array<Report>;
   getAllResources: Array<Resource>;
   getAllUsers: Array<User>;
@@ -310,6 +318,11 @@ export type Query = {
   getUserSubscription?: Maybe<Subscription>;
   getUserTotalFileSize: Scalars['Float']['output'];
   getUsersWithAccess: Array<User>;
+};
+
+
+export type QueryCheckUserExistsArgs = {
+  email: Scalars['String']['input'];
 };
 
 
@@ -773,6 +786,22 @@ export type UpdateProfilePictureMutationVariables = Exact<{
 
 export type UpdateProfilePictureMutation = { __typename?: 'Mutation', updateProfilePicture: { __typename?: 'User', id: string, email: string, profilePicture?: string | null } };
 
+export type ResetPasswordSendCodeMutationVariables = Exact<{
+  email: Scalars['String']['input'];
+  lang: Scalars['String']['input'];
+}>;
+
+
+export type ResetPasswordSendCodeMutation = { __typename?: 'Mutation', resetPasswordSendCode: string };
+
+export type ResetPasswordMutationVariables = Exact<{
+  token: Scalars['String']['input'];
+  newPassword: Scalars['String']['input'];
+}>;
+
+
+export type ResetPasswordMutation = { __typename?: 'Mutation', resetPassword: string };
+
 export type GetAllUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -792,6 +821,13 @@ export type GetUserStatsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetUserStatsQuery = { __typename?: 'Query', getAllUsers: Array<{ __typename?: 'User', id: string, role: UserRole, subscription?: { __typename?: 'Subscription', id: string } | null }> };
+
+export type CheckUserExistsQueryVariables = Exact<{
+  email: Scalars['String']['input'];
+}>;
+
+
+export type CheckUserExistsQuery = { __typename?: 'Query', checkUserExists: boolean };
 
 
 export const SendContactRequestDocument = gql`
@@ -2303,6 +2339,70 @@ export function useUpdateProfilePictureMutation(baseOptions?: Apollo.MutationHoo
 export type UpdateProfilePictureMutationHookResult = ReturnType<typeof useUpdateProfilePictureMutation>;
 export type UpdateProfilePictureMutationResult = Apollo.MutationResult<UpdateProfilePictureMutation>;
 export type UpdateProfilePictureMutationOptions = Apollo.BaseMutationOptions<UpdateProfilePictureMutation, UpdateProfilePictureMutationVariables>;
+export const ResetPasswordSendCodeDocument = gql`
+    mutation ResetPasswordSendCode($email: String!, $lang: String!) {
+  resetPasswordSendCode(email: $email, lang: $lang)
+}
+    `;
+export type ResetPasswordSendCodeMutationFn = Apollo.MutationFunction<ResetPasswordSendCodeMutation, ResetPasswordSendCodeMutationVariables>;
+
+/**
+ * __useResetPasswordSendCodeMutation__
+ *
+ * To run a mutation, you first call `useResetPasswordSendCodeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useResetPasswordSendCodeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [resetPasswordSendCodeMutation, { data, loading, error }] = useResetPasswordSendCodeMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *      lang: // value for 'lang'
+ *   },
+ * });
+ */
+export function useResetPasswordSendCodeMutation(baseOptions?: Apollo.MutationHookOptions<ResetPasswordSendCodeMutation, ResetPasswordSendCodeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ResetPasswordSendCodeMutation, ResetPasswordSendCodeMutationVariables>(ResetPasswordSendCodeDocument, options);
+      }
+export type ResetPasswordSendCodeMutationHookResult = ReturnType<typeof useResetPasswordSendCodeMutation>;
+export type ResetPasswordSendCodeMutationResult = Apollo.MutationResult<ResetPasswordSendCodeMutation>;
+export type ResetPasswordSendCodeMutationOptions = Apollo.BaseMutationOptions<ResetPasswordSendCodeMutation, ResetPasswordSendCodeMutationVariables>;
+export const ResetPasswordDocument = gql`
+    mutation ResetPassword($token: String!, $newPassword: String!) {
+  resetPassword(token: $token, newPassword: $newPassword)
+}
+    `;
+export type ResetPasswordMutationFn = Apollo.MutationFunction<ResetPasswordMutation, ResetPasswordMutationVariables>;
+
+/**
+ * __useResetPasswordMutation__
+ *
+ * To run a mutation, you first call `useResetPasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useResetPasswordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [resetPasswordMutation, { data, loading, error }] = useResetPasswordMutation({
+ *   variables: {
+ *      token: // value for 'token'
+ *      newPassword: // value for 'newPassword'
+ *   },
+ * });
+ */
+export function useResetPasswordMutation(baseOptions?: Apollo.MutationHookOptions<ResetPasswordMutation, ResetPasswordMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ResetPasswordMutation, ResetPasswordMutationVariables>(ResetPasswordDocument, options);
+      }
+export type ResetPasswordMutationHookResult = ReturnType<typeof useResetPasswordMutation>;
+export type ResetPasswordMutationResult = Apollo.MutationResult<ResetPasswordMutation>;
+export type ResetPasswordMutationOptions = Apollo.BaseMutationOptions<ResetPasswordMutation, ResetPasswordMutationVariables>;
 export const GetAllUsersDocument = gql`
     query getAllUsers {
   getAllUsers {
@@ -2478,3 +2578,41 @@ export type GetUserStatsQueryHookResult = ReturnType<typeof useGetUserStatsQuery
 export type GetUserStatsLazyQueryHookResult = ReturnType<typeof useGetUserStatsLazyQuery>;
 export type GetUserStatsSuspenseQueryHookResult = ReturnType<typeof useGetUserStatsSuspenseQuery>;
 export type GetUserStatsQueryResult = Apollo.QueryResult<GetUserStatsQuery, GetUserStatsQueryVariables>;
+export const CheckUserExistsDocument = gql`
+    query CheckUserExists($email: String!) {
+  checkUserExists(email: $email)
+}
+    `;
+
+/**
+ * __useCheckUserExistsQuery__
+ *
+ * To run a query within a React component, call `useCheckUserExistsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCheckUserExistsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCheckUserExistsQuery({
+ *   variables: {
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useCheckUserExistsQuery(baseOptions: Apollo.QueryHookOptions<CheckUserExistsQuery, CheckUserExistsQueryVariables> & ({ variables: CheckUserExistsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CheckUserExistsQuery, CheckUserExistsQueryVariables>(CheckUserExistsDocument, options);
+      }
+export function useCheckUserExistsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CheckUserExistsQuery, CheckUserExistsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CheckUserExistsQuery, CheckUserExistsQueryVariables>(CheckUserExistsDocument, options);
+        }
+export function useCheckUserExistsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<CheckUserExistsQuery, CheckUserExistsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<CheckUserExistsQuery, CheckUserExistsQueryVariables>(CheckUserExistsDocument, options);
+        }
+export type CheckUserExistsQueryHookResult = ReturnType<typeof useCheckUserExistsQuery>;
+export type CheckUserExistsLazyQueryHookResult = ReturnType<typeof useCheckUserExistsLazyQuery>;
+export type CheckUserExistsSuspenseQueryHookResult = ReturnType<typeof useCheckUserExistsSuspenseQuery>;
+export type CheckUserExistsQueryResult = Apollo.QueryResult<CheckUserExistsQuery, CheckUserExistsQueryVariables>;
