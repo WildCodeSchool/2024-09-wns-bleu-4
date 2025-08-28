@@ -714,6 +714,10 @@
             "title": "Forgot Password",
             "description": "Password recovery"
         },
+        "resetPassword": {
+            "title": "Reset Password",
+            "description": "Reset your password"
+        },
         "subscription": {
             "title": "Subscription",
             "description": "Wild Transfer service subscription",
@@ -785,5 +789,33 @@
         "memberDescription": "Platform member",
         "joinedOn": "Member since",
         "unknownDate": "Unknown date"
+    },
+    "password": {
+        "forgot": {
+            "form": {
+                "title": "Forgot Password",
+                "description": "Password recovery",
+                "submit": "Recover password",
+                "email": {
+                    "label": "Email",
+                    "placeholder": "exemple@exemple.com"
+                }
+            }
+        },
+        "reset": {
+            "form": {
+                "title": "Reset Password for {{email}}",
+                "description": "Enter your new password below",
+                "password": {
+                    "label": "Password",
+                    "placeholder": "Your new password"
+                },
+                "confirmPassword": {
+                    "label": "Confirm password",
+                    "placeholder": "Confirm your new password"
+                },
+                "submit": "Reset Password"
+            }
+        }
     }
 }
