@@ -313,7 +313,10 @@ export default function FileUploader({
                                                 preload="metadata"
                                             />
                                         ) : (
-                                            <FileIcon className="w-16 h-16 md:w-20 md:h-20 text-zinc-400" />
+                                            <FilePreview
+                                                fileName={files[0].name}
+                                                className="w-5 h-5 flex-shrink-0"
+                                            />
                                         )}
                                         {files[0].progress === 100 && (
                                             <motion.div
@@ -329,7 +332,10 @@ export default function FileUploader({
                                     <div className="flex-1 min-w-0">
                                         <div className="flex flex-col gap-1 w-full">
                                             <div className="flex items-center gap-2 min-w-0">
-                                                <FileIcon className="w-5 h-5 flex-shrink-0 text-blue-500 dark:text-blue-400" />
+                                            <FilePreview
+                                                fileName={files[0].name}
+                                                className="w-5 h-5 flex-shrink-0"
+                                            />
                                                 <h4
                                                     className="font-medium text-base md:text-lg truncate text-zinc-800 dark:text-zinc-200"
                                                     title={files[0].name}
