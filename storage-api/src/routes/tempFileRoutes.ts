@@ -19,7 +19,7 @@ tempFileRoutes.get('/temp/:tempId', getTempFile);
 tempFileRoutes.get('/temp/:tempId/info', getTempFileInfo);
 
 // Admin route for manual cleanup (for testing/debugging)
-tempFileRoutes.post('/temp/cleanup', (req, res) => {
+tempFileRoutes.post('/temp/cleanup', (_req, res) => {
     try {
         manualCleanup();
         res.json({ message: 'Manual cleanup completed successfully' });
