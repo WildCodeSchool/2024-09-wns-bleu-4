@@ -628,7 +628,8 @@
         },
         "preview": {
             "audio": "Votre navigateur ne supporte pas la lecture audio",
-            "video": "Votre navigateur ne supporte pas la lecture vidéo"
+            "video": "Votre navigateur ne supporte pas la lecture vidéo",
+            "pdf": "PDF non disponible"
         }
     },
     "meta": {

@@ -1,5 +1,6 @@
 import { getFileTypeInfo } from '@/utils/fileUtils';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface FilePreviewProps {
     fileName: string;
@@ -12,6 +13,7 @@ const FilePreview: React.FC<FilePreviewProps> = ({
     fileUrl,
     className = 'h-14 w-14 flex-shrink-0',
 }) => {
+    const { t } = useTranslation();
     const fileTypeInfo = getFileTypeInfo(fileName);
     const IconComponent = fileTypeInfo.icon;
     const [imageError, setImageError] = useState(false);
@@ -69,7 +71,7 @@ const FilePreview: React.FC<FilePreviewProps> = ({
                     onError={() => setPdfError(true)}
                 >
                     <div className="w-full h-full flex items-center justify-center text-sm text-muted-foreground">
-                        PDF non disponible
+                        {t('fileCard.preview.pdf')}
                     </div>
                 </object>
             </div>
