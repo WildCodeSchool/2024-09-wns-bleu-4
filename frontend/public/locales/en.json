@@ -620,7 +620,8 @@
         },
         "preview": {
             "audio": "Your browser does not support audio playback",
-            "video": "Your browser does not support video playback"
+            "video": "Your browser does not support video playback",
+            "pdf": "PDF not available"
         }
     },
     "meta": {

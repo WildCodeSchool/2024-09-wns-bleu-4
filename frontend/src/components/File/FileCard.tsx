@@ -1,3 +1,4 @@
+import FilePreview from '@/components/FilePreview';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import {
@@ -11,7 +12,6 @@ import UserHoverCard from '@/components/UserHoverCard';
 import { Contact } from '@/generated/graphql-types';
 import {
     Download,
-    FileText,
     Flag,
     Info,
     MoreVertical,
@@ -67,10 +67,10 @@ const FileCard: React.FC<FileCardProps> = ({
     return (
         <>
             <Card className="hover:shadow-md transition-shadow">
-                <CardContent className="p-4">
+                <CardContent>
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3 flex-1 min-w-0">
-                            <FileText className="h-8 w-8 text-muted-foreground flex-shrink-0" />
+                            <FilePreview fileName={name} fileUrl={url} />
                             <div className="min-w-0 flex-1">
                                 <h3 className="font-semibold text-sm truncate mb-1">
                                     {name}
@@ -129,6 +129,12 @@ const FileCard: React.FC<FileCardProps> = ({
                                     align="end"
                                     className="w-48"
                                 >
+                                    <DropdownMenuItem onClick={handleDownload}>
+                                        <Download className="h-4 w-4 mr-2" />
+                                        {t('fileCard.download')}
+                                    </DropdownMenuItem>
+
+                                    <DropdownMenuSeparator />
                                     <FileInfoDialog
                                         trigger={
                                             <DropdownMenuItem
@@ -141,6 +147,7 @@ const FileCard: React.FC<FileCardProps> = ({
                                             </DropdownMenuItem>
                                         }
                                         fileName={name}
+                                        fileUrl={url}
                                         fileSize={formattedSize}
                                         description={description}
                                         owner={owner}

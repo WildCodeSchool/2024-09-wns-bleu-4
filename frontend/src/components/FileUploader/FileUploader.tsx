@@ -1,12 +1,8 @@
+import FilePreview from '@/components/FilePreview';
+import { formatFileSize } from '@/utils/fileUtils';
 import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
-import {
-    CheckCircle,
-    File as FileIcon,
-    Loader,
-    Trash2,
-    UploadCloud,
-} from 'lucide-react';
+import { CheckCircle, Loader, Trash2, UploadCloud } from 'lucide-react';
 import { ChangeEvent, DragEvent, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -111,14 +107,6 @@ export default function FileUploader({
         onFileChange(null);
         onFileSizeChange(null);
         onDescriptionChange('');
-    };
-
-    const formatFileSize = (bytes: number): string => {
-        if (!bytes) return '0 Bytes';
-        const k = 1024;
-        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return `${(bytes / Math.pow(k, i)).toFixed(2)} ${sizes[i]}`;
     };
 
     const defaultAcceptedTypes = {
@@ -278,25 +266,11 @@ export default function FileUploader({
                             >
                                 {/* Thumbnail */}
                                 <div className="relative flex-shrink-0">
-                                    {files[0].type.startsWith('image/') ? (
-                                        <img
-                                            src={files[0].preview}
-                                            alt={files[0].name}
-                                            className="w-16 h-16 md:w-20 md:h-20 rounded-lg object-cover border dark:border-zinc-700 shadow-sm"
-                                        />
-                                    ) : files[0].type.startsWith('video/') ? (
-                                        <video
-                                            src={files[0].preview}
-                                            className="w-16 h-16 md:w-20 md:h-20 rounded-lg object-cover border dark:border-zinc-700 shadow-sm"
-                                            controls={false}
-                                            muted
-                                            loop
-                                            playsInline
-                                            preload="metadata"
-                                        />
-                                    ) : (
-                                        <FileIcon className="w-16 h-16 md:w-20 md:h-20 text-zinc-400" />
-                                    )}
+                                    <FilePreview
+                                        fileName={files[0].name}
+                                        fileUrl={files[0].preview}
+                                        className="w-16 h-16 md:w-20 md:h-20"
+                                    />
                                     {files[0].progress === 100 && (
                                         <motion.div
                                             initial={{ opacity: 0, scale: 0.5 }}
@@ -311,7 +285,10 @@ export default function FileUploader({
                                 <div className="flex-1 min-w-0">
                                     <div className="flex flex-col gap-1 w-full">
                                         <div className="flex items-center gap-2 min-w-0">
-                                            <FileIcon className="w-5 h-5 flex-shrink-0 text-blue-500 dark:text-blue-400" />
+                                            <FilePreview
+                                                fileName={files[0].name}
+                                                className="w-5 h-5 flex-shrink-0"
+                                            />
                                             <h4
                                                 className="font-medium text-base md:text-lg truncate text-zinc-800 dark:text-zinc-200"
                                                 title={files[0].name}
@@ -339,7 +316,9 @@ export default function FileUploader({
                                                         onClick={(e) =>
                                                             removeFile(e)
                                                         }
-                                                        aria-label={t('upload.selectedFile.delete')}
+                                                        aria-label={t(
+                                                            'upload.selectedFile.delete',
+                                                        )}
                                                     />
                                                 )}
                                             </span>
@@ -369,7 +348,9 @@ export default function FileUploader({
 
                                     <div className="mt-4">
                                         <textarea
-                                            placeholder={t('upload.description.placeholder')}
+                                            placeholder={t(
+                                                'upload.description.placeholder',
+                                            )}
                                             value={description}
                                             onChange={(e) =>
                                                 onDescriptionChange(
@@ -382,7 +363,9 @@ export default function FileUploader({
                                             required
                                         />
                                         <div className="flex justify-end mt-1 text-xs text-zinc-500">
-                                            {t('upload.description.charCount', { count: description.length })}
+                                            {t('upload.description.charCount', {
+                                                count: description.length,
+                                            })}
                                         </div>
                                     </div>
                                 </div>

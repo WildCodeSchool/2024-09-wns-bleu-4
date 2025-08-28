@@ -1,3 +1,4 @@
+import FilePreview from '@/components/FilePreview';
 import {
     Dialog,
     DialogContent,
@@ -13,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 interface FileInfoDialogProps {
     trigger: React.ReactNode;
     fileName: string;
+    fileUrl?: string;
     fileSize?: string;
     description?: string;
     owner?: {
@@ -25,6 +27,7 @@ interface FileInfoDialogProps {
 const FileInfoDialog: React.FC<FileInfoDialogProps> = ({
     trigger,
     fileName,
+    fileUrl,
     fileSize,
     description,
     owner,
@@ -43,6 +46,13 @@ const FileInfoDialog: React.FC<FileInfoDialogProps> = ({
                     </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4">
+                    {fileUrl && (
+                        <FilePreview
+                            fileName={fileName}
+                            fileUrl={fileUrl}
+                            className="h-fit"
+                        />
+                    )}
                     <div className="space-y-2">
                         <Label className="text-sm font-medium">
                             {t('fileCard.info.name')}

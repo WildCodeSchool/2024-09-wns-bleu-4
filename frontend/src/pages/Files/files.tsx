@@ -1,12 +1,12 @@
 import FileSection from '@/components/File/FileSection';
 import { Loader } from '@/components/Loader';
 import { Button } from '@/components/ui/button';
+import { useAuthContext } from '@/context/useAuthContext';
 import {
     GET_RESOURCES_BY_USER_ID,
     GET_SHARED_RESOURCES,
 } from '@/graphql/Resource/queries';
 import { GET_USER_ID } from '@/graphql/User/queries';
-import { useAuthContext } from '@/context/useAuthContext';
 import { useMyContacts } from '@/hooks/useMyContacts';
 import { useQuery } from '@apollo/client';
 import { FolderOpen, Plus, Users } from 'lucide-react';
@@ -36,7 +36,7 @@ const FilesPage: React.FC = () => {
     if (loading) {
         return (
             <div className="flex justify-center items-center min-h-[400px]">
-                <Loader size={50} />
+                <Loader />
             </div>
         );
     }
