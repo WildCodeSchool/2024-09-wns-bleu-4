@@ -49,6 +49,13 @@ const Layout = () => {
                 <ToastContainer
                     position="bottom-right"
                     theme={theme === 'dark' ? 'light' : 'dark'}
+                    limit={3}
+                    newestOnTop={true}
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    closeOnClick={true}
+                    pauseOnHover={true}
+                    draggable={true}
                 />
             </main>
         </ThemeProvider>
