@@ -160,7 +160,6 @@ jobs:
 
       - name: Install WebKit dependencies
         run: |
-          sudo apt-get update
           sudo apt-get install -y \
             libgtk-4-1 \
             libgraphene-1.0-0 \
