@@ -8,20 +8,7 @@ import { RESET_PASSWORD } from '@/graphql/User/mutations';
 import { toast } from 'react-toastify';
 import { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-
-// Simple JWT decode function (without verification - just for display)
-const decodeJWT = (token: string) => {
-    try {
-        const base64Url = token.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        }).join(''));
-        return JSON.parse(jsonPayload);
-    } catch {
-        return null;
-    }
-};
+import { decodeJWT } from '@/utils/globalUtils';
 
 const ResetPassword = () => {
     const { t } = useTranslation();
