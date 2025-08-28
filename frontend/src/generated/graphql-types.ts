@@ -296,6 +296,7 @@ export type MutationUpdateUserRoleArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  checkUserExists: Scalars['Boolean']['output'];
   getAllReports: Array<Report>;
   getAllResources: Array<Resource>;
   getAllUsers: Array<User>;
@@ -317,6 +318,11 @@ export type Query = {
   getUserSubscription?: Maybe<Subscription>;
   getUserTotalFileSize: Scalars['Float']['output'];
   getUsersWithAccess: Array<User>;
+};
+
+
+export type QueryCheckUserExistsArgs = {
+  email: Scalars['String']['input'];
 };
 
 
@@ -815,6 +821,13 @@ export type GetUserStatsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetUserStatsQuery = { __typename?: 'Query', getAllUsers: Array<{ __typename?: 'User', id: string, role: UserRole, subscription?: { __typename?: 'Subscription', id: string } | null }> };
+
+export type CheckUserExistsQueryVariables = Exact<{
+  email: Scalars['String']['input'];
+}>;
+
+
+export type CheckUserExistsQuery = { __typename?: 'Query', checkUserExists: boolean };
 
 
 export const SendContactRequestDocument = gql`
@@ -2565,3 +2578,41 @@ export type GetUserStatsQueryHookResult = ReturnType<typeof useGetUserStatsQuery
 export type GetUserStatsLazyQueryHookResult = ReturnType<typeof useGetUserStatsLazyQuery>;
 export type GetUserStatsSuspenseQueryHookResult = ReturnType<typeof useGetUserStatsSuspenseQuery>;
 export type GetUserStatsQueryResult = Apollo.QueryResult<GetUserStatsQuery, GetUserStatsQueryVariables>;
+export const CheckUserExistsDocument = gql`
+    query CheckUserExists($email: String!) {
+  checkUserExists(email: $email)
+}
+    `;
+
+/**
+ * __useCheckUserExistsQuery__
+ *
+ * To run a query within a React component, call `useCheckUserExistsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCheckUserExistsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCheckUserExistsQuery({
+ *   variables: {
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useCheckUserExistsQuery(baseOptions: Apollo.QueryHookOptions<CheckUserExistsQuery, CheckUserExistsQueryVariables> & ({ variables: CheckUserExistsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CheckUserExistsQuery, CheckUserExistsQueryVariables>(CheckUserExistsDocument, options);
+      }
+export function useCheckUserExistsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CheckUserExistsQuery, CheckUserExistsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CheckUserExistsQuery, CheckUserExistsQueryVariables>(CheckUserExistsDocument, options);
+        }
+export function useCheckUserExistsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<CheckUserExistsQuery, CheckUserExistsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<CheckUserExistsQuery, CheckUserExistsQueryVariables>(CheckUserExistsDocument, options);
+        }
+export type CheckUserExistsQueryHookResult = ReturnType<typeof useCheckUserExistsQuery>;
+export type CheckUserExistsLazyQueryHookResult = ReturnType<typeof useCheckUserExistsLazyQuery>;
+export type CheckUserExistsSuspenseQueryHookResult = ReturnType<typeof useCheckUserExistsSuspenseQuery>;
+export type CheckUserExistsQueryResult = Apollo.QueryResult<CheckUserExistsQuery, CheckUserExistsQueryVariables>;
