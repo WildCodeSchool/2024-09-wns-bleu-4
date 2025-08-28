@@ -27,6 +27,7 @@ export interface FileCardProps {
     description?: string;
     formattedSize: string;
     isShared?: boolean;
+    isCompact?: boolean;
     owner?: {
         id: number;
         email: string;

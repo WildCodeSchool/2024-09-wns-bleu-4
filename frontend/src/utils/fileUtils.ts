@@ -16,11 +16,11 @@ export interface FileTypeInfo {
     isImage: boolean;
     isVideo: boolean;
     isPdf: boolean;
+    emoji: string;
 }
 
-export const getFileTypeInfo = (fileName: string): FileTypeInfo => {
-    const extension = fileName.toLowerCase().split('.').pop() || '';
-
+// Fonction interne commune pour déterminer le type de fichier
+const getFileTypeData = (extension: string) => {
     // Images
     const imageExtensions = [
         'jpg',
@@ -39,6 +39,7 @@ export const getFileTypeInfo = (fileName: string): FileTypeInfo => {
             isImage: true,
             isVideo: false,
             isPdf: false,
+            emoji: '🖼️',
         };
     }
 
@@ -60,6 +61,7 @@ export const getFileTypeInfo = (fileName: string): FileTypeInfo => {
             isImage: false,
             isVideo: true,
             isPdf: false,
+            emoji: '🎥',
         };
     }
 
@@ -72,6 +74,7 @@ export const getFileTypeInfo = (fileName: string): FileTypeInfo => {
             isImage: false,
             isVideo: false,
             isPdf: false,
+            emoji: '🎵',
         };
     }
 
@@ -83,6 +86,7 @@ export const getFileTypeInfo = (fileName: string): FileTypeInfo => {
             isImage: false,
             isVideo: false,
             isPdf: true,
+            emoji: '📄',
         };
     }
 
@@ -95,6 +99,7 @@ export const getFileTypeInfo = (fileName: string): FileTypeInfo => {
             isImage: false,
             isVideo: false,
             isPdf: false,
+            emoji: '📊',
         };
     }
 
@@ -126,6 +131,7 @@ export const getFileTypeInfo = (fileName: string): FileTypeInfo => {
             isImage: false,
             isVideo: false,
             isPdf: false,
+            emoji: '💻',
         };
     }
 
@@ -138,6 +144,7 @@ export const getFileTypeInfo = (fileName: string): FileTypeInfo => {
             isImage: false,
             isVideo: false,
             isPdf: false,
+            emoji: '📦',
         };
     }
 
@@ -150,6 +157,7 @@ export const getFileTypeInfo = (fileName: string): FileTypeInfo => {
             isImage: false,
             isVideo: false,
             isPdf: false,
+            emoji: '📝',
         };
     }
 
@@ -160,7 +168,13 @@ export const getFileTypeInfo = (fileName: string): FileTypeInfo => {
         isImage: false,
         isVideo: false,
         isPdf: false,
+        emoji: '📄',
     };
+};
+
+export const getFileTypeInfo = (fileName: string): FileTypeInfo => {
+    const extension = fileName.toLowerCase().split('.').pop() || '';
+    return getFileTypeData(extension);
 };
 
 // Fonction utilitaire pour formater la taille des fichiers
@@ -184,7 +198,6 @@ export const defaultAcceptedFileTypes = {
     'video/*': ['.mp4', '.mov'],
 };
 
-// Fonctions utilitaires pour le drag and drop
 export const createDragAndDropHandlers = (
     setIsDragging: (isDragging: boolean) => void,
     handleFiles: (files: FileList) => void,

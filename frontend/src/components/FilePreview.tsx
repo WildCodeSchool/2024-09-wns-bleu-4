@@ -11,7 +11,7 @@ interface FilePreviewProps {
 const FilePreview: React.FC<FilePreviewProps> = ({
     fileName,
     fileUrl,
-    className = 'h-14 w-14 flex-shrink-0',
+    className = 'h-20 w-20 flex-shrink-0',
 }) => {
     const { t } = useTranslation();
     const fileTypeInfo = getFileTypeInfo(fileName);
@@ -22,9 +22,7 @@ const FilePreview: React.FC<FilePreviewProps> = ({
 
     if (fileTypeInfo.isImage && fileUrl && !imageError) {
         return (
-            <div
-                className={`${className} rounded overflow-hidden border border-border`}
-            >
+            <div className={`${className} rounded overflow-hidden`}>
                 <img
                     src={fileUrl}
                     alt={fileName}
@@ -37,9 +35,7 @@ const FilePreview: React.FC<FilePreviewProps> = ({
 
     if (fileTypeInfo.isVideo && fileUrl && !videoError) {
         return (
-            <div
-                className={`${className} rounded overflow-hidden border border-border`}
-            >
+            <div className={`${className} rounded overflow-hidden`}>
                 <video
                     src={fileUrl}
                     className="w-full h-full object-cover"
@@ -56,9 +52,7 @@ const FilePreview: React.FC<FilePreviewProps> = ({
 
     if (fileTypeInfo.isPdf && fileUrl && !pdfError) {
         return (
-            <div
-                className={`${className} rounded border border-border bg-white`}
-            >
+            <div className={`${className} rounded bg-white`}>
                 <object
                     data={fileUrl}
                     type="application/pdf"
