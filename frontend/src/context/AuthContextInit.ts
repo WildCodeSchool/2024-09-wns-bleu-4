@@ -10,16 +10,16 @@ interface AuthContext {
         storage: {
             bytesUsed: string;
             percentage: number;
-        }
+        };
     } | null;
     isAuth: boolean;
     loading: boolean;
-    refreshAuth: () => void;
+    refreshAuth: () => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContext>({
     user: null,
     isAuth: false,
     loading: true,
-    refreshAuth: () => {},
+    refreshAuth: async () => {},
 });

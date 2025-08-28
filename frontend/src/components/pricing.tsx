@@ -1,16 +1,16 @@
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
+import { useAuth } from '@/hooks/useAuth';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { cn } from '@/utils/globalUtils';
 import NumberFlow from '@number-flow/react';
 import confetti from 'canvas-confetti';
 import { motion } from 'framer-motion';
 import { Check, Star } from 'lucide-react';
-import { useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { buttonVariants } from './ui/variants';
-import { useAuth } from '@/hooks/useAuth';
 
 interface PricingPlan {
     name: string;
@@ -95,16 +95,20 @@ export function Pricing({
                 </label>
                 <span className="ml-2 font-semibold">
                     {t('pricing.yearlyBilling')}{' '}
-                    <span className="text-primary">{t('pricing.save20Percent')}</span>
+                    <span className="text-primary">
+                        {t('pricing.save20Percent')}
+                    </span>
                 </span>
             </div>
 
-            <div className={cn(
-                "grid gap-4",
-                isSinglePlan
-                    ? "grid-cols-1 max-w-2xl mx-auto"
-                    : "grid-cols-1 md:grid-cols-3 sm:grid-cols-2"
-            )}>
+            <div
+                className={cn(
+                    'grid gap-4',
+                    isSinglePlan
+                        ? 'grid-cols-1 max-w-2xl mx-auto'
+                        : 'grid-cols-1 md:grid-cols-3 sm:grid-cols-2',
+                )}
+            >
                 {plans.map((plan, index) => {
                     // Réduction de prix : mensuel / annuel
                     const monthly = Math.max(1, Math.floor(+plan.price / 2));
@@ -152,7 +156,7 @@ export function Pricing({
                                 'flex flex-col',
                                 !plan.isPopular && !isSinglePlan && 'mt-5',
                                 isSinglePlan && 'p-8 lg:p-12',
-                                !isSinglePlan && index === 0 || index === 2
+                                (!isSinglePlan && index === 0) || index === 2
                                     ? 'z-0 transform translate-x-0 translate-y-0 -translate-z-[50px] rotate-y-[10deg]'
                                     : 'z-10',
                                 !isSinglePlan && index === 0 && 'origin-right',
@@ -168,17 +172,22 @@ export function Pricing({
                                 </div>
                             )}
                             <div className="flex-1 flex flex-col">
-                                <p className={cn(
-                                    "text-base font-semibold text-muted-foreground",
-                                    isSinglePlan && "text-lg"
-                                )}>
+                                <p
+                                    className={cn(
+                                        'text-base font-semibold text-muted-foreground',
+                                        isSinglePlan && 'text-lg',
+                                    )}
+                                >
                                     {plan.name}
                                 </p>
                                 <div className="mt-6 flex items-center justify-center gap-x-2">
-                                    <span className={cn(
-                                        "text-5xl font-bold tracking-tight text-foreground",
-                                        isSinglePlan && "text-6xl lg:text-7xl"
-                                    )}>
+                                    <span
+                                        className={cn(
+                                            'text-5xl font-bold tracking-tight text-foreground',
+                                            isSinglePlan &&
+                                                'text-6xl lg:text-7xl',
+                                        )}
+                                    >
                                         <NumberFlow
                                             value={isMonthly ? monthly : annual}
                                             format={{
@@ -195,10 +204,12 @@ export function Pricing({
                                             className="font-variant-numeric: tabular-nums"
                                         />
                                     </span>
-                                    <span className={cn(
-                                        "text-sm font-semibold leading-6 tracking-wide text-muted-foreground",
-                                        isSinglePlan && "text-base"
-                                    )}>
+                                    <span
+                                        className={cn(
+                                            'text-sm font-semibold leading-6 tracking-wide text-muted-foreground',
+                                            isSinglePlan && 'text-base',
+                                        )}
+                                    >
                                         /{' '}
                                         {plan.period === 'Next 3 months'
                                             ? t('pricing.threeMonths')
@@ -206,32 +217,40 @@ export function Pricing({
                                     </span>
                                 </div>
 
-                                <p className={cn(
-                                    "text-xs leading-5 text-muted-foreground",
-                                    isSinglePlan && "text-sm"
-                                )}>
+                                <p
+                                    className={cn(
+                                        'text-xs leading-5 text-muted-foreground',
+                                        isSinglePlan && 'text-sm',
+                                    )}
+                                >
                                     {isMonthly
                                         ? t('pricing.monthlyBilling')
                                         : t('pricing.yearlyBilling')}
                                 </p>
 
-                                <ul className={cn(
-                                    "mt-5 gap-2 flex flex-col",
-                                    isSinglePlan && "mt-8 gap-3"
-                                )}>
+                                <ul
+                                    className={cn(
+                                        'mt-5 gap-2 flex flex-col',
+                                        isSinglePlan && 'mt-8 gap-3',
+                                    )}
+                                >
                                     {plan.features.map((feature, idx) => (
                                         <li
                                             key={idx}
                                             className="flex items-start gap-2"
                                         >
-                                            <Check className={cn(
-                                                "h-4 w-4 text-primary mt-1 flex-shrink-0",
-                                                isSinglePlan && "h-5 w-5"
-                                            )} />
-                                            <span className={cn(
-                                                "text-left",
-                                                isSinglePlan && "text-base"
-                                            )}>
+                                            <Check
+                                                className={cn(
+                                                    'h-4 w-4 text-primary mt-1 flex-shrink-0',
+                                                    isSinglePlan && 'h-5 w-5',
+                                                )}
+                                            />
+                                            <span
+                                                className={cn(
+                                                    'text-left',
+                                                    isSinglePlan && 'text-base',
+                                                )}
+                                            >
                                                 {feature}
                                             </span>
                                         </li>
@@ -243,12 +262,14 @@ export function Pricing({
                                 {user?.isSubscribed ? (
                                     <span
                                         className={cn(
-                                            buttonVariants({ variant: 'outline' }),
+                                            buttonVariants({
+                                                variant: 'outline',
+                                            }),
                                             'group relative w-full gap-2 overflow-hidden text-lg font-semibold tracking-tighter opacity-60 cursor-not-allowed',
                                             plan.isPopular
                                                 ? 'bg-primary text-primary-foreground'
                                                 : 'bg-background text-foreground',
-                                            isSinglePlan && 'text-xl py-4'
+                                            isSinglePlan && 'text-xl py-4',
                                         )}
                                     >
                                         {t('subscription.alreadySubscribed')}
@@ -257,22 +278,26 @@ export function Pricing({
                                     <Link
                                         to={plan.href}
                                         className={cn(
-                                            buttonVariants({ variant: 'outline' }),
+                                            buttonVariants({
+                                                variant: 'outline',
+                                            }),
                                             'group relative w-full gap-2 overflow-hidden text-lg font-semibold tracking-tighter',
                                             'transform-gpu ring-offset-current transition-all duration-300 ease-out hover:ring-2 hover:ring-primary hover:ring-offset-1 hover:bg-primary hover:text-primary-foreground',
                                             plan.isPopular
                                                 ? 'bg-primary text-primary-foreground'
                                                 : 'bg-background text-foreground',
-                                            isSinglePlan && 'text-xl py-4'
+                                            isSinglePlan && 'text-xl py-4',
                                         )}
                                     >
                                         {plan.buttonText}
                                     </Link>
                                 )}
-                                <p className={cn(
-                                    "mt-6 text-xs leading-5 text-muted-foreground",
-                                    isSinglePlan && "text-sm mt-8"
-                                )}>
+                                <p
+                                    className={cn(
+                                        'mt-6 text-xs leading-5 text-muted-foreground',
+                                        isSinglePlan && 'text-sm mt-8',
+                                    )}
+                                >
                                     {plan.description}
                                 </p>
                             </div>

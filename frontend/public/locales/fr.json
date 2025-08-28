@@ -59,6 +59,8 @@
         "actions": {
             "addFiles": "Ajouter des fichiers"
         },
+        "compactMode": "Mode réduit",
+        "toggleCompactMode": "Basculer en mode réduit",
         "errors": {
             "invalidResourceId": "ID de ressource non valide",
             "deleting": "Suppression en cours...",

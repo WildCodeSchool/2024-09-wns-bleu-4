@@ -59,6 +59,8 @@
         "actions": {
             "addFiles": "Add files"
         },
+        "compactMode": "Condensed mode",
+        "toggleCompactMode": "Toggle condensed mode",
         "errors": {
             "invalidResourceId": "Invalid resource ID",
             "deleting": "Deleting...",

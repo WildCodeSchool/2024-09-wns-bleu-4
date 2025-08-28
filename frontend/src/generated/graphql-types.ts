@@ -492,13 +492,13 @@ export type User = {
 
 export type UserInfo = {
   __typename?: 'UserInfo';
-  email: Scalars['String']['output'];
-  id: Scalars['ID']['output'];
+  email?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
   isLoggedIn: Scalars['Boolean']['output'];
   isSubscribed?: Maybe<Scalars['Boolean']['output']>;
   profilePicture?: Maybe<Scalars['String']['output']>;
-  role: UserRole;
-  storage: UserStorage;
+  role?: Maybe<UserRole>;
+  storage?: Maybe<UserStorage>;
 };
 
 export type UserInput = {
@@ -810,12 +810,12 @@ export type GetAllUsersQuery = { __typename?: 'Query', getAllUsers: Array<{ __ty
 export type GetUserInfoQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUserInfoQuery = { __typename?: 'Query', getUserInfo: { __typename?: 'UserInfo', email: string, isLoggedIn: boolean, id: string, isSubscribed?: boolean | null, role: UserRole, profilePicture?: string | null, storage: { __typename?: 'UserStorage', bytesUsed: string, percentage: number } } };
+export type GetUserInfoQuery = { __typename?: 'Query', getUserInfo: { __typename?: 'UserInfo', email?: string | null, isLoggedIn: boolean, id?: string | null, isSubscribed?: boolean | null, role?: UserRole | null, profilePicture?: string | null, storage?: { __typename?: 'UserStorage', bytesUsed: string, percentage: number } | null } };
 
 export type GetUserIdQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUserIdQuery = { __typename?: 'Query', getUserInfo: { __typename?: 'UserInfo', id: string, email: string } };
+export type GetUserIdQuery = { __typename?: 'Query', getUserInfo: { __typename?: 'UserInfo', id?: string | null, email?: string | null } };
 
 export type GetUserStatsQueryVariables = Exact<{ [key: string]: never; }>;
 

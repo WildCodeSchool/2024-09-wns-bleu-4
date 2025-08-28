@@ -25,9 +25,14 @@ const Layout = () => {
     return (
         <ThemeProvider>
             {/* HeaderBands */}
-            {isFeatureEnabled('homeDisclaimer') && !getItem('homeDisclaimerClosed') && (
-                <HeaderBand type="warning" text={t('home.disclaimer')} onClick={handleHomeDisclaimerClose} />
-            )}
+            {isFeatureEnabled('homeDisclaimer') &&
+                !getItem('homeDisclaimerClosed') && (
+                    <HeaderBand
+                        type="warning"
+                        text={t('home.disclaimer')}
+                        onClick={handleHomeDisclaimerClose}
+                    />
+                )}
 
             {/* Main Content */}
             <main>

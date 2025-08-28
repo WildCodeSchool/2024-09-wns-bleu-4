@@ -51,22 +51,22 @@ export class UserInfo {
     @Field(() => Boolean)
     isLoggedIn: boolean;
 
-    @Field(() => String, { nullable: false })
+    @Field(() => String, { nullable: true })
     email?: String;
 
-    @Field(() => ID, { nullable: false })
+    @Field(() => ID, { nullable: true })
     id?: number;
 
     @Field(() => Boolean, { nullable: true })
     isSubscribed?: boolean;
 
-    @Field(() => UserRole, { nullable: false })
+    @Field(() => UserRole, { nullable: true })
     role?: UserRole;
 
     @Field(() => String, { nullable: true })
     profilePicture?: string | null;
 
-    @Field(() => UserStorage, { nullable: false })
+    @Field(() => UserStorage, { nullable: true })
     storage?: UserStorage;
 }
 
