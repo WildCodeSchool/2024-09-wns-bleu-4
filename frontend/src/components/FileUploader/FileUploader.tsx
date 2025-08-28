@@ -1,12 +1,8 @@
+import FilePreview from '@/components/FilePreview';
+import { formatFileSize } from '@/utils/fileUtils';
 import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
-import {
-    CheckCircle,
-    File as FileIcon,
-    Loader,
-    Trash2,
-    UploadCloud,
-} from 'lucide-react';
+import { CheckCircle, Loader, Trash2, UploadCloud } from 'lucide-react';
 import { ChangeEvent, DragEvent, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CREATE_RESOURCE } from '@/graphql/Resource/mutations';
@@ -110,14 +106,6 @@ export default function FileUploader({
         e.stopPropagation();
         setFiles([]);
         setDescription('');
-    };
-
-    const formatFileSize = (bytes: number): string => {
-        if (!bytes) return '0 Bytes';
-        const k = 1024;
-        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return `${(bytes / Math.pow(k, i)).toFixed(2)} ${sizes[i]}`;
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -391,7 +379,7 @@ export default function FileUploader({
                                                 )}
                                             />
                                         </div>
-
+                                      
                                         <div className="mt-4">
                                             <textarea
                                                 placeholder={t('upload.description.placeholder')}

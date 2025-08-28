@@ -259,12 +259,24 @@
             },
             "actions": {
                 "delete": "Supprimer"
+            },
+            "role": {
+                "success": "Rôle utilisateur mis à jour avec succès",
+                "error": "Erreur lors de la mise à jour du rôle"
+            },
+            "delete": {
+                "title": "Supprimer l'utilisateur",
+                "description": "Êtes-vous sûr de vouloir supprimer l'utilisateur {{email}} ? Cette action est irréversible.",
+                "confirm": "Supprimer",
+                "success": "Utilisateur supprimé avec succès",
+                "error": "Erreur lors de la suppression de l'utilisateur"
             }
         },
         "files": {
             "title": "Gestion des fichiers",
             "description": "Surveiller et gérer les fichiers téléchargés et le stockage",
             "viewAll": "Voir tous les fichiers",
+            "sharedBy": "Partagé par",
             "search": {
                 "placeholder": "Rechercher un fichier par nom..."
             },
@@ -276,6 +288,16 @@
                 "title": "Liste des fichiers",
                 "empty": "Aucun fichier trouvé",
                 "noResults": "Aucun fichier ne correspond à votre recherche"
+            },
+            "actions": {
+                "download": "Télécharger",
+                "delete": "Supprimer",
+                "downloadSuccess": "Fichier téléchargé avec succès"
+            },
+            "delete": {
+                "description": "Êtes-vous sûr de vouloir supprimer le fichier \"{{name}}\" ? Cette action est irréversible.",
+                "success": "Fichier supprimé avec succès",
+                "error": "Erreur lors de la suppression du fichier"
             }
         },
         "reports": {
@@ -292,6 +314,12 @@
                 "title": "Liste des signalements",
                 "empty": "Aucun signalement trouvé",
                 "noResults": "Aucun signalement ne correspond à votre recherche"
+            },
+            "details": {
+                "reporter": "Signalé par",
+                "fileName": "Nom du fichier",
+                "fileOwner": "Propriétaire du fichier",
+                "content": "Détails du signalement"
             }
         },
         "logs": {
@@ -462,7 +490,8 @@
         "details": {
             "reporter": "Auteur du rapport",
             "fileOwner": "Propriétaire du fichier",
-            "fileName": "Nom du fichier"
+            "fileName": "Nom du fichier",
+            "content": "Détails du signalement"
         },
         "reasons": {
             "corrupted": "Fichier corrompu ou illisible",
@@ -660,7 +689,8 @@
         },
         "preview": {
             "audio": "Votre navigateur ne supporte pas la lecture audio",
-            "video": "Votre navigateur ne supporte pas la lecture vidéo"
+            "video": "Votre navigateur ne supporte pas la lecture vidéo",
+            "pdf": "PDF non disponible"
         }
     },
     "meta": {

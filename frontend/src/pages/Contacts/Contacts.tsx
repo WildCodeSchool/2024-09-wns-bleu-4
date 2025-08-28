@@ -57,9 +57,15 @@ const Contacts = () => {
 
             <Tabs defaultValue="requests" className="w-full">
                 <TabsList className="mb-6">
-                    <TabsTrigger value="requests">{t('contact.tabs.received')}</TabsTrigger>
-                    <TabsTrigger value="contacts">{t('contact.tabs.contacts')}</TabsTrigger>
-                    <TabsTrigger value="sent">{t('contact.tabs.sent')}</TabsTrigger>
+                    <TabsTrigger value="requests">
+                        {t('contact.tabs.received')}
+                    </TabsTrigger>
+                    <TabsTrigger value="contacts">
+                        {t('contact.tabs.contacts')}
+                    </TabsTrigger>
+                    <TabsTrigger value="sent">
+                        {t('contact.tabs.sent')}
+                    </TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="requests" className="space-y-8">

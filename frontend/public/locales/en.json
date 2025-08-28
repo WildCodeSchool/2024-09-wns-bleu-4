@@ -259,12 +259,24 @@
             },
             "actions": {
                 "delete": "Delete"
+            },
+            "role": {
+                "success": "User role updated successfully",
+                "error": "Error updating user role"
+            },
+            "delete": {
+                "title": "Delete User",
+                "description": "Are you sure you want to delete the user {{email}}? This action is irreversible.",
+                "confirm": "Delete",
+                "success": "User deleted successfully",
+                "error": "Error deleting user"
             }
         },
         "files": {
             "title": "File Management",
             "description": "Monitor and manage uploaded files and storage",
             "viewAll": "View All Files",
+            "sharedBy": "Shared by",
             "search": {
                 "placeholder": "Search for a file by name..."
             },
@@ -276,6 +288,16 @@
                 "title": "File list",
                 "empty": "No files found",
                 "noResults": "No files match your search"
+            },
+            "actions": {
+                "download": "Download",
+                "delete": "Delete",
+                "downloadSuccess": "File downloaded successfully"
+            },
+            "delete": {
+                "description": "Are you sure you want to delete the file \"{{name}}\"? This action is irreversible.",
+                "success": "File deleted successfully",
+                "error": "Error deleting file"
             }
         },
         "reports": {
@@ -292,6 +314,12 @@
                 "title": "Report list",
                 "empty": "No reports found",
                 "noResults": "No reports match your search"
+            },
+            "details": {
+                "reporter": "Reported by",
+                "fileName": "File name",
+                "fileOwner": "File owner",
+                "content": "Report details"
             }
         },
         "logs": {
@@ -461,7 +489,8 @@
         "details": {
             "reporter": "Reported by",
             "fileOwner": "File owner",
-            "fileName": "File name"
+            "fileName": "File name",
+            "content": "Report details"
         },
         "reasons": {
             "corrupted": "Corrupted file",
@@ -652,7 +681,8 @@
         },
         "preview": {
             "audio": "Your browser does not support audio playback",
-            "video": "Your browser does not support video playback"
+            "video": "Your browser does not support video playback",
+            "pdf": "PDF not available"
         }
     },
     "meta": {
