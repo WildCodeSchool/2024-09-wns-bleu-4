@@ -44,9 +44,9 @@ const FilesPage: React.FC = () => {
     const myFiles = resources?.getResourcesByUserId || [];
     const sharedFiles = sharedResources?.getUserSharedResources || [];
 
-    const handleFileDeleted = () => {
+    const handleFileDeleted = async () => {
         refetchMyFiles();
-        refreshAuth();
+        await refreshAuth();
     };
 
     return (

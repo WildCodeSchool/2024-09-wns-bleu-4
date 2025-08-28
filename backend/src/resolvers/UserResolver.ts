@@ -4,7 +4,10 @@ import { Resource } from '@/entities/Resource';
 import { LogType } from '@/entities/SystemLog';
 import { TempUser, User, UserRole, UserStorage } from '@/entities/User';
 import SystemLogResolver from '@/resolvers/SystemLogResolver';
-import { calculateStoragePercentage, formatFileSize } from '@/utils/storageUtils';
+import {
+    calculateStoragePercentage,
+    formatFileSize,
+} from '@/utils/storageUtils';
 import * as argon2 from 'argon2';
 import { IsEmail, Length, Matches } from 'class-validator';
 import jwt, { Secret } from 'jsonwebtoken';
@@ -47,22 +50,22 @@ export class UserInfo {
     @Field(() => Boolean)
     isLoggedIn: boolean;
 
-    @Field(() => String, { nullable: false })
+    @Field(() => String, { nullable: true })
     email?: String;
 
-    @Field(() => ID, { nullable: false })
+    @Field(() => ID, { nullable: true })
     id?: number;
 
     @Field(() => Boolean, { nullable: true })
     isSubscribed?: boolean;
 
-    @Field(() => UserRole, { nullable: false })
+    @Field(() => UserRole, { nullable: true })
     role?: UserRole;
 
     @Field(() => String, { nullable: true })
     profilePicture?: string | null;
 
-    @Field(() => UserStorage, { nullable: false })
+    @Field(() => UserStorage, { nullable: true })
     storage?: UserStorage;
 }
 
@@ -191,7 +194,7 @@ class UserResolver {
                 const token = jwt.sign(
                     { email: user.email, userRole: user.role },
                     process.env.JWT_SECRET_KEY as Secret,
-                    { expiresIn: '1h' }
+                    { expiresIn: '1h' },
                 );
                 context.res.setHeader(
                     'Set-Cookie',
@@ -236,10 +239,13 @@ class UserResolver {
                     .select('SUM(resource.size)', 'totalSize')
                     .where('resource.user.id = :userId', { userId: user.id })
                     .getRawOne();
-                
-                const totalBytesUsed = result?.totalSize ? Number(result.totalSize) : 0;
-                const storagePercentage = calculateStoragePercentage(totalBytesUsed);
-                
+
+                const totalBytesUsed = result?.totalSize
+                    ? Number(result.totalSize)
+                    : 0;
+                const storagePercentage =
+                    calculateStoragePercentage(totalBytesUsed);
+
                 return {
                     isLoggedIn: true,
                     email: context.email,

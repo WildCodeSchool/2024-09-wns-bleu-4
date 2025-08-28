@@ -44,7 +44,7 @@ const HeaderMobile = () => {
 
     const handleLogout = async () => {
         await logout();
-        refreshAuth();
+        await refreshAuth();
         toast.success(t('auth.logoutSuccess'));
         navigate('/');
     };

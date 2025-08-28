@@ -2,9 +2,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
-import { useTranslation } from 'react-i18next';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Input } from '../ui/input';
@@ -44,14 +44,16 @@ const Form = ({ title, onSubmit, loading, links, error }: FormProps) => {
     });
 
     const submitForm = async (data: FormData) => {
-        await onSubmit(data.email, data.password)
-            .then((res) => {
-                console.log(res);
-            })
-            .catch((error) => {
-                toast.error(error.message);
-                throw new Error(error.message);
-            });
+        try {
+            await onSubmit(data.email, data.password);
+        } catch (error) {
+            const errorMessage =
+                error instanceof Error
+                    ? error.message
+                    : 'Une erreur est survenue';
+            toast.error(errorMessage);
+            throw new Error(errorMessage);
+        }
     };
 
     return (
@@ -69,7 +71,9 @@ const Form = ({ title, onSubmit, loading, links, error }: FormProps) => {
                     data-testid="form"
                 >
                     <div className="space-y-2">
-                        <Label htmlFor="email">{t('auth.form.email.label')}</Label>
+                        <Label htmlFor="email">
+                            {t('auth.form.email.label')}
+                        </Label>
                         <Input
                             id="email"
                             type="email"
@@ -84,12 +88,16 @@ const Form = ({ title, onSubmit, loading, links, error }: FormProps) => {
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="password">{t('auth.form.password.label')}</Label>
+                        <Label htmlFor="password">
+                            {t('auth.form.password.label')}
+                        </Label>
                         <div className="relative">
                             <Input
                                 id="password"
                                 type={showPassword ? 'text' : 'password'}
-                                placeholder={t('auth.form.password.placeholder')}
+                                placeholder={t(
+                                    'auth.form.password.placeholder',
+                                )}
                                 className="pr-10"
                                 {...register('password')}
                             />
@@ -115,7 +123,10 @@ const Form = ({ title, onSubmit, loading, links, error }: FormProps) => {
                             </Button>
                         </div>
                         {errors.password && (
-                            <span className="text-sm text-red-500" data-testid="password-error">
+                            <span
+                                className="text-sm text-red-500"
+                                data-testid="password-error"
+                            >
                                 {errors.password.message}
                             </span>
                         )}
@@ -130,7 +141,9 @@ const Form = ({ title, onSubmit, loading, links, error }: FormProps) => {
                         type="submit"
                         className="mt-2 cursor-pointer"
                     >
-                        {loading ? t('auth.form.loading', { action: title }) : t('auth.form.submit')}
+                        {loading
+                            ? t('auth.form.loading', { action: title })
+                            : t('auth.form.submit')}
                     </Button>
 
                     {links && (

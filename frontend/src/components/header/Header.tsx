@@ -1,8 +1,8 @@
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import Logo from '@/components/Logo';
 import { ModeToggle } from '@/components/mode-toggle';
-import SubscribedLogo from '@/components/SubscribedLogo';
 import StorageProgress from '@/components/StorageProgress';
+import SubscribedLogo from '@/components/SubscribedLogo';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -16,6 +16,7 @@ import { NavigationMenu } from '@/components/ui/navigation-menu';
 import { UserAvatar } from '@/components/UserAvatar';
 import { useAuthContext } from '@/context/useAuthContext';
 import { useLogoutMutation } from '@/generated/graphql-types';
+import { useAuth } from '@/hooks/useAuth';
 import {
     ChevronDown,
     CreditCard,
@@ -33,7 +34,6 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useAuth } from '@/hooks/useAuth';
 
 const Header = () => {
     const [logout] = useLogoutMutation();
@@ -44,7 +44,7 @@ const Header = () => {
 
     const handleLogout = async () => {
         await logout();
-        refreshAuth();
+        await refreshAuth();
         toast.success(t('auth.logoutSuccess'));
         navigate('/');
     };
@@ -250,16 +250,17 @@ const Header = () => {
 
             <div className="flex items-center gap-4">
                 <DropdownMenu>
-                    {isAuth && (
-                        user?.isSubscribed ? (
+                    {isAuth &&
+                        (user?.isSubscribed ? (
                             <SubscribedLogo />
                         ) : (
                             <StorageProgress
-                                bytesUsed={user?.storage?.bytesUsed ?? '0 Bytes'}
+                                bytesUsed={
+                                    user?.storage?.bytesUsed ?? '0 Bytes'
+                                }
                                 percentage={user?.storage?.percentage ?? 0}
                             />
-                        )
-                    )}
+                        ))}
                     <DropdownMenuTrigger asChild>
                         <Button
                             variant="ghost"
