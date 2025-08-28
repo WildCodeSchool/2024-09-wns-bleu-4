@@ -5,7 +5,7 @@ import { ThemeProvider } from '@/components/themeProvider';
 import { useEnv } from '@/hooks/useEnv';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { useTheme } from '@/hooks/useTheme';
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils/globalUtils';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';

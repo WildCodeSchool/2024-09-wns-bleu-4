@@ -26,7 +26,12 @@
             }
         },
         "actions": {
-            "save": "Save"
+            "save": "Save",
+            "changePassword": {
+                "label": "Change password",
+                "description": "You will be sent an email with a link to reset your password",
+                "mailSent": "Email sent !"
+            }
         },
         "avatar": {
             "tooltip": "Click to change your profile picture",
@@ -714,6 +719,10 @@
             "title": "Forgot Password",
             "description": "Password recovery"
         },
+        "resetPassword": {
+            "title": "Reset Password",
+            "description": "Reset your password"
+        },
         "subscription": {
             "title": "Subscription",
             "description": "Wild Transfer service subscription",
@@ -785,5 +794,38 @@
         "memberDescription": "Platform member",
         "joinedOn": "Member since",
         "unknownDate": "Unknown date"
+    },
+    "password": {
+        "forgot": {
+            "form": {
+                "title": "Forgot Password",
+                "description": "Password recovery",
+                "submit": "Recover password",
+                "email": {
+                    "label": "Email",
+                    "placeholder": "exemple@exemple.com"
+                }
+            }
+        },
+        "reset": {
+            "form": {
+                "title": "Reset Password for {{email}}",
+                "description": "Enter your new password below",
+                "password": {
+                    "label": "Password",
+                    "placeholder": "Your new password"
+                },
+                "confirmPassword": {
+                    "label": "Confirm password",
+                    "placeholder": "Confirm your new password"
+                },
+                "submit": "Reset Password",
+                "invalidLink": "Invalid reset link",
+                "passwordsDoNotMatch": "Passwords do not match",
+                "passwordTooShort": "Password must be at least 12 characters long",
+                "success": "Password has been reset successfully!"
+            },
+            "loading": "Loading..."
+        }
     }
 }

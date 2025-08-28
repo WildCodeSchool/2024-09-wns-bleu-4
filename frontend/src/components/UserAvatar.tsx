@@ -1,5 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils/globalUtils';
 import { useTranslation } from 'react-i18next';
 
 interface UserAvatarProps {

@@ -5,7 +5,7 @@ import {
     PopoverTrigger,
 } from '@/components/ui/popover';
 import { useEffect, useState } from 'react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils/globalUtils';
 
 const StorageProgress = ({
     bytesUsed,
