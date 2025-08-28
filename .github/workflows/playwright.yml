@@ -54,24 +54,6 @@ jobs:
           timeout 60 bash -c 'until docker compose exec -T db pg_isready -U postgres; do sleep 2; done'
           echo "Database is ready!"
 
-      - name: Wait for backend to be ready
-        run: |
-          echo "Waiting for backend to be ready..."
-          timeout 60 bash -c 'until docker compose exec -T backend curl -f http://localhost:4000 > /dev/null 2>&1; do sleep 2; done'
-          echo "Backend is ready!"
-
-      - name: Wait for frontend to be ready
-        run: |
-          echo "Waiting for frontend to be ready..."
-          timeout 60 bash -c 'until docker compose exec -T frontend curl -f http://localhost:5173 > /dev/null 2>&1; do sleep 2; done'
-          echo "Frontend is ready!"
-
-      - name: Wait for nginx gateway to be ready
-        run: |
-          echo "Waiting for nginx gateway to be ready..."
-          timeout 60 bash -c 'until curl -f http://localhost:7007 > /dev/null 2>&1; do sleep 2; done'
-          echo "Nginx gateway is ready!"
-
       - name: Additional wait for app stability
         run: |
           echo "Waiting additional time for app stability..."
@@ -143,24 +125,6 @@ jobs:
         timeout 60 bash -c 'until docker compose exec -T db pg_isready -U postgres; do sleep 2; done'
         echo "Database is ready!"
 
-    - name: Wait for backend to be ready
-      run: |
-        echo "Waiting for backend to be ready..."
-        timeout 60 bash -c 'until docker compose exec -T backend curl -f http://localhost:4000 > /dev/null 2>&1; do sleep 2; done'
-        echo "Backend is ready!"
-
-    - name: Wait for frontend to be ready
-      run: |
-        echo "Waiting for frontend to be ready..."
-        timeout 60 bash -c 'until docker compose exec -T frontend curl -f http://localhost:5173 > /dev/null 2>&1; do sleep 2; done'
-        echo "Frontend is ready!"
-
-    - name: Wait for nginx gateway to be ready
-      run: |
-        echo "Waiting for nginx gateway to be ready..."
-        timeout 60 bash -c 'until curl -f http://localhost:7007 > /dev/null 2>&1; do sleep 2; done'
-        echo "Nginx gateway is ready!"
-
     - name: Additional wait for app stability
       run: |
         echo "Waiting additional time for app stability..."
@@ -210,8 +174,6 @@ jobs:
           echo "JWT_SECRET_KEY=ci-test-secret-key" >> .env
           echo "RESEND_API_KEY=test-api-key" >> .env
           echo "RESEND_EMAIL_DOMAIN=resend.dev" >> .env
-          echo "DATABASE_URL=postgresql://postgres:example@db:5432/postgres" >> .env
-          echo "NODE_ENV=test" >> .env
 
       - name: Create frontend .env with required variables
         run: |
@@ -233,29 +195,6 @@ jobs:
           echo "Waiting for database to be ready..."
           timeout 60 bash -c 'until docker compose exec -T db pg_isready -U postgres; do sleep 2; done'
           echo "Database is ready!"
-
-      - name: Wait for backend to be ready
-        run: |
-          echo "Waiting for backend to be ready..."
-          timeout 60 bash -c 'until docker compose exec -T backend curl -f http://localhost:4000 > /dev/null 2>&1; do sleep 2; done'
-          echo "Backend is ready!"
-
-      - name: Wait for frontend to be ready
-        run: |
-          echo "Waiting for frontend to be ready..."
-          timeout 60 bash -c 'until docker compose exec -T backend curl -f http://localhost:5173 > /dev/null 2>&1; do sleep 2; done'
-          echo "Frontend is ready!"
-
-      - name: Wait for nginx gateway to be ready
-        run: |
-          echo "Waiting for nginx gateway to be ready..."
-          timeout 60 bash -c 'until curl -f http://localhost:7007 > /dev/null 2>&1; do sleep 2; done'
-          echo "Nginx gateway is ready!"
-
-      - name: Additional wait for app stability
-        run: |
-          echo "Waiting additional time for app stability..."
-          sleep 10
 
       - name: Exécution des tests Playwright - WebKit
         run: |
