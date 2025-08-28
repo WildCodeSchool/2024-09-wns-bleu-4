@@ -9,7 +9,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import UserHoverCard from '@/components/UserHoverCard';
-import { Contact } from '@/generated/graphql-types';
+import { FileCardProps } from '@/types/types';
 import {
     Download,
     Flag,
@@ -24,23 +24,6 @@ import FileDeleteDialog from './FileDeleteDialog';
 import FileInfoDialog from './FileInfoDialog';
 import FileReportDialog from './FileReportDialog';
 import FileShareDialog from './FileShareDialog';
-
-interface FileCardProps {
-    name: string;
-    url: string;
-    id: number;
-    description?: string;
-    formattedSize: string;
-    isShared?: boolean;
-    owner?: {
-        id: number;
-        email: string;
-        createdAt?: string;
-        profilePicture?: string;
-    };
-    onFileDeleted?: () => void;
-    myContacts?: Contact[];
-}
 
 const FileCard: React.FC<FileCardProps> = ({
     name,
