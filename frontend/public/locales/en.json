@@ -282,6 +282,12 @@
                 "title": "Report list",
                 "empty": "No reports found",
                 "noResults": "No reports match your search"
+            },
+            "details": {
+                "reporter": "Reported by",
+                "fileName": "File name",
+                "fileOwner": "File owner",
+                "content": "Report details"
             }
         },
         "logs": {
