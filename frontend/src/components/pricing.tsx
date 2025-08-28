@@ -1,7 +1,7 @@
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils/globalUtils';
 import NumberFlow from '@number-flow/react';
 import confetti from 'canvas-confetti';
 import { motion } from 'framer-motion';
