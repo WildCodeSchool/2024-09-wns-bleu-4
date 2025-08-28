@@ -282,6 +282,12 @@
                 "title": "Liste des signalements",
                 "empty": "Aucun signalement trouvé",
                 "noResults": "Aucun signalement ne correspond à votre recherche"
+            },
+            "details": {
+                "reporter": "Signalé par",
+                "fileName": "Nom du fichier",
+                "fileOwner": "Propriétaire du fichier",
+                "content": "Détails du signalement"
             }
         },
         "logs": {
