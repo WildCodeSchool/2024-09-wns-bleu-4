@@ -815,7 +815,8 @@
                     "placeholder": "Confirm your new password"
                 },
                 "submit": "Reset Password"
-            }
+            },
+            "loading": "Loading..."
         }
     }
 }

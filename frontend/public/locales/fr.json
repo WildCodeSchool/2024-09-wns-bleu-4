@@ -823,7 +823,8 @@
                     "placeholder": "Confirmez votre nouveau mot de passe"
                 },
                 "submit": "Réinitialiser le mot de passe"
-            }
+            },
+            "loading": "Chargement..."
         }
     }
 }
