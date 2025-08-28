@@ -26,7 +26,12 @@
             }
         },
         "actions": {
-            "save": "Save"
+            "save": "Save",
+            "changePassword": {
+                "label": "Change password",
+                "description": "You will be sent an email with a link to reset your password",
+                "mailSent": "Email sent !"
+            }
         },
         "avatar": {
             "tooltip": "Click to change your profile picture",
@@ -814,7 +819,11 @@
                     "label": "Confirm password",
                     "placeholder": "Confirm your new password"
                 },
-                "submit": "Reset Password"
+                "submit": "Reset Password",
+                "invalidLink": "Invalid reset link",
+                "passwordsDoNotMatch": "Passwords do not match",
+                "passwordTooShort": "Password must be at least 12 characters long",
+                "success": "Password has been reset successfully!"
             },
             "loading": "Loading..."
         }
