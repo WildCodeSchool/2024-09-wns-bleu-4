@@ -1,79 +1,101 @@
 # Storage API
 
-API de stockage de fichiers avec authentification JWT.
+A Node.js/Express API for handling file uploads and temporary file sharing.
 
-## Configuration
+## Features
 
-### Variables d'environnement
+- **File Upload**: Secure file upload with authentication
+- **Temporary File Sharing**: Generate temporary links that expire after 24 hours
+- **Automatic Cleanup**: Expired files are automatically removed from storage every 5 minutes
+- **File Management**: Track file metadata, access counts, and expiration times
 
-Créer un fichier `.env` dans le dossier `storage-api` avec :
+## API Endpoints
 
-```env
-# Clé secrète JWT (doit être la même que dans le backend principal)
-JWT_SECRET_KEY=<Entrer une chaine de caractères>
+### Temporary Files (Public)
 
-# Port du serveur (optionnel, par défaut 3001)
-PORT=3000
+- `POST /temp/upload` - Upload a file to generate a temporary link
+- `GET /temp/:tempId` - Download a file using a temporary link
+- `GET /temp/:tempId/info` - Get information about a temporary file
+- `POST /temp/cleanup` - Manually trigger cleanup of expired files (for testing)
+
+### Secure Files (Authenticated)
+
+- `POST /upload` - Upload a file to secure storage
+- `GET /files` - List uploaded files
+- `GET /uploads/:filename` - Download a file
+
+## File Expiration & Cleanup
+
+### Automatic Cleanup
+- **Frequency**: Every 5 minute
+- **Scope**: All expired temporary files
+- **Actions**: 
+  - Removes expired files from disk storage
+  - Updates `temp-links.json` to remove expired entries
+  - Logs cleanup operations
+
+### Manual Cleanup
+- **Endpoint**: `POST /temp/cleanup`
+- **Use Case**: Testing, debugging, or immediate cleanup
+- **Response**: JSON confirmation of cleanup completion
+
+### Expiration Behavior
+- **Default TTL**: 24 hours from upload
+- **Storage**: Files are stored in `uploads/temp/` directory
+- **Metadata**: Tracked in `temp-links.json` with timestamps
+
+## File Storage Structure
+
+```
+storage-api/
+├── uploads/           # Secure file storage
+├── uploads/temp/      # Temporary file storage
+├── temp-links.json    # Temporary file metadata
+└── src/
+    ├── services/
+    │   └── cleanupService.ts  # Automatic cleanup service
+    ├── controllers/
+    │   └── tempFileController.ts  # Temporary file handling
+    └── routes/
+        └── tempFileRoutes.ts   # API routes
 ```
 
-## Installation
+## Development
 
+### Prerequisites
+- Node.js 18+
+- npm or yarn
+
+### Installation
 ```bash
 npm install
 ```
 
-## Démarrage
-
-### Développement
-```bash
-npm run dev
-```
-
-### Production
+### Running the Server
 ```bash
 npm start
 ```
 
-## Routes
+The server will start on port 3000 with automatic cleanup service enabled.
 
-Toutes les routes nécessitent une authentification via cookie JWT.
 
-## Authentification
 
-L'API utilise le même système d'authentification que le backend principal :
-- Vérification du token JWT dans les cookies
-- Support des rôles utilisateur 
-- Middleware `authMiddleware` pour l'authentification de base
+## Configuration
 
-## Logs
+### Cleanup Intervals
+- **Default**: 5 minute
+- **Customizable**: Modify `CLEANUP_INTERVAL` in `cleanupService.ts`
 
-L'API enregistre toutes les actions avec l'email de l'utilisateur :
-- Upload de fichiers
-- Suppression de fichiers
-- Consultation de fichiers
-- Erreurs d'authentification
+### File Expiration
+- **Default TTL**: 24 hours
+- **Customizable**: Modify expiration calculation in `tempFileController.ts`
 
-## Exemple d'utilisation
+## Monitoring
 
-```javascript
-// Upload d'un fichier
-const formData = new FormData();
-formData.append('file', fileInput.files[0]);
+The cleanup service logs all operations:
+- Startup messages
+- Periodic cleanup results
+- File removal confirmations
+- Error handling
 
-fetch('/upload', {
-  method: 'POST',
-  body: formData,
-  credentials: 'include' // Important pour les cookies
-});
-
-// Liste des fichiers
-fetch('/files', {
-  credentials: 'include'
-});
-
-// Suppression d'un fichier (admin uniquement)
-fetch('/delete/filename.ext', {
-  method: 'DELETE',
-  credentials: 'include'
-});
-``` 
+Check console output for cleanup service activity. 

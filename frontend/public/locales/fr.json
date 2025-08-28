@@ -72,6 +72,38 @@
     },
     "upload": {
         "title": "Télécharger un fichier",
+        "page": {
+            "deposit": {
+                "title": "Transférer votre fichier",
+                "description": "Téléchargez un fichier pour le partager avec vos contacts"
+            },
+            "tempLink": {
+                "title": "Générer un lien temporaire",
+                "description": "Téléchargez un fichier pour générer un lien temporaire qui expirera dans 24 heures",
+                "generatedLinks": "Liens générés",
+                "actions": {
+                    "generate": "Générer un lien",
+                    "copy": "Copier le lien",
+                    "view": "Ouvrir dans le navigateur",
+                    "download": "Télécharger le fichier",
+                    "delete": "Supprimer le lien"
+                },
+                "toast": {
+                    "success": "Le lien a été généré avec succès",
+                    "error": "Erreur lors de la génération du lien",
+                    "copy": "Le lien a été copié avec succès",
+                    "delete": "Le lien a été supprimé avec succès"
+                },
+                "type": {
+                    "browser": "Voir dans le navigateur",
+                    "download": "Télécharger uniquement"
+                },
+                "expired": "Expiré",
+                "linkExpired": "Le lien a expiré",
+                "generating": "Génération du lien...",
+                "remaining": "restant"
+            }
+        },
         "dragDrop": {
             "title": "Transférez votre fichier",
             "dropHere": "Déposez le fichier ici",
@@ -92,11 +124,11 @@
             "save": "Enregistrer le fichier"
         },
         "success": {
-            "message": "✅ Le fichier a été envoyé et enregistré avec succès !",
+            "message": "Le fichier a été envoyé et enregistré avec succès !",
             "shareNow": "Partager maintenant"
         },
         "errors": {
-            "upload": "❌ Une erreur s'est produite. Veuillez réessayer.",
+            "upload": "Une erreur s'est produite. Veuillez réessayer.",
             "fileUpload": "Erreur lors de l'upload du fichier",
             "storageLimitExceeded": "❌ Limite de stockage dépassée. Ce fichier dépasserait votre limite de 20MB.",
             "share": {
@@ -227,12 +259,24 @@
             },
             "actions": {
                 "delete": "Supprimer"
+            },
+            "role": {
+                "success": "Rôle utilisateur mis à jour avec succès",
+                "error": "Erreur lors de la mise à jour du rôle"
+            },
+            "delete": {
+                "title": "Supprimer l'utilisateur",
+                "description": "Êtes-vous sûr de vouloir supprimer l'utilisateur {{email}} ? Cette action est irréversible.",
+                "confirm": "Supprimer",
+                "success": "Utilisateur supprimé avec succès",
+                "error": "Erreur lors de la suppression de l'utilisateur"
             }
         },
         "files": {
             "title": "Gestion des fichiers",
             "description": "Surveiller et gérer les fichiers téléchargés et le stockage",
             "viewAll": "Voir tous les fichiers",
+            "sharedBy": "Partagé par",
             "search": {
                 "placeholder": "Rechercher un fichier par nom..."
             },
@@ -244,6 +288,16 @@
                 "title": "Liste des fichiers",
                 "empty": "Aucun fichier trouvé",
                 "noResults": "Aucun fichier ne correspond à votre recherche"
+            },
+            "actions": {
+                "download": "Télécharger",
+                "delete": "Supprimer",
+                "downloadSuccess": "Fichier téléchargé avec succès"
+            },
+            "delete": {
+                "description": "Êtes-vous sûr de vouloir supprimer le fichier \"{{name}}\" ? Cette action est irréversible.",
+                "success": "Fichier supprimé avec succès",
+                "error": "Erreur lors de la suppression du fichier"
             }
         },
         "reports": {
@@ -260,6 +314,12 @@
                 "title": "Liste des signalements",
                 "empty": "Aucun signalement trouvé",
                 "noResults": "Aucun signalement ne correspond à votre recherche"
+            },
+            "details": {
+                "reporter": "Signalé par",
+                "fileName": "Nom du fichier",
+                "fileOwner": "Propriétaire du fichier",
+                "content": "Détails du signalement"
             }
         },
         "logs": {
@@ -430,7 +490,8 @@
         "details": {
             "reporter": "Auteur du rapport",
             "fileOwner": "Propriétaire du fichier",
-            "fileName": "Nom du fichier"
+            "fileName": "Nom du fichier",
+            "content": "Détails du signalement"
         },
         "reasons": {
             "corrupted": "Fichier corrompu ou illisible",
@@ -628,7 +689,8 @@
         },
         "preview": {
             "audio": "Votre navigateur ne supporte pas la lecture audio",
-            "video": "Votre navigateur ne supporte pas la lecture vidéo"
+            "video": "Votre navigateur ne supporte pas la lecture vidéo",
+            "pdf": "PDF non disponible"
         }
     },
     "meta": {
