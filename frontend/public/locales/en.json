@@ -7,7 +7,8 @@
         "cancel": "Cancel",
         "delete": "Delete",
         "add": "Add",
-        "sending": "Sending..."
+        "sending": "Sending...",
+        "sent": "Sent !"
     },
     "profile": {
         "title": "My Profile",
@@ -606,7 +607,8 @@
             "description": "Please check your email to complete your registration.",
             "resendEmail": "Resend email",
             "success": "Your email has been confirmed, you can now log in!",
-            "error": "The entered code is incorrect or has expired, please try again."
+            "error": "The entered code is incorrect or has expired, please try again.",
+            "emailResent": "An email confirmation has been sent to your email address."
         },
         "protectedRoute": {
             "error": "You must be logged in to access this page"
