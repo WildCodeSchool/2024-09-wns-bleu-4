@@ -10,57 +10,61 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    
-    - uses: actions/setup-node@v4
-      with:
-        node-version: lts/*
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
 
-    - name: Installation des dépendances
-      run: |
-        cd playwright
-        npm ci
+      - name: Installation des dépendances
+        run: |
+          cd playwright
+          npm ci
 
-    - name: Installation des navigateurs de Playwright
-      run: |
-        cd playwright
-        npx playwright install chromium
+      - name: Installation des navigateurs de Playwright
+        run: |
+          cd playwright
+          npx playwright install chromium
 
-    - name: Create .env with required variables
-      run: |
-        cd backend
-        echo "JWT_SECRET_KEY=ci-test-secret-key" >> .env
-        echo "RESEND_API_KEY=test-api-key" >> .env
-        echo "RESEND_EMAIL_DOMAIN=resend.dev" >> .env
+      - name: Create .env with required variables
+        run: |
+          cd backend
+          echo "JWT_SECRET_KEY=ci-test-secret-key" >> .env
+          echo "RESEND_API_KEY=test-api-key" >> .env
+          echo "RESEND_EMAIL_DOMAIN=resend.dev" >> .env
 
-    - name: Build Docker containers
-      run: |
-        docker compose up --build -d
-      continue-on-error: false
+      - name: Set up Docker
+        run: |
+              docker --version
 
-    - name: Wait for application to be ready
-      run: |
-        echo "Waiting for application to be ready..."
-        timeout 120 bash -c 'until curl -f http://localhost:7007 > /dev/null 2>&1; do sleep 5; done'
-        echo "Application is ready!"
+      - name: Build Docker containers
+        run: |
+          docker compose up --build -d
+        continue-on-error: false
 
-    - name: Exécution des tests Playwright - Chromium
-      run: |
-        cd playwright
-        npx playwright test --project=chromium
+      - name: Wait for application to be ready
+        run: |
+          echo "Waiting for application to be ready..."
+          timeout 120 bash -c 'until curl -f http://localhost:7007 > /dev/null 2>&1; do sleep 5; done'
+          echo "Application is ready!"
 
-    - name: Stop Docker containers
-      if: always()
-      run: |
-        docker compose down -v
-        docker system prune -f
+      - name: Exécution des tests Playwright - Chromium
+        run: |
+          cd playwright
+          npm run test:chromium
 
-    - uses: actions/upload-artifact@v4
-      if: ${{ !cancelled() }}
-      with:
-        name: playwright-report-chromium
-        path: playwright/playwright-report/
-        retention-days: 30
+      - name: Stop Docker containers
+        if: always()
+        run: |
+          docker compose down -v
+          docker system prune -f
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report-chromium
+          path: playwright/playwright-report/
+          retention-days: 30
 
   firefox:
     timeout-minutes: 60
@@ -89,6 +93,10 @@ jobs:
         echo "RESEND_API_KEY=test-api-key" >> .env
         echo "RESEND_EMAIL_DOMAIN=resend.dev" >> .env
 
+    - name: Set up Docker
+      run: |
+        docker --version
+
     - name: Build Docker containers
       run: |
         docker compose up --build -d
@@ -103,7 +111,7 @@ jobs:
     - name: Exécution des tests Playwright - Firefox
       run: |
         cd playwright
-        npx playwright test --project=firefox
+        npm run test:firefox
 
     - name: Stop Docker containers
       if: always()
@@ -122,54 +130,58 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    
-    - uses: actions/setup-node@v4
-      with:
-        node-version: lts/*
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
 
-    - name: Installation des dépendances
-      run: |
-        cd playwright
-        npm ci
+      - name: Installation des dépendances
+        run: |
+          cd playwright
+          npm ci
 
-    - name: Installation des navigateurs de Playwright
-      run: |
-        cd playwright
-        npx playwright install webkit
+      - name: Installation des navigateurs de Playwright
+        run: |
+          cd playwright
+          npx playwright install webkit
 
-    - name: Create .env with required variables
-      run: |
-        cd backend
-        echo "JWT_SECRET_KEY=ci-test-secret-key" >> .env
-        echo "RESEND_API_KEY=test-api-key" >> .env
-        echo "RESEND_EMAIL_DOMAIN=resend.dev" >> .env
+      - name: Create .env with required variables
+        run: |
+          cd backend
+          echo "JWT_SECRET_KEY=ci-test-secret-key" >> .env
+          echo "RESEND_API_KEY=test-api-key" >> .env
+          echo "RESEND_EMAIL_DOMAIN=resend.dev" >> .env
 
-    - name: Build Docker containers
-      run: |
-        docker compose up --build -d
-      continue-on-error: false
+      - name: Set up Docker
+        run: |
+          docker --version
 
-    - name: Wait for application to be ready
-      run: |
-        echo "Waiting for application to be ready..."
-        timeout 120 bash -c 'until curl -f http://localhost:7007 > /dev/null 2>&1; do sleep 5; done'
-        echo "Application is ready!"
+      - name: Build Docker containers
+        run: |
+          docker compose up --build -d
+        continue-on-error: false
 
-    - name: Exécution des tests Playwright - WebKit
-      run: |
-        cd playwright
-        npx playwright test --project=webkit
+      - name: Wait for application to be ready
+        run: |
+          echo "Waiting for application to be ready..."
+          timeout 120 bash -c 'until curl -f http://localhost:7007 > /dev/null 2>&1; do sleep 5; done'
+          echo "Application is ready!"
 
-    - name: Stop Docker containers
-      if: always()
-      run: |
-        docker compose down -v
-        docker system prune -f
+      - name: Exécution des tests Playwright - WebKit
+        run: |
+          cd playwright
+          npm run test:webkit
 
-    - uses: actions/upload-artifact@v4
-      if: ${{ !cancelled() }}
-      with:
-        name: playwright-report-webkit
-        path: playwright/playwright-report/
-        retention-days: 30
+      - name: Stop Docker containers
+        if: always()
+        run: |
+          docker compose down -v
+          docker system prune -f
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report-webkit
+          path: playwright/playwright-report/
+          retention-days: 30
