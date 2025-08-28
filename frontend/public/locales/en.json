@@ -72,6 +72,38 @@
     },
     "upload": {
         "title": "Upload a file",
+        "page": {
+            "deposit": {
+                "title": "Transfer your file",
+                "description": "Upload a file to share it with your contacts"
+            },
+            "tempLink": {
+                "title": "Generate a temporary link",
+                "description": "Upload a file to generate a temporary link that expires in 24 hours",
+                "generatedLinks": "Generated links",
+                "actions": {
+                    "generate": "Generate link",
+                    "copy": "Copy link",
+                    "open": "Open in browser",
+                    "download": "Download file",
+                    "delete": "Delete link"
+                },
+                "toast": {
+                    "success": "Link generated successfully",
+                    "error": "Error generating link",
+                    "copy": "Link copied successfully",
+                    "delete": "Link deleted successfully"
+                },
+                "type": {
+                    "browser": "View in browser",
+                    "download": "Download only"
+                },
+                "expired": "Expired",
+                "linkExpired": "Link expired",
+                "generating": "Generating link...",
+                "remaining": "remaining"
+            }
+        },
         "dragDrop": {
             "title": "Transfer your file",
             "dropHere": "Drop file here",

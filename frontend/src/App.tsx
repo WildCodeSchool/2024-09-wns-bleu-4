@@ -84,7 +84,6 @@ const App = () => {
                                 <PageWrapper
                                     title={t('meta.upload.title')}
                                     description={t('meta.upload.description')}
-                                    requireAuth
                                 >
                                     <UploadPage />
                                 </PageWrapper>
