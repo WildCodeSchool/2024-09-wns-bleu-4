@@ -10,72 +10,57 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      
-      - uses: actions/setup-node@v4
-        with:
-          node-version: lts/*
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: lts/*
 
-      - name: Installation des dépendances
-        run: |
-          cd playwright
-          npm ci
+    - name: Installation des dépendances
+      run: |
+        cd playwright
+        npm ci
 
-      - name: Installation des navigateurs de Playwright
-        run: |
-          cd playwright
-          npx playwright install chromium
+    - name: Installation des navigateurs de Playwright
+      run: |
+        cd playwright
+        npx playwright install chromium
 
-      - name: Create backend .env with required variables
-        run: |
-          cd backend
-          echo "JWT_SECRET_KEY=ci-test-secret-key" >> .env
-          echo "RESEND_API_KEY=test-api-key" >> .env
-          echo "RESEND_EMAIL_DOMAIN=resend.dev" >> .env
+    - name: Create .env with required variables
+      run: |
+        cd backend
+        echo "JWT_SECRET_KEY=ci-test-secret-key" >> .env
+        echo "RESEND_API_KEY=test-api-key" >> .env
+        echo "RESEND_EMAIL_DOMAIN=resend.dev" >> .env
 
-      - name: Create frontend .env with required variables
-        run: |
-          cd frontend
-          echo "VITE_ENVIRONMENT=DEV" >> .env
-          echo "VITE_STRIPE_PUBLISHABLE_KEY=pk_test_dummy" >> .env
+    - name: Build Docker containers
+      run: |
+        docker compose up --build -d
+      continue-on-error: false
 
-      - name: Set up Docker
-        run: |
-          docker --version
+    - name: Wait for application to be ready
+      run: |
+        echo "Waiting for application to be ready..."
+        timeout 120 bash -c 'until curl -f http://localhost:7007 > /dev/null 2>&1; do sleep 5; done'
+        echo "Application is ready!"
 
-      - name: Build Docker containers
-        run: |
-          docker compose up --build -d
-        continue-on-error: false
+    - name: Exécution des tests Playwright - Chromium
+      run: |
+        cd playwright
+        npx playwright test --project=chromium
 
-      - name: Wait for database to be ready
-        run: |
-          echo "Waiting for database to be ready..."
-          timeout 60 bash -c 'until docker compose exec -T db pg_isready -U postgres; do sleep 2; done'
-          echo "Database is ready!"
+    - name: Stop Docker containers
+      if: always()
+      run: |
+        docker compose down -v
+        docker system prune -f
 
-      - name: Additional wait for app stability
-        run: |
-          echo "Waiting additional time for app stability..."
-          sleep 10
-
-      - name: Exécution des tests Playwright - Chromium
-        run: |
-          cd playwright
-          npm run test:chromium
-
-      - name: Stop Docker containers
-        if: always()
-        run: |
-          docker compose down -v
-          docker system prune -f
-
-      - uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
-        with:
-          name: playwright-report-chromium
-          path: playwright/playwright-report/
-          retention-days: 30
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report-chromium
+        path: playwright/playwright-report/
+        retention-days: 30
 
   firefox:
     timeout-minutes: 60
@@ -97,43 +82,28 @@ jobs:
         cd playwright
         npx playwright install firefox
 
-    - name: Create backend .env with required variables
+    - name: Create .env with required variables
       run: |
         cd backend
         echo "JWT_SECRET_KEY=ci-test-secret-key" >> .env
         echo "RESEND_API_KEY=test-api-key" >> .env
         echo "RESEND_EMAIL_DOMAIN=resend.dev" >> .env
 
-    - name: Create frontend .env with required variables
-      run: |
-        cd frontend
-        echo "VITE_ENVIRONMENT=DEV" >> .env
-        echo "VITE_STRIPE_PUBLISHABLE_KEY=pk_test_dummy" >> .env
-
-    - name: Set up Docker
-      run: |
-        docker --version
-
     - name: Build Docker containers
       run: |
         docker compose up --build -d
       continue-on-error: false
 
-    - name: Wait for database to be ready
+    - name: Wait for application to be ready
       run: |
-        echo "Waiting for database to be ready..."
-        timeout 60 bash -c 'until docker compose exec -T db pg_isready -U postgres; do sleep 2; done'
-        echo "Database is ready!"
-
-    - name: Additional wait for app stability
-      run: |
-        echo "Waiting additional time for app stability..."
-        sleep 10
+        echo "Waiting for application to be ready..."
+        timeout 120 bash -c 'until curl -f http://localhost:7007 > /dev/null 2>&1; do sleep 5; done'
+        echo "Application is ready!"
 
     - name: Exécution des tests Playwright - Firefox
       run: |
         cd playwright
-        npm run test:firefox
+        npx playwright test --project=firefox
 
     - name: Stop Docker containers
       if: always()
@@ -152,87 +122,54 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      
-      - uses: actions/setup-node@v4
-        with:
-          node-version: lts/*
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: lts/*
 
-      - name: Install WebKit dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            libgtk-4-1 \
-            libgraphene-1.0-0 \
-            libwoff1 \
-            libvpx7 \
-            libevent-2.1-7 \
-            libopus0 \
-            libgstreamer-plugins-base1.0-0 \
-            libgstreamer1.0-0 \
-            libgstreamer-gl1.0-0 \
-            libgstreamer-plugins-bad1.0-0 \
-            libflite1 \
-            libavif13 \
-            libharfbuzz-icu0 \
-            libsecret-1-0 \
-            libhyphen0 \
-            libmanette-0.2-0 \
-            libgles2-mesa \
-            libx264-163
+    - name: Installation des dépendances
+      run: |
+        cd playwright
+        npm ci
 
-      - name: Installation des dépendances
-        run: |
-          cd playwright
-          npm ci
+    - name: Installation des navigateurs de Playwright
+      run: |
+        cd playwright
+        npx playwright install webkit
 
-      - name: Installation des navigateurs de Playwright
-        run: |
-          cd playwright
-          npx playwright install webkit
+    - name: Create .env with required variables
+      run: |
+        cd backend
+        echo "JWT_SECRET_KEY=ci-test-secret-key" >> .env
+        echo "RESEND_API_KEY=test-api-key" >> .env
+        echo "RESEND_EMAIL_DOMAIN=resend.dev" >> .env
 
-      - name: Create backend .env with required variables
-        run: |
-          cd backend
-          echo "JWT_SECRET_KEY=ci-test-secret-key" >> .env
-          echo "RESEND_API_KEY=test-api-key" >> .env
-          echo "RESEND_EMAIL_DOMAIN=resend.dev" >> .env
+    - name: Build Docker containers
+      run: |
+        docker compose up --build -d
+      continue-on-error: false
 
-      - name: Create frontend .env with required variables
-        run: |
-          cd frontend
-          echo "VITE_ENVIRONMENT=DEV" >> .env
-          echo "VITE_STRIPE_PUBLISHABLE_KEY=pk_test_dummy" >> .env
+    - name: Wait for application to be ready
+      run: |
+        echo "Waiting for application to be ready..."
+        timeout 120 bash -c 'until curl -f http://localhost:7007 > /dev/null 2>&1; do sleep 5; done'
+        echo "Application is ready!"
 
-      - name: Set up Docker
-        run: |
-          docker --version
+    - name: Exécution des tests Playwright - WebKit
+      run: |
+        cd playwright
+        npx playwright test --project=webkit
 
-      - name: Build Docker containers
-        run: |
-          docker compose up --build -d
-        continue-on-error: false
+    - name: Stop Docker containers
+      if: always()
+      run: |
+        docker compose down -v
+        docker system prune -f
 
-      - name: Wait for database to be ready
-        run: |
-          echo "Waiting for database to be ready..."
-          timeout 60 bash -c 'until docker compose exec -T db pg_isready -U postgres; do sleep 2; done'
-          echo "Database is ready!"
-
-      - name: Exécution des tests Playwright - WebKit
-        run: |
-          cd playwright
-          npm run test:webkit
-
-      - name: Stop Docker containers
-        if: always()
-        run: |
-          docker compose down -v
-          docker system prune -f
-
-      - uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
-        with:
-          name: playwright-report-webkit
-          path: playwright/playwright-report/
-          retention-days: 30
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report-webkit
+        path: playwright/playwright-report/
+        retention-days: 30
