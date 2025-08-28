@@ -5,7 +5,10 @@ import { LogType } from '@/entities/SystemLog';
 import { TempUser, User, UserRole, UserStorage } from '@/entities/User';
 import SystemLogResolver from '@/resolvers/SystemLogResolver';
 import { getDomain } from '@/utils/envUtils';
-import { calculateStoragePercentage, formatFileSize } from '@/utils/storageUtils';
+import {
+    calculateStoragePercentage,
+    formatFileSize,
+} from '@/utils/storageUtils';
 import * as argon2 from 'argon2';
 import { IsEmail, Length, Matches } from 'class-validator';
 import jwt, { Secret } from 'jsonwebtoken';
@@ -115,21 +118,21 @@ class UserResolver {
         if (!user) {
             throw new Error("L'utilisateur demandé n'a pas été trouvé");
         }
-        
+
         // Generate a JWT token for password reset that expires in 1 hour
         const resetToken = jwt.sign(
-            { 
-                email: user.email, 
+            {
+                email: user.email,
                 type: 'password_reset',
-                userId: user.id 
+                userId: user.id,
             },
             process.env.JWT_SECRET_KEY as Secret,
-            { expiresIn: '1h' }
-        );  
-        
+            { expiresIn: '1h' },
+        );
+
         // Create the reset password link
         const resetPasswordLink = `${getDomain()}/reset-password?token=${resetToken}`;
-        
+
         const resend = new Resend(process.env.RESEND_API_KEY);
         try {
             await resend.emails.send({
@@ -155,32 +158,39 @@ class UserResolver {
     ) {
         try {
             // Verify the JWT token
-            const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY as Secret) as any;
-            
+            const decoded = jwt.verify(
+                token,
+                process.env.JWT_SECRET_KEY as Secret,
+            ) as any;
+
             // Check if it's a password reset token
             if (decoded.type !== 'password_reset') {
                 throw new Error('Invalid token type');
             }
-            
+
             // Find the user
             const user = await User.findOneBy({ id: decoded.userId });
             if (!user) {
                 throw new Error('User not found');
             }
-            
+
             // Hash the new password
             const hashedPassword = await argon2.hash(newPassword);
-            
+
             // Update the user's password
             user.password = hashedPassword;
             await user.save();
-            
+
             return 'Password has been reset successfully';
         } catch (error) {
             if (error.name === 'TokenExpiredError') {
-                throw new Error('Reset link has expired. Please request a new one.');
+                throw new Error(
+                    'Reset link has expired. Please request a new one.',
+                );
             } else if (error.name === 'JsonWebTokenError') {
-                throw new Error('Invalid reset link. Please request a new one.');
+                throw new Error(
+                    'Invalid reset link. Please request a new one.',
+                );
             }
             throw new Error(error.message || 'Error resetting password');
         }
@@ -241,7 +251,7 @@ class UserResolver {
                 const token = jwt.sign(
                     { email: user.email, userRole: user.role },
                     process.env.JWT_SECRET_KEY as Secret,
-                    { expiresIn: '1h' }
+                    { expiresIn: '1h' },
                 );
                 context.res.setHeader(
                     'Set-Cookie',
@@ -274,6 +284,14 @@ class UserResolver {
         return users;
     }
 
+    @Query(() => Boolean)
+    async checkUserExists(
+        @Arg('email', () => String) email: string,
+    ): Promise<boolean> {
+        const user = await User.findOneBy({ email });
+        return !!user;
+    }
+
     @Query(() => UserInfo)
     async getUserInfo(@Ctx() context: any): Promise<UserInfo> {
         if (context.email) {
@@ -286,10 +304,13 @@ class UserResolver {
                     .select('SUM(resource.size)', 'totalSize')
                     .where('resource.user.id = :userId', { userId: user.id })
                     .getRawOne();
-                
-                const totalBytesUsed = result?.totalSize ? Number(result.totalSize) : 0;
-                const storagePercentage = calculateStoragePercentage(totalBytesUsed);
-                
+
+                const totalBytesUsed = result?.totalSize
+                    ? Number(result.totalSize)
+                    : 0;
+                const storagePercentage =
+                    calculateStoragePercentage(totalBytesUsed);
+
                 return {
                     isLoggedIn: true,
                     email: context.email,
