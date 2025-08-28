@@ -150,7 +150,7 @@ jobs:
 
   webkit:
     timeout-minutes: 60
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       
@@ -158,9 +158,15 @@ jobs:
         with:
           node-version: lts/*
 
-      - name: Install WebKit dependencies
+      - name: Check available packages
         run: |
           sudo apt-get update
+          apt-cache search libavif
+          apt-cache search libvpx
+          apt-cache search libx264
+
+      - name: Install WebKit dependencies
+        run: |
           sudo apt-get install -y \
             libgtk-4-1 \
             libgraphene-1.0-0 \
@@ -173,7 +179,7 @@ jobs:
             libgstreamer-gl1.0-0 \
             libgstreamer-plugins-bad1.0-0 \
             libflite1 \
-            libavif13 \
+            libavif12 \
             libharfbuzz-icu0 \
             libsecret-1-0 \
             libhyphen0 \
