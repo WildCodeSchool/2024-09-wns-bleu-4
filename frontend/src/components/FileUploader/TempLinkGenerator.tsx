@@ -3,9 +3,9 @@ import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { FileWithPreview, TempLink } from '@/types/types';
 import {
     createDragAndDropHandlers,
-    defaultAcceptedFileTypes,
     formatFileSize,
 } from '@/utils/fileUtils';
+import { cn } from '@/utils/globalUtils';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
     CheckCircle,
@@ -18,11 +18,14 @@ import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import TempLinkCard from './TempLinkCard';
-import { cn } from '@/utils/globalUtils';
 
 const STORAGE_KEY = 'tempLinks';
 
-const TempLinkGenerator = () => {
+interface TempLinkGeneratorProps {
+    acceptedFileTypes: Record<string, string[]>;
+}
+
+const TempLinkGenerator = ({ acceptedFileTypes }: TempLinkGeneratorProps) => {
     const { t } = useTranslation();
     const { setItem, getItem } = useLocalStorage();
     const [files, setFiles] = useState<FileWithPreview[]>([]);
@@ -331,7 +334,7 @@ const TempLinkGenerator = () => {
                             type="file"
                             hidden
                             onChange={onSelect}
-                            accept={Object.entries(defaultAcceptedFileTypes)
+                            accept={Object.entries(acceptedFileTypes)
                                 .map(([, extensions]) => extensions.join(','))
                                 .join(',')}
                         />
