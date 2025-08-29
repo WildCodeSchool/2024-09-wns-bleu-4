@@ -529,26 +529,31 @@
         },
         "cta": {
             "title": "Prêt à commencer ?",
+            "description": "Inscrivez-vous gratuitement en quelques secondes pour accéder à toutes nos fonctionnalités",
             "createAccount": "Créer un compte",
             "viewSubscriptions": "Voir nos abonnements"
         },
         "features": {
             "title": "Fonctionnalités principales",
-            "security": {
-                "title": "Sécurité maximale",
-                "description": "Vos fichiers sont cryptés et stockés de manière sécurisée."
+            "deposit": {
+                "title": "Deposer vos fichiers de manière permanente",
+                "description": "Vos fichiers sont cryptés et stockés de manière sécurisée.",
+                "benefit": "Vos fichiers sont conservés indéfiniment"
             },
-            "transfer": {
-                "title": "Transfert rapide",
-                "description": "Transférez vos fichiers rapidement avec notre infrastructure optimisée."
+            "linking": {
+                "title": "Générer des liens temporaires de fichiers",
+                "description": "Générez des liens de partage temporaires avec expiration automatique.",
+                "benefit": "Transfert rapide"
             },
             "contacts": {
                 "title": "Gestion des contacts",
-                "description": "Organisez vos contacts et partagez facilement vos fichiers."
+                "description": "Organisez vos contacts et partagez facilement vos fichiers.",
+                "benefit": "Organisez et gérez vos contacts facilement"
             },
-            "support": {
-                "title": "Support 24/7",
-                "description": "Notre équipe est disponible pour vous aider à tout moment."
+            "more": {
+                "title": "Simplicité, ergonomie, prévisualisation et plus",
+                "description": "Interface intuitive avec prévisualisation des fichiers, glisser-déposer, et toutes les fonctionnalités modernes pour une expérience utilisateur exceptionnelle.",
+                "benefit": "Interface moderne et intuitive"
             }
         }
     },
