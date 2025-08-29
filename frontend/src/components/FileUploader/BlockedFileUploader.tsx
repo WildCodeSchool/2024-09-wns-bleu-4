@@ -17,13 +17,13 @@ export default function BlockedFileUploader() {
 
                     <div className="space-y-2">
                         <h3 className="text-xl md:text-2xl font-semibold text-zinc-400">
-                            {t('upload.dragDrop.dropHere')}
+                            {t('upload.page.deposit.dropBox.title')}
                         </h3>
                         <p className="text-zinc-500 md:text-lg max-w-md mx-auto">
-                            {t('upload.dragDrop.title')}
+                            {t('upload.page.deposit.dropBox.supportedTypes')}
                         </p>
                         <p className="text-sm text-zinc-400">
-                            {t('upload.dragDrop.releaseToUpload')}
+                            {t('upload.page.deposit.dropBox.notice')}
                         </p>
                     </div>
 
@@ -40,10 +40,10 @@ export default function BlockedFileUploader() {
                 <div className="absolute inset-0 rounded-2xl bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                     <div className="text-center p-6 max-w-sm">
                         <h3 className="text-lg font-semibold text-zinc-800 dark:text-zinc-200 mb-2">
-                            File deposit is blocked
+                            {t('upload.blocked.line1')}
                         </h3>
                         <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-6">
-                            for unregistered users
+                            {t('upload.blocked.line2')}
                         </p>
                         <Link
                             to="/sign"
@@ -53,7 +53,7 @@ export default function BlockedFileUploader() {
                             group-hover:-translate-y-0.5 border border-black/30 dark:border-white/30
                             hover:shadow-md dark:hover:shadow-neutral-800/50"
                         >
-                            Register Now
+                            {t('upload.blocked.button')}
                         </Link>
                     </div>
                 </div>

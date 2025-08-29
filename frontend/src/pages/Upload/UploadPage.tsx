@@ -46,7 +46,7 @@ const UploadPage = () => {
                         {t('upload.page.tempLink.description')}
                     </p>
                 </div>
-                <TempLinkGenerator />
+                <TempLinkGenerator acceptedFileTypes={acceptedFileTypes} />
             </section>
         </div>
     );

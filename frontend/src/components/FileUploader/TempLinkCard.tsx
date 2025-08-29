@@ -96,7 +96,7 @@ const TempLinkCard: React.FC<TempLinkCardProps> = ({
                     : 'bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700'
             }`}
         >
-            <CardContent className="p-4">
+            <CardContent>
                 <div className="flex items-center justify-between gap-4">
                     <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
@@ -143,7 +143,7 @@ const TempLinkCard: React.FC<TempLinkCardProps> = ({
                             size="sm"
                             onClick={() => copyToClipboard(link.url)}
                             disabled={link.isExpired}
-                            className="flex-shrink-0"
+                            className="flex-shrink-0 cursor-pointer"
                             title={
                                 link.isExpired
                                     ? t('upload.page.tempLink.linkExpired')
@@ -163,7 +163,7 @@ const TempLinkCard: React.FC<TempLinkCardProps> = ({
                                 title={
                                     link.isExpired
                                         ? t('upload.page.tempLink.linkExpired')
-                                        : t('upload.page.tempLink.actions.open')
+                                        : t('upload.page.tempLink.actions.view')
                                 }
                             >
                                 <a
@@ -181,7 +181,7 @@ const TempLinkCard: React.FC<TempLinkCardProps> = ({
                             size="sm"
                             onClick={handleDownload}
                             disabled={link.isExpired}
-                            className="flex-shrink-0"
+                            className="flex-shrink-0 cursor-pointer"
                             title={
                                 link.isExpired
                                     ? t('upload.page.tempLink.linkExpired')
@@ -195,7 +195,7 @@ const TempLinkCard: React.FC<TempLinkCardProps> = ({
                             variant="outline"
                             size="sm"
                             onClick={() => onRemoveTempLink(link.id)}
-                            className="flex-shrink-0"
+                            className="flex-shrink-0 cursor-pointer"
                             title={t('upload.page.tempLink.actions.delete')}
                         >
                             <Trash2 className="w-4 h-4" />

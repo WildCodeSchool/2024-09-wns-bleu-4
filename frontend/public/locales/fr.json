@@ -7,7 +7,8 @@
         "cancel": "Annuler",
         "delete": "Supprimer",
         "add": "Ajouter",
-        "sending": "Envoi..."
+        "sending": "Envoi...",
+        "back": "Retour"
     },
     "profile": {
         "title": "Mon profil",
@@ -81,12 +82,22 @@
         "title": "Télécharger un fichier",
         "page": {
             "deposit": {
-                "title": "Transférer votre fichier",
-                "description": "Téléchargez un fichier pour le partager avec vos contacts"
+                "title": "Déposer votre fichier",
+                "description": "Téléchargez un fichier pour le partager avec vos contacts",
+                "dropBox": {
+                    "title": "Déposez votre fichier permanent ici",
+                    "supportedTypes": "Supporte les images, documents, vidéos, et plus",
+                    "notice": "Les fichiers seront conservés indéfiniment"
+                }
             },
             "tempLink": {
                 "title": "Générer un lien temporaire",
-                "description": "Téléchargez un fichier pour générer un lien temporaire qui expirera dans 24 heures",
+                "description": "Téléchargez un fichier pour générer un lien temporaire qui expirera dans 30 minutes",
+                "dropBox": {
+                    "title": "Téléchargez votre fichier temporaire ici",
+                    "supportedTypes": "Supporte les images, documents, vidéos, et plus",
+                    "notice": "Taille maximale du fichier : 10MB"
+                },
                 "generatedLinks": "Liens générés",
                 "actions": {
                     "generate": "Générer un lien",
@@ -99,7 +110,8 @@
                     "success": "Le lien a été généré avec succès",
                     "error": "Erreur lors de la génération du lien",
                     "copy": "Le lien a été copié avec succès",
-                    "delete": "Le lien a été supprimé avec succès"
+                    "delete": "Le lien a été supprimé avec succès",
+                    "fileTooLarge": "La taille du fichier dépasse la limite de 10MB"
                 },
                 "type": {
                     "browser": "Voir dans le navigateur",
@@ -111,12 +123,18 @@
                 "remaining": "restant"
             }
         },
+        "blocked": {
+            "line1": "Le depot de fichier est bloqué",
+            "line2": "pour les utilisateurs non enregistrés",
+            "button": "S'inscrire"
+        },
         "dragDrop": {
             "title": "Transférez votre fichier",
             "dropHere": "Déposez le fichier ici",
             "releaseToUpload": "Relâchez pour télécharger",
             "browse": "parcourez",
-            "supportedTypes": "Supporte les images, documents, vidéos, et plus"
+            "supportedTypes": "Supporte les images, documents, vidéos, et plus",
+            "maxSize": "Taille maximale du fichier : 10MB"
         },
         "selectedFile": {
             "title": "Fichier sélectionné",

@@ -9,6 +9,7 @@ import {
     defaultAcceptedFileTypes,
     formatFileSize,
 } from '@/utils/fileUtils';
+import { cn } from '@/utils/globalUtils';
 import { useMutation } from '@apollo/client';
 import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -214,7 +215,7 @@ export default function FileUploader({ acceptedFileTypes }: FileUploaderProps) {
                                     }}
                                 />
                                 <UploadCloud
-                                    className={clsx(
+                                    className={cn(
                                         'w-16 h-16 md:w-20 md:h-20 drop-shadow-sm',
                                         isDragging
                                             ? 'text-blue-500'
@@ -227,7 +228,9 @@ export default function FileUploader({ acceptedFileTypes }: FileUploaderProps) {
                                 <h3 className="text-xl md:text-2xl font-semibold text-zinc-800 dark:text-zinc-100">
                                     {isDragging
                                         ? t('upload.dragDrop.dropHere')
-                                        : t('upload.dragDrop.title')}
+                                        : t(
+                                              'upload.page.deposit.dropBox.title',
+                                          )}
                                 </h3>
                                 <p className="text-zinc-600 dark:text-zinc-300 md:text-lg max-w-md mx-auto">
                                     {isDragging ? (
@@ -237,16 +240,15 @@ export default function FileUploader({ acceptedFileTypes }: FileUploaderProps) {
                                             )}
                                         </span>
                                     ) : (
-                                        <>
-                                            {t('upload.dragDrop.title')}{' '}
-                                            <span className="text-blue-500 font-medium">
-                                                {t('upload.dragDrop.browse')}
-                                            </span>
-                                        </>
+                                        <span>
+                                            {t(
+                                                'upload.page.deposit.dropBox.supportedTypes',
+                                            )}
+                                        </span>
                                     )}
                                 </p>
                                 <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                                    {t('upload.dragDrop.supportedTypes')}
+                                    {t('upload.page.deposit.dropBox.notice')}
                                 </p>
                             </div>
 
