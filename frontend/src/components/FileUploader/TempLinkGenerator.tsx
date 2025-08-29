@@ -18,6 +18,7 @@ import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import TempLinkCard from './TempLinkCard';
+import { cn } from '@/utils/globalUtils';
 
 const STORAGE_KEY = 'tempLinks';
 
@@ -130,6 +131,17 @@ const TempLinkGenerator = () => {
         if (fileList.length === 0) return;
 
         const file = fileList[0];
+
+        // Check file size limit (10MB)
+        const maxSize = 10 * 1024 * 1024; // 10MB in bytes
+        if (file.size > maxSize) {
+            toast.error(
+                t('upload.page.tempLink.toast.fileTooLarge') ||
+                    'File size exceeds 10MB limit',
+            );
+            return;
+        }
+
         const newFile = {
             id: `${URL.createObjectURL(file)}-${Date.now()}`,
             preview: URL.createObjectURL(file),
@@ -197,7 +209,17 @@ const TempLinkGenerator = () => {
             });
 
             if (!response.ok) {
-                throw new Error('Failed to upload file');
+                const errorData = await response.json().catch(() => ({}));
+
+                if (response.status === 413) {
+                    throw new Error('File size exceeds 10MB limit');
+                } else if (response.status === 400) {
+                    throw new Error(errorData.message || 'Invalid file format');
+                } else {
+                    throw new Error(
+                        errorData.message || 'Failed to upload file',
+                    );
+                }
             }
 
             const result = await response.json();
@@ -206,7 +228,7 @@ const TempLinkGenerator = () => {
             const newTempLink: TempLink = {
                 id: result.tempId,
                 url: `${window.location.origin}/storage${result.accessUrl}`,
-                expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
+                expiresAt: new Date(Date.now() + 30 * 60 * 1000), // 30 minutes
                 fileName: result.originalName,
                 fileSize: result.fileSize,
                 isExpired: false,
@@ -270,28 +292,37 @@ const TempLinkGenerator = () => {
                                     display: isDragging ? 'block' : 'none',
                                 }}
                             />
-                            <FadeClock className="lucide lucide-clock-fading-icon lucide-clock-fading w-16 h-16 md:w-20 md:h-20 drop-shadow-sm text-zinc-700 dark:text-zinc-300 group-hover:text-blue-500 transition-colors duration-300" />
+                            <FadeClock
+                                className={cn(
+                                    'lucide lucide-clock-fading-icon lucide-clock-fading w-16 h-16 md:w-20 md:h-20 drop-shadow-sm group-hover:text-blue-500 transition-colors duration-300',
+                                    isDragging
+                                        ? 'text-blue-500'
+                                        : 'text-zinc-700 dark:text-zinc-300 group-hover:text-blue-500 transition-colors duration-300',
+                                )}
+                            />
                         </motion.div>
 
                         <div className="space-y-2">
                             <h3 className="text-xl md:text-2xl font-semibold text-zinc-800 dark:text-zinc-100">
                                 {isDragging
                                     ? t('upload.dragDrop.dropHere')
-                                    : t('upload.title')}
+                                    : t('upload.page.tempLink.dropBox.title')}
                             </h3>
                             <p className="text-zinc-600 dark:text-zinc-300 md:text-lg max-w-md mx-auto">
                                 {isDragging ? (
                                     <span className="font-medium text-blue-500">
-                                        {t('upload.dragDrop.dropHere')}
+                                        {t('upload.dragDrop.releaseToUpload')}
                                     </span>
                                 ) : (
                                     <span className="font-medium text-zinc-500 dark:text-zinc-400">
-                                        {t('upload.title')}
+                                        {t(
+                                            'upload.page.tempLink.dropBox.supportedTypes',
+                                        )}
                                     </span>
                                 )}
                             </p>
                             <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                                {t('upload.dragDrop.supportedTypes')}
+                                {t('upload.dragDrop.maxSize')}
                             </p>
                         </div>
 

@@ -30,6 +30,20 @@ const storage = multer.diskStorage({
     
 });
 
+// Create separate multer instances for different upload types
 const upload = multer({ storage });
 
+// Create a specific instance for temporary files with 10MB limit
+const tempUpload = multer({
+    storage,
+    limits: {
+        fileSize: 10 * 1024 * 1024, // 10MB in bytes
+    },
+    fileFilter: (req, file, cb) => {
+        // Optional: Add file type validation if needed
+        cb(null, true);
+    }
+});
+
 export default upload;
+export { tempUpload };
