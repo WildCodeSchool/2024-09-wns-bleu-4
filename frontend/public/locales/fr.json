@@ -401,14 +401,34 @@
         "disclaimer": "Wildtransfer est un projet d'étude réalisé par des étudiants de la Wild Code School. Pour des raisons de sécurité nous vous conseillons de ne pas fournir des informations sensibles ou personnelles. Utilisez des emails temporaires pour vous inscrire ainsi que des mots de passe différents de ceux utilisés habituellement et ne partagez pas de fichiers sensibles."
     },
     "about": {
-        "title": "À propos de Wild Transfer",
-        "subtitle": "Une plateforme moderne pour transférer vos fichiers en toute sérénité",
-        "description1": "est une solution simple, rapide et sécurisée pour le partage de fichiers. Elle s'adresse aussi bien aux professionnels qu'aux particuliers, avec une interface intuitive pensée pour une expérience fluide.",
-        "description2": "Notre mission est de garantir un service fiable et respectueux de votre vie privée. Nous utilisons des technologies modernes pour assurer la sécurité et la confidentialité de vos données.",
-        "description3": "Développée par une équipe de développeurs, la plateforme évolue en permanence pour répondre aux nouveaux usages et proposer des fonctionnalités adaptées à vos besoins.",
-        "contactText": "Pour toute question ou suggestion, n'hésitez pas à nous contacter via la",
-        "contactLink": "page de contact",
-        "description": "En savoir plus sur Wild Transfer"
+        "hero": {
+            "title": "À propos de Wild Transfer",
+            "subtitle": "Une plateforme moderne pour transférer vos fichiers en toute sérénité"
+        },
+        "badge": {
+            "studentProject": "Projet étudiant"
+        },
+        "sections": {
+            "whatIs": {
+                "title": "Qu'est-ce que Wild Transfer ?",
+                "description": "est une solution simple, rapide et sécurisée pour le partage de fichiers. Elle s'adresse aussi bien aux professionnels qu'aux particuliers, avec une interface intuitive pensée pour une expérience fluide."
+            },
+            "mission": {
+                "title": "Notre mission",
+                "description": "Notre mission est de garantir un service fiable et respectueux de votre vie privée. Nous utilisons des technologies modernes pour assurer la sécurité et la confidentialité de vos données."
+            },
+            "development": {
+                "title": "Développement",
+                "description": "Ce projet a été développé par des étudiants de la Wild Code School dans un délai de quelques mois, démontrant notre capacité à créer des solutions innovantes et fonctionnelles en un temps record."
+            },
+            "quality": {
+                "title": "Qualité et bonnes pratiques",
+                "description": "Bien que ce soit un projet d'étude, nous avons mis l'accent sur la qualité du code, l'expérience utilisateur et la sécurité, en utilisant les meilleures pratiques de développement moderne."
+            }
+        },
+        "meta": {
+            "description": "En savoir plus sur Wild Transfer"
+        }
     },
     "contact": {
         "title": "Mes contacts",
