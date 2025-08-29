@@ -2,7 +2,7 @@ import { AuthContext } from '@/context/AuthContextInit';
 import { useGetUserInfoQuery } from '@/generated/graphql-types';
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const { data, loading, refetch } = useGetUserInfoQuery();
+    const { data, loading, refetch } = useGetUserInfoQuery({});
 
     const isAuth = !!data?.getUserInfo.id;
     const user = isAuth
@@ -15,14 +15,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               role: data?.getUserInfo.role ?? undefined,
               profilePicture: data?.getUserInfo.profilePicture ?? null,
               storage: {
-                bytesUsed: data?.getUserInfo.storage?.bytesUsed || '0 Bytes',
-                percentage: data?.getUserInfo.storage?.percentage || 0,
-            },
+                  bytesUsed: data?.getUserInfo.storage?.bytesUsed || '0 Bytes',
+                  percentage: data?.getUserInfo.storage?.percentage || 0,
+              },
           }
         : null;
 
-    const refreshAuth = () => {
-        refetch();
+    const refreshAuth = async () => {
+        await refetch();
     };
 
     return (

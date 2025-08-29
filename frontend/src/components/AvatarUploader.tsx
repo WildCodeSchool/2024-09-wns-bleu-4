@@ -1,6 +1,6 @@
 import { UPDATE_PROFILE_PICTURE } from '@/graphql/User/mutations';
 import { GET_USER_INFO } from '@/graphql/User/queries';
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils/globalUtils';
 import { useMutation } from '@apollo/client';
 import { Camera, Loader } from 'lucide-react';
 import { useRef, useState } from 'react';

@@ -16,7 +16,7 @@ const UploadPage = () => {
         'audio/*': ['.mp3', '.wav'],
         'video/*': ['.mp4', '.mov'],
     };
-    
+
     return (
         <div className="mx-auto grid grid-cols-2 gap-8 items-start">
             {/* Persistent Uploader */}
@@ -37,7 +37,7 @@ const UploadPage = () => {
             </section>
 
             {/* Temporary Link Generator */}
-            <section>
+            <section className="col-span-full md:col-span-1">
                 <div className="mb-8">
                     <h2 className="text-2xl font-bold text-zinc-800 dark:text-zinc-200 mb-2">
                         {t('upload.page.tempLink.title')}
@@ -46,7 +46,7 @@ const UploadPage = () => {
                         {t('upload.page.tempLink.description')}
                     </p>
                 </div>
-                <TempLinkGenerator />
+                <TempLinkGenerator acceptedFileTypes={acceptedFileTypes} />
             </section>
         </div>
     );

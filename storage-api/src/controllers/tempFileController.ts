@@ -36,12 +36,18 @@ export const uploadTempFile = (req: Request, res: Response): void => {
         return;
     }
 
+    // Check if file size exceeds limit (additional safety check)
+    if (req.file.size > 10 * 1024 * 1024) {
+        res.status(413).json({ message: 'File size exceeds 10MB limit' });
+        return;
+    }
+
     try {
         const tempId = uuidv4();
         const originalName = req.file.originalname;
         const fileSize = req.file.size;
         const createdAt = new Date();
-        const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+        const expiresAt = new Date(Date.now() + 30 * 60 * 1000); // 30 minutes
 
         // Generate a unique filename for the temp directory
         const fileExtension = path.extname(originalName);
