@@ -9,7 +9,8 @@ import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card';
+import { OneShotButton } from '../OneShotButton';
 
 export const ConfirmForm: React.FC = () => {
     const { t } = useTranslation();
@@ -40,7 +41,6 @@ export const ConfirmForm: React.FC = () => {
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <button className="btn py-2">{t('auth.confirm.resendEmail')}</button>
                 <InputOTP
                     ref={otpInputRef}
                     onChange={handleOtpChange}
@@ -62,6 +62,14 @@ export const ConfirmForm: React.FC = () => {
                     </InputOTPGroup>
                 </InputOTP>
             </CardContent>
+            <CardFooter>
+                <OneShotButton
+                    handleClick={handleOtpChange}
+                    label="auth.confirm.resendEmail"
+                    successToast="auth.confirm.emailResent"
+                    errorToast="auth.confirm.error"
+                />
+            </CardFooter>
         </Card>
     );
 };

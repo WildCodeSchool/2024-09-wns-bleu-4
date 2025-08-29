@@ -8,6 +8,7 @@
         "delete": "Supprimer",
         "add": "Ajouter",
         "sending": "Envoi...",
+        "sent": "Envoyé !",
         "back": "Retour"
     },
     "profile": {
@@ -635,7 +636,8 @@
             "description": "Veuillez vérifier votre boîte mail afin de finaliser votre inscription.",
             "resendEmail": "Renvoyer un email",
             "success": "Votre email a bien été confirmé, vous pouvez vous connecter !",
-            "error": "Le code saisie est incorrect ou a expiré, veuillez réessayer."
+            "error": "Le code saisie est incorrect ou a expiré, veuillez réessayer.",
+            "emailResent": "Un email de confirmation a été renvoyé à votre adresse email."
         },
         "protectedRoute": {
             "error": "Vous devez être connecté pour accéder à cette page"
