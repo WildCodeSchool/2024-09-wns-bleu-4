@@ -672,7 +672,8 @@
             "info": "Information",
             "share": "Share",
             "report": "Report",
-            "delete": "Delete"
+            "delete": "Delete",
+            "edit": "Edit"
         },
         "info": {
             "title": "File Information",
@@ -735,6 +736,14 @@
             "audio": "Your browser does not support audio playback",
             "video": "Your browser does not support video playback",
             "pdf": "PDF not available"
+        },
+        "edit": {
+            "title": "Edit file",
+            "description": "Update the description for \"{{fileName}}\"",
+            "placeholder": "Enter a new description...",
+            "save": "Save",
+            "success": "Description updated successfully",
+            "error": "Error updating description"
         }
     },
     "meta": {

@@ -676,7 +676,8 @@
             "info": "Informations",
             "share": "Partager",
             "report": "Signaler",
-            "delete": "Supprimer"
+            "delete": "Supprimer",
+            "edit": "Modifier"
         },
         "info": {
             "title": "Informations du fichier",
@@ -743,6 +744,14 @@
             "audio": "Votre navigateur ne supporte pas la lecture audio",
             "video": "Votre navigateur ne supporte pas la lecture vidéo",
             "pdf": "PDF non disponible"
+        },
+        "edit": {
+            "title": "Modifier le fichier",
+            "description": "Mettre à jour la description de \"{{fileName}}\"",
+            "placeholder": "Saisissez une nouvelle description...",
+            "save": "Enregistrer",
+            "success": "Description mise à jour avec succès",
+            "error": "Erreur lors de la mise à jour de la description"
         }
     },
     "meta": {

@@ -217,6 +217,43 @@ class ResourceResolver {
             throw error;
         }
     }
+
+    @Mutation(() => Resource)
+    async updateResourceDescription(
+        @Arg('id', () => ID) id: number,
+        @Arg('description', () => String) description: string,
+    ): Promise<Resource> {
+        try {
+            const resource = await Resource.findOne({
+                where: { id },
+                relations: ['user'],
+            });
+
+            if (!resource) {
+                throw new Error('Le fichier demandé n\'a pas été trouvé');
+            }
+
+            resource.description = description;
+            await Resource.save(resource);
+
+            await SystemLogResolver.logEvent(
+                LogType.SUCCESS,
+                'Fichier mis à jour',
+                `La description du fichier "${resource.name}" a été mise à jour`,
+                resource.user?.email,
+            );
+
+            return resource;
+        } catch (error) {
+            await SystemLogResolver.logEvent(
+                LogType.ERROR,
+                'Erreur lors de la mise à jour de fichier',
+                `Erreur lors de la mise à jour de la description du fichier ID ${id}: ${error}`,
+                undefined,
+            );
+            throw error;
+        }
+    }
 }
 
 export default ResourceResolver;

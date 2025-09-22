@@ -15,6 +15,7 @@ import {
     Download,
     Flag,
     Info,
+    Pencil,
     MoreVertical,
     Share2,
     Trash2,
@@ -23,6 +24,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import FileDeleteDialog from './FileDeleteDialog';
 import FileInfoDialog from './FileInfoDialog';
+import FileEditDialog from './FileEditDialog';
+import FilePreviewDialog from './FilePreviewDialog';
 import FileReportDialog from './FileReportDialog';
 import FileShareDialog from './FileShareDialog';
 
@@ -50,55 +53,68 @@ const FileCard: React.FC<FileCardProps> = ({
     };
 
     return (
-        <Card className="hover:shadow-md transition-all duration-200 p-2.5">
+        <Card className="hover:shadow-md transition-all duration-200 p-2.5 hover:bg-accent">
             <CardContent className="p-0">
                 <div className="flex items-center justify-between">
+                    {/* Left: preview + meta (this opens the preview dialog) */}
                     <div className="flex items-center gap-3 flex-1 min-w-0">
-                        {isCompact ? (
-                            <div className="text-2xl">
-                                {getFileTypeInfo(name).emoji}
-                            </div>
-                        ) : (
-                            <FilePreview fileName={name} fileUrl={url} />
-                        )}
-                        <div className="min-w-0 flex-1">
-                            <h3 className="font-semibold text-sm truncate mb-1">
-                                {name}
-                            </h3>
-                            <div className="text-xs text-muted-foreground space-y-1">
-                                <p className="font-medium">
-                                    {formattedSize}
-                                    {isCompact && isShared && owner && (
-                                        <span className="ml-2">
-                                            • {t('fileCard.sharedBy')}{' '}
-                                            <UserHoverCard user={owner}>
-                                                <span className="text-blue-500 cursor-pointer hover:underline">
-                                                    {owner.email}
-                                                </span>
-                                            </UserHoverCard>
-                                        </span>
+                        <FilePreviewDialog
+                            trigger={
+                                <div className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer">
+                                    {isCompact ? (
+                                        <div className="text-2xl">
+                                            {getFileTypeInfo(name).emoji}
+                                        </div>
+                                    ) : (
+                                        <FilePreview context="card" fileName={name} fileUrl={url} />
                                     )}
-                                </p>
-                                {!isCompact && description && (
-                                    <p className="truncate line-clamp-2">
-                                        {description}
-                                    </p>
-                                )}
-                                {!isCompact && isShared && owner && (
-                                    <p className="truncate">
-                                        {t('fileCard.sharedBy')}{' '}
-                                        <UserHoverCard user={owner}>
-                                            <span className="text-blue-500 cursor-pointer hover:underline">
-                                                {owner.email}
-                                            </span>
-                                        </UserHoverCard>
-                                    </p>
-                                )}
-                            </div>
-                        </div>
+                                    <div className="min-w-0 flex-1">
+                                        <h3 className="font-semibold text-sm truncate mb-1">
+                                            {name}
+                                        </h3>
+                                        <div className="text-xs text-muted-foreground space-y-1">
+                                            <p className="font-medium">
+                                                {formattedSize}
+                                                {isCompact && isShared && owner && (
+                                                    <span className="ml-2">
+                                                        • {t('fileCard.sharedBy')}{' '}
+                                                        <UserHoverCard user={owner}>
+                                                            <span className="text-blue-500 cursor-pointer hover:underline">
+                                                                {owner.email}
+                                                            </span>
+                                                        </UserHoverCard>
+                                                    </span>
+                                                )}
+                                            </p>
+                                            {!isCompact && description && (
+                                                <p className="truncate line-clamp-2">
+                                                    {description}
+                                                </p>
+                                            )}
+                                            {!isCompact && isShared && owner && (
+                                                <p className="truncate">
+                                                    {t('fileCard.sharedBy')}{' '}
+                                                    <UserHoverCard user={owner}>
+                                                        <span className="text-blue-500 cursor-pointer hover:underline">
+                                                            {owner.email}
+                                                        </span>
+                                                    </UserHoverCard>
+                                                </p>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            fileName={name}
+                            fileUrl={url}
+                            fileSize={formattedSize}
+                            description={description}
+                            owner={owner}
+                            isShared={isShared}
+                        />
                     </div>
 
-                    {/* Actions */}
+                    {/* Right: actions (do NOT open preview dialog) */}
                     <div className="flex items-center gap-2">
                         <Button
                             variant="outline"
@@ -107,22 +123,14 @@ const FileCard: React.FC<FileCardProps> = ({
                             className="flex-shrink-0"
                         >
                             <Download className="h-4 w-4" />
-                            <span className="sr-only">
-                                {t('fileCard.download')}
-                            </span>
+                            <span className="sr-only">{t('fileCard.download')}</span>
                         </Button>
 
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    className="flex-shrink-0"
-                                >
+                                <Button variant="outline" size="sm" className="flex-shrink-0">
                                     <MoreVertical className="h-4 w-4" />
-                                    <span className="sr-only">
-                                        {t('fileCard.moreOptions')}
-                                    </span>
+                                    <span className="sr-only">{t('fileCard.moreOptions')}</span>
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" className="w-48">
@@ -134,29 +142,37 @@ const FileCard: React.FC<FileCardProps> = ({
                                 <DropdownMenuSeparator />
                                 <FileInfoDialog
                                     trigger={
-                                        <DropdownMenuItem
-                                            onSelect={(e) => e.preventDefault()}
-                                        >
+                                        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                                             <Info className="h-4 w-4 mr-2" />
                                             {t('fileCard.menu.info')}
                                         </DropdownMenuItem>
                                     }
                                     fileName={name}
-                                    fileUrl={url}
                                     fileSize={formattedSize}
                                     description={description}
                                     owner={owner}
                                     isShared={isShared}
                                 />
 
+                                <FileEditDialog
+                                    trigger={
+                                        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                                            <Pencil className="h-4 w-4 mr-2" />
+                                            {t('fileCard.menu.edit')}
+                                        </DropdownMenuItem>
+                                    }
+                                    resourceId={id}
+                                    fileName={name}
+                                    initialDescription={description}
+                                    onUpdated={() => {
+                                        // no-op: parent list can refetch if needed; optimistic UI inside dialog
+                                    }}
+                                />
+
                                 {!isShared && myContacts.length > 0 && (
                                     <FileShareDialog
                                         trigger={
-                                            <DropdownMenuItem
-                                                onSelect={(e) =>
-                                                    e.preventDefault()
-                                                }
-                                            >
+                                            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                                                 <Share2 className="h-4 w-4 mr-2" />
                                                 {t('fileCard.menu.share')}
                                             </DropdownMenuItem>
@@ -169,9 +185,7 @@ const FileCard: React.FC<FileCardProps> = ({
 
                                 <FileReportDialog
                                     trigger={
-                                        <DropdownMenuItem
-                                            onSelect={(e) => e.preventDefault()}
-                                        >
+                                        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                                             <Flag className="h-4 w-4 mr-2" />
                                             {t('fileCard.menu.report')}
                                         </DropdownMenuItem>
@@ -186,9 +200,7 @@ const FileCard: React.FC<FileCardProps> = ({
                                             trigger={
                                                 <DropdownMenuItem
                                                     className="text-destructive focus:text-destructive"
-                                                    onSelect={(e) =>
-                                                        e.preventDefault()
-                                                    }
+                                                    onSelect={(e) => e.preventDefault()}
                                                 >
                                                     <Trash2 className="h-4 w-4 mr-2" />
                                                     {t('fileCard.menu.delete')}

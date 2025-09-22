@@ -97,6 +97,7 @@ export type Mutation = {
   resetPasswordSendCode: Scalars['String']['output'];
   sendContactRequest: Contact;
   updateProfilePicture: User;
+  updateResourceDescription: Resource;
   updateUserRole: Scalars['String']['output'];
 };
 
@@ -236,6 +237,12 @@ export type MutationSendContactRequestArgs = {
 
 export type MutationUpdateProfilePictureArgs = {
   data: UpdateProfilePictureInput;
+};
+
+
+export type MutationUpdateResourceDescriptionArgs = {
+  description: Scalars['String']['input'];
+  id: Scalars['ID']['input'];
 };
 
 
@@ -573,6 +580,14 @@ export type CreateUserAccessMutationVariables = Exact<{
 
 
 export type CreateUserAccessMutation = { __typename?: 'Mutation', createUserAccess: string };
+
+export type UpdateResourceDescriptionMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+  description: Scalars['String']['input'];
+}>;
+
+
+export type UpdateResourceDescriptionMutation = { __typename?: 'Mutation', updateResourceDescription: { __typename?: 'Resource', id: number, name: string, description: string, url: string, path: string } };
 
 export type GetAllResourcesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1518,6 +1533,44 @@ export function useCreateUserAccessMutation(baseOptions?: Apollo.MutationHookOpt
 export type CreateUserAccessMutationHookResult = ReturnType<typeof useCreateUserAccessMutation>;
 export type CreateUserAccessMutationResult = Apollo.MutationResult<CreateUserAccessMutation>;
 export type CreateUserAccessMutationOptions = Apollo.BaseMutationOptions<CreateUserAccessMutation, CreateUserAccessMutationVariables>;
+export const UpdateResourceDescriptionDocument = gql`
+    mutation UpdateResourceDescription($id: ID!, $description: String!) {
+  updateResourceDescription(id: $id, description: $description) {
+    id
+    name
+    description
+    url
+    path
+  }
+}
+    `;
+export type UpdateResourceDescriptionMutationFn = Apollo.MutationFunction<UpdateResourceDescriptionMutation, UpdateResourceDescriptionMutationVariables>;
+
+/**
+ * __useUpdateResourceDescriptionMutation__
+ *
+ * To run a mutation, you first call `useUpdateResourceDescriptionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateResourceDescriptionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateResourceDescriptionMutation, { data, loading, error }] = useUpdateResourceDescriptionMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      description: // value for 'description'
+ *   },
+ * });
+ */
+export function useUpdateResourceDescriptionMutation(baseOptions?: Apollo.MutationHookOptions<UpdateResourceDescriptionMutation, UpdateResourceDescriptionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateResourceDescriptionMutation, UpdateResourceDescriptionMutationVariables>(UpdateResourceDescriptionDocument, options);
+      }
+export type UpdateResourceDescriptionMutationHookResult = ReturnType<typeof useUpdateResourceDescriptionMutation>;
+export type UpdateResourceDescriptionMutationResult = Apollo.MutationResult<UpdateResourceDescriptionMutation>;
+export type UpdateResourceDescriptionMutationOptions = Apollo.BaseMutationOptions<UpdateResourceDescriptionMutation, UpdateResourceDescriptionMutationVariables>;
 export const GetAllResourcesDocument = gql`
     query GetAllResources {
   getAllResources {
