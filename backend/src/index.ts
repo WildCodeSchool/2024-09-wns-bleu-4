@@ -1,7 +1,5 @@
 import { dataSource } from '@/db';
-import CommentResolver from '@/resolvers/CommentResolver';
 import ContactResolver from '@/resolvers/ContactResolver';
-import LikeResolver from '@/resolvers/LikeResolver';
 import PaymentResolver from '@/resolvers/PaymentResolver';
 import ReportResolver from '@/resolvers/ReportResolver';
 import ResourceResolver from '@/resolvers/ResourceResolver';
@@ -36,8 +34,6 @@ const start = async () => {
         resolvers: [
             UserResolver,
             ContactResolver,
-            LikeResolver,
-            CommentResolver,
             ReportResolver,
             SubscriptionResolver,
             ResourceResolver,

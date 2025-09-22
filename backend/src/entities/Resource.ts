@@ -1,5 +1,3 @@
-import { Comment } from '@/entities/Comment';
-import { Like } from '@/entities/Like';
 import { Report } from '@/entities/Report';
 import { User } from '@/entities/User';
 import { formatFileSize } from '@/utils/storageUtils';
@@ -95,14 +93,6 @@ export class Resource extends BaseEntity {
     @ManyToMany(() => User, (User) => User.sharedResources)
     @JoinTable()
     usersWithAccess: User[];
-
-    @Field(() => [Like])
-    @OneToMany(() => Like, (like) => like.resource)
-    likes: Like[];
-
-    @Field(() => [Comment])
-    @OneToMany(() => Comment, (comment) => comment.resource)
-    comments: Comment[];
 
     @Field(() => [Report])
     @OneToMany(() => Report, (report) => report.resource)
