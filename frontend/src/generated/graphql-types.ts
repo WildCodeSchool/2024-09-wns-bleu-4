@@ -18,20 +18,6 @@ export type Scalars = {
   DateTimeISO: { input: any; output: any; }
 };
 
-export type Comment = {
-  __typename?: 'Comment';
-  content: Scalars['String']['output'];
-  id: Scalars['ID']['output'];
-  resource: Resource;
-  user: User;
-};
-
-export type CommentInput = {
-  content: Scalars['String']['input'];
-  resource: Scalars['ID']['input'];
-  user: Scalars['ID']['input'];
-};
-
 export type Contact = {
   __typename?: 'Contact';
   createdAt: Scalars['DateTimeISO']['output'];
@@ -73,18 +59,6 @@ export type CreateReportInput = {
   userId: Scalars['ID']['input'];
 };
 
-export type Like = {
-  __typename?: 'Like';
-  id: Scalars['ID']['output'];
-  resource: Resource;
-  user: User;
-};
-
-export type LikeInput = {
-  resource: Scalars['ID']['input'];
-  user: Scalars['ID']['input'];
-};
-
 /** System log type enum */
 export enum LogType {
   Error = 'ERROR',
@@ -100,8 +74,6 @@ export type Mutation = {
   clearSystemLogs: Scalars['String']['output'];
   confirmEmail: Scalars['String']['output'];
   confirmPayment: Scalars['Boolean']['output'];
-  createComment: Comment;
-  createLike: Like;
   createPaymentIntent: Scalars['String']['output'];
   createReport: Report;
   createReportByIds: Report;
@@ -111,8 +83,6 @@ export type Mutation = {
   createSystemLog: SystemLog;
   createUser: User;
   createUserAccess: Scalars['String']['output'];
-  deleteComment: Scalars['String']['output'];
-  deleteLike: Scalars['String']['output'];
   deleteReport: Scalars['String']['output'];
   deleteResource: Scalars['String']['output'];
   deleteSubscription: Scalars['String']['output'];
@@ -149,16 +119,6 @@ export type MutationConfirmEmailArgs = {
 export type MutationConfirmPaymentArgs = {
   clientSecret: Scalars['String']['input'];
   paymentMethodId: Scalars['String']['input'];
-};
-
-
-export type MutationCreateCommentArgs = {
-  newComment: CommentInput;
-};
-
-
-export type MutationCreateLikeArgs = {
-  data: LikeInput;
 };
 
 
@@ -208,16 +168,6 @@ export type MutationCreateUserArgs = {
 export type MutationCreateUserAccessArgs = {
   resourceId: Scalars['ID']['input'];
   userId: Scalars['ID']['input'];
-};
-
-
-export type MutationDeleteCommentArgs = {
-  commentToDelete: CommentInput;
-};
-
-
-export type MutationDeleteLikeArgs = {
-  likeToDelete: LikeInput;
 };
 
 
@@ -300,10 +250,6 @@ export type Query = {
   getAllReports: Array<Report>;
   getAllResources: Array<Resource>;
   getAllUsers: Array<User>;
-  getCommentsByResource: Array<Comment>;
-  getCommentsByUser: Array<Comment>;
-  getLikesByResource: Array<Like>;
-  getLikesByUser: Array<Like>;
   getMyContacts: ContactsResponse;
   getPaymentIntent: Scalars['String']['output'];
   getReportsByResource: Array<Report>;
@@ -323,26 +269,6 @@ export type Query = {
 
 export type QueryCheckUserExistsArgs = {
   email: Scalars['String']['input'];
-};
-
-
-export type QueryGetCommentsByResourceArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type QueryGetCommentsByUserArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type QueryGetLikesByResourceArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type QueryGetLikesByUserArgs = {
-  id: Scalars['ID']['input'];
 };
 
 
@@ -432,11 +358,9 @@ export type ReportInput = {
 
 export type Resource = {
   __typename?: 'Resource';
-  comments: Array<Comment>;
   description: Scalars['String']['output'];
   formattedSize: Scalars['String']['output'];
   id: Scalars['Float']['output'];
-  likes: Array<Like>;
   name: Scalars['String']['output'];
   path: Scalars['String']['output'];
   reports: Array<Report>;

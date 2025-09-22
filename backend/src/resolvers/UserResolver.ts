@@ -383,9 +383,7 @@ class UserResolver {
         const user = await User.findOne({
             where: { id },
             relations: [
-                'likes',
                 'reports',
-                'comments',
                 'sharedResources',
                 'subscription',
             ],

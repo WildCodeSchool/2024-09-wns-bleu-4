@@ -187,8 +187,6 @@ class ResourceResolver {
                 relations: [
                     'user',
                     'usersWithAccess',
-                    'likes',
-                    'comments',
                     'reports',
                 ],
             });
