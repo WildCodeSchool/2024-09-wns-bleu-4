@@ -6,11 +6,13 @@ import ResourceResolver from '@/resolvers/ResourceResolver';
 import SubscriptionResolver from '@/resolvers/SubscriptionResolver';
 import SystemLogResolver from '@/resolvers/SystemLogResolver';
 import UserResolver from '@/resolvers/UserResolver';
+import { cleanupExpiredResources } from '@/services/cleanupService';
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
 import * as cookie from 'cookie';
 import 'dotenv/config';
 import jwt, { Secret } from 'jsonwebtoken';
+import * as cron from 'node-cron';
 import 'reflect-metadata';
 import { buildSchema } from 'type-graphql';
 
@@ -21,11 +23,15 @@ const start = async () => {
 
     // Validate Stripe environment variables
     if (!process.env.STRIPE_SECRET_KEY) {
-        console.warn('STRIPE_SECRET_KEY not found. Stripe functionality will be disabled.');
+        console.warn(
+            'STRIPE_SECRET_KEY not found. Stripe functionality will be disabled.',
+        );
     }
 
     if (!process.env.STRIPE_WEBHOOK_SECRET) {
-        console.warn('STRIPE_WEBHOOK_SECRET not found. Webhook verification will be disabled.');
+        console.warn(
+            'STRIPE_WEBHOOK_SECRET not found. Webhook verification will be disabled.',
+        );
     }
 
     await dataSource.initialize();
@@ -88,6 +94,19 @@ const start = async () => {
         },
     });
     console.log(`🚀  Server ready at: ${url}`);
+
+    // Schedule daily cleanup of expired resources at 2 AM
+    cron.schedule('0 2 * * *', async () => {
+        console.log('Running scheduled cleanup of expired resources...');
+        try {
+            await cleanupExpiredResources();
+            console.log('Scheduled cleanup completed successfully');
+        } catch (error) {
+            console.error('Scheduled cleanup failed:', error);
+        }
+    });
+
+    console.log('📅 Daily cleanup job scheduled for 2 AM');
 };
 
 start();
