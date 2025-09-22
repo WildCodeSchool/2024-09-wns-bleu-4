@@ -63,6 +63,11 @@
         },
         "compactMode": "Mode réduit",
         "toggleCompactMode": "Basculer en mode réduit",
+        "search": {
+            "placeholder": "Rechercher des fichiers par nom..."
+        },
+        "sortByRecent": "Trier par plus récent",
+        "results": "résultats",
         "errors": {
             "invalidResourceId": "ID de ressource non valide",
             "deleting": "Suppression en cours...",
@@ -72,7 +77,6 @@
             "loadError": "Erreur lors du chargement des fichiers"
         },
         "uploadNew": "Télécharger un nouveau fichier",
-        "search": "Rechercher des fichiers",
         "filter": "Filtrer",
         "emptyState": {
             "noFilesDescription": "Téléchargez votre premier fichier pour le partager avec vos contacts.",

@@ -128,3 +128,30 @@ export const GET_USERS_WITH_ACCESS = gql`
         }
     }
 `;
+
+export const SEARCH_RESOURCES_BY_USER_ID = gql`
+    query SearchResourcesByUserId($userId: ID!, $search: SearchInput!) {
+        searchResourcesByUserId(userId: $userId, search: $search) {
+            resources {
+                description
+                id
+                name
+                path
+                url
+                size
+                formattedSize
+                user {
+                    id
+                    email
+                    createdAt
+                    profilePicture
+                }
+            }
+            totalCount
+            totalPages
+            currentPage
+            hasNextPage
+            hasPreviousPage
+        }
+    }
+`;

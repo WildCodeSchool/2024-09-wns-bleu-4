@@ -46,6 +46,18 @@ export class PaginationInput {
     limit: number = 10;
 }
 
+@InputType()
+export class SearchInput {
+    @Field(() => String)
+    searchTerm: string;
+
+    @Field(() => Number, { defaultValue: 1 })
+    page: number = 1;
+
+    @Field(() => Number, { defaultValue: 10 })
+    limit: number = 10;
+}
+
 @ObjectType()
 export class PaginatedResources {
     @Field(() => [Resource])
@@ -106,6 +118,45 @@ class ResourceResolver {
             skip,
             take: limit,
         });
+
+        const totalPages = Math.ceil(totalCount / limit);
+        const hasNextPage = page < totalPages;
+        const hasPreviousPage = page > 1;
+
+        return {
+            resources,
+            totalCount,
+            totalPages,
+            currentPage: page,
+            hasNextPage,
+            hasPreviousPage,
+        };
+    }
+
+    @Query(() => PaginatedResources)
+    async searchResourcesByUserId(
+        @Arg('userId', () => ID) userId: number,
+        @Arg('search', () => SearchInput) search: SearchInput,
+    ): Promise<PaginatedResources> {
+        const { searchTerm, page, limit } = search;
+        const skip = (page - 1) * limit;
+
+        // Create a query builder for more complex search
+        const queryBuilder = Resource.createQueryBuilder('resource')
+            .leftJoinAndSelect('resource.user', 'user')
+            .where('resource.user.id = :userId', { userId })
+            .andWhere('resource.name ILIKE :searchTerm', { searchTerm: `%${searchTerm}%` })
+            .orderBy('resource.name', 'ASC') // Sort by name for relevance
+            .addOrderBy('resource.createdAt', 'DESC'); // Secondary sort by creation date
+
+        // Get total count for pagination
+        const totalCount = await queryBuilder.getCount();
+
+        // Apply pagination
+        const resources = await queryBuilder
+            .skip(skip)
+            .take(limit)
+            .getMany();
 
         const totalPages = Math.ceil(totalCount / limit);
         const hasNextPage = page < totalPages;

@@ -1,10 +1,11 @@
 import FileCard from '@/components/File/FileCard';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { Contact, Resource } from '@/generated/graphql-types';
-import { ChevronLeft, ChevronRight, LucideIcon, Plus } from 'lucide-react';
+import { ChevronLeft, ChevronRight, LucideIcon, Plus, Search, Clock } from 'lucide-react';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
@@ -29,6 +30,9 @@ interface FileSectionProps {
     showUploadButton?: boolean;
     pagination?: PaginationInfo;
     onPageChange?: (page: number) => void;
+    onSearch?: (searchTerm: string) => void;
+    onSortByRecent?: () => void;
+    isSearching?: boolean;
 }
 
 const FileSection: React.FC<FileSectionProps> = ({
@@ -43,9 +47,33 @@ const FileSection: React.FC<FileSectionProps> = ({
     showUploadButton = false,
     pagination,
     onPageChange,
+    onSearch,
+    onSortByRecent,
+    isSearching = false,
 }) => {
     const { t } = useTranslation();
     const [isCompact, setIsCompact] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const handleSearch = () => {
+        if (onSearch) {
+            onSearch(searchTerm);
+        }
+    };
+
+    const handleKeyPress = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            handleSearch();
+        }
+    };
+
+    const handleSortByRecent = () => {
+        // Clear local input content
+        setSearchTerm('');
+        if (onSortByRecent) {
+            onSortByRecent();
+        }
+    };
 
     return (
         <div className="space-y-4">
@@ -55,6 +83,9 @@ const FileSection: React.FC<FileSectionProps> = ({
                     <h3 className="text-lg font-semibold">{title}</h3>
                     <Badge variant="secondary">
                         {pagination ? pagination.totalCount : files.length}
+                        <span className="text-sm text-muted-foreground ml-1">
+                            {t('files.results')}
+                        </span>
                     </Badge>
                 </div>
                 <div className="flex items-center gap-2">
@@ -67,6 +98,43 @@ const FileSection: React.FC<FileSectionProps> = ({
                         aria-label={t('files.toggleCompactMode')}
                     />
                 </div>
+            </div>
+            
+            {/* Search Bar */}
+            <div className="flex items-center gap-2">
+                <div className="relative flex-1">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                        type="text"
+                        placeholder={t('files.search.placeholder')}
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onKeyPress={handleKeyPress}
+                        className="pl-10 pr-4"
+                    />
+                </div>
+                <Button
+                    className="cursor-pointer"
+                    onClick={handleSearch}
+                    disabled={isSearching}
+                    size="sm"
+                    variant="outline"
+                >
+                    {isSearching ? (
+                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                    ) : (
+                        <Search className="h-4 w-4" />
+                    )}
+                </Button>
+                <Button
+                    className="cursor-pointer"
+                    onClick={handleSortByRecent}
+                    size="sm"
+                    variant="outline"
+                    title={t('files.sortByRecent')}
+                >
+                    <Clock className="h-4 w-4" />
+                </Button>
             </div>
             <Separator />
             {files.length === 0 ? (

@@ -63,6 +63,11 @@
         },
         "compactMode": "Condensed mode",
         "toggleCompactMode": "Toggle condensed mode",
+        "search": {
+            "placeholder": "Search files by name..."
+        },
+        "sortByRecent": "Sort by most recent",
+        "results": "results",
         "errors": {
             "invalidResourceId": "Invalid resource ID",
             "deleting": "Deleting...",
@@ -72,7 +77,6 @@
             "loadError": "Error loading files"
         },
         "uploadNew": "Upload a new file",
-        "search": "Search files",
         "filter": "Filter",
         "emptyState": {
             "noFilesDescription": "Upload your first file to share it with your contacts.",
