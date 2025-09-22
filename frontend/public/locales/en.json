@@ -419,14 +419,34 @@
         "disclaimer": "Wildtransfer is a study project created by students from the Wild Code School. For security reasons, we advise you not to provide sensitive or personal information. Use temporary emails to register, as well as passwords different from those you usually use, and do not share sensitive files."
     },
     "about": {
-        "title": "About Wild Transfer",
-        "subtitle": "A modern platform to transfer your files with peace of mind",
-        "description1": "is a simple, fast and secure solution for file sharing. It is designed for both professionals and individuals, with an intuitive interface designed for a smooth experience.",
-        "description2": "Our mission is to provide a reliable service that respects your privacy. We use modern technologies to ensure the security and confidentiality of your data.",
-        "description3": "Developed by a team of developers, the platform is constantly evolving to meet new uses and offer features adapted to your needs.",
-        "contactText": "For any questions or suggestions, feel free to contact us via the",
-        "contactLink": "contact page",
-        "description": "Learn more about Wild Transfer"
+        "hero": {
+            "title": "About Wild Transfer",
+            "subtitle": "A modern platform to transfer your files with peace of mind"
+        },
+        "badge": {
+            "studentProject": "Student Project"
+        },
+        "sections": {
+            "whatIs": {
+                "title": "What is Wild Transfer?",
+                "description": "is a simple, fast and secure solution for file sharing. It is designed for both professionals and individuals, with an intuitive interface designed for a smooth experience."
+            },
+            "mission": {
+                "title": "Our Mission",
+                "description": "Our mission is to provide a reliable service that respects your privacy. We use modern technologies to ensure the security and confidentiality of your data."
+            },
+            "development": {
+                "title": "Development",
+                "description": "This project was developed by students from Wild Code School within a few months, demonstrating our ability to create innovative and functional solutions in record time."
+            },
+            "quality": {
+                "title": "Quality & Best Practices",
+                "description": "Although this is a study project, we have focused on code quality, user experience and security, using modern development best practices."
+            }
+        },
+        "meta": {
+            "description": "Learn more about Wild Transfer"
+        }
     },
     "contact": {
         "title": "My Contacts",
@@ -532,7 +552,7 @@
         "description": "Manage user accounts, roles and permissions"
     },
     "howItWorks": {
-        "title": "How it works",
+        "title": "How does it work ?",
         "step1": {
             "title": "Create your account",
             "description": "Sign up for free in seconds to access all our features."
@@ -547,26 +567,31 @@
         },
         "cta": {
             "title": "Ready to get started?",
+            "description": "Sign up for free in seconds to access all our features",
             "createAccount": "Create an account",
             "viewSubscriptions": "View our subscriptions"
         },
         "features": {
-            "title": "Key features",
-            "security": {
-                "title": "Maximum security",
-                "description": "Your files are encrypted and stored securely."
+            "title": "Main features",
+            "deposit": {
+                "title": "Deposit your files permanently",
+                "description": "Your files are encrypted and stored securely.",
+                "benefit": "Your files are stored indefinitely"
             },
-            "transfer": {
-                "title": "Fast transfer",
-                "description": "Transfer your files quickly with our optimized infrastructure."
+            "linking": {
+                "title": "Generate temporary file links",
+                "description": "Generate temporary file sharing links with automatic expiration.",
+                "benefit": "Fast transfer"
             },
             "contacts": {
-                "title": "Contact management",
-                "description": "Organize your contacts and share your files easily."
+                "title": "Manage contacts",
+                "description": "Organize your contacts and share your files easily.",
+                "benefit": "Organize and manage your contacts easily"
             },
-            "support": {
-                "title": "24/7 Support",
-                "description": "Our team is available to help you at any time."
+            "more": {
+                "title": "Simplicity, ergonomics, preview and more",
+                "description": "Intuitive interface with file preview, drag-and-drop, and all modern features for an exceptional user experience.",
+                "benefit": "Modern and intuitive interface"
             }
         }
     },
