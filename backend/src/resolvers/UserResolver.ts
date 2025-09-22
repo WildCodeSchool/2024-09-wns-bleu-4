@@ -4,7 +4,11 @@ import { Resource } from '@/entities/Resource';
 import { LogType } from '@/entities/SystemLog';
 import { TempUser, User, UserRole, UserStorage } from '@/entities/User';
 import SystemLogResolver from '@/resolvers/SystemLogResolver';
-import { calculateStoragePercentage, formatFileSize } from '@/utils/storageUtils';
+import { getDomain } from '@/utils/envUtils';
+import {
+    calculateStoragePercentage,
+    formatFileSize,
+} from '@/utils/storageUtils';
 import * as argon2 from 'argon2';
 import { IsEmail, Length, Matches } from 'class-validator';
 import jwt, { Secret } from 'jsonwebtoken';
@@ -47,22 +51,22 @@ export class UserInfo {
     @Field(() => Boolean)
     isLoggedIn: boolean;
 
-    @Field(() => String, { nullable: false })
+    @Field(() => String, { nullable: true })
     email?: String;
 
-    @Field(() => ID, { nullable: false })
+    @Field(() => ID, { nullable: true })
     id?: number;
 
     @Field(() => Boolean, { nullable: true })
     isSubscribed?: boolean;
 
-    @Field(() => UserRole, { nullable: false })
+    @Field(() => UserRole, { nullable: true })
     role?: UserRole;
 
     @Field(() => String, { nullable: true })
     profilePicture?: string | null;
 
-    @Field(() => UserStorage, { nullable: false })
+    @Field(() => UserStorage, { nullable: true })
     storage?: UserStorage;
 }
 
@@ -106,18 +110,29 @@ class UserResolver {
     }
 
     @Mutation(() => String)
-    async resetSendCode(
+    async resetPasswordSendCode(
         @Arg('email', () => String) email: string,
         @Arg('lang', () => String) lang: string,
     ) {
-        const user = await TempUser.findOneBy({ email });
+        const user = await User.findOneBy({ email });
         if (!user) {
             throw new Error("L'utilisateur demandé n'a pas été trouvé");
         }
-        const resetCode = Array.from({ length: 8 }, () =>
-            Math.floor(Math.random() * 10),
-        ).join('');
-        await TempUser.update({ email }, { randomCode: resetCode });
+
+        // Generate a JWT token for password reset that expires in 1 hour
+        const resetToken = jwt.sign(
+            {
+                email: user.email,
+                type: 'password_reset',
+                userId: user.id,
+            },
+            process.env.JWT_SECRET_KEY as Secret,
+            { expiresIn: '1h' },
+        );
+
+        // Create the reset password link
+        const resetPasswordLink = `${getDomain()}/reset-password?token=${resetToken}`;
+
         const resend = new Resend(process.env.RESEND_API_KEY);
         try {
             await resend.emails.send({
@@ -126,13 +141,58 @@ class UserResolver {
                 subject: 'Reset Password',
                 react: ResetPasswordEmail({
                     userEmail: email,
-                    resetPasswordLink: '#', // TODO: Replacer par le vrai lien une fois la feature en place + Supprimer ce commentaire
+                    resetPasswordLink: resetPasswordLink,
                     lang: lang as 'fr' | 'en',
                 }),
             });
-            return 'Un code de réinitialisation a été envoyé à votre adresse email';
+            return 'Un lien de réinitialisation a été envoyé à votre adresse email';
         } catch (error) {
             throw new Error(error.message);
+        }
+    }
+
+    @Mutation(() => String)
+    async resetPassword(
+        @Arg('token', () => String) token: string,
+        @Arg('newPassword', () => String) newPassword: string,
+    ) {
+        try {
+            // Verify the JWT token
+            const decoded = jwt.verify(
+                token,
+                process.env.JWT_SECRET_KEY as Secret,
+            ) as any;
+
+            // Check if it's a password reset token
+            if (decoded.type !== 'password_reset') {
+                throw new Error('Invalid token type');
+            }
+
+            // Find the user
+            const user = await User.findOneBy({ id: decoded.userId });
+            if (!user) {
+                throw new Error('User not found');
+            }
+
+            // Hash the new password
+            const hashedPassword = await argon2.hash(newPassword);
+
+            // Update the user's password
+            user.password = hashedPassword;
+            await user.save();
+
+            return 'Password has been reset successfully';
+        } catch (error) {
+            if (error.name === 'TokenExpiredError') {
+                throw new Error(
+                    'Reset link has expired. Please request a new one.',
+                );
+            } else if (error.name === 'JsonWebTokenError') {
+                throw new Error(
+                    'Invalid reset link. Please request a new one.',
+                );
+            }
+            throw new Error(error.message || 'Error resetting password');
         }
     }
 
@@ -191,7 +251,7 @@ class UserResolver {
                 const token = jwt.sign(
                     { email: user.email, userRole: user.role },
                     process.env.JWT_SECRET_KEY as Secret,
-                    { expiresIn: '1h' }
+                    { expiresIn: '1h' },
                 );
                 context.res.setHeader(
                     'Set-Cookie',
@@ -224,6 +284,14 @@ class UserResolver {
         return users;
     }
 
+    @Query(() => Boolean)
+    async checkUserExists(
+        @Arg('email', () => String) email: string,
+    ): Promise<boolean> {
+        const user = await User.findOneBy({ email });
+        return !!user;
+    }
+
     @Query(() => UserInfo)
     async getUserInfo(@Ctx() context: any): Promise<UserInfo> {
         if (context.email) {
@@ -236,10 +304,13 @@ class UserResolver {
                     .select('SUM(resource.size)', 'totalSize')
                     .where('resource.user.id = :userId', { userId: user.id })
                     .getRawOne();
-                
-                const totalBytesUsed = result?.totalSize ? Number(result.totalSize) : 0;
-                const storagePercentage = calculateStoragePercentage(totalBytesUsed);
-                
+
+                const totalBytesUsed = result?.totalSize
+                    ? Number(result.totalSize)
+                    : 0;
+                const storagePercentage =
+                    calculateStoragePercentage(totalBytesUsed);
+
                 return {
                     isLoggedIn: true,
                     email: context.email,

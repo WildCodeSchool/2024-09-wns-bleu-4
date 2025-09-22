@@ -7,7 +7,9 @@
         "cancel": "Annuler",
         "delete": "Supprimer",
         "add": "Ajouter",
-        "sending": "Envoi..."
+        "sending": "Envoi...",
+        "sent": "Envoyé !",
+        "back": "Retour"
     },
     "profile": {
         "title": "Mon profil",
@@ -26,7 +28,12 @@
             }
         },
         "actions": {
-            "save": "Enregistrer"
+            "save": "Enregistrer",
+            "changePassword": {
+                "label": "Changer de mot de passe",
+                "description": "Vous recevrez un email avec un lien pour réinitialiser votre mot de passe",
+                "mailSent": "Email envoyé !"
+            }
         },
         "avatar": {
             "tooltip": "Cliquez pour changer votre photo de profil",
@@ -54,6 +61,8 @@
         "actions": {
             "addFiles": "Ajouter des fichiers"
         },
+        "compactMode": "Mode réduit",
+        "toggleCompactMode": "Basculer en mode réduit",
         "errors": {
             "invalidResourceId": "ID de ressource non valide",
             "deleting": "Suppression en cours...",
@@ -74,12 +83,22 @@
         "title": "Télécharger un fichier",
         "page": {
             "deposit": {
-                "title": "Transférer votre fichier",
-                "description": "Téléchargez un fichier pour le partager avec vos contacts"
+                "title": "Déposer votre fichier",
+                "description": "Téléchargez un fichier pour le partager avec vos contacts",
+                "dropBox": {
+                    "title": "Déposez votre fichier permanent ici",
+                    "supportedTypes": "Supporte les images, documents, vidéos, et plus",
+                    "notice": "Les fichiers seront conservés indéfiniment"
+                }
             },
             "tempLink": {
                 "title": "Générer un lien temporaire",
-                "description": "Téléchargez un fichier pour générer un lien temporaire qui expirera dans 24 heures",
+                "description": "Téléchargez un fichier pour générer un lien temporaire qui expirera dans 30 minutes",
+                "dropBox": {
+                    "title": "Téléchargez votre fichier temporaire ici",
+                    "supportedTypes": "Supporte les images, documents, vidéos, et plus",
+                    "notice": "Taille maximale du fichier : 10MB"
+                },
                 "generatedLinks": "Liens générés",
                 "actions": {
                     "generate": "Générer un lien",
@@ -92,7 +111,8 @@
                     "success": "Le lien a été généré avec succès",
                     "error": "Erreur lors de la génération du lien",
                     "copy": "Le lien a été copié avec succès",
-                    "delete": "Le lien a été supprimé avec succès"
+                    "delete": "Le lien a été supprimé avec succès",
+                    "fileTooLarge": "La taille du fichier dépasse la limite de 10MB"
                 },
                 "type": {
                     "browser": "Voir dans le navigateur",
@@ -104,12 +124,18 @@
                 "remaining": "restant"
             }
         },
+        "blocked": {
+            "line1": "Le depot de fichier est bloqué",
+            "line2": "pour les utilisateurs non enregistrés",
+            "button": "S'inscrire"
+        },
         "dragDrop": {
             "title": "Transférez votre fichier",
             "dropHere": "Déposez le fichier ici",
             "releaseToUpload": "Relâchez pour télécharger",
             "browse": "parcourez",
-            "supportedTypes": "Supporte les images, documents, vidéos, et plus"
+            "supportedTypes": "Supporte les images, documents, vidéos, et plus",
+            "maxSize": "Taille maximale du fichier : 10MB"
         },
         "selectedFile": {
             "title": "Fichier sélectionné",
@@ -610,7 +636,8 @@
             "description": "Veuillez vérifier votre boîte mail afin de finaliser votre inscription.",
             "resendEmail": "Renvoyer un email",
             "success": "Votre email a bien été confirmé, vous pouvez vous connecter !",
-            "error": "Le code saisie est incorrect ou a expiré, veuillez réessayer."
+            "error": "Le code saisie est incorrect ou a expiré, veuillez réessayer.",
+            "emailResent": "Un email de confirmation a été renvoyé à votre adresse email."
         },
         "protectedRoute": {
             "error": "Vous devez être connecté pour accéder à cette page"
@@ -722,6 +749,10 @@
             "title": "Mot de passe oublié",
             "description": "Récupération de mot de passe"
         },
+        "resetPassword": {
+            "title": "Réinitialiser le mot de passe",
+            "description": "Réinitialisez votre mot de passe"
+        },
         "payment": {
             "title": "Paiement d'abonnement",
             "description": "Finalisez votre paiement d'abonnement pour Wild Transfer"
@@ -793,5 +824,38 @@
         "memberDescription": "Membre de la plateforme",
         "joinedOn": "Membre depuis le",
         "unknownDate": "Date inconnue"
+    },
+    "password": {
+        "forgot": {
+            "form": {
+                "title": "Mot de passe oublié",
+                "description": "Récupération de mot de passe",
+                "submit": "Récupérer le mot de passe",
+                "email": {
+                    "label": "Email",
+                    "placeholder": "exemple@exemple.com"
+                }
+            }
+        },
+        "reset": {
+            "form": {
+                "title": "Réinitialisation de mot de passe pour {{email}}",
+                "description": "Entrez votre nouveau mot de passe ci-dessous",
+                "password": {
+                    "label": "Mot de passe",
+                    "placeholder": "Votre nouveau mot de passe"
+                },
+                "confirmPassword": {
+                    "label": "Confirmer le mot de passe",
+                    "placeholder": "Confirmez votre nouveau mot de passe"
+                },
+                "submit": "Réinitialiser le mot de passe",
+                "invalidLink": "Lien de réinitialisation invalide",
+                "passwordsDoNotMatch": "Les mots de passe ne correspondent pas",
+                "passwordTooShort": "Le mot de passe doit contenir au moins 12 caractères",
+                "success": "Mot de passe réinitialisé avec succès"
+            },
+            "loading": "Chargement..."
+        }
     }
 }

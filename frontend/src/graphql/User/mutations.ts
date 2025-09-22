@@ -47,3 +47,16 @@ export const UPDATE_PROFILE_PICTURE = gql`
         }
     }
 `;
+
+// Password reset
+export const RESET_PASSWORD_SEND_CODE = gql`
+    mutation ResetPasswordSendCode($email: String!, $lang: String!) {
+        resetPasswordSendCode(email: $email, lang: $lang)
+    }
+`;
+
+export const RESET_PASSWORD = gql`
+    mutation ResetPassword($token: String!, $newPassword: String!) {
+        resetPassword(token: $token, newPassword: $newPassword)
+    }
+`;

@@ -1,43 +1,31 @@
+import FadeClock from '@/components/Icons/FadeClock';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { FileWithPreview, TempLink } from '@/types/types';
+import {
+    createDragAndDropHandlers,
+    formatFileSize,
+} from '@/utils/fileUtils';
+import { cn } from '@/utils/globalUtils';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
     CheckCircle,
-    Copy,
-    DownloadIcon,
-    EyeIcon,
     File as FileIcon,
     Link as LinkIcon,
     Loader,
     Trash2,
 } from 'lucide-react';
-import { ChangeEvent, DragEvent, useEffect, useRef, useState } from 'react';
-import { toast } from 'react-toastify';
-import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import FadeClock from '@/components/Icons/FadeClock';
-
-interface FileWithPreview {
-    id: string;
-    preview: string;
-    progress: number;
-    name: string;
-    size: number;
-    type: string;
-    lastModified?: number;
-    file?: File;
-}
-
-interface TempLink {
-    id: string;
-    url: string;
-    expiresAt: Date;
-    fileName: string;
-    fileSize: number;
-    isExpired?: boolean;
-}
+import { toast } from 'react-toastify';
+import TempLinkCard from './TempLinkCard';
 
 const STORAGE_KEY = 'tempLinks';
 
-const TempLinkGenerator = () => {
+interface TempLinkGeneratorProps {
+    acceptedFileTypes: Record<string, string[]>;
+}
+
+const TempLinkGenerator = ({ acceptedFileTypes }: TempLinkGeneratorProps) => {
     const { t } = useTranslation();
     const { setItem, getItem } = useLocalStorage();
     const [files, setFiles] = useState<FileWithPreview[]>([]);
@@ -65,7 +53,7 @@ const TempLinkGenerator = () => {
         };
 
         document.addEventListener('visibilitychange', handleVisibilityChange);
-        
+
         // Also listen for focus events (when user returns to tab)
         const handleFocus = () => {
             loadTempLinksFromStorage();
@@ -74,7 +62,10 @@ const TempLinkGenerator = () => {
         window.addEventListener('focus', handleFocus);
 
         return () => {
-            document.removeEventListener('visibilitychange', handleVisibilityChange);
+            document.removeEventListener(
+                'visibilitychange',
+                handleVisibilityChange,
+            );
             window.removeEventListener('focus', handleFocus);
         };
     }, []);
@@ -82,39 +73,46 @@ const TempLinkGenerator = () => {
     // Periodically check for expired links (every minute)
     useEffect(() => {
         const interval = setInterval(() => {
-            setTempLinks(prev => 
-                prev.map(link => ({
+            setTempLinks((prev) =>
+                prev.map((link) => ({
                     ...link,
-                    isExpired: new Date() > link.expiresAt
-                }))
+                    isExpired: new Date() > link.expiresAt,
+                })),
             );
         }, 60000); // Check every minute
 
         return () => clearInterval(interval);
     }, []);
 
-    const loadTempLinksFromStorage = () => {
+    const loadTempLinksFromStorage = useCallback(() => {
         try {
             const stored = getItem(STORAGE_KEY);
             if (stored) {
                 const parsed = JSON.parse(stored);
                 // Convert string dates back to Date objects and check expiration
-                const linksWithExpiration = parsed
-                    .map((link: Omit<TempLink, 'expiresAt'> & { expiresAt: string }) => {
+                const linksWithExpiration = parsed.map(
+                    (
+                        link: Omit<TempLink, 'expiresAt'> & {
+                            expiresAt: string;
+                        },
+                    ) => {
                         const expiresAt = new Date(link.expiresAt);
                         const isExpired = new Date() > expiresAt;
                         return {
                             ...link,
                             expiresAt,
-                            isExpired
+                            isExpired,
                         };
-                    });
-                
+                    },
+                );
+
                 // Keep all links but mark expired ones
                 setTempLinks(linksWithExpiration);
-                
+
                 // Clean up expired links from storage (optional - you can keep them for reference)
-                const validLinks = linksWithExpiration.filter((link: TempLink) => !link.isExpired);
+                const validLinks = linksWithExpiration.filter(
+                    (link: TempLink) => !link.isExpired,
+                );
                 if (validLinks.length !== linksWithExpiration.length) {
                     setItem(STORAGE_KEY, JSON.stringify(validLinks));
                 }
@@ -122,20 +120,31 @@ const TempLinkGenerator = () => {
         } catch (error) {
             console.error('Error loading temp links from localStorage:', error);
         }
-    };
+    }, [getItem, setItem, setTempLinks]);
 
-    const saveTempLinksToStorage = () => {
+    const saveTempLinksToStorage = useCallback(() => {
         try {
             setItem(STORAGE_KEY, JSON.stringify(tempLinks));
         } catch (error) {
             console.error('Error saving temp links to localStorage:', error);
         }
-    };
+    }, [setItem, tempLinks]);
 
     const handleFiles = (fileList: FileList) => {
         if (fileList.length === 0) return;
 
         const file = fileList[0];
+
+        // Check file size limit (10MB)
+        const maxSize = 10 * 1024 * 1024; // 10MB in bytes
+        if (file.size > maxSize) {
+            toast.error(
+                t('upload.page.tempLink.toast.fileTooLarge') ||
+                    'File size exceeds 10MB limit',
+            );
+            return;
+        }
+
         const newFile = {
             id: `${URL.createObjectURL(file)}-${Date.now()}`,
             preview: URL.createObjectURL(file),
@@ -170,18 +179,10 @@ const TempLinkGenerator = () => {
         }, 300);
     };
 
-    const onDrop = (e: DragEvent) => {
-        e.preventDefault();
-        setIsDragging(false);
-        handleFiles(e.dataTransfer.files);
-    };
-
-    const onDragOver = (e: DragEvent) => {
-        e.preventDefault();
-        setIsDragging(true);
-    };
-
-    const onDragLeave = () => setIsDragging(false);
+    const { onDrop, onDragOver, onDragLeave } = createDragAndDropHandlers(
+        setIsDragging,
+        handleFiles,
+    );
 
     const onSelect = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) handleFiles(e.target.files);
@@ -192,58 +193,6 @@ const TempLinkGenerator = () => {
         setFiles([]);
     };
 
-    const formatFileSize = (bytes: number): string => {
-        if (!bytes) return '0 Bytes';
-        const k = 1024;
-        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return `${(bytes / Math.pow(k, i)).toFixed(2)} ${sizes[i]}`;
-    };
-
-    const formatTimeRemaining = (expiresAt: Date): string => {
-        const now = new Date();
-        const diff = expiresAt.getTime() - now.getTime();
-
-        if (diff <= 0) return 'Expired';
-
-        const hours = Math.floor(diff / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-
-        if (hours > 0) return `${hours}h ${minutes}m ${t('upload.page.tempLink.remaining')}`;
-        return `${minutes}m ${t('upload.page.tempLink.remaining')}`;
-    };
-
-    const getFileDisplayType = (fileName: string): 'browser' | 'download' => {
-        const extension = fileName.toLowerCase().split('.').pop();
-        const browserDisplayableExtensions = [
-            'html', 'htm', 'css', 'js', 'json', 'xml', 'txt', 'md', 'pdf',
-            'png', 'jpg', 'jpeg', 'gif', 'bmp', 'svg', 'webp', 'ico',
-            'mp3', 'wav', 'ogg', 'mp4', 'avi', 'mov', 'wmv', 'flv', 'webm'
-        ];
-        
-        return browserDisplayableExtensions.includes(extension || '') ? 'browser' : 'download';
-    };
-
-    const getFileIcon = (fileName: string) => {
-        const extension = fileName.toLowerCase().split('.').pop();
-        
-        if (['png', 'jpg', 'jpeg', 'gif', 'bmp', 'svg', 'webp', 'ico'].includes(extension || '')) {
-            return '🖼️';
-        } else if (['mp4', 'avi', 'mov', 'wmv', 'flv', 'webm'].includes(extension || '')) {
-            return '🎥';
-        } else if (['mp3', 'wav', 'ogg'].includes(extension || '')) {
-            return '🎵';
-        } else if (['pdf'].includes(extension || '')) {
-            return '📄';
-        } else if (['doc', 'docx'].includes(extension || '')) {
-            return '📝';
-        } else if (['zip', 'rar', '7z', 'tar', 'gz'].includes(extension || '')) {
-            return '📦';
-        } else {
-            return '📁';
-        }
-    };
-
     const generateTempLink = async () => {
         if (files.length === 0) return;
 
@@ -251,7 +200,7 @@ const TempLinkGenerator = () => {
 
         try {
             const file = files[0];
-            
+
             // Create FormData for file upload
             const formData = new FormData();
             formData.append('file', file.file!);
@@ -263,22 +212,32 @@ const TempLinkGenerator = () => {
             });
 
             if (!response.ok) {
-                throw new Error('Failed to upload file');
+                const errorData = await response.json().catch(() => ({}));
+
+                if (response.status === 413) {
+                    throw new Error('File size exceeds 10MB limit');
+                } else if (response.status === 400) {
+                    throw new Error(errorData.message || 'Invalid file format');
+                } else {
+                    throw new Error(
+                        errorData.message || 'Failed to upload file',
+                    );
+                }
             }
 
             const result = await response.json();
-            
+
             // Create new temp link with real data
             const newTempLink: TempLink = {
                 id: result.tempId,
                 url: `${window.location.origin}/storage${result.accessUrl}`,
-                expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
+                expiresAt: new Date(Date.now() + 30 * 60 * 1000), // 30 minutes
                 fileName: result.originalName,
                 fileSize: result.fileSize,
                 isExpired: false,
             };
 
-            setTempLinks(prev => [newTempLink, ...prev]);
+            setTempLinks((prev) => [newTempLink, ...prev]);
             setFiles([]);
             toast.success(t('upload.page.tempLink.toast.success'));
         } catch (error) {
@@ -289,29 +248,9 @@ const TempLinkGenerator = () => {
         }
     };
 
-    const copyToClipboard = async (url: string) => {
-        try {
-            await navigator.clipboard.writeText(url);
-            toast.success(t('upload.page.tempLink.toast.copy'));
-        } catch (error) {
-            console.error('Failed to copy to clipboard:', error);
-            toast.error(t('upload.page.tempLink.toast.error'));
-        }
-    };
-
     const removeTempLink = (id: string) => {
-        setTempLinks(prev => prev.filter(link => link.id !== id));
+        setTempLinks((prev) => prev.filter((link) => link.id !== id));
         toast.info(t('upload.page.tempLink.toast.delete'));
-    };
-
-    const acceptedFileTypes = {
-        'application/pdf': ['.pdf'],
-        'image/*': ['.png', '.jpg', '.jpeg'],
-        'application/msword': ['.doc'],
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-            ['.docx'],
-        'audio/*': ['.mp3', '.wav'],
-        'video/*': ['.mp4', '.mov'],
     };
 
     return (
@@ -356,28 +295,37 @@ const TempLinkGenerator = () => {
                                     display: isDragging ? 'block' : 'none',
                                 }}
                             />
-                            <FadeClock className="lucide lucide-clock-fading-icon lucide-clock-fading w-16 h-16 md:w-20 md:h-20 drop-shadow-sm text-zinc-700 dark:text-zinc-300 group-hover:text-blue-500 transition-colors duration-300" />
+                            <FadeClock
+                                className={cn(
+                                    'lucide lucide-clock-fading-icon lucide-clock-fading w-16 h-16 md:w-20 md:h-20 drop-shadow-sm group-hover:text-blue-500 transition-colors duration-300',
+                                    isDragging
+                                        ? 'text-blue-500'
+                                        : 'text-zinc-700 dark:text-zinc-300 group-hover:text-blue-500 transition-colors duration-300',
+                                )}
+                            />
                         </motion.div>
 
                         <div className="space-y-2">
                             <h3 className="text-xl md:text-2xl font-semibold text-zinc-800 dark:text-zinc-100">
                                 {isDragging
                                     ? t('upload.dragDrop.dropHere')
-                                    : t('upload.title')}
+                                    : t('upload.page.tempLink.dropBox.title')}
                             </h3>
                             <p className="text-zinc-600 dark:text-zinc-300 md:text-lg max-w-md mx-auto">
                                 {isDragging ? (
                                     <span className="font-medium text-blue-500">
-                                        {t('upload.dragDrop.dropHere')}
+                                        {t('upload.dragDrop.releaseToUpload')}
                                     </span>
                                 ) : (
                                     <span className="font-medium text-zinc-500 dark:text-zinc-400">
-                                        {t('upload.title')}
+                                        {t(
+                                            'upload.page.tempLink.dropBox.supportedTypes',
+                                        )}
                                     </span>
                                 )}
                             </p>
                             <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                                {t('upload.dragDrop.supportedTypes')}
+                                {t('upload.dragDrop.maxSize')}
                             </p>
                         </div>
 
@@ -494,12 +442,16 @@ const TempLinkGenerator = () => {
                                     {isUploading ? (
                                         <>
                                             <Loader className="w-4 h-4 animate-spin" />
-                                            {t('upload.page.tempLink.generating')}
+                                            {t(
+                                                'upload.page.tempLink.generating',
+                                            )}
                                         </>
                                     ) : (
                                         <>
                                             <LinkIcon className="w-4 h-4" />
-                                            {t('upload.page.tempLink.actions.generate')}
+                                            {t(
+                                                'upload.page.tempLink.actions.generate',
+                                            )}
                                         </>
                                     )}
                                 </button>
@@ -517,101 +469,11 @@ const TempLinkGenerator = () => {
                     </h3>
                     <div className="space-y-3">
                         {tempLinks.map((link) => (
-                            <motion.div
+                            <TempLinkCard
                                 key={link.id}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                className={`p-4 rounded-lg border transition-all duration-200 ${
-                                    link.isExpired
-                                        ? 'bg-red-50/50 dark:bg-red-900/20 border-red-200 dark:border-red-800 opacity-60'
-                                        : 'bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700'
-                                }`}
-                            >
-                                <div className="flex items-center justify-between gap-4">
-                                    <div className="flex-1 min-w-0">
-                                        <div className="flex items-center gap-2 mb-1">
-                                            <span className="text-lg">{getFileIcon(link.fileName)}</span>
-                                            <span className="font-medium text-zinc-800 dark:text-zinc-200 truncate">
-                                                {link.fileName}
-                                            </span>
-                                        </div>
-                                        <div className="flex items-center gap-4 text-sm text-zinc-500 dark:text-zinc-400">
-                                            <span>
-                                                {formatFileSize(link.fileSize)}
-                                            </span>
-                                            <span className={`flex items-center gap-1 ${
-                                                link.isExpired ? 'text-red-500 dark:text-red-400' : ''
-                                            }`}>
-                                                <FadeClock className="w-4 h-4 text-zinc-500 dark:text-zinc-400" />
-                                                {link.isExpired ? t('upload.page.tempLink.expired') : formatTimeRemaining(link.expiresAt)}
-                                            </span>
-                                            <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                                                getFileDisplayType(link.fileName) === 'browser'
-                                                    ? 'bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-200'
-                                                    : 'bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200'
-                                            }`}>
-                                                {getFileDisplayType(link.fileName) === 'browser' ? t('upload.page.tempLink.type.browser') : t('upload.page.tempLink.type.download')}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <button
-                                            onClick={() =>
-                                                copyToClipboard(link.url)
-                                            }
-                                            disabled={link.isExpired}
-                                            className={`p-2 transition-colors duration-200 ${
-                                                link.isExpired
-                                                    ? 'text-zinc-400 dark:text-zinc-500'
-                                                    : 'text-zinc-500 hover:text-yellow-500 cursor-pointer'
-                                            }`}
-                                            title={link.isExpired ? t('upload.page.tempLink.linkExpired') : t('upload.page.tempLink.actions.copy')}
-                                        >
-                                            <Copy className="w-4 h-4" />
-                                        </button>
-                                        
-                                        {/* View/Open button */}
-                                        {getFileDisplayType(link.fileName) === 'browser' && (
-                                            <a
-                                                href={link.isExpired ? '#' : link.url}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className={`p-2 transition-colors duration-200 ${
-                                                    link.isExpired
-                                                        ? 'text-zinc-400 dark:text-zinc-500 pointer-events-none'
-                                                        : 'text-zinc-500 hover:text-green-500'
-                                                }`}
-                                                title={link.isExpired ? t('upload.page.tempLink.linkExpired') : t('upload.page.tempLink.actions.open')}
-                                            >
-                                                <EyeIcon className="w-4 h-4" />
-                                            </a>
-                                        )}
-                                        
-                                        {/* Download button */}
-                                        <a
-                                            href={link.isExpired ? '#' : `${link.url}?download=true`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className={`p-2 transition-colors duration-200 ${
-                                                link.isExpired
-                                                    ? 'text-zinc-400 dark:text-zinc-500 pointer-events-none'
-                                                    : 'text-zinc-500 hover:text-blue-500'
-                                            }`}
-                                            title={link.isExpired ? t('upload.page.tempLink.linkExpired') : t('upload.page.tempLink.actions.download')}
-                                        >
-                                            <DownloadIcon className="w-4 h-4" />
-                                        </a>
-                                        
-                                        <button
-                                            onClick={() => removeTempLink(link.id)}
-                                            className="p-2 text-zinc-500 hover:text-red-500 transition-colors duration-200 cursor-pointer"
-                                            title={t('upload.page.tempLink.actions.delete')}
-                                        >
-                                            <Trash2 className="w-4 h-4" />
-                                        </button>
-                                    </div>
-                                </div>
-                            </motion.div>
+                                link={link}
+                                onRemoveTempLink={removeTempLink}
+                            />
                         ))}
                     </div>
                 </div>

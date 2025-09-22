@@ -1,19 +1,23 @@
+import FileShareDialog from '@/components/File/FileShareDialog';
 import FilePreview from '@/components/FilePreview';
-import { formatFileSize } from '@/utils/fileUtils';
-import clsx from 'clsx';
-import { AnimatePresence, motion } from 'framer-motion';
-import { CheckCircle, Loader, Trash2, UploadCloud } from 'lucide-react';
-import { ChangeEvent, DragEvent, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Button } from '@/components/ui/button';
 import { CREATE_RESOURCE } from '@/graphql/Resource/mutations';
 import { useAuth } from '@/hooks/useAuth';
 import { useMyContacts } from '@/hooks/useMyContacts';
+import {
+    createDragAndDropHandlers,
+    defaultAcceptedFileTypes,
+    formatFileSize,
+} from '@/utils/fileUtils';
+import { cn } from '@/utils/globalUtils';
 import { useMutation } from '@apollo/client';
-import { Share2 } from 'lucide-react';
-import { mutate } from 'swr';
-import FileShareDialog from '@/components/File/FileShareDialog';
-import { Button } from '@/components/ui/button';
+import clsx from 'clsx';
+import { AnimatePresence, motion } from 'framer-motion';
+import { CheckCircle, Loader, Share2, Trash2, UploadCloud } from 'lucide-react';
+import { ChangeEvent, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { mutate } from 'swr';
 
 interface FileWithPreview {
     id: string;
@@ -30,19 +34,19 @@ interface FileUploaderProps {
     acceptedFileTypes?: Record<string, string[]>;
 }
 
-export default function FileUploader({
-    acceptedFileTypes,
-}: FileUploaderProps) {
+export default function FileUploader({ acceptedFileTypes }: FileUploaderProps) {
     const { t } = useTranslation();
     const { user } = useAuth();
     const { acceptedContacts } = useMyContacts();
     const [createResource] = useMutation(CREATE_RESOURCE);
-    
+
     const [files, setFiles] = useState<FileWithPreview[]>([]);
     const [isDragging, setIsDragging] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
     const [description, setDescription] = useState<string>('');
-    const [lastUploadedResourceId, setLastUploadedResourceId] = useState<string | null>(null);
+    const [lastUploadedResourceId, setLastUploadedResourceId] = useState<
+        string | null
+    >(null);
     const [uploadedFileName, setUploadedFileName] = useState<string>('');
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -85,18 +89,10 @@ export default function FileUploader({
         }, 300);
     };
 
-    const onDrop = (e: DragEvent) => {
-        e.preventDefault();
-        setIsDragging(false);
-        handleFiles(e.dataTransfer.files);
-    };
-
-    const onDragOver = (e: DragEvent) => {
-        e.preventDefault();
-        setIsDragging(true);
-    };
-
-    const onDragLeave = () => setIsDragging(false);
+    const { onDrop, onDragOver, onDragLeave } = createDragAndDropHandlers(
+        setIsDragging,
+        handleFiles,
+    );
 
     const onSelect = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) handleFiles(e.target.files);
@@ -126,7 +122,8 @@ export default function FileUploader({
                         name: file.name,
                         path: fileUrl,
                         url: fileUrl,
-                        description: description || `Fichier uploadé : ${file.name}`,
+                        description:
+                            description || `Fichier uploadé : ${file.name}`,
                         userId: user.id,
                         size: file.size,
                     },
@@ -137,7 +134,9 @@ export default function FileUploader({
                 const formData = new FormData();
                 formData.append('file', file);
 
-                const storageUrl = `/storage/upload?filename=${encodeURIComponent(secureName)}`;
+                const storageUrl = `/storage/upload?filename=${encodeURIComponent(
+                    secureName,
+                )}`;
                 const storageResponse = await fetch(storageUrl, {
                     method: 'POST',
                     body: formData,
@@ -147,7 +146,9 @@ export default function FileUploader({
                     throw new Error(t('upload.errors.fileUpload'));
                 }
 
-                setLastUploadedResourceId(resourceResponse.data.createResource.id);
+                setLastUploadedResourceId(
+                    resourceResponse.data.createResource.id,
+                );
                 setUploadedFileName(file.name);
                 setFiles([]);
                 setDescription('');
@@ -162,17 +163,7 @@ export default function FileUploader({
         }
     };
 
-    const defaultAcceptedTypes = {
-        'application/pdf': ['.pdf'],
-        'image/*': ['.png', '.jpg', '.jpeg'],
-        'application/msword': ['.doc'],
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-            ['.docx'],
-        'audio/*': ['.mp3', '.wav'],
-        'video/*': ['.mp4', '.mov'],
-    };
-
-    const finalAcceptedTypes = acceptedFileTypes || defaultAcceptedTypes;
+    const finalAcceptedTypes = acceptedFileTypes || defaultAcceptedFileTypes;
 
     return (
         <div className="">
@@ -192,7 +183,8 @@ export default function FileUploader({
                         transition={{ duration: 0.2 }}
                         className={clsx(
                             'relative rounded-2xl p-8 md:p-12 text-center cursor-pointer bg-secondary/50 border border-primary/10 shadow-sm hover:shadow-md backdrop-blur group',
-                            isDragging && 'ring-4 ring-blue-400/30 border-blue-500',
+                            isDragging &&
+                                'ring-4 ring-blue-400/30 border-blue-500',
                         )}
                     >
                         <div className="flex flex-col items-center gap-5">
@@ -208,7 +200,9 @@ export default function FileUploader({
                                 <motion.div
                                     animate={{
                                         opacity: isDragging ? [0.5, 1, 0.5] : 1,
-                                        scale: isDragging ? [0.95, 1.05, 0.95] : 1,
+                                        scale: isDragging
+                                            ? [0.95, 1.05, 0.95]
+                                            : 1,
                                     }}
                                     transition={{
                                         duration: 2,
@@ -221,7 +215,7 @@ export default function FileUploader({
                                     }}
                                 />
                                 <UploadCloud
-                                    className={clsx(
+                                    className={cn(
                                         'w-16 h-16 md:w-20 md:h-20 drop-shadow-sm',
                                         isDragging
                                             ? 'text-blue-500'
@@ -234,24 +228,27 @@ export default function FileUploader({
                                 <h3 className="text-xl md:text-2xl font-semibold text-zinc-800 dark:text-zinc-100">
                                     {isDragging
                                         ? t('upload.dragDrop.dropHere')
-                                        : t('upload.dragDrop.title')}
+                                        : t(
+                                              'upload.page.deposit.dropBox.title',
+                                          )}
                                 </h3>
                                 <p className="text-zinc-600 dark:text-zinc-300 md:text-lg max-w-md mx-auto">
                                     {isDragging ? (
                                         <span className="font-medium text-blue-500">
-                                            {t('upload.dragDrop.releaseToUpload')}
+                                            {t(
+                                                'upload.dragDrop.releaseToUpload',
+                                            )}
                                         </span>
                                     ) : (
-                                        <>
-                                            {t('upload.dragDrop.title')}{' '}
-                                            <span className="text-blue-500 font-medium">
-                                                {t('upload.dragDrop.browse')}
-                                            </span>
-                                        </>
+                                        <span>
+                                            {t(
+                                                'upload.page.deposit.dropBox.supportedTypes',
+                                            )}
+                                        </span>
                                     )}
                                 </p>
                                 <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                                    {t('upload.dragDrop.supportedTypes')}
+                                    {t('upload.page.deposit.dropBox.notice')}
                                 </p>
                             </div>
 
@@ -261,7 +258,9 @@ export default function FileUploader({
                                 hidden
                                 onChange={onSelect}
                                 accept={Object.entries(finalAcceptedTypes)
-                                    .map(([, extensions]) => extensions.join(','))
+                                    .map(([, extensions]) =>
+                                        extensions.join(','),
+                                    )
                                     .join(',')}
                             />
                         </div>
@@ -302,7 +301,9 @@ export default function FileUploader({
                                                 alt={files[0].name}
                                                 className="w-16 h-16 md:w-20 md:h-20 rounded-lg object-cover border dark:border-zinc-700 shadow-sm"
                                             />
-                                        ) : files[0].type.startsWith('video/') ? (
+                                        ) : files[0].type.startsWith(
+                                              'video/',
+                                          ) ? (
                                             <video
                                                 src={files[0].preview}
                                                 className="w-16 h-16 md:w-20 md:h-20 rounded-lg object-cover border dark:border-zinc-700 shadow-sm"
@@ -320,8 +321,14 @@ export default function FileUploader({
                                         )}
                                         {files[0].progress === 100 && (
                                             <motion.div
-                                                initial={{ opacity: 0, scale: 0.5 }}
-                                                animate={{ opacity: 1, scale: 1 }}
+                                                initial={{
+                                                    opacity: 0,
+                                                    scale: 0.5,
+                                                }}
+                                                animate={{
+                                                    opacity: 1,
+                                                    scale: 1,
+                                                }}
                                                 className="absolute -right-2 -bottom-2 bg-white dark:bg-zinc-800 rounded-full shadow-sm"
                                             >
                                                 <CheckCircle className="w-5 h-5 text-emerald-500" />
@@ -332,10 +339,10 @@ export default function FileUploader({
                                     <div className="flex-1 min-w-0">
                                         <div className="flex flex-col gap-1 w-full">
                                             <div className="flex items-center gap-2 min-w-0">
-                                            <FilePreview
-                                                fileName={files[0].name}
-                                                className="w-5 h-5 flex-shrink-0"
-                                            />
+                                                <FilePreview
+                                                    fileName={files[0].name}
+                                                    className="w-5 h-5 flex-shrink-0"
+                                                />
                                                 <h4
                                                     className="font-medium text-base md:text-lg truncate text-zinc-800 dark:text-zinc-200"
                                                     title={files[0].name}
@@ -346,11 +353,16 @@ export default function FileUploader({
 
                                             <div className="flex items-center justify-between gap-3 text-sm text-zinc-500 dark:text-zinc-400">
                                                 <span className="text-xs md:text-sm">
-                                                    {formatFileSize(files[0].size)}
+                                                    {formatFileSize(
+                                                        files[0].size,
+                                                    )}
                                                 </span>
                                                 <span className="flex items-center gap-1.5">
                                                     <span className="font-medium">
-                                                        {Math.round(files[0].progress)}%
+                                                        {Math.round(
+                                                            files[0].progress,
+                                                        )}
+                                                        %
                                                     </span>
                                                     {files[0].progress < 100 ? (
                                                         <Loader className="w-4 h-4 animate-spin text-blue-500" />
@@ -358,7 +370,9 @@ export default function FileUploader({
                                                         <Trash2
                                                             className="w-4 h-4 cursor-pointer text-zinc-400 hover:text-red-500 dark:text-zinc-500 dark:hover:text-red-400 transition-colors duration-200"
                                                             onClick={removeFile}
-                                                            aria-label={t('upload.selectedFile.delete')}
+                                                            aria-label={t(
+                                                                'upload.selectedFile.delete',
+                                                            )}
                                                         />
                                                     )}
                                                 </span>
@@ -385,19 +399,30 @@ export default function FileUploader({
                                                 )}
                                             />
                                         </div>
-                                      
+
                                         <div className="mt-4">
                                             <textarea
-                                                placeholder={t('upload.description.placeholder')}
+                                                placeholder={t(
+                                                    'upload.description.placeholder',
+                                                )}
                                                 value={description}
-                                                onChange={(e) => setDescription(e.target.value)}
+                                                onChange={(e) =>
+                                                    setDescription(
+                                                        e.target.value,
+                                                    )
+                                                }
                                                 className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-lg text-zinc-800 dark:text-zinc-200 bg-white dark:bg-zinc-800 resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
                                                 rows={4}
                                                 minLength={4}
                                                 required
                                             />
                                             <div className="flex justify-end mt-1 text-xs text-zinc-500">
-                                                {t('upload.description.charCount', { count: description.length })}
+                                                {t(
+                                                    'upload.description.charCount',
+                                                    {
+                                                        count: description.length,
+                                                    },
+                                                )}
                                             </div>
                                         </div>
                                     </div>

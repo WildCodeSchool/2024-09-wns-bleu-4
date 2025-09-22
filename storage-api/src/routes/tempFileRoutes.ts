@@ -6,7 +6,7 @@ import {
     cleanupAllExpiredFiles
 } from '../controllers/tempFileController';
 import { manualCleanup } from '../services/cleanupService';
-import upload from '../middlewares/multerConfig';
+import { tempUpload } from '../middlewares/multerConfig';
 
 const tempFileRoutes = express.Router();
 
@@ -14,7 +14,7 @@ const tempFileRoutes = express.Router();
 cleanupAllExpiredFiles();
 
 // Public routes for temporary files (no authentication required)
-tempFileRoutes.post('/temp/upload', upload.single('file'), uploadTempFile);
+tempFileRoutes.post('/temp/upload', tempUpload.single('file'), uploadTempFile);
 tempFileRoutes.get('/temp/:tempId', getTempFile);
 tempFileRoutes.get('/temp/:tempId/info', getTempFileInfo);
 

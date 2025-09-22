@@ -7,7 +7,9 @@
         "cancel": "Cancel",
         "delete": "Delete",
         "add": "Add",
-        "sending": "Sending..."
+        "sending": "Sending...",
+        "sent": "Sent !",
+        "back": "Back"
     },
     "profile": {
         "title": "My Profile",
@@ -26,7 +28,12 @@
             }
         },
         "actions": {
-            "save": "Save"
+            "save": "Save",
+            "changePassword": {
+                "label": "Change password",
+                "description": "You will be sent an email with a link to reset your password",
+                "mailSent": "Email sent !"
+            }
         },
         "avatar": {
             "tooltip": "Click to change your profile picture",
@@ -54,6 +61,8 @@
         "actions": {
             "addFiles": "Add files"
         },
+        "compactMode": "Condensed mode",
+        "toggleCompactMode": "Toggle condensed mode",
         "errors": {
             "invalidResourceId": "Invalid resource ID",
             "deleting": "Deleting...",
@@ -75,11 +84,21 @@
         "page": {
             "deposit": {
                 "title": "Transfer your file",
-                "description": "Upload a file to share it with your contacts"
+                "description": "Upload a file to share it with your contacts",
+                "dropBox": {
+                    "title": "Transfer your file here",
+                    "supportedTypes": "Supports images, documents, videos, and more",
+                    "notice": "Files will be kept indefinitely"
+                }
             },
             "tempLink": {
                 "title": "Generate a temporary link",
-                "description": "Upload a file to generate a temporary link that expires in 24 hours",
+                "description": "Upload a file to generate a temporary link that expires in 30 minutes",
+                "dropBox": {
+                    "title": "Upload your temporary file here",
+                    "supportedTypes": "Supports images, documents, videos, and more",
+                    "notice": "Maximum file size: 10MB"
+                },
                 "generatedLinks": "Generated links",
                 "actions": {
                     "generate": "Generate link",
@@ -92,7 +111,8 @@
                     "success": "Link generated successfully",
                     "error": "Error generating link",
                     "copy": "Link copied successfully",
-                    "delete": "Link deleted successfully"
+                    "delete": "Link deleted successfully",
+                    "fileTooLarge": "File size exceeds 10MB limit"
                 },
                 "type": {
                     "browser": "View in browser",
@@ -104,12 +124,18 @@
                 "remaining": "remaining"
             }
         },
+        "blocked": {
+            "line1": "File deposit is blocked",
+            "line2": "for unregistered users",
+            "button": "Register Now"
+        },
         "dragDrop": {
             "title": "Transfer your file",
             "dropHere": "Drop file here",
             "releaseToUpload": "Release to upload",
             "browse": "browse",
-            "supportedTypes": "Supports images, documents, videos, and more"
+            "supportedTypes": "Supports images, documents, videos, and more",
+            "maxSize": "Maximum file size: 10MB"
         },
         "selectedFile": {
             "title": "Selected file",
@@ -606,7 +632,8 @@
             "description": "Please check your email to complete your registration.",
             "resendEmail": "Resend email",
             "success": "Your email has been confirmed, you can now log in!",
-            "error": "The entered code is incorrect or has expired, please try again."
+            "error": "The entered code is incorrect or has expired, please try again.",
+            "emailResent": "An email confirmation has been sent to your email address."
         },
         "protectedRoute": {
             "error": "You must be logged in to access this page"
@@ -714,6 +741,10 @@
             "title": "Forgot Password",
             "description": "Password recovery"
         },
+        "resetPassword": {
+            "title": "Reset Password",
+            "description": "Reset your password"
+        },
         "subscription": {
             "title": "Subscription",
             "description": "Wild Transfer service subscription",
@@ -785,5 +816,38 @@
         "memberDescription": "Platform member",
         "joinedOn": "Member since",
         "unknownDate": "Unknown date"
+    },
+    "password": {
+        "forgot": {
+            "form": {
+                "title": "Forgot Password",
+                "description": "Password recovery",
+                "submit": "Recover password",
+                "email": {
+                    "label": "Email",
+                    "placeholder": "exemple@exemple.com"
+                }
+            }
+        },
+        "reset": {
+            "form": {
+                "title": "Reset Password for {{email}}",
+                "description": "Enter your new password below",
+                "password": {
+                    "label": "Password",
+                    "placeholder": "Your new password"
+                },
+                "confirmPassword": {
+                    "label": "Confirm password",
+                    "placeholder": "Confirm your new password"
+                },
+                "submit": "Reset Password",
+                "invalidLink": "Invalid reset link",
+                "passwordsDoNotMatch": "Passwords do not match",
+                "passwordTooShort": "Password must be at least 12 characters long",
+                "success": "Password has been reset successfully!"
+            },
+            "loading": "Loading..."
+        }
     }
 }
