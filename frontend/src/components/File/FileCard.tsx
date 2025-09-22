@@ -154,20 +154,22 @@ const FileCard: React.FC<FileCardProps> = ({
                                     isShared={isShared}
                                 />
 
-                                <FileEditDialog
-                                    trigger={
-                                        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                                            <Pencil className="h-4 w-4 mr-2" />
-                                            {t('fileCard.menu.edit')}
-                                        </DropdownMenuItem>
-                                    }
-                                    resourceId={id}
-                                    fileName={name}
-                                    initialDescription={description}
-                                    onUpdated={() => {
-                                        // no-op: parent list can refetch if needed; optimistic UI inside dialog
-                                    }}
-                                />
+                                {owner && !isShared && (
+                                    <FileEditDialog
+                                        trigger={
+                                            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                                                <Pencil className="h-4 w-4 mr-2" />
+                                                {t('fileCard.menu.edit')}
+                                            </DropdownMenuItem>
+                                        }
+                                        resourceId={id}
+                                        fileName={name}
+                                        initialDescription={description}
+                                        onUpdated={() => {
+                                            // no-op: parent list can refetch if needed; optimistic UI inside dialog
+                                        }}
+                                    />
+                                )}
 
                                 {!isShared && myContacts.length > 0 && (
                                     <FileShareDialog

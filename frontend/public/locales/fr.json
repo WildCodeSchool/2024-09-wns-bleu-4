@@ -77,6 +77,12 @@
         "emptyState": {
             "noFilesDescription": "Téléchargez votre premier fichier pour le partager avec vos contacts.",
             "noSharedFilesDescription": "Vos contacts n'ont pas encore partagé de fichiers avec vous."
+        },
+        "pagination": {
+            "showing": "Affichage de {{start}} à {{end}} sur {{total}} fichiers",
+            "page": "Page {{current}} sur {{total}}",
+            "previous": "Précédent",
+            "next": "Suivant"
         }
     },
     "upload": {
@@ -701,7 +707,8 @@
                 "sharing": "Erreur lors du partage du fichier",
                 "console": "Erreur lors du partage du fichier"
             },
-            "success": "Fichier partagé avec succès"
+            "success": "Fichier partagé avec succès",
+            "alreadyShared": "Déjà partagé"
         },
         "report": {
             "title": "Signaler ce fichier",

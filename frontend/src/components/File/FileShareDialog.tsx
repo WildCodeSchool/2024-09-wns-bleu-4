@@ -14,7 +14,8 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { useAuthContext } from '@/context/useAuthContext';
 import { Contact, ContactStatus } from '@/generated/graphql-types';
 import { CREATE_USER_ACCESS } from '@/graphql/Resource/mutations';
-import { useMutation } from '@apollo/client';
+import { GET_USERS_WITH_ACCESS } from '@/graphql/Resource/queries';
+import { useMutation, useQuery } from '@apollo/client';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
@@ -37,6 +38,14 @@ const FileShareDialog: React.FC<FileShareDialogProps> = ({
     const [selectedContacts, setSelectedContacts] = useState<Contact[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [createUserAccess] = useMutation(CREATE_USER_ACCESS);
+    
+    // Fetch users who already have access to this resource
+    const { data: usersWithAccessData, refetch: refetchUsersWithAccess } = useQuery(GET_USERS_WITH_ACCESS, {
+        variables: { resourceId: Number(resourceId) },
+        skip: !resourceId,
+    });
+    
+    const usersWithAccess = usersWithAccessData?.getUsersWithAccess || [];
 
     const getContactInfo = (contact: Contact) => {
         const currentUserEmail = user?.email;
@@ -48,6 +57,12 @@ const FileShareDialog: React.FC<FileShareDialogProps> = ({
             email: otherUser.email,
             user: otherUser,
         };
+    };
+
+    const isContactAlreadyShared = (contact: Contact) => {
+        const contactInfo = getContactInfo(contact);
+        const isShared = usersWithAccess.some((user: { id: string }) => user.id === String(contactInfo.user.id));
+        return isShared;
     };
 
     const filteredContacts = myContacts
@@ -75,6 +90,9 @@ const FileShareDialog: React.FC<FileShareDialogProps> = ({
                     },
                 });
             }
+
+            // Refetch the users with access to update the UI
+            await refetchUsersWithAccess();
 
             toast.success(t('fileCard.share.success'));
             setSelectedContacts([]);
@@ -124,25 +142,38 @@ const FileShareDialog: React.FC<FileShareDialogProps> = ({
                             <div className="space-y-2">
                                 {filteredContacts.map((contact) => {
                                     const contactInfo = getContactInfo(contact);
+                                    const isAlreadyShared = isContactAlreadyShared(contact);
                                     return (
                                         <div
                                             key={contact.id}
-                                            className="flex items-center space-x-2"
+                                            className={`flex items-center space-x-2 ${
+                                                isAlreadyShared ? 'opacity-50' : ''
+                                            }`}
                                         >
                                             <Checkbox
                                                 id={`contact-${contact.id}`}
                                                 checked={selectedContacts.some(
                                                     (c) => c.id === contact.id,
                                                 )}
+                                                disabled={isAlreadyShared}
                                                 onCheckedChange={() =>
-                                                    toggleContact(contact)
+                                                    !isAlreadyShared && toggleContact(contact)
                                                 }
                                             />
                                             <Label
                                                 htmlFor={`contact-${contact.id}`}
-                                                className="text-sm font-normal cursor-pointer flex-1"
+                                                className={`text-sm font-normal flex-1 ${
+                                                    isAlreadyShared 
+                                                        ? 'cursor-not-allowed text-muted-foreground' 
+                                                        : 'cursor-pointer'
+                                                }`}
                                             >
                                                 {contactInfo.email}
+                                                {isAlreadyShared && (
+                                                    <span className="ml-2 text-xs text-muted-foreground">
+                                                        ({t('fileCard.share.alreadyShared')})
+                                                    </span>
+                                                )}
                                             </Label>
                                         </div>
                                     );

@@ -77,6 +77,12 @@
         "emptyState": {
             "noFilesDescription": "Upload your first file to share it with your contacts.",
             "noSharedFilesDescription": "Your contacts haven't shared any files with you yet."
+        },
+        "pagination": {
+            "showing": "Showing {{start}} to {{end}} of {{total}} files",
+            "page": "Page {{current}} of {{total}}",
+            "previous": "Previous",
+            "next": "Next"
         }
     },
     "upload": {
@@ -697,7 +703,8 @@
                 "sharing": "Error sharing file",
                 "console": "Error sharing file"
             },
-            "success": "File shared successfully"
+            "success": "File shared successfully",
+            "alreadyShared": "Already shared"
         },
         "report": {
             "title": "Report this file",

@@ -4,13 +4,17 @@ import SystemLogResolver from './SystemLogResolver';
 import { LogType } from '@/entities/SystemLog';
 import {
     Arg,
+    Ctx,
     Field,
     ID,
     InputType,
     Mutation,
+    ObjectType,
     Query,
     Resolver,
+    UseMiddleware,
 } from 'type-graphql';
+import { isAuth } from '@/middleware/isAuth';
 
 @InputType()
 export class ResourceInput implements Partial<Resource> {
@@ -31,6 +35,36 @@ export class ResourceInput implements Partial<Resource> {
 
     @Field(() => Number, { nullable: false })
     size: number;
+}
+
+@InputType()
+export class PaginationInput {
+    @Field(() => Number, { defaultValue: 1 })
+    page: number = 1;
+
+    @Field(() => Number, { defaultValue: 10 })
+    limit: number = 10;
+}
+
+@ObjectType()
+export class PaginatedResources {
+    @Field(() => [Resource])
+    resources: Resource[];
+
+    @Field(() => Number)
+    totalCount: number;
+
+    @Field(() => Number)
+    totalPages: number;
+
+    @Field(() => Number)
+    currentPage: number;
+
+    @Field(() => Boolean)
+    hasNextPage: boolean;
+
+    @Field(() => Boolean)
+    hasPreviousPage: boolean;
 }
 
 @Resolver(Resource)
@@ -55,6 +89,36 @@ class ResourceResolver {
             where: { user: { id: userId } },
             relations: ['user'],
         });
+    }
+
+    @Query(() => PaginatedResources)
+    async getResourcesByUserIdPaginated(
+        @Arg('userId', () => ID) userId: number,
+        @Arg('pagination', () => PaginationInput) pagination: PaginationInput,
+    ): Promise<PaginatedResources> {
+        const { page, limit } = pagination;
+        const skip = (page - 1) * limit;
+
+        const [resources, totalCount] = await Resource.findAndCount({
+            where: { user: { id: userId } },
+            relations: ['user'],
+            order: { createdAt: 'DESC' },
+            skip,
+            take: limit,
+        });
+
+        const totalPages = Math.ceil(totalCount / limit);
+        const hasNextPage = page < totalPages;
+        const hasPreviousPage = page > 1;
+
+        return {
+            resources,
+            totalCount,
+            totalPages,
+            currentPage: page,
+            hasNextPage,
+            hasPreviousPage,
+        };
     }
 
     @Query(() => Number)
@@ -219,9 +283,11 @@ class ResourceResolver {
     }
 
     @Mutation(() => Resource)
+    @UseMiddleware(isAuth)
     async updateResourceDescription(
         @Arg('id', () => ID) id: number,
         @Arg('description', () => String) description: string,
+        @Ctx() context: any,
     ): Promise<Resource> {
         try {
             const resource = await Resource.findOne({
@@ -231,6 +297,15 @@ class ResourceResolver {
 
             if (!resource) {
                 throw new Error('Le fichier demandé n\'a pas été trouvé');
+            }
+
+            // Ensure only the owner can update
+            const requestingUser = await User.findOne({
+                where: { email: context.email },
+            });
+
+            if (!requestingUser || resource.user.id !== requestingUser.id) {
+                throw new Error('Vous n\'êtes pas autorisé à modifier ce fichier');
             }
 
             resource.description = description;

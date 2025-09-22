@@ -83,7 +83,7 @@ const FilePreviewDialog: React.FC<FilePreviewDialogProps> = ({
                 </div>
 
                 {description && (
-                    <div className="px-6 py-4 border-t bg-muted/10">
+                    <div className="px-6 py-4 border-t bg-muted/10 break-words">
                         <h4 className="text-sm font-medium mb-2">
                             {t('fileCard.info.description')}
                         </h4>

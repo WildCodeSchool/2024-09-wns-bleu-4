@@ -1,15 +1,15 @@
 import FileSection from '@/components/File/FileSection';
-import { Loader } from '@/components/Loader';
 import { Button } from '@/components/ui/button';
 import { useAuthContext } from '@/context/useAuthContext';
 import {
-    GET_RESOURCES_BY_USER_ID,
-    GET_SHARED_RESOURCES,
+    GET_RESOURCES_BY_USER_ID_PAGINATED,
+    GET_SHARED_RESOURCES_PAGINATED,
 } from '@/graphql/Resource/queries';
 import { GET_USER_ID } from '@/graphql/User/queries';
 import { useMyContacts } from '@/hooks/useMyContacts';
 import { useQuery } from '@apollo/client';
 import { FolderOpen, Plus, Users } from 'lucide-react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
@@ -17,36 +17,52 @@ const FilesPage: React.FC = () => {
     const { t } = useTranslation();
     const { data: userData } = useQuery(GET_USER_ID);
     const { refreshAuth } = useAuthContext();
+    
+    // Pagination state
+    const [myFilesPage, setMyFilesPage] = useState(1);
+    const [sharedFilesPage, setSharedFilesPage] = useState(1);
+    
     const {
         data: resources,
-        loading,
         refetch: refetchMyFiles,
-    } = useQuery(GET_RESOURCES_BY_USER_ID, {
-        variables: { userId: userData?.getUserInfo?.id },
+    } = useQuery(GET_RESOURCES_BY_USER_ID_PAGINATED, {
+        variables: { 
+            userId: userData?.getUserInfo?.id,
+            pagination: { page: myFilesPage, limit: 10 }
+        },
         fetchPolicy: 'cache-and-network',
         skip: !userData?.getUserInfo?.id,
     });
-    const { data: sharedResources } = useQuery(GET_SHARED_RESOURCES, {
-        variables: { userId: userData?.getUserInfo?.id },
+    
+    const { 
+        data: sharedResources,
+    } = useQuery(GET_SHARED_RESOURCES_PAGINATED, {
+        variables: { 
+            userId: userData?.getUserInfo?.id,
+            pagination: { page: sharedFilesPage, limit: 10 }
+        },
         fetchPolicy: 'cache-and-network',
+        skip: !userData?.getUserInfo?.id,
     });
 
     const { acceptedContacts } = useMyContacts();
 
-    if (loading) {
-        return (
-            <div className="flex justify-center items-center min-h-[400px]">
-                <Loader />
-            </div>
-        );
-    }
-
-    const myFiles = resources?.getResourcesByUserId || [];
-    const sharedFiles = sharedResources?.getUserSharedResources || [];
+    const myFiles = resources?.getResourcesByUserIdPaginated?.resources || [];
+    const myFilesPagination = resources?.getResourcesByUserIdPaginated;
+    const sharedFiles = sharedResources?.getUserSharedResourcesPaginated?.resources || [];
+    const sharedFilesPagination = sharedResources?.getUserSharedResourcesPaginated;
 
     const handleFileDeleted = async () => {
         refetchMyFiles();
         await refreshAuth();
+    };
+
+    const handleMyFilesPageChange = (page: number) => {
+        setMyFilesPage(page);
+    };
+
+    const handleSharedFilesPageChange = (page: number) => {
+        setSharedFilesPage(page);
     };
 
     return (
@@ -82,6 +98,8 @@ const FilesPage: React.FC = () => {
                     onFileDeleted={handleFileDeleted}
                     myContacts={acceptedContacts}
                     showUploadButton={true}
+                    pagination={myFilesPagination}
+                    onPageChange={handleMyFilesPageChange}
                 />
 
                 {/* Fichiers partagés */}
@@ -94,6 +112,8 @@ const FilesPage: React.FC = () => {
                         'files.emptyState.noSharedFilesDescription',
                     )}
                     isShared={true}
+                    pagination={sharedFilesPagination}
+                    onPageChange={handleSharedFilesPageChange}
                 />
             </div>
         </div>
