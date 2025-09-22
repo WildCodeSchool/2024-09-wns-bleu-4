@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { Contact, Resource } from '@/generated/graphql-types';
-import { ChevronLeft, ChevronRight, LucideIcon, Plus, Search, Clock } from 'lucide-react';
+import { ChevronLeft, ChevronRight, LucideIcon, Plus, Search, Clock, X } from 'lucide-react';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
@@ -112,6 +112,21 @@ const FileSection: React.FC<FileSectionProps> = ({
                         onKeyPress={handleKeyPress}
                         className="pl-10 pr-4"
                     />
+                    {searchTerm && (
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
+                            aria-label={t('common.clear')}
+                            onClick={() => {
+                                setSearchTerm('');
+                                if (onSortByRecent) onSortByRecent();
+                            }}
+                        >
+                            <X className="h-4 w-4" />
+                        </Button>
+                    )}
                 </div>
                 <Button
                     className="cursor-pointer"
