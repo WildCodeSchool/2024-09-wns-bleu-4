@@ -170,7 +170,7 @@ const FileSection: React.FC<FileSectionProps> = ({
                     )}
                 </div>
             ) : (
-                <div className="flex flex-col h-[550px]">
+                <div className="flex flex-col h-[500px]">
                     {/* File Cards Container - Fixed height with scroll */}
                     <ScrollBox>
                         {files.map((file: Resource) => (
