@@ -1,5 +1,4 @@
 import FileShareDialog from '@/components/File/FileShareDialog';
-import FilePreview from '@/components/FilePreview';
 import { Button } from '@/components/ui/button';
 import { CREATE_RESOURCE, DELETE_RESOURCE } from '@/graphql/Resource/mutations';
 import { useAuth } from '@/hooks/useAuth';
@@ -7,28 +6,21 @@ import { useMyContacts } from '@/hooks/useMyContacts';
 import {
     createDragAndDropHandlers,
     defaultAcceptedFileTypes,
-    formatFileSize,
 } from '@/utils/fileUtils';
 import { cn } from '@/utils/globalUtils';
 import { useMutation } from '@apollo/client';
 import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
-import { CheckCircle, Loader, Share2, Trash2, UploadCloud } from 'lucide-react';
+import { Loader, Share2, UploadCloud } from 'lucide-react';
 import { ChangeEvent, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { mutate } from 'swr';
+import SingleUploadCard from './SingleUploadCard';
+import MultiUploadList from './MultiUploadList';
+import { FileWithPreview } from '@/types/types';
 
-interface FileWithPreview {
-    id: string;
-    preview: string;
-    progress: number;
-    name: string;
-    size: number;
-    type: string;
-    lastModified?: number;
-    file?: File;
-}
+// using shared FileWithPreview type from '@/types/types'
 
 interface FileUploaderProps {
     acceptedFileTypes?: Record<string, string[]>;
@@ -42,9 +34,9 @@ export default function FileUploader({ acceptedFileTypes }: FileUploaderProps) {
     const [deleteResource] = useMutation(DELETE_RESOURCE);
 
     const [files, setFiles] = useState<FileWithPreview[]>([]);
+    const [descriptions, setDescriptions] = useState<Record<string, string>>({});
     const [isDragging, setIsDragging] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
-    const [description, setDescription] = useState<string>('');
     const [lastUploadedResourceId, setLastUploadedResourceId] = useState<
         string | null
     >(null);
@@ -54,34 +46,36 @@ export default function FileUploader({ acceptedFileTypes }: FileUploaderProps) {
     const handleFiles = (fileList: FileList) => {
         if (fileList.length === 0) return;
 
-        const file = fileList[0];
-
-        // Check file size limit (client-side validation for non-subscribed users)
         const isSubscribed = user?.isSubscribed;
-        if (!isSubscribed) {
-            const maxSize = 10 * 1024 * 1024; // 10MB in bytes
-            if (file.size > maxSize) {
+        const maxSize = 10 * 1024 * 1024;
+
+        const added: FileWithPreview[] = [];
+        Array.from(fileList).forEach((file) => {
+            if (!isSubscribed && file.size > maxSize) {
                 toast.error(
                     t('upload.toast.fileTooLarge') ||
                         'File size exceeds 10MB limit for non-subscribed users',
                 );
                 return;
             }
-        }
 
-        const newFile = {
-            id: `${URL.createObjectURL(file)}-${Date.now()}`,
-            preview: URL.createObjectURL(file),
-            progress: 0,
-            name: file.name,
-            size: file.size,
-            type: file.type,
-            lastModified: file.lastModified,
-            file,
-        };
+            const id = `${URL.createObjectURL(file)}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+            added.push({
+                id,
+                preview: URL.createObjectURL(file),
+                progress: 0,
+                name: file.name,
+                size: file.size,
+                type: file.type,
+                lastModified: file.lastModified,
+                file,
+            });
+        });
 
-        setFiles([newFile]); // Replace any existing file
-        simulateUpload(newFile.id);
+        if (added.length === 0) return;
+
+        setFiles((prev) => [...prev, ...added]);
+        added.forEach((f) => simulateUpload(f.id));
     };
 
     // Simulate upload progress (visual only)
@@ -112,98 +106,116 @@ export default function FileUploader({ acceptedFileTypes }: FileUploaderProps) {
         if (e.target.files) handleFiles(e.target.files);
     };
 
-    const removeFile = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        setFiles([]);
-        setDescription('');
+    const removeFile = (fileToRemove: FileWithPreview) => {
+        setFiles((prev) => prev.filter((f) => f.id !== fileToRemove.id));
+        setDescriptions((prev) => {
+            const next = { ...prev };
+            delete next[fileToRemove.id];
+            return next;
+        });
+    };
+
+    const onDescriptionChange = (fileId: string, value: string) => {
+        setDescriptions((prev) => ({ ...prev, [fileId]: value }));
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!files[0]?.file || !user?.id) return;
+        if (files.length === 0 || !user?.id) return;
 
         setIsUploading(true);
 
         try {
-            const file = files[0].file;
-            const secureName = file.name.replace(/\s+/g, '_');
-            const fileUrl = `/storage/uploads/${secureName}`;
+            let lastResourceId: string | null = null;
+            let lastFileName = '';
 
-            const resourceResponse = await createResource({
-                variables: {
-                    data: {
-                        name: file.name,
-                        url: fileUrl,
-                        description:
-                            description || `Fichier uploadé : ${file.name}`,
-                        userId: user.id,
-                        size: file.size,
+            for (const f of files) {
+                if (!f.file) continue;
+                const file = f.file;
+                const secureName = file.name.replace(/\s+/g, '_');
+                const fileUrl = `/storage/uploads/${secureName}`;
+
+                const resourceResponse = await createResource({
+                    variables: {
+                        data: {
+                            name: file.name,
+                            path: fileUrl,
+                            url: fileUrl,
+                            description:
+                                files.length > 1
+                                    ? descriptions[f.id] || `Fichier uploadé : ${file.name}`
+                                    : `Fichier uploadé : ${file.name}`,
+                            userId: user.id,
+                            size: file.size,
+                        },
                     },
-                },
-            });
+                });
 
-            if (resourceResponse.data?.createResource) {
-                const resourceId = resourceResponse.data.createResource.id;
+                if (resourceResponse.data?.createResource) {
+                    const resourceId = resourceResponse.data.createResource.id;
 
-                try {
-                    const formData = new FormData();
-                    formData.append('file', file);
-
-                    const storageUrl = `/storage/upload?filename=${encodeURIComponent(
-                        secureName,
-                    )}`;
-                    const storageResponse = await fetch(storageUrl, {
-                        method: 'POST',
-                        body: formData,
-                    });
-
-                    if (!storageResponse.ok) {
-                        const errorData = await storageResponse
-                            .json()
-                            .catch(() => ({}));
-
-                        // Utiliser le message d'erreur détaillé de la storage API
-                        if (errorData.message) {
-                            throw new Error(errorData.message);
-                        }
-
-                        // Fallback pour les erreurs connues
-                        if (storageResponse.status === 429) {
-                            throw new Error(
-                                "Trop d'uploads. Veuillez patienter avant de réessayer.",
-                            );
-                        } else {
-                            throw new Error(t('upload.errors.fileUpload'));
-                        }
-                    }
-
-                    setLastUploadedResourceId(resourceId);
-                    setUploadedFileName(file.name);
-                    setFiles([]);
-                    setDescription('');
-                    mutate('/storage/files');
-                    toast.success(t('upload.success.message'));
-                } catch (uploadError) {
-                    // Rollback: supprimer la ressource créée si l'upload échoue
-                    console.error(
-                        'Upload failed, rolling back resource creation:',
-                        uploadError,
-                    );
                     try {
-                        await deleteResource({
-                            variables: { deleteResourceId: resourceId },
+                        const formData = new FormData();
+                        formData.append('file', file);
+
+                        const storageUrl = `/storage/upload?filename=${encodeURIComponent(
+                            secureName,
+                        )}`;
+                        const storageResponse = await fetch(storageUrl, {
+                            method: 'POST',
+                            body: formData,
                         });
-                        console.log(`Rolled back resource ${resourceId}`);
-                    } catch (rollbackError) {
+
+                        if (!storageResponse.ok) {
+                            const errorData = await storageResponse
+                                .json()
+                                .catch(() => ({}));
+
+                            if (errorData.message) {
+                                throw new Error(errorData.message);
+                            }
+
+                            if (storageResponse.status === 429) {
+                                throw new Error(
+                                    "Trop d'uploads. Veuillez patienter avant de réessayer.",
+                                );
+                            } else {
+                                throw new Error(t('upload.errors.fileUpload'));
+                            }
+                        }
+
+                        lastResourceId = resourceId;
+                        lastFileName = file.name;
+                    } catch (uploadError) {
                         console.error(
-                            'Failed to rollback resource:',
-                            rollbackError,
+                            'Upload failed, rolling back resource creation:',
+                            uploadError,
                         );
+                        try {
+                            await deleteResource({
+                                variables: { deleteResourceId: resourceId },
+                            });
+                            console.log(`Rolled back resource ${resourceId}`);
+                        } catch (rollbackError) {
+                            console.error(
+                                'Failed to rollback resource:',
+                                rollbackError,
+                            );
+                        }
+                        throw uploadError;
                     }
-                    throw uploadError; // Re-throw pour afficher l'erreur à l'utilisateur
                 }
             }
+
+            if (lastResourceId) {
+                setLastUploadedResourceId(lastResourceId);
+                setUploadedFileName(lastFileName);
+            }
+            setFiles([]);
+            setDescriptions({});
+            mutate('/storage/files');
+            toast.success(t('upload.success.message'));
         } catch (error) {
             console.error("Erreur lors de l'upload:", error);
             toast.error(t('upload.errors.upload'));
@@ -311,6 +323,7 @@ export default function FileUploader({ acceptedFileTypes }: FileUploaderProps) {
                                         extensions.join(','),
                                     )
                                     .join(',')}
+                                multiple
                             />
                         </div>
                     </motion.div>
@@ -318,167 +331,21 @@ export default function FileUploader({ acceptedFileTypes }: FileUploaderProps) {
 
                 <div className="mt-8">
                     <AnimatePresence>
-                        {files.length > 0 && (
-                            <>
-                                <motion.div
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    className="flex justify-between items-center mb-3 px-2"
-                                >
-                                    <h3 className="font-semibold text-lg md:text-xl text-zinc-800 dark:text-zinc-200">
-                                        {t('upload.selectedFile.title')}
-                                    </h3>
-                                </motion.div>
-
-                                <motion.div
-                                    key={files[0].id}
-                                    initial={{ opacity: 0, y: 20, scale: 0.97 }}
-                                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                                    exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                                    transition={{
-                                        type: 'spring',
-                                        stiffness: 300,
-                                        damping: 24,
-                                    }}
-                                    className="px-4 py-4 flex items-start gap-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 shadow hover:shadow-md transition-all duration-200"
-                                >
-                                    {/* Thumbnail */}
-                                    <div className="relative flex-shrink-0">
-                                        {files[0].type.startsWith('image/') ? (
-                                            <img
-                                                src={files[0].preview}
-                                                alt={files[0].name}
-                                                className="w-16 h-16 md:w-20 md:h-20 rounded-lg object-cover border dark:border-zinc-700 shadow-sm"
-                                            />
-                                        ) : files[0].type.startsWith(
-                                              'video/',
-                                          ) ? (
-                                            <video
-                                                src={files[0].preview}
-                                                className="w-16 h-16 md:w-20 md:h-20 rounded-lg object-cover border dark:border-zinc-700 shadow-sm"
-                                                controls={false}
-                                                muted
-                                                loop
-                                                playsInline
-                                                preload="metadata"
-                                            />
-                                        ) : (
-                                            <FilePreview
-                                                context='card'
-                                                fileName={files[0].name}
-                                                className="w-5 h-5 flex-shrink-0"
-                                            />
-                                        )}
-                                        {files[0].progress === 100 && (
-                                            <motion.div
-                                                initial={{
-                                                    opacity: 0,
-                                                    scale: 0.5,
-                                                }}
-                                                animate={{
-                                                    opacity: 1,
-                                                    scale: 1,
-                                                }}
-                                                className="absolute -right-2 -bottom-2 bg-white dark:bg-zinc-800 rounded-full shadow-sm"
-                                            >
-                                                <CheckCircle className="w-5 h-5 text-emerald-500" />
-                                            </motion.div>
-                                        )}
-                                    </div>
-
-                                    <div className="flex-1 min-w-0">
-                                        <div className="flex flex-col gap-1 w-full">
-                                            <div className="flex items-center gap-2 min-w-0">
-                                                <FilePreview
-                                                    context='card'
-                                                    fileName={files[0].name}
-                                                    className="w-5 h-5 flex-shrink-0"
-                                                />
-                                                <h4
-                                                    className="font-medium text-base md:text-lg truncate text-zinc-800 dark:text-zinc-200"
-                                                    title={files[0].name}
-                                                >
-                                                    {files[0].name}
-                                                </h4>
-                                            </div>
-
-                                            <div className="flex items-center justify-between gap-3 text-sm text-zinc-500 dark:text-zinc-400">
-                                                <span className="text-xs md:text-sm">
-                                                    {formatFileSize(
-                                                        files[0].size,
-                                                    )}
-                                                </span>
-                                                <span className="flex items-center gap-1.5">
-                                                    <span className="font-medium">
-                                                        {Math.round(
-                                                            files[0].progress,
-                                                        )}
-                                                        %
-                                                    </span>
-                                                    {files[0].progress < 100 ? (
-                                                        <Loader className="w-4 h-4 animate-spin text-blue-500" />
-                                                    ) : (
-                                                        <Trash2
-                                                            className="w-4 h-4 cursor-pointer text-zinc-400 hover:text-red-500 dark:text-zinc-500 dark:hover:text-red-400 transition-colors duration-200"
-                                                            onClick={removeFile}
-                                                            aria-label={t(
-                                                                'upload.selectedFile.delete',
-                                                            )}
-                                                        />
-                                                    )}
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        <div className="w-full h-2 bg-zinc-200 dark:bg-zinc-700 rounded-full overflow-hidden mt-3">
-                                            <motion.div
-                                                initial={{ width: 0 }}
-                                                animate={{
-                                                    width: `${files[0].progress}%`,
-                                                }}
-                                                transition={{
-                                                    duration: 0.4,
-                                                    type: 'spring',
-                                                    stiffness: 100,
-                                                    ease: 'easeOut',
-                                                }}
-                                                className={clsx(
-                                                    'h-full rounded-full shadow-inner',
-                                                    files[0].progress < 100
-                                                        ? 'bg-blue-500'
-                                                        : 'bg-emerald-500',
-                                                )}
-                                            />
-                                        </div>
-
-                                        <div className="mt-4">
-                                            <textarea
-                                                placeholder={t(
-                                                    'upload.description.placeholder',
-                                                )}
-                                                value={description}
-                                                onChange={(e) =>
-                                                    setDescription(
-                                                        e.target.value,
-                                                    )
-                                                }
-                                                className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-lg text-zinc-800 dark:text-zinc-200 bg-white dark:bg-zinc-800 resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
-                                                rows={4}
-                                                minLength={4}
-                                                required
-                                            />
-                                            <div className="flex justify-end mt-1 text-xs text-zinc-500">
-                                                {t(
-                                                    'upload.description.charCount',
-                                                    {
-                                                        count: description.length,
-                                                    },
-                                                )}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            </>
+                        {files.length === 1 && (
+                            <SingleUploadCard
+                                key={files[0].id}
+                                file={files[0]}
+                                onRemove={removeFile}
+                            />
+                        )}
+                        {files.length > 1 && (
+                            <MultiUploadList
+                                key={files[0].id}
+                                files={files}
+                                descriptions={descriptions}
+                                onDescriptionChange={onDescriptionChange}
+                                removeFile={removeFile}
+                            />
                         )}
                     </AnimatePresence>
                 </div>
@@ -492,25 +359,35 @@ export default function FileUploader({ acceptedFileTypes }: FileUploaderProps) {
                             exit={{ opacity: 0, y: 10 }}
                             className="mt-6 flex"
                         >
-                            <button
-                                type="submit"
-                                className={clsx(
-                                    'px-8 py-3 rounded-lg font-medium transition-all duration-200 shadow-sm',
-                                    description.length >= 4 && !isUploading
-                                        ? 'bg-blue-500 hover:bg-blue-600 text-white'
-                                        : 'bg-zinc-300 dark:bg-zinc-700 text-zinc-500 dark:text-zinc-400 cursor-not-allowed',
-                                )}
-                                disabled={description.length < 4 || isUploading}
-                            >
-                                {isUploading ? (
-                                    <span className="flex items-center gap-2">
-                                        <Loader className="w-4 h-4 animate-spin" />
-                                        {t('upload.submit.uploading')}
-                                    </span>
-                                ) : (
-                                    t('upload.submit.save')
-                                )}
-                            </button>
+                            {(() => {
+                                const allDescriptionsValid =
+                                    files.length > 1
+                                        ? files.every((f) => (descriptions[f.id] || '').trim().length > 4)
+                                        : true;
+                                const allUploaded = files.every((f) => f.progress >= 100);
+                                const canSubmit = allDescriptionsValid && allUploaded && !isUploading;
+                                return (
+                                    <button
+                                        type="submit"
+                                        className={clsx(
+                                            'px-8 py-3 rounded-lg font-medium transition-all duration-200 shadow-sm',
+                                            canSubmit
+                                                ? 'bg-blue-500 hover:bg-blue-600 text-white'
+                                                : 'bg-zinc-300 dark:bg-zinc-700 text-zinc-500 dark:text-zinc-400 cursor-not-allowed',
+                                        )}
+                                        disabled={!canSubmit}
+                                    >
+                                        {isUploading ? (
+                                            <span className="flex items-center gap-2">
+                                                <Loader className="w-4 h-4 animate-spin" />
+                                                {t('upload.submit.uploading')}
+                                            </span>
+                                        ) : (
+                                            t('upload.submit.save')
+                                        )}
+                                    </button>
+                                );
+                            })()}
                         </motion.div>
                     )}
                 </AnimatePresence>
