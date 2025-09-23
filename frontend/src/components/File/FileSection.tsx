@@ -73,6 +73,9 @@ const FileSection: React.FC<FileSectionProps> = ({
     const { t } = useTranslation();
     const [isCompact, setIsCompact] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
+    
+    console.log('FileSection - authorOptions:', authorOptions);
+    console.log('FileSection - selectedAuthorId:', selectedAuthorId);
 
     const typeOptions: { key: string; label: string }[] = [
         { key: 'image', label: t('files.types.image') || 'Image' },
@@ -231,11 +234,11 @@ const FileSection: React.FC<FileSectionProps> = ({
                                     </DropdownMenuCheckboxItem>
                                     {authorOptions.map((a) => (
                                         <DropdownMenuCheckboxItem
-                                            key={a.id}
-                                            checked={selectedAuthorId === a.id}
+                                            key={Number(a.id)}
+                                            checked={selectedAuthorId === Number(a.id)}
                                             onCheckedChange={(checked) => {
                                                 if (checked && onAuthorChange) {
-                                                    onAuthorChange(a.id);
+                                                    onAuthorChange(Number(a.id));
                                                 }
                                             }}
                                             onSelect={(e) => e.preventDefault()}
