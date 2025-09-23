@@ -1,7 +1,6 @@
 import { Resource } from '@/entities/Resource';
-import { User } from '@/entities/User';
-import SystemLogResolver from './SystemLogResolver';
 import { LogType } from '@/entities/SystemLog';
+import { User } from '@/entities/User';
 import {
     Arg,
     Field,
@@ -11,6 +10,7 @@ import {
     Query,
     Resolver,
 } from 'type-graphql';
+import SystemLogResolver from './SystemLogResolver';
 
 @InputType()
 export class ResourceInput implements Partial<Resource> {
@@ -65,9 +65,9 @@ class ResourceResolver {
             .select('SUM(resource.size)', 'totalSize')
             .where('resource.user.id = :userId', { userId })
             .getRawOne();
-        
+
         const totalSize = result?.totalSize ? Number(result.totalSize) : 0;
-        
+
         return totalSize;
     }
 
@@ -75,7 +75,10 @@ class ResourceResolver {
     async getUsersWithAccess(
         @Arg('resourceId', () => ID) resourceId: number,
     ): Promise<User[]> {
-        const resource = await Resource.findOne({ where: { id: resourceId }, relations: ['usersWithAccess'] });
+        const resource = await Resource.findOne({
+            where: { id: resourceId },
+            relations: ['usersWithAccess'],
+        });
         return resource?.usersWithAccess || [];
     }
 
@@ -85,22 +88,22 @@ class ResourceResolver {
         @Arg('userId', () => ID) userId: number,
     ): Promise<string> {
         try {
-            const resource = await Resource.findOne({ 
+            const resource = await Resource.findOne({
                 where: { id: resourceId },
                 relations: ['usersWithAccess', 'user'],
             });
 
             if (!resource) {
-                throw new Error('Le fichier demandé n\'a pas été trouvé');
-            };
+                throw new Error("Le fichier demandé n'a pas été trouvé");
+            }
 
             const user = await User.findOne({ where: { id: userId } });
             if (!user) {
-                throw new Error('L\'utilisateur demandé n\'a pas été trouvé');
-            };
+                throw new Error("L'utilisateur demandé n'a pas été trouvé");
+            }
 
             // Check if user already has access to this resource
-            if (resource.usersWithAccess.some(u => u.id === user.id)) {
+            if (resource.usersWithAccess.some((u) => u.id === user.id)) {
                 return 'User already has access to this resource';
             } else {
                 resource.usersWithAccess.push(user);
@@ -111,7 +114,7 @@ class ResourceResolver {
                     LogType.SUCCESS,
                     'Accès fichier accordé',
                     `L'accès au fichier "${resource.name}" a été accordé à l'utilisateur ${user.email}`,
-                    resource.user.email
+                    resource.user.email,
                 );
 
                 return 'Access granted';
@@ -120,9 +123,9 @@ class ResourceResolver {
             // Log de l'erreur
             await SystemLogResolver.logEvent(
                 LogType.ERROR,
-                'Erreur lors de l\'accord d\'accès',
+                "Erreur lors de l'accord d'accès",
                 `Erreur lors de l'accord d'accès au fichier ID ${resourceId}: ${error}`,
-                undefined
+                undefined,
             );
             throw error;
         }
@@ -133,28 +136,46 @@ class ResourceResolver {
         @Arg('data', () => ResourceInput) data: ResourceInput,
     ): Promise<Resource> {
         try {
-            const user = await User.findOne({ 
+            const user = await User.findOne({
                 where: { id: data.userId },
-                relations: ['subscription']
+                relations: ['subscription'],
             });
             if (!user) {
-                throw new Error('L\'utilisateur demandé n\'a pas été trouvé');
+                throw new Error("L'utilisateur demandé n'a pas été trouvé");
+            }
+            const existingResource = await Resource.findOne({
+                where: { name: data.name, user: { id: data.userId } },
+            });
+            if (existingResource) {
+                throw new Error('Une ressource avec ce nom existe déjà');
             }
 
             // Only check storage limit for non-subscribed users
             if (!user.subscription) {
-                const MAX_STORAGE_BYTES = 20971520; // 20MB = 20 × 1024 × 1024 = 20,971,520 bytes
-                
+                const MAX_STORAGE_BYTES = 10485760; // 10MB = 10 × 1024 × 1024 = 10,485,760 bytes
+
                 // Get current user's total file size
-                const currentTotalSize = await this.getUserTotalFileSize(data.userId);
-                                
+                const currentTotalSize = await this.getUserTotalFileSize(
+                    data.userId,
+                );
+
                 // Check if adding this file would exceed the limit
                 if (currentTotalSize + data.size > MAX_STORAGE_BYTES) {
-                    throw new Error('Storage limit exceeded. This file would exceed your 20MB storage limit.');
+                    throw new Error(
+                        'Storage limit exceeded. This file would exceed your 10MB storage limit.',
+                    );
                 }
             }
 
-            const resource = Resource.create({ ...data, user, size: data.size });
+            // Set expiration date for non-subscribed users (90 days)
+            const resourceData: any = { ...data, user, size: data.size };
+            if (!user.subscription) {
+                resourceData.expireAt = new Date(
+                    Date.now() + 90 * 24 * 60 * 60 * 1000,
+                );
+            }
+
+            const resource = Resource.create(resourceData);
 
             const savedResource = await Resource.save(resource);
 
@@ -163,7 +184,7 @@ class ResourceResolver {
                 LogType.SUCCESS,
                 'Fichier créé',
                 `Le fichier "${data.name}" a été créé par l'utilisateur ${user.email}`,
-                user.email
+                user.email,
             );
 
             return savedResource;
@@ -173,7 +194,7 @@ class ResourceResolver {
                 LogType.ERROR,
                 'Erreur lors de la création de fichier',
                 `Erreur lors de la création du fichier "${data.name}": ${error}`,
-                undefined
+                undefined,
             );
             throw error;
         }
@@ -184,15 +205,11 @@ class ResourceResolver {
         try {
             const resource = await Resource.findOne({
                 where: { id: parseInt(id) },
-                relations: [
-                    'user',
-                    'usersWithAccess',
-                    'reports',
-                ],
+                relations: ['user', 'usersWithAccess', 'reports'],
             });
 
             if (!resource) {
-                throw new Error('Le fichier demandé n\'a pas été trouvé');
+                throw new Error("Le fichier demandé n'a pas été trouvé");
             }
 
             await Resource.remove(resource);
@@ -202,7 +219,7 @@ class ResourceResolver {
                 LogType.SUCCESS,
                 'Fichier supprimé',
                 `Le fichier "${resource.name}" a été supprimé du système`,
-                resource.user.email
+                resource.user.email,
             );
 
             return 'Resource deleted';
@@ -212,7 +229,7 @@ class ResourceResolver {
                 LogType.ERROR,
                 'Erreur lors de la suppression de fichier',
                 `Erreur lors de la suppression du fichier ID ${id}: ${error}`,
-                undefined
+                undefined,
             );
             throw error;
         }

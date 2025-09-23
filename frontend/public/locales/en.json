@@ -97,7 +97,7 @@
                 "dropBox": {
                     "title": "Upload your temporary file here",
                     "supportedTypes": "Supports images, documents, videos, and more",
-                    "notice": "Maximum file size: 10MB"
+                    "notice": "Max size: 10MB (non-subscribed users) • Unlimited (subscribed)"
                 },
                 "generatedLinks": "Generated links",
                 "actions": {
@@ -112,7 +112,7 @@
                     "error": "Error generating link",
                     "copy": "Link copied successfully",
                     "delete": "Link deleted successfully",
-                    "fileTooLarge": "File size exceeds 10MB limit"
+                    "fileTooLarge": "File size exceeds 10MB limit for non-subscribed users"
                 },
                 "type": {
                     "browser": "View in browser",

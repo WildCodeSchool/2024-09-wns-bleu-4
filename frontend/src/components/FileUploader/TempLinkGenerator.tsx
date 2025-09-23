@@ -1,10 +1,8 @@
 import FadeClock from '@/components/Icons/FadeClock';
+import { useAuth } from '@/hooks/useAuth';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { FileWithPreview, TempLink } from '@/types/types';
-import {
-    createDragAndDropHandlers,
-    formatFileSize,
-} from '@/utils/fileUtils';
+import { createDragAndDropHandlers, formatFileSize } from '@/utils/fileUtils';
 import { cn } from '@/utils/globalUtils';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
@@ -27,6 +25,7 @@ interface TempLinkGeneratorProps {
 
 const TempLinkGenerator = ({ acceptedFileTypes }: TempLinkGeneratorProps) => {
     const { t } = useTranslation();
+    const { user } = useAuth();
     const { setItem, getItem } = useLocalStorage();
     const [files, setFiles] = useState<FileWithPreview[]>([]);
     const [isDragging, setIsDragging] = useState(false);
@@ -135,14 +134,17 @@ const TempLinkGenerator = ({ acceptedFileTypes }: TempLinkGeneratorProps) => {
 
         const file = fileList[0];
 
-        // Check file size limit (10MB)
-        const maxSize = 10 * 1024 * 1024; // 10MB in bytes
-        if (file.size > maxSize) {
-            toast.error(
-                t('upload.page.tempLink.toast.fileTooLarge') ||
-                    'File size exceeds 10MB limit',
-            );
-            return;
+        // Check file size limit (client-side validation for non-subscribed users)
+        const isSubscribed = user?.isSubscribed;
+        if (!isSubscribed) {
+            const maxSize = 10 * 1024 * 1024; // 10MB in bytes
+            if (file.size > maxSize) {
+                toast.error(
+                    t('upload.page.tempLink.toast.fileTooLarge') ||
+                        'File size exceeds 10MB limit for non-subscribed users',
+                );
+                return;
+            }
         }
 
         const newFile = {
@@ -214,14 +216,24 @@ const TempLinkGenerator = ({ acceptedFileTypes }: TempLinkGeneratorProps) => {
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({}));
 
+                // Utiliser le message d'erreur détaillé de la storage API
+                if (errorData.message) {
+                    throw new Error(errorData.message);
+                }
+
+                // Fallback pour les erreurs connues
                 if (response.status === 413) {
-                    throw new Error('File size exceeds 10MB limit');
-                } else if (response.status === 400) {
-                    throw new Error(errorData.message || 'Invalid file format');
-                } else {
                     throw new Error(
-                        errorData.message || 'Failed to upload file',
+                        t('upload.page.tempLink.toast.fileTooLarge'),
                     );
+                } else if (response.status === 429) {
+                    throw new Error(
+                        'Trop de tentatives. Veuillez patienter avant de réessayer.',
+                    );
+                } else if (response.status === 400) {
+                    throw new Error('Format de fichier non valide');
+                } else {
+                    throw new Error("Erreur lors de l'upload du fichier");
                 }
             }
 

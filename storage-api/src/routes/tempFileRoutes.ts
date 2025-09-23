@@ -1,17 +1,22 @@
 import express from 'express';
 import {
-    uploadTempFile,
+    cleanupAllExpiredFiles,
     getTempFile,
     getTempFileInfo,
-    cleanupAllExpiredFiles
+    uploadTempFile,
 } from '../controllers/tempFileController';
-import { manualCleanup } from '../services/cleanupService';
 import { tempUpload } from '../middlewares/multerConfig';
+import { generalLimiter, tempUploadLimiter } from '../middlewares/rateLimiters';
+import { manualCleanup } from '../services/cleanupService';
 
 const tempFileRoutes = express.Router();
 
 // Clean up expired files on startup
 cleanupAllExpiredFiles();
+
+// Appliquer les rate limiters aux routes publiques
+tempFileRoutes.use('/temp/upload', tempUploadLimiter); // Limite les uploads temporaires
+tempFileRoutes.use('/temp', generalLimiter); // Limite générale pour les autres routes temp
 
 // Public routes for temporary files (no authentication required)
 tempFileRoutes.post('/temp/upload', tempUpload.single('file'), uploadTempFile);

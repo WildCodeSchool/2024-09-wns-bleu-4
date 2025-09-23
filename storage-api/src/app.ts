@@ -5,6 +5,9 @@ import { startCleanupService } from './services/cleanupService';
 
 const app = express();
 
+// Trust proxy for accurate IP detection (important for rate limiting behind nginx)
+app.set('trust proxy', 1);
+
 // Start the cleanup service for expired files
 startCleanupService();
 
