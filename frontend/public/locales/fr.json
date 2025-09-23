@@ -97,7 +97,7 @@
                 "dropBox": {
                     "title": "Téléchargez votre fichier temporaire ici",
                     "supportedTypes": "Supporte les images, documents, vidéos, et plus",
-                    "notice": "Taille maximale du fichier : 10MB"
+                    "notice": "Taille maximale : 10MB (utilisateurs non connectés et sans abonnement) • Illimitée (connectés)"
                 },
                 "generatedLinks": "Liens générés",
                 "actions": {
@@ -112,7 +112,7 @@
                     "error": "Erreur lors de la génération du lien",
                     "copy": "Le lien a été copié avec succès",
                     "delete": "Le lien a été supprimé avec succès",
-                    "fileTooLarge": "La taille du fichier dépasse la limite de 10MB"
+                    "fileTooLarge": "La taille du fichier dépasse la limite de 10MB pour les utilisateurs non-abonnés"
                 },
                 "type": {
                     "browser": "Voir dans le navigateur",

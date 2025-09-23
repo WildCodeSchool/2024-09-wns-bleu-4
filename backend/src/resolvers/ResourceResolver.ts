@@ -143,6 +143,12 @@ class ResourceResolver {
             if (!user) {
                 throw new Error("L'utilisateur demandé n'a pas été trouvé");
             }
+            const existingResource = await Resource.findOne({
+                where: { name: data.name, user: { id: data.userId } },
+            });
+            if (existingResource) {
+                throw new Error('Une ressource avec ce nom existe déjà');
+            }
 
             // Only check storage limit for non-subscribed users
             if (!user.subscription) {

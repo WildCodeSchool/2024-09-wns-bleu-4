@@ -1,6 +1,7 @@
 import { ResetPasswordEmail } from '@/emails/ResetPassword';
 import { VerifyAccountEmail } from '@/emails/VerifyAccount';
 import { Resource } from '@/entities/Resource';
+import { SubscriptionStatus } from '@/entities/Subscription';
 import { LogType } from '@/entities/SystemLog';
 import { TempUser, User, UserRole, UserStorage } from '@/entities/User';
 import SystemLogResolver from '@/resolvers/SystemLogResolver';
@@ -248,8 +249,11 @@ class UserResolver {
 
         try {
             if (await this.isPasswordCorrect(user, loginUserData)) {
+                const isSubscribed =
+                    user.subscription &&
+                    user.subscription.status === SubscriptionStatus.ACTIVE;
                 const token = jwt.sign(
-                    { email: user.email, userRole: user.role },
+                    { email: user.email, userRole: user.role, isSubscribed },
                     process.env.JWT_SECRET_KEY as Secret,
                     { expiresIn: '1h' },
                 );
@@ -382,11 +386,7 @@ class UserResolver {
     async deleteUser(@Arg('id', () => ID) id: number): Promise<string> {
         const user = await User.findOne({
             where: { id },
-            relations: [
-                'reports',
-                'sharedResources',
-                'subscription',
-            ],
+            relations: ['reports', 'sharedResources', 'subscription'],
         });
 
         if (!user) {
