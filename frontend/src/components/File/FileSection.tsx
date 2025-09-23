@@ -9,6 +9,7 @@ import { ChevronLeft, ChevronRight, LucideIcon, Plus, Search, Clock, X } from 'l
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import ScrollBox from '../Wrappers/ScrollBox';
 
 interface PaginationInfo {
     totalCount: number;
@@ -171,7 +172,7 @@ const FileSection: React.FC<FileSectionProps> = ({
             ) : (
                 <div className="flex flex-col h-[550px]">
                     {/* File Cards Container - Fixed height with scroll */}
-                    <div className="flex-1 space-y-2 overflow-y-auto pr-2 scrollbar-elegant">
+                    <ScrollBox>
                         {files.map((file: Resource) => (
                             <FileCard
                                 key={file.id}
@@ -198,48 +199,48 @@ const FileSection: React.FC<FileSectionProps> = ({
                                 myContacts={myContacts}
                             />
                         ))}
-                    </div>
+                    </ScrollBox>
+                </div>
+            )}
                     
-                    {/* Pagination Controls - Always visible for consistent UI */}
-                    {pagination && onPageChange && (
-                        <div className="flex items-center justify-between pt-4 border-t bg-background">
-                            <div className="text-sm text-muted-foreground">
-                                {t('files.pagination.showing', {
-                                    start: ((pagination.currentPage - 1) * 10) + 1,
-                                    end: Math.min(pagination.currentPage * 10, pagination.totalCount),
-                                    total: pagination.totalCount
-                                })}
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <Button
-                                    className="cursor-pointer"
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => onPageChange(pagination.currentPage - 1)}
-                                    disabled={!pagination.hasPreviousPage}
-                                >
-                                    <ChevronLeft className="h-4 w-4" />
-                                    {t('files.pagination.previous')}
-                                </Button>
-                                <span className="text-sm text-muted-foreground">
-                                    {t('files.pagination.page', {
-                                        current: pagination.currentPage,
-                                        total: pagination.totalPages
-                                    })}
-                                </span>
-                                <Button
-                                className="cursor-pointer"
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => onPageChange(pagination.currentPage + 1)}
-                                    disabled={!pagination.hasNextPage}
-                                >
-                                    {t('files.pagination.next')}
-                                    <ChevronRight className="h-4 w-4" />
-                                </Button>
-                            </div>
-                        </div>
-                    )}
+            {/* Pagination Controls - Always visible for consistent UI */}
+            {pagination && onPageChange && (
+                <div className="flex items-center justify-between pt-4 border-t bg-background">
+                    <div className="text-sm text-muted-foreground">
+                        {t('files.pagination.showing', {
+                            start: ((pagination.currentPage - 1) * 10) + 1,
+                            end: Math.min(pagination.currentPage * 10, pagination.totalCount),
+                            total: pagination.totalCount
+                        })}
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <Button
+                            className="cursor-pointer"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => onPageChange(pagination.currentPage - 1)}
+                            disabled={!pagination.hasPreviousPage}
+                        >
+                            <ChevronLeft className="h-4 w-4" />
+                            {t('files.pagination.previous')}
+                        </Button>
+                        <span className="text-sm text-muted-foreground">
+                            {t('files.pagination.page', {
+                                current: pagination.currentPage,
+                                total: pagination.totalPages
+                            })}
+                        </span>
+                        <Button
+                            className="cursor-pointer"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => onPageChange(pagination.currentPage + 1)}
+                            disabled={!pagination.hasNextPage}
+                        >
+                            {t('files.pagination.next')}
+                            <ChevronRight className="h-4 w-4" />
+                        </Button>
+                    </div>
                 </div>
             )}
         </div>

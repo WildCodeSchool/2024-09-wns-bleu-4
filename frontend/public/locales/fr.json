@@ -93,10 +93,10 @@
         "title": "Télécharger un fichier",
         "page": {
             "deposit": {
-                "title": "Déposer votre fichier",
-                "description": "Téléchargez un fichier pour le partager avec vos contacts",
+                "title": "Déposer vos fichiers",
+                "description": "Téléchargez des fichiers pour les partager avec vos contacts",
                 "dropBox": {
-                    "title": "Déposez votre fichier permanent ici",
+                    "title": "Déposez vos fichiers permanents ici",
                     "supportedTypes": "Supporte les images, documents, vidéos, et plus",
                     "notice": "Les fichiers seront conservés indéfiniment"
                 }

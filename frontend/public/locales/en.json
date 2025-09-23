@@ -93,10 +93,10 @@
         "title": "Upload a file",
         "page": {
             "deposit": {
-                "title": "Transfer your file",
-                "description": "Upload a file to share it with your contacts",
+                "title": "Transfer your files",
+                "description": "Upload files to share them with your contacts",
                 "dropBox": {
-                    "title": "Transfer your file here",
+                    "title": "Transfer your files here",
                     "supportedTypes": "Supports images, documents, videos, and more",
                     "notice": "Files will be kept indefinitely"
                 }

@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { FileWithPreview } from '@/types/types';
 import MultiUploadCard from './MultiUploadCard';
+import ScrollBox from '../Wrappers/ScrollBox';
 
 interface MultiUploadListProps {
     files: FileWithPreview[];
@@ -11,19 +12,21 @@ interface MultiUploadListProps {
 
 const MultiUploadList = ({ files, descriptions, onDescriptionChange, removeFile }: MultiUploadListProps) => {
     return (
-        <motion.div layout className="flex flex-col gap-3">
-            <AnimatePresence initial={false}>
-                {files.map((file) => (
-                    <MultiUploadCard
-                        key={file.id}
-                        file={file}
-                        description={descriptions[file.id] || ''}
-                        onDescriptionChange={onDescriptionChange}
-                        onRemove={removeFile}
-                    />)
-                )}
-            </AnimatePresence>
-        </motion.div>
+        <ScrollBox className='max-h-[550px]'>
+            <motion.div layout className="flex flex-col gap-3">
+                <AnimatePresence initial={false}>
+                    {files.map((file) => (
+                        <MultiUploadCard
+                            key={file.id}
+                            file={file}
+                            description={descriptions[file.id] || ''}
+                            onDescriptionChange={onDescriptionChange}
+                            onRemove={removeFile}
+                        />)
+                    )}
+                </AnimatePresence>
+            </motion.div>
+        </ScrollBox>
     );
 };
 
