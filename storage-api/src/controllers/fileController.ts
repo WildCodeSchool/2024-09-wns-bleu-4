@@ -20,7 +20,7 @@ export const uploadFile = (req: Request, res: Response): void => {
     res.json({
         message: 'Fichier uploadé avec succès !',
         filename: req.file.filename,
-        path: `/uploads/${req.file.filename}`, // Chemin vers la route sécurisée
+        url: `/uploads/${req.file.filename}`, // Chemin vers la route sécurisée
         uploadedBy: req.user?.email
     });
 };

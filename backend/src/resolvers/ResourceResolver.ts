@@ -30,9 +30,6 @@ export class ResourceInput implements Partial<Resource> {
     @Field(() => String)
     url: string;
 
-    @Field(() => String)
-    path: string;
-
     @Field(() => Number, { nullable: false })
     size: number;
 }

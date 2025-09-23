@@ -36,7 +36,7 @@ export const cleanupExpiredResources = async (): Promise<void> => {
                     'storage-api',
                     'uploads',
                 );
-                const filePath = path.join(uploadsDir, resource.path);
+                const filePath = path.join(uploadsDir, resource.url);
 
                 if (fs.existsSync(filePath)) {
                     fs.unlinkSync(filePath);

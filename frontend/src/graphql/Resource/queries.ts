@@ -6,7 +6,6 @@ export const GET_ALL_RESOURCES = gql`
             id
             name
             description
-            path
             url
             size
             formattedSize
@@ -24,7 +23,6 @@ export const GET_RESOURCES_BY_USER_ID = gql`
             description
             id
             name
-            path
             url
             size
             formattedSize
@@ -39,7 +37,6 @@ export const GET_RESOURCES_BY_USER_ID_PAGINATED = gql`
                 description
                 id
                 name
-                path
                 url
                 size
                 formattedSize
@@ -65,7 +62,6 @@ export const GET_SHARED_RESOURCES = gql`
             id
             name
             description
-            path
             url
             size
             formattedSize
@@ -86,7 +82,6 @@ export const GET_SHARED_RESOURCES_PAGINATED = gql`
                 id
                 name
                 description
-                path
                 url
                 size
                 formattedSize
@@ -136,7 +131,6 @@ export const SEARCH_RESOURCES_BY_USER_ID = gql`
                 description
                 id
                 name
-                path
                 url
                 size
                 formattedSize

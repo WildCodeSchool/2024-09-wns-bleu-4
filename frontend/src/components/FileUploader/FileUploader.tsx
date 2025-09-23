@@ -134,7 +134,6 @@ export default function FileUploader({ acceptedFileTypes }: FileUploaderProps) {
                 variables: {
                     data: {
                         name: file.name,
-                        path: fileUrl,
                         url: fileUrl,
                         description:
                             description || `Fichier uploadé : ${file.name}`,
@@ -365,6 +364,7 @@ export default function FileUploader({ acceptedFileTypes }: FileUploaderProps) {
                                             />
                                         ) : (
                                             <FilePreview
+                                                context='card'
                                                 fileName={files[0].name}
                                                 className="w-5 h-5 flex-shrink-0"
                                             />
@@ -390,6 +390,7 @@ export default function FileUploader({ acceptedFileTypes }: FileUploaderProps) {
                                         <div className="flex flex-col gap-1 w-full">
                                             <div className="flex items-center gap-2 min-w-0">
                                                 <FilePreview
+                                                    context='card'
                                                     fileName={files[0].name}
                                                     className="w-5 h-5 flex-shrink-0"
                                                 />

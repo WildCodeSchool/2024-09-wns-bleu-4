@@ -6,7 +6,6 @@ export const CREATE_RESOURCE = gql`
             id
             name
             description
-            path
             url
         }
     }
@@ -30,7 +29,6 @@ export const UPDATE_RESOURCE_DESCRIPTION = gql`
             name
             description
             url
-            path
         }
     }
 `;

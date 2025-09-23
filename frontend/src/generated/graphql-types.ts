@@ -405,7 +405,6 @@ export type Resource = {
   formattedSize: Scalars['String']['output'];
   id: Scalars['Float']['output'];
   name: Scalars['String']['output'];
-  path: Scalars['String']['output'];
   reports: Array<Report>;
   size: Scalars['Float']['output'];
   url: Scalars['String']['output'];
@@ -416,7 +415,6 @@ export type Resource = {
 export type ResourceInput = {
   description: Scalars['String']['input'];
   name: Scalars['String']['input'];
-  path: Scalars['String']['input'];
   size: Scalars['Float']['input'];
   url: Scalars['String']['input'];
   userId: Scalars['ID']['input'];
@@ -606,7 +604,7 @@ export type CreateResourceMutationVariables = Exact<{
 }>;
 
 
-export type CreateResourceMutation = { __typename?: 'Mutation', createResource: { __typename?: 'Resource', id: number, name: string, description: string, path: string, url: string } };
+export type CreateResourceMutation = { __typename?: 'Mutation', createResource: { __typename?: 'Resource', id: number, name: string, description: string, url: string } };
 
 export type DeleteResourceMutationVariables = Exact<{
   deleteResourceId: Scalars['ID']['input'];
@@ -629,19 +627,19 @@ export type UpdateResourceDescriptionMutationVariables = Exact<{
 }>;
 
 
-export type UpdateResourceDescriptionMutation = { __typename?: 'Mutation', updateResourceDescription: { __typename?: 'Resource', id: number, name: string, description: string, url: string, path: string } };
+export type UpdateResourceDescriptionMutation = { __typename?: 'Mutation', updateResourceDescription: { __typename?: 'Resource', id: number, name: string, description: string, url: string } };
 
 export type GetAllResourcesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllResourcesQuery = { __typename?: 'Query', getAllResources: Array<{ __typename?: 'Resource', id: number, name: string, description: string, path: string, url: string, size: number, formattedSize: string, user: { __typename?: 'User', id: string, email: string } }> };
+export type GetAllResourcesQuery = { __typename?: 'Query', getAllResources: Array<{ __typename?: 'Resource', id: number, name: string, description: string, url: string, size: number, formattedSize: string, user: { __typename?: 'User', id: string, email: string } }> };
 
 export type GetResourcesByUserIdQueryVariables = Exact<{
   userId: Scalars['ID']['input'];
 }>;
 
 
-export type GetResourcesByUserIdQuery = { __typename?: 'Query', getResourcesByUserId: Array<{ __typename?: 'Resource', description: string, id: number, name: string, path: string, url: string, size: number, formattedSize: string }> };
+export type GetResourcesByUserIdQuery = { __typename?: 'Query', getResourcesByUserId: Array<{ __typename?: 'Resource', description: string, id: number, name: string, url: string, size: number, formattedSize: string }> };
 
 export type GetResourcesByUserIdPaginatedQueryVariables = Exact<{
   userId: Scalars['ID']['input'];
@@ -649,14 +647,14 @@ export type GetResourcesByUserIdPaginatedQueryVariables = Exact<{
 }>;
 
 
-export type GetResourcesByUserIdPaginatedQuery = { __typename?: 'Query', getResourcesByUserIdPaginated: { __typename?: 'PaginatedResources', totalCount: number, totalPages: number, currentPage: number, hasNextPage: boolean, hasPreviousPage: boolean, resources: Array<{ __typename?: 'Resource', description: string, id: number, name: string, path: string, url: string, size: number, formattedSize: string, user: { __typename?: 'User', id: string, email: string, createdAt: any, profilePicture?: string | null } }> } };
+export type GetResourcesByUserIdPaginatedQuery = { __typename?: 'Query', getResourcesByUserIdPaginated: { __typename?: 'PaginatedResources', totalCount: number, totalPages: number, currentPage: number, hasNextPage: boolean, hasPreviousPage: boolean, resources: Array<{ __typename?: 'Resource', description: string, id: number, name: string, url: string, size: number, formattedSize: string, user: { __typename?: 'User', id: string, email: string, createdAt: any, profilePicture?: string | null } }> } };
 
 export type GetUserSharedResourcesQueryVariables = Exact<{
   userId: Scalars['ID']['input'];
 }>;
 
 
-export type GetUserSharedResourcesQuery = { __typename?: 'Query', getUserSharedResources: Array<{ __typename?: 'Resource', id: number, name: string, description: string, path: string, url: string, size: number, formattedSize: string, user: { __typename?: 'User', id: string, email: string, createdAt: any, profilePicture?: string | null } }> };
+export type GetUserSharedResourcesQuery = { __typename?: 'Query', getUserSharedResources: Array<{ __typename?: 'Resource', id: number, name: string, description: string, url: string, size: number, formattedSize: string, user: { __typename?: 'User', id: string, email: string, createdAt: any, profilePicture?: string | null } }> };
 
 export type GetUserSharedResourcesPaginatedQueryVariables = Exact<{
   userId: Scalars['ID']['input'];
@@ -664,7 +662,7 @@ export type GetUserSharedResourcesPaginatedQueryVariables = Exact<{
 }>;
 
 
-export type GetUserSharedResourcesPaginatedQuery = { __typename?: 'Query', getUserSharedResourcesPaginated: { __typename?: 'PaginatedResources', totalCount: number, totalPages: number, currentPage: number, hasNextPage: boolean, hasPreviousPage: boolean, resources: Array<{ __typename?: 'Resource', id: number, name: string, description: string, path: string, url: string, size: number, formattedSize: string, user: { __typename?: 'User', id: string, email: string, createdAt: any, profilePicture?: string | null } }> } };
+export type GetUserSharedResourcesPaginatedQuery = { __typename?: 'Query', getUserSharedResourcesPaginated: { __typename?: 'PaginatedResources', totalCount: number, totalPages: number, currentPage: number, hasNextPage: boolean, hasPreviousPage: boolean, resources: Array<{ __typename?: 'Resource', id: number, name: string, description: string, url: string, size: number, formattedSize: string, user: { __typename?: 'User', id: string, email: string, createdAt: any, profilePicture?: string | null } }> } };
 
 export type GetResourceStatsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -691,7 +689,7 @@ export type SearchResourcesByUserIdQueryVariables = Exact<{
 }>;
 
 
-export type SearchResourcesByUserIdQuery = { __typename?: 'Query', searchResourcesByUserId: { __typename?: 'PaginatedResources', totalCount: number, totalPages: number, currentPage: number, hasNextPage: boolean, hasPreviousPage: boolean, resources: Array<{ __typename?: 'Resource', description: string, id: number, name: string, path: string, url: string, size: number, formattedSize: string, user: { __typename?: 'User', id: string, email: string, createdAt: any, profilePicture?: string | null } }> } };
+export type SearchResourcesByUserIdQuery = { __typename?: 'Query', searchResourcesByUserId: { __typename?: 'PaginatedResources', totalCount: number, totalPages: number, currentPage: number, hasNextPage: boolean, hasPreviousPage: boolean, resources: Array<{ __typename?: 'Resource', description: string, id: number, name: string, url: string, size: number, formattedSize: string, user: { __typename?: 'User', id: string, email: string, createdAt: any, profilePicture?: string | null } }> } };
 
 export type CreateSubscriptionMutationVariables = Exact<{
   userId: Scalars['ID']['input'];
@@ -1512,7 +1510,6 @@ export const CreateResourceDocument = gql`
     id
     name
     description
-    path
     url
   }
 }
@@ -1613,7 +1610,6 @@ export const UpdateResourceDescriptionDocument = gql`
     name
     description
     url
-    path
   }
 }
     `;
@@ -1650,7 +1646,6 @@ export const GetAllResourcesDocument = gql`
     id
     name
     description
-    path
     url
     size
     formattedSize
@@ -1699,7 +1694,6 @@ export const GetResourcesByUserIdDocument = gql`
     description
     id
     name
-    path
     url
     size
     formattedSize
@@ -1746,7 +1740,6 @@ export const GetResourcesByUserIdPaginatedDocument = gql`
       description
       id
       name
-      path
       url
       size
       formattedSize
@@ -1805,7 +1798,6 @@ export const GetUserSharedResourcesDocument = gql`
     id
     name
     description
-    path
     url
     size
     formattedSize
@@ -1858,7 +1850,6 @@ export const GetUserSharedResourcesPaginatedDocument = gql`
       id
       name
       description
-      path
       url
       size
       formattedSize
@@ -2036,7 +2027,6 @@ export const SearchResourcesByUserIdDocument = gql`
       description
       id
       name
-      path
       url
       size
       formattedSize

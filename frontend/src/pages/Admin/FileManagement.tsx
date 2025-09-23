@@ -15,7 +15,6 @@ interface Resource {
     id: number;
     name: string;
     description: string;
-    path: string;
     url: string;
     user?: {
         id: number;
@@ -183,6 +182,7 @@ const FileManagement: React.FC = () => {
                                 >
                                     <div className="flex items-center gap-4">
                                         <FilePreview
+                                            context="card"
                                             fileName={file.name}
                                             fileUrl={file.url}
                                         />
@@ -203,7 +203,7 @@ const FileManagement: React.FC = () => {
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <Badge variant="secondary">
-                                            {file.path
+                                            {file.url
                                                 .split('.')
                                                 .pop()
                                                 ?.toUpperCase() || 'FILE'}
