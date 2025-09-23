@@ -124,12 +124,12 @@ const generateUniqueFilename = (
     originalName: string,
     customName?: string,
 ): string => {
-    let baseName = originalName;
     if (customName) {
-        baseName = customName;
+        // Si un nom personnalisé est fourni, l'utiliser tel quel
+        return customName;
     }
-    const nameWithoutExt = path.parse(baseName).name;
-    const ext = path.extname(baseName) || path.extname(originalName);
+    const nameWithoutExt = path.parse(originalName).name;
+    const ext = path.extname(originalName);
     // Utiliser UUID pour garantir l'unicité absolue
     return `${nameWithoutExt}-${uuidv4()}${ext}`;
 };
