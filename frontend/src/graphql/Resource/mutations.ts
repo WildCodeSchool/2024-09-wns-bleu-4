@@ -22,3 +22,15 @@ export const CREATE_USER_ACCESS = gql`
         createUserAccess(resourceId: $resourceId, userId: $userId)
     }
 `;
+
+export const UPDATE_RESOURCE_DESCRIPTION = gql`
+    mutation UpdateResourceDescription($id: ID!, $description: String!) {
+        updateResourceDescription(id: $id, description: $description) {
+            id
+            name
+            description
+            url
+            path
+        }
+    }
+`;

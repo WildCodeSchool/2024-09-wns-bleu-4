@@ -63,6 +63,11 @@
         },
         "compactMode": "Mode réduit",
         "toggleCompactMode": "Basculer en mode réduit",
+        "search": {
+            "placeholder": "Rechercher des fichiers par nom..."
+        },
+        "sortByRecent": "Trier par plus récent",
+        "results": "résultats",
         "errors": {
             "invalidResourceId": "ID de ressource non valide",
             "deleting": "Suppression en cours...",
@@ -72,11 +77,16 @@
             "loadError": "Erreur lors du chargement des fichiers"
         },
         "uploadNew": "Télécharger un nouveau fichier",
-        "search": "Rechercher des fichiers",
         "filter": "Filtrer",
         "emptyState": {
             "noFilesDescription": "Téléchargez votre premier fichier pour le partager avec vos contacts.",
             "noSharedFilesDescription": "Vos contacts n'ont pas encore partagé de fichiers avec vous."
+        },
+        "pagination": {
+            "showing": "Affichage de {{start}} à {{end}} sur {{total}} fichiers",
+            "page": "Page {{current}} sur {{total}}",
+            "previous": "Précédent",
+            "next": "Suivant"
         }
     },
     "upload": {
@@ -676,7 +686,8 @@
             "info": "Informations",
             "share": "Partager",
             "report": "Signaler",
-            "delete": "Supprimer"
+            "delete": "Supprimer",
+            "edit": "Modifier"
         },
         "info": {
             "title": "Informations du fichier",
@@ -700,7 +711,8 @@
                 "sharing": "Erreur lors du partage du fichier",
                 "console": "Erreur lors du partage du fichier"
             },
-            "success": "Fichier partagé avec succès"
+            "success": "Fichier partagé avec succès",
+            "alreadyShared": "Déjà partagé"
         },
         "report": {
             "title": "Signaler ce fichier",
@@ -743,6 +755,14 @@
             "audio": "Votre navigateur ne supporte pas la lecture audio",
             "video": "Votre navigateur ne supporte pas la lecture vidéo",
             "pdf": "PDF non disponible"
+        },
+        "edit": {
+            "title": "Modifier le fichier",
+            "description": "Mettre à jour la description de \"{{fileName}}\"",
+            "placeholder": "Saisissez une nouvelle description...",
+            "save": "Enregistrer",
+            "success": "Description mise à jour avec succès",
+            "error": "Erreur lors de la mise à jour de la description"
         }
     },
     "meta": {

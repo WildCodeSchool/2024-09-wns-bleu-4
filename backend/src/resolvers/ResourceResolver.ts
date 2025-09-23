@@ -3,13 +3,17 @@ import { LogType } from '@/entities/SystemLog';
 import { User } from '@/entities/User';
 import {
     Arg,
+    Ctx,
     Field,
     ID,
     InputType,
     Mutation,
+    ObjectType,
     Query,
     Resolver,
+    UseMiddleware,
 } from 'type-graphql';
+import { isAuth } from '@/middleware/isAuth';
 import SystemLogResolver from './SystemLogResolver';
 
 @InputType()
@@ -31,6 +35,48 @@ export class ResourceInput implements Partial<Resource> {
 
     @Field(() => Number, { nullable: false })
     size: number;
+}
+
+@InputType()
+export class PaginationInput {
+    @Field(() => Number, { defaultValue: 1 })
+    page: number = 1;
+
+    @Field(() => Number, { defaultValue: 10 })
+    limit: number = 10;
+}
+
+@InputType()
+export class SearchInput {
+    @Field(() => String)
+    searchTerm: string;
+
+    @Field(() => Number, { defaultValue: 1 })
+    page: number = 1;
+
+    @Field(() => Number, { defaultValue: 10 })
+    limit: number = 10;
+}
+
+@ObjectType()
+export class PaginatedResources {
+    @Field(() => [Resource])
+    resources: Resource[];
+
+    @Field(() => Number)
+    totalCount: number;
+
+    @Field(() => Number)
+    totalPages: number;
+
+    @Field(() => Number)
+    currentPage: number;
+
+    @Field(() => Boolean)
+    hasNextPage: boolean;
+
+    @Field(() => Boolean)
+    hasPreviousPage: boolean;
 }
 
 @Resolver(Resource)
@@ -55,6 +101,75 @@ class ResourceResolver {
             where: { user: { id: userId } },
             relations: ['user'],
         });
+    }
+
+    @Query(() => PaginatedResources)
+    async getResourcesByUserIdPaginated(
+        @Arg('userId', () => ID) userId: number,
+        @Arg('pagination', () => PaginationInput) pagination: PaginationInput,
+    ): Promise<PaginatedResources> {
+        const { page, limit } = pagination;
+        const skip = (page - 1) * limit;
+
+        const [resources, totalCount] = await Resource.findAndCount({
+            where: { user: { id: userId } },
+            relations: ['user'],
+            order: { createdAt: 'DESC' },
+            skip,
+            take: limit,
+        });
+
+        const totalPages = Math.ceil(totalCount / limit);
+        const hasNextPage = page < totalPages;
+        const hasPreviousPage = page > 1;
+
+        return {
+            resources,
+            totalCount,
+            totalPages,
+            currentPage: page,
+            hasNextPage,
+            hasPreviousPage,
+        };
+    }
+
+    @Query(() => PaginatedResources)
+    async searchResourcesByUserId(
+        @Arg('userId', () => ID) userId: number,
+        @Arg('search', () => SearchInput) search: SearchInput,
+    ): Promise<PaginatedResources> {
+        const { searchTerm, page, limit } = search;
+        const skip = (page - 1) * limit;
+
+        // Create a query builder for more complex search
+        const queryBuilder = Resource.createQueryBuilder('resource')
+            .leftJoinAndSelect('resource.user', 'user')
+            .where('resource.user.id = :userId', { userId })
+            .andWhere('resource.name ILIKE :searchTerm', { searchTerm: `%${searchTerm}%` })
+            .orderBy('resource.name', 'ASC') // Sort by name for relevance
+            .addOrderBy('resource.createdAt', 'DESC'); // Secondary sort by creation date
+
+        // Get total count for pagination
+        const totalCount = await queryBuilder.getCount();
+
+        // Apply pagination
+        const resources = await queryBuilder
+            .skip(skip)
+            .take(limit)
+            .getMany();
+
+        const totalPages = Math.ceil(totalCount / limit);
+        const hasNextPage = page < totalPages;
+        const hasPreviousPage = page > 1;
+
+        return {
+            resources,
+            totalCount,
+            totalPages,
+            currentPage: page,
+            hasNextPage,
+            hasPreviousPage,
+        };
     }
 
     @Query(() => Number)
@@ -229,6 +344,54 @@ class ResourceResolver {
                 LogType.ERROR,
                 'Erreur lors de la suppression de fichier',
                 `Erreur lors de la suppression du fichier ID ${id}: ${error}`,
+                undefined,
+            );
+            throw error;
+        }
+    }
+
+    @Mutation(() => Resource)
+    @UseMiddleware(isAuth)
+    async updateResourceDescription(
+        @Arg('id', () => ID) id: number,
+        @Arg('description', () => String) description: string,
+        @Ctx() context: any,
+    ): Promise<Resource> {
+        try {
+            const resource = await Resource.findOne({
+                where: { id },
+                relations: ['user'],
+            });
+
+            if (!resource) {
+                throw new Error('Le fichier demandé n\'a pas été trouvé');
+            }
+
+            // Ensure only the owner can update
+            const requestingUser = await User.findOne({
+                where: { email: context.email },
+            });
+
+            if (!requestingUser || resource.user.id !== requestingUser.id) {
+                throw new Error('Vous n\'êtes pas autorisé à modifier ce fichier');
+            }
+
+            resource.description = description;
+            await Resource.save(resource);
+
+            await SystemLogResolver.logEvent(
+                LogType.SUCCESS,
+                'Fichier mis à jour',
+                `La description du fichier "${resource.name}" a été mise à jour`,
+                resource.user?.email,
+            );
+
+            return resource;
+        } catch (error) {
+            await SystemLogResolver.logEvent(
+                LogType.ERROR,
+                'Erreur lors de la mise à jour de fichier',
+                `Erreur lors de la mise à jour de la description du fichier ID ${id}: ${error}`,
                 undefined,
             );
             throw error;

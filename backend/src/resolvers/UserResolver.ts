@@ -5,6 +5,7 @@ import { SubscriptionStatus } from '@/entities/Subscription';
 import { LogType } from '@/entities/SystemLog';
 import { TempUser, User, UserRole, UserStorage } from '@/entities/User';
 import SystemLogResolver from '@/resolvers/SystemLogResolver';
+import { PaginatedResources, PaginationInput } from './ResourceResolver';
 import { getDomain } from '@/utils/envUtils';
 import {
     calculateStoragePercentage,
@@ -356,6 +357,58 @@ class UserResolver {
         return resourcesWithOwner.filter(
             (resource): resource is Resource => resource !== null,
         );
+    }
+
+    @Query(() => PaginatedResources)
+    async getUserSharedResourcesPaginated(
+        @Arg('userId', () => ID) userId: number,
+        @Arg('pagination', () => PaginationInput) pagination: PaginationInput,
+    ): Promise<PaginatedResources> {
+        const { page, limit } = pagination;
+        const skip = (page - 1) * limit;
+
+        // First get the user with shared resources
+        const user = await User.findOne({
+            where: { id: userId },
+            relations: ['sharedResources'],
+        });
+        const sharedResources = user?.sharedResources ?? [];
+
+        if (sharedResources.length === 0) {
+            return {
+                resources: [],
+                totalCount: 0,
+                totalPages: 0,
+                currentPage: page,
+                hasNextPage: false,
+                hasPreviousPage: false,
+            };
+        }
+
+        // Get the resource IDs
+        const resourceIds = sharedResources.map(resource => resource.id);
+
+        // Get paginated resources with owner info
+        const [resources, totalCount] = await Resource.createQueryBuilder('resource')
+            .leftJoinAndSelect('resource.user', 'user')
+            .where('resource.id IN (:...resourceIds)', { resourceIds })
+            .orderBy('resource.createdAt', 'DESC')
+            .skip(skip)
+            .take(limit)
+            .getManyAndCount();
+
+        const totalPages = Math.ceil(totalCount / limit);
+        const hasNextPage = page < totalPages;
+        const hasPreviousPage = page > 1;
+
+        return {
+            resources,
+            totalCount,
+            totalPages,
+            currentPage: page,
+            hasNextPage,
+            hasPreviousPage,
+        };
     }
 
     @Mutation(() => User)
