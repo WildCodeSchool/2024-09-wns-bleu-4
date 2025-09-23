@@ -228,32 +228,21 @@ const FilesPage: React.FC = () => {
     }, [isSharedSearchMode, sharedSearchLoading]);
 
     // Load authors for shared files dropdown
-    console.log('User ID for authors query:', userData?.getUserInfo?.id);
-    console.log('Skip condition:', !userData?.getUserInfo?.id);
-    const { data: authorsData, loading: authorsLoading, error: authorsError } = useQuery(GET_AUTHORS_WHO_SHARED_WITH_USER, {
+    const { data: authorsData } = useQuery(GET_AUTHORS_WHO_SHARED_WITH_USER, {
         variables: { userId: userData?.getUserInfo?.id },
         skip: !userData?.getUserInfo?.id,
         fetchPolicy: 'cache-and-network',
     });
-    
-    console.log('Authors query state:', { authorsData, authorsLoading, authorsError });
 
     useEffect(() => {
-        console.log('Authors data:', authorsData);
-        console.log('Authors loading:', authorsLoading);
-        console.log('Authors error:', authorsError);
         if (authorsData?.getAuthorsWhoSharedWithUser) {
-            console.log('Raw authors from GraphQL:', authorsData.getAuthorsWhoSharedWithUser);
-            console.log('Authors length:', authorsData.getAuthorsWhoSharedWithUser.length);
-            console.log('First author:', authorsData.getAuthorsWhoSharedWithUser[0]);
             type AuthorGQL = { id: string | number; email: string; profilePicture?: string | null };
             const normalized = (authorsData.getAuthorsWhoSharedWithUser as AuthorGQL[])
                 .filter(Boolean)
                 .map((a) => ({ id: Number(a.id), email: a.email, profilePicture: a.profilePicture ?? null }));
-            console.log('Normalized authors:', normalized);
             setAuthors(normalized);
         }
-    }, [authorsData, authorsLoading, authorsError]);
+    }, [authorsData]);
 
     return (
         <div className="py-6 space-y-6">

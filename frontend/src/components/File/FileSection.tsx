@@ -73,9 +73,6 @@ const FileSection: React.FC<FileSectionProps> = ({
     const { t } = useTranslation();
     const [isCompact, setIsCompact] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
-    
-    console.log('FileSection - authorOptions:', authorOptions);
-    console.log('FileSection - selectedAuthorId:', selectedAuthorId);
 
     const typeOptions: { key: string; label: string }[] = [
         { key: 'image', label: t('files.types.image') || 'Image' },

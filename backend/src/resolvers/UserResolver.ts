@@ -415,31 +415,20 @@ class UserResolver {
     async getAuthorsWhoSharedWithUser(
         @Arg('userId', () => ID) userId: number,
     ): Promise<User[]> {
-        console.log('getAuthorsWhoSharedWithUser called with userId:', userId);
-        
         // Get user and related shared resources
         const user = await User.findOne({
             where: { id: userId },
             relations: ['sharedResources', 'sharedResources.user'],
         });
 
-        console.log('User found:', user?.email);
-        console.log('Shared resources count:', user?.sharedResources?.length || 0);
-        console.log('Shared resources:', user?.sharedResources?.map(r => ({ id: r.id, name: r.name, user: r.user?.email })));
-
         const authorsMap = new Map<number, User>();
         (user?.sharedResources || []).forEach((res) => {
             if (res.user) {
-                console.log('Adding author:', res.user.email, 'ID:', res.user.id);
-                console.log('Author object:', { id: res.user.id, email: res.user.email, profilePicture: res.user.profilePicture });
                 authorsMap.set(res.user.id, res.user);
             }
         });
         
-        const result = Array.from(authorsMap.values());
-        console.log('Returning authors count:', result.length);
-        console.log('Returning authors:', result.map(a => ({ id: a.id, email: a.email, profilePicture: a.profilePicture })));
-        return result;
+        return Array.from(authorsMap.values());
     }
 
     @Query(() => PaginatedResources)
