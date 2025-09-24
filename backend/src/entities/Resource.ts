@@ -124,6 +124,7 @@ export class Resource extends BaseEntity {
     })
     scanAnalysisId: string;
 
+    @Field(() => Date, { nullable: true })
     @IsDate()
     @Column('date', { nullable: true })
     scanDate: Date;

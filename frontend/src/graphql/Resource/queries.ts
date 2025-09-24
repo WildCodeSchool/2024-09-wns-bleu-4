@@ -155,3 +155,32 @@ export const SEARCH_RESOURCES_BY_USER_ID = gql`
         }
     }
 `;
+
+// Get VT scan status for a resource and update it server-side if progressing
+export const GET_RESOURCE_SCAN_STATUS = gql`
+    query GetResourceScanStatus($resourceId: ID!) {
+        getResourceScanStatus(resourceId: $resourceId) {
+            id
+            name
+            scanStatus
+            scanAnalysisId
+            scanDate
+            threatCount
+            scanError
+        }
+    }
+`;
+
+export const GET_RESOURCE_SCAN_RESULT = gql`
+    query GetResourceScanResult($resourceId: ID!) {
+        getResourceScanResult(resourceId: $resourceId) {
+            resourceId
+            status
+            analysisId
+            scanDate
+            threatCount
+            error
+            isProcessing
+        }
+    }
+`;

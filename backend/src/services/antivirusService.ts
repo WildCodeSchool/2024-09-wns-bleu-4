@@ -4,8 +4,6 @@ import { registerEnumType } from 'type-graphql';
 import fs from 'fs';
 import path from 'path';
 
-import virustotal from '@api/virustotal';
-
 export enum ScanStatus {
     PENDING = 'pending',
     SCANNING = 'scanning',
@@ -137,8 +135,8 @@ export class AntivirusService {
     }
 
     /**
-     * Submit file to VirusTotal using totalvirus-api package
-     * https://www.npmjs.com/package/totalvirus-api
+     * Submit file to VirusTotal public API (multipart/form-data)
+     * https://docs.virustotal.com/reference/files-scan
      */
     private static async submitToPublicAPI(
         fullFilePath: string,
@@ -147,22 +145,48 @@ export class AntivirusService {
         
         // Debug logging
         console.log(`Submitting file to VirusTotal: ${fileName}, size: ${fs.statSync(fullFilePath).size} bytes`);
-        console.log('Available methods on virustotal:', Object.getOwnPropertyNames(virustotal));
-        console.log('virustotal.postFiles type:', typeof virustotal.postFiles);
 
         try {
-            // Submit file for scanning using postFiles method
-            // The API client should handle reading the file
-            const response = await virustotal.postFiles(
-                { file: fullFilePath },
-                { 'x-apikey': this.VIRUSTOTAL_API_KEY! }
-            );
-            
-            if (!response.data?.id) {
-                throw new Error('No analysis ID returned from VirusTotal API');
+            // Build multipart body using standard Web FormData (Node 18+)
+            // Important: pass a Blob with a filename so VT recognizes the 'file' part
+            const fileBuffer = fs.readFileSync(fullFilePath);
+            const blob = new Blob([new Uint8Array(fileBuffer)]);
+            const formData = new FormData();
+            formData.append('file', blob, fileName);
+
+            // For files larger than 32MB, VirusTotal requires obtaining an upload URL first
+            const fileSize = fs.statSync(fullFilePath).size;
+            let uploadEndpoint = 'https://www.virustotal.com/api/v3/files';
+            if (fileSize > 32 * 1024 * 1024) {
+                const uploadUrlRes = await fetch('https://www.virustotal.com/api/v3/files/upload_url', {
+                    method: 'GET',
+                    headers: { 'x-apikey': this.VIRUSTOTAL_API_KEY! },
+                });
+                if (!uploadUrlRes.ok) {
+                    const t = await uploadUrlRes.text();
+                    throw new Error(`Failed to get upload URL: ${uploadUrlRes.status} ${uploadUrlRes.statusText} - ${t}`);
+                }
+                const uploadUrlJson: any = await uploadUrlRes.json();
+                if (uploadUrlJson?.data) uploadEndpoint = uploadUrlJson.data as string;
             }
 
-            return response.data.id as string;
+            const response = await fetch(uploadEndpoint, {
+                method: 'POST',
+                headers: {
+                    'x-apikey': this.VIRUSTOTAL_API_KEY!,
+                },
+                body: formData,
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`VirusTotal public API error: ${response.status} ${response.statusText} - ${errorText}`);
+            }
+
+            const data: any = await response.json();
+            const analysisId = data?.data?.id as string | undefined;
+            if (!analysisId) throw new Error('No analysis ID returned from VirusTotal public API');
+            return analysisId;
         } catch (error) {
             let errorMessage = 'VirusTotal API error';
             

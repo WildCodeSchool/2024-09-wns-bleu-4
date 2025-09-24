@@ -9,7 +9,8 @@
         "add": "Ajouter",
         "sending": "Envoi...",
         "sent": "Envoyé !",
-        "back": "Retour"
+        "back": "Retour",
+        "close": "Fermer"
     },
     "profile": {
         "title": "Mon profil",
@@ -679,6 +680,7 @@
         }
     },
     "fileCard": {
+        "scan": "Analyser",
         "download": "Télécharger",
         "moreOptions": "Plus d'options",
         "sharedBy": "Partagé par",
@@ -763,6 +765,17 @@
             "save": "Enregistrer",
             "success": "Description mise à jour avec succès",
             "error": "Erreur lors de la mise à jour de la description"
+        },
+        "scanDialog": {
+            "title": "Analyse antivirus",
+            "description": "Statut et résultats de l'analyse VirusTotal",
+            "analysisId": "ID d'analyse",
+            "scanDate": "Date d'analyse",
+            "threatCount": "Nombre de menaces",
+            "error": "Erreur",
+            "refresh": "Rafraîchir",
+            "clean": "Indétecté",
+            "infected": "Possiblement infecté"
         }
     },
     "meta": {

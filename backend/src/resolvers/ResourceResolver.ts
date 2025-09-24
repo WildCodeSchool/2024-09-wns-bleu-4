@@ -81,6 +81,30 @@ export class PaginatedResources {
     hasPreviousPage: boolean;
 }
 
+@ObjectType()
+export class ResourceScanResult {
+    @Field(() => ScanStatus)
+    status: ScanStatus;
+
+    @Field(() => String, { nullable: true })
+    analysisId?: string | null;
+
+    @Field(() => Date, { nullable: true })
+    scanDate?: Date | null;
+
+    @Field(() => Number, { nullable: true })
+    threatCount?: number | null;
+
+    @Field(() => String, { nullable: true })
+    error?: string | null;
+
+    @Field(() => Boolean)
+    isProcessing: boolean;
+
+    @Field(() => ID)
+    resourceId: number;
+}
+
 @Resolver(Resource)
 class ResourceResolver {
     @Query(() => [Resource])
@@ -516,6 +540,57 @@ class ResourceResolver {
         }
 
         return resource;
+    }
+
+    /**
+     * Return a ScanResult-like object for UI polling/loader control
+     */
+    @Query(() => ResourceScanResult, { nullable: true })
+    async getResourceScanResult(
+        @Arg('resourceId', () => ID) resourceId: number,
+    ): Promise<ResourceScanResult | null> {
+        const resource = await Resource.findOne({
+            where: { id: resourceId },
+            relations: ['user'],
+        });
+
+        if (!resource) return null;
+
+        // If scanning and we have an analysis id, try to refresh
+        if (
+            resource.scanStatus === ScanStatus.SCANNING &&
+            resource.scanAnalysisId
+        ) {
+            try {
+                const scan = await AntivirusService.checkScanStatus(
+                    resource.scanAnalysisId,
+                    resource.name,
+                    resource.user?.email,
+                );
+
+                // Persist any change
+                if (scan.status !== resource.scanStatus) {
+                    resource.scanStatus = scan.status;
+                    if (scan.scanDate) resource.scanDate = scan.scanDate;
+                    if (scan.threatCount !== undefined)
+                        resource.threatCount = scan.threatCount;
+                    if (scan.error) resource.scanError = scan.error;
+                    await Resource.save(resource);
+                }
+            } catch (e) {
+                // ignore transient errors; UI will continue polling
+            }
+        }
+
+        return {
+            status: resource.scanStatus,
+            analysisId: resource.scanAnalysisId,
+            scanDate: resource.scanDate ?? null,
+            threatCount: resource.threatCount ?? null,
+            error: resource.scanError ?? null,
+            isProcessing: resource.scanStatus === ScanStatus.SCANNING,
+            resourceId: resource.id,
+        };
     }
 }
 
