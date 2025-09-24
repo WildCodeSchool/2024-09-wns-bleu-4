@@ -8,7 +8,7 @@ const VirusTotal = () => {
         >
             <path
                 fill="#0b4dda"
-                fill-rule="evenodd"
+                fillRule="evenodd"
                 d="M45.292 44.5 0 89h100V0H0l45.292 44.5zM90 80H22l35.987-35.2L22 9h68v71z"
             />
         </svg>
