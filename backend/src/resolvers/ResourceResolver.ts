@@ -15,6 +15,8 @@ import {
 } from 'type-graphql';
 import { isAuth } from '@/middleware/isAuth';
 import SystemLogResolver from './SystemLogResolver';
+import { AntivirusService } from '@/services/antivirusService';
+import { ScanStatus } from '@/services/antivirusService';
 
 @InputType()
 export class ResourceInput implements Partial<Resource> {
@@ -283,7 +285,12 @@ class ResourceResolver {
             }
 
             // Set expiration date for non-subscribed users (90 days)
-            const resourceData: any = { ...data, user, size: data.size };
+            const resourceData: any = { 
+                ...data, 
+                user, 
+                size: data.size,
+                scanStatus: ScanStatus.PENDING,
+            };
             if (!user.subscription) {
                 resourceData.expireAt = new Date(
                     Date.now() + 90 * 24 * 60 * 60 * 1000,
@@ -291,8 +298,12 @@ class ResourceResolver {
             }
 
             const resource = Resource.create(resourceData);
-
             const savedResource = await Resource.save(resource);
+
+            // Start antivirus scan asynchronously with a delay to ensure file is uploaded
+            setTimeout(() => {
+                this.performAntivirusScan(savedResource, data.path, user.email);
+            }, 5000); // Wait 5 seconds for file upload to complete
 
             // Log de l'événement
             await SystemLogResolver.logEvent(
@@ -396,6 +407,115 @@ class ResourceResolver {
             );
             throw error;
         }
+    }
+
+    /**
+     * Perform antivirus scan asynchronously
+     */
+    private async performAntivirusScan(
+        resource: Resource,
+        filePath: string,
+        userEmail: string,
+    ): Promise<void> {
+        try {
+            // Update status to scanning
+            resource.scanStatus = ScanStatus.SCANNING;
+            await Resource.save(resource);
+
+            // Perform the scan
+            const scanResult = await AntivirusService.scanFile(
+                filePath,
+                resource.name,
+                userEmail,
+            );
+
+            // Update resource with scan results
+            resource.scanStatus = scanResult.status;
+            if (scanResult.analysisId) {
+                resource.scanAnalysisId = scanResult.analysisId;
+            }
+            if (scanResult.scanDate) {
+                resource.scanDate = scanResult.scanDate;
+            }
+            if (scanResult.threatCount !== undefined) {
+                resource.threatCount = scanResult.threatCount;
+            }
+            if (scanResult.error) {
+                resource.scanError = scanResult.error;
+            }
+
+            await Resource.save(resource);
+
+            // If file is infected, log a warning
+            if (scanResult.status === ScanStatus.INFECTED) {
+                await SystemLogResolver.logEvent(
+                    LogType.ERROR,
+                    'Fichier infecté détecté',
+                    `Le fichier "${resource.name}" a été détecté comme infecté par ${scanResult.threatCount} moteurs antivirus`,
+                    userEmail,
+                );
+            }
+
+        } catch (error) {
+            // Update resource with error status
+            resource.scanStatus = ScanStatus.ERROR;
+            resource.scanError = error instanceof Error ? error.message : 'Unknown error';
+            await Resource.save(resource);
+
+            await SystemLogResolver.logEvent(
+                LogType.ERROR,
+                'Erreur lors du scan antivirus',
+                `Erreur lors du scan antivirus du fichier "${resource.name}": ${error}`,
+                userEmail,
+            );
+        }
+    }
+
+    /**
+     * Check the status of an antivirus scan
+     */
+    @Query(() => Resource, { nullable: true })
+    async getResourceScanStatus(
+        @Arg('resourceId', () => ID) resourceId: number,
+    ): Promise<Resource | null> {
+        const resource = await Resource.findOne({
+            where: { id: resourceId },
+            relations: ['user'],
+        });
+
+        if (!resource) {
+            return null;
+        }
+
+        // If scan is still in progress, check for updates
+        if (resource.scanStatus === ScanStatus.SCANNING && resource.scanAnalysisId) {
+            try {
+                const scanResult = await AntivirusService.checkScanStatus(
+                    resource.scanAnalysisId,
+                    resource.name,
+                    resource.user?.email,
+                );
+
+                // Update resource if status changed
+                if (scanResult.status !== resource.scanStatus) {
+                    resource.scanStatus = scanResult.status;
+                    if (scanResult.scanDate) {
+                        resource.scanDate = scanResult.scanDate;
+                    }
+                    if (scanResult.threatCount !== undefined) {
+                        resource.threatCount = scanResult.threatCount;
+                    }
+                    if (scanResult.error) {
+                        resource.scanError = scanResult.error;
+                    }
+                    await Resource.save(resource);
+                }
+            } catch (error) {
+                console.error('Error checking scan status:', error);
+            }
+        }
+
+        return resource;
     }
 }
 

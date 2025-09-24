@@ -277,6 +277,7 @@ export type Query = {
   getReportsByResource: Array<Report>;
   getReportsByUser: Array<Report>;
   getResourceById?: Maybe<Resource>;
+  getResourceScanStatus?: Maybe<Resource>;
   getResourcesByUserId: Array<Resource>;
   getResourcesByUserIdPaginated: PaginatedResources;
   getSystemLogById?: Maybe<SystemLog>;
@@ -314,6 +315,11 @@ export type QueryGetReportsByUserArgs = {
 
 export type QueryGetResourceByIdArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QueryGetResourceScanStatusArgs = {
+  resourceId: Scalars['ID']['input'];
 };
 
 
@@ -407,7 +413,11 @@ export type Resource = {
   name: Scalars['String']['output'];
   path: Scalars['String']['output'];
   reports: Array<Report>;
+  scanAnalysisId?: Maybe<Scalars['String']['output']>;
+  scanError?: Maybe<Scalars['String']['output']>;
+  scanStatus: ScanStatus;
   size: Scalars['Float']['output'];
+  threatCount?: Maybe<Scalars['Float']['output']>;
   url: Scalars['String']['output'];
   user: User;
   usersWithAccess: Array<User>;
@@ -421,6 +431,15 @@ export type ResourceInput = {
   url: Scalars['String']['input'];
   userId: Scalars['ID']['input'];
 };
+
+/** Status of antivirus scan */
+export enum ScanStatus {
+  Clean = 'CLEAN',
+  Error = 'ERROR',
+  Infected = 'INFECTED',
+  Pending = 'PENDING',
+  Scanning = 'SCANNING'
+}
 
 export type SearchInput = {
   limit?: Scalars['Float']['input'];

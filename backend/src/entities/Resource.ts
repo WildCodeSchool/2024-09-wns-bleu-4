@@ -1,5 +1,6 @@
 import { Report } from '@/entities/Report';
 import { User } from '@/entities/User';
+import { ScanStatus } from '@/services/antivirusService';
 import { formatFileSize } from '@/utils/storageUtils';
 import { IsDate, IsEnum, Length, MaxLength } from 'class-validator';
 import { Field, ObjectType } from 'type-graphql';
@@ -105,4 +106,39 @@ export class Resource extends BaseEntity {
     @IsDate()
     @CreateDateColumn()
     createdAt: Date;
+
+    @Field(() => ScanStatus)
+    @IsEnum(ScanStatus)
+    @Column({
+        type: 'enum',
+        enum: ScanStatus,
+        default: ScanStatus.PENDING,
+    })
+    scanStatus: ScanStatus;
+
+    @Field(() => String, { nullable: true })
+    @Column({
+        type: 'varchar',
+        length: 255,
+        nullable: true,
+    })
+    scanAnalysisId: string;
+
+    @IsDate()
+    @Column('date', { nullable: true })
+    scanDate: Date;
+
+    @Field(() => Number, { nullable: true })
+    @Column({
+        type: 'integer',
+        nullable: true,
+    })
+    threatCount: number;
+
+    @Field(() => String, { nullable: true })
+    @Column({
+        type: 'text',
+        nullable: true,
+    })
+    scanError: string;
 }

@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "virustotal": "^0.0.1"
+  }
+}
