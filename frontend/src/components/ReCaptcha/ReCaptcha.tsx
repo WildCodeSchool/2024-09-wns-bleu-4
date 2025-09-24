@@ -28,13 +28,13 @@ declare global {
 }
 
 export const ReCAPTCHA = ({ onSuccess, onError }: ReCAPTCHAProps) => {
-    const { isProd } = useEnv();
+    const { isDev } = useEnv();
     const testSiteKey = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI';
 
     const resolvedSiteKey =
-        isProd
-            ? import.meta.env?.VITE_RECAPTCHA_SITE_KEY 
-            : testSiteKey;
+        isDev
+            ? testSiteKey
+            : import.meta.env?.VITE_RECAPTCHA_SITE_KEY;
 
     const containerRef = useRef<HTMLDivElement | null>(null);
     const [widgetId, setWidgetId] = useState<number | null>(null);
