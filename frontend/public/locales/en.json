@@ -763,9 +763,10 @@
             "description": "VirusTotal scan status and results",
             "analysisId": "Analysis ID",
             "scanDate": "Scan date",
-            "threatCount": "Threat count",
+            "threatCount": "Potential threats count",
             "error": "Error",
             "refresh": "Refresh",
+            "loading": "loading...",
             "clean": "Clean",
             "infected": "Possibly Infected"
         }

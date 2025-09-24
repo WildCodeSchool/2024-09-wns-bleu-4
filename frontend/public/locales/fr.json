@@ -771,9 +771,10 @@
             "description": "Statut et résultats de l'analyse VirusTotal",
             "analysisId": "ID d'analyse",
             "scanDate": "Date d'analyse",
-            "threatCount": "Nombre de menaces",
+            "threatCount": "Nombre de menaces potentielles",
             "error": "Erreur",
             "refresh": "Rafraîchir",
+            "loading": "chargement...",
             "clean": "Indétecté",
             "infected": "Possiblement infecté"
         }

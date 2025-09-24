@@ -7,11 +7,12 @@ import {
     DialogTrigger,
 } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
+import VirusTotal from '@/components/Icons/VirusTotal';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { GET_RESOURCE_SCAN_RESULT } from '@/graphql/Resource/queries';
 import { useQuery } from '@apollo/client';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Loader } from '@/components/Loader';
 
@@ -20,8 +21,6 @@ interface FileScanDialogProps {
     resourceId: number;
     fileName: string;
 }
-
-const POLL_INTERVAL_MS = 12000; // 12s
 
 const statusColor: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
     pending: 'secondary',
@@ -35,7 +34,7 @@ const FileScanDialog: React.FC<FileScanDialogProps> = ({ trigger, resourceId, fi
     const { t } = useTranslation();
     const [open, setOpen] = useState(false);
 
-    const { data, loading } = useQuery(
+    const { data, loading, refetch } = useQuery(
         GET_RESOURCE_SCAN_RESULT,
         {
             variables: { resourceId },
@@ -43,6 +42,27 @@ const FileScanDialog: React.FC<FileScanDialogProps> = ({ trigger, resourceId, fi
             nextFetchPolicy: 'cache-first',
         },
     );
+
+    const [hasOpened, setHasOpened] = useState(false);
+    const [lastStatus, setLastStatus] = useState<string | undefined>(undefined);
+
+    // Track latest status
+    useEffect(() => {
+        const st = data?.getResourceScanResult?.status as string | undefined;
+        if (st) setLastStatus(st);
+    }, [data?.getResourceScanResult?.status]);
+
+    // On first open, force a refetch to get freshest VT status. Afterwards, only refetch if still scanning.
+    useEffect(() => {
+        if (!open) return;
+        if (!hasOpened) {
+            setHasOpened(true);
+            refetch();
+        } else if (lastStatus === 'scanning') {
+            refetch();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [open]);
 
     const scan = data?.getResourceScanResult;
 
@@ -60,7 +80,7 @@ const FileScanDialog: React.FC<FileScanDialogProps> = ({ trigger, resourceId, fi
                     ? (typeof value === 'string' && value.length > 50
                         ? value.slice(0, 35) + '...'
                         : value)
-                    : '-'}
+                    : t('fileCard.scanDialog.loading')}
             </p>
         </div>
     );
@@ -68,9 +88,22 @@ const FileScanDialog: React.FC<FileScanDialogProps> = ({ trigger, resourceId, fi
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>{trigger}</DialogTrigger>
-            <DialogContent className="sm:max-w-md">
+            <DialogContent className="sm:max-w-md" hideCloseButton={true}>
                 <DialogHeader>
-                    <DialogTitle>{t('fileCard.scanDialog.title')}</DialogTitle>
+                    <div className="flex items-center justify-between gap-3">
+                        <DialogTitle>{t('fileCard.scanDialog.title')}</DialogTitle>
+                        <a
+                            href="https://www.virustotal.com/gui/home/upload"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="no-underline"
+                        >
+                            <Badge className="bg-blue-50 text-blue-600 border border-blue-200 hover:bg-blue-100 gap-2 cursor-pointer">
+                                <VirusTotal />
+                                Powered by VirusTotal
+                            </Badge>
+                        </a>
+                    </div>
                     <DialogDescription>
                         {t('fileCard.scanDialog.description')}
                     </DialogDescription>
@@ -89,7 +122,7 @@ const FileScanDialog: React.FC<FileScanDialogProps> = ({ trigger, resourceId, fi
                     <div className="grid gap-4">
                         {infoRow(
                             t('fileCard.scanDialog.analysisId'), 
-                            scan?.analysisId ? <a className="text-blue-500" href={`https://www.virustotal.com/gui/file/${scan?.analysisId}`} target="_blank" rel="noopener noreferrer">{scan?.analysisId.slice(0, 35) + '...'}</a> : '-'
+                            scan?.analysisId ? <a className="text-blue-500" href={`https://www.virustotal.com/gui/file/${scan?.analysisId}`} target="_blank" rel="noopener noreferrer">{scan?.analysisId.slice(0, 35) + '...'}</a> : t('fileCard.scanDialog.loading')
                         )}
                         {infoRow(t('fileCard.scanDialog.scanDate'), scan?.scanDate)}
                         {infoRow(t('fileCard.scanDialog.threatCount'), scan?.threatCount?.toString())}
@@ -97,10 +130,7 @@ const FileScanDialog: React.FC<FileScanDialogProps> = ({ trigger, resourceId, fi
                     </div>
 
                     <div className="flex justify-end gap-2">
-                        <Button variant="outline" disabled>
-                            {t('fileCard.scanDialog.refresh')}
-                        </Button>
-                        <Button onClick={() => setOpen(false)}>{t('common.close')}</Button>
+                        <Button className="cursor-pointer" onClick={() => setOpen(false)}>{t('common.close')}</Button>
                     </div>
                 </div>
                 )}

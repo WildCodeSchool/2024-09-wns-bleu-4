@@ -19,7 +19,6 @@ import {
     MoreVertical,
     Share2,
     Trash2,
-    ShieldCheck,
 } from 'lucide-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -30,6 +29,7 @@ import FilePreviewDialog from './FilePreviewDialog';
 import FileReportDialog from './FileReportDialog';
 import FileShareDialog from './FileShareDialog';
 import FileScanDialog from './FileScanDialog';
+import VirusTotal from '@/components/Icons/VirusTotal';
 
 const FileCard: React.FC<FileCardProps> = ({
     name,
@@ -137,11 +137,13 @@ const FileCard: React.FC<FileCardProps> = ({
                     <div className="flex items-center gap-2">
                         <FileScanDialog
                             trigger={
-                                <Button variant="outline" size="sm">
-                                    <ShieldCheck className="h-4 w-4" />
-                                    <span className="sr-only">
-                                        {t('fileCard.scan')}
-                                    </span>
+                                <Button
+                                    variant="default"
+                                    size="sm"
+                                    className="flex items-center gap-2 cursor-pointer bg-blue-300 hover:bg-blue-200 border-blue-200 dark:bg-blue-900/50 dark:hover:bg-blue-800/50 dark:border-blue-700"
+                                >
+                                    <VirusTotal />
+                                    <span className="sr-only">{t('fileCard.scan')}</span>
                                 </Button>
                             }
                             resourceId={id}
