@@ -89,6 +89,14 @@ export class Resource extends BaseEntity {
         return formatFileSize(this.size);
     }
 
+    @Field(() => String, { nullable: false })
+    @Column({
+        type: 'varchar',
+        length: 32,
+        nullable: true,
+    })
+    md5Hash: string;
+
     @Field(() => [User])
     @ManyToMany(() => User, (User) => User.sharedResources)
     @JoinTable()

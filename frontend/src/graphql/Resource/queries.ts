@@ -10,6 +10,7 @@ export const GET_ALL_RESOURCES = gql`
             url
             size
             formattedSize
+            md5Hash
             user {
                 id
                 email
@@ -28,6 +29,7 @@ export const GET_RESOURCES_BY_USER_ID = gql`
             url
             size
             formattedSize
+            md5Hash
         }
     }
 `;
@@ -43,6 +45,7 @@ export const GET_RESOURCES_BY_USER_ID_PAGINATED = gql`
                 url
                 size
                 formattedSize
+                md5Hash
                 user {
                     id
                     email
@@ -69,6 +72,7 @@ export const GET_SHARED_RESOURCES = gql`
             url
             size
             formattedSize
+            md5Hash
             user {
                 id
                 email
@@ -90,6 +94,7 @@ export const GET_SHARED_RESOURCES_PAGINATED = gql`
                 url
                 size
                 formattedSize
+                md5Hash
                 user {
                     id
                     email
@@ -140,6 +145,7 @@ export const SEARCH_RESOURCES_BY_USER_ID = gql`
                 url
                 size
                 formattedSize
+                md5Hash
                 user {
                     id
                     email

@@ -180,6 +180,7 @@ const FileSection: React.FC<FileSectionProps> = ({
                                 url={file.url}
                                 description={file.description}
                                 formattedSize={file.formattedSize}
+                                md5Hash={file.md5Hash}
                                 isShared={isShared}
                                 isCompact={isCompact}
                                 owner={

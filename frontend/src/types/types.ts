@@ -26,6 +26,7 @@ export interface FileCardProps {
     id: number;
     description?: string;
     formattedSize: string;
+    md5Hash?: string;
     isShared?: boolean;
     isCompact?: boolean;
     owner?: {

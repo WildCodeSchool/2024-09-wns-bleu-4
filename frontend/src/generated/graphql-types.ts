@@ -404,6 +404,7 @@ export type Resource = {
   description: Scalars['String']['output'];
   formattedSize: Scalars['String']['output'];
   id: Scalars['Float']['output'];
+  md5Hash: Scalars['String']['output'];
   name: Scalars['String']['output'];
   path: Scalars['String']['output'];
   reports: Array<Report>;
@@ -415,6 +416,7 @@ export type Resource = {
 
 export type ResourceInput = {
   description: Scalars['String']['input'];
+  md5Hash?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
   path: Scalars['String']['input'];
   size: Scalars['Float']['input'];
@@ -634,14 +636,14 @@ export type UpdateResourceDescriptionMutation = { __typename?: 'Mutation', updat
 export type GetAllResourcesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllResourcesQuery = { __typename?: 'Query', getAllResources: Array<{ __typename?: 'Resource', id: number, name: string, description: string, path: string, url: string, size: number, formattedSize: string, user: { __typename?: 'User', id: string, email: string } }> };
+export type GetAllResourcesQuery = { __typename?: 'Query', getAllResources: Array<{ __typename?: 'Resource', id: number, name: string, description: string, path: string, url: string, size: number, formattedSize: string, md5Hash: string, user: { __typename?: 'User', id: string, email: string } }> };
 
 export type GetResourcesByUserIdQueryVariables = Exact<{
   userId: Scalars['ID']['input'];
 }>;
 
 
-export type GetResourcesByUserIdQuery = { __typename?: 'Query', getResourcesByUserId: Array<{ __typename?: 'Resource', description: string, id: number, name: string, path: string, url: string, size: number, formattedSize: string }> };
+export type GetResourcesByUserIdQuery = { __typename?: 'Query', getResourcesByUserId: Array<{ __typename?: 'Resource', description: string, id: number, name: string, path: string, url: string, size: number, formattedSize: string, md5Hash: string }> };
 
 export type GetResourcesByUserIdPaginatedQueryVariables = Exact<{
   userId: Scalars['ID']['input'];
@@ -649,14 +651,14 @@ export type GetResourcesByUserIdPaginatedQueryVariables = Exact<{
 }>;
 
 
-export type GetResourcesByUserIdPaginatedQuery = { __typename?: 'Query', getResourcesByUserIdPaginated: { __typename?: 'PaginatedResources', totalCount: number, totalPages: number, currentPage: number, hasNextPage: boolean, hasPreviousPage: boolean, resources: Array<{ __typename?: 'Resource', description: string, id: number, name: string, path: string, url: string, size: number, formattedSize: string, user: { __typename?: 'User', id: string, email: string, createdAt: any, profilePicture?: string | null } }> } };
+export type GetResourcesByUserIdPaginatedQuery = { __typename?: 'Query', getResourcesByUserIdPaginated: { __typename?: 'PaginatedResources', totalCount: number, totalPages: number, currentPage: number, hasNextPage: boolean, hasPreviousPage: boolean, resources: Array<{ __typename?: 'Resource', description: string, id: number, name: string, path: string, url: string, size: number, formattedSize: string, md5Hash: string, user: { __typename?: 'User', id: string, email: string, createdAt: any, profilePicture?: string | null } }> } };
 
 export type GetUserSharedResourcesQueryVariables = Exact<{
   userId: Scalars['ID']['input'];
 }>;
 
 
-export type GetUserSharedResourcesQuery = { __typename?: 'Query', getUserSharedResources: Array<{ __typename?: 'Resource', id: number, name: string, description: string, path: string, url: string, size: number, formattedSize: string, user: { __typename?: 'User', id: string, email: string, createdAt: any, profilePicture?: string | null } }> };
+export type GetUserSharedResourcesQuery = { __typename?: 'Query', getUserSharedResources: Array<{ __typename?: 'Resource', id: number, name: string, description: string, path: string, url: string, size: number, formattedSize: string, md5Hash: string, user: { __typename?: 'User', id: string, email: string, createdAt: any, profilePicture?: string | null } }> };
 
 export type GetUserSharedResourcesPaginatedQueryVariables = Exact<{
   userId: Scalars['ID']['input'];
@@ -664,7 +666,7 @@ export type GetUserSharedResourcesPaginatedQueryVariables = Exact<{
 }>;
 
 
-export type GetUserSharedResourcesPaginatedQuery = { __typename?: 'Query', getUserSharedResourcesPaginated: { __typename?: 'PaginatedResources', totalCount: number, totalPages: number, currentPage: number, hasNextPage: boolean, hasPreviousPage: boolean, resources: Array<{ __typename?: 'Resource', id: number, name: string, description: string, path: string, url: string, size: number, formattedSize: string, user: { __typename?: 'User', id: string, email: string, createdAt: any, profilePicture?: string | null } }> } };
+export type GetUserSharedResourcesPaginatedQuery = { __typename?: 'Query', getUserSharedResourcesPaginated: { __typename?: 'PaginatedResources', totalCount: number, totalPages: number, currentPage: number, hasNextPage: boolean, hasPreviousPage: boolean, resources: Array<{ __typename?: 'Resource', id: number, name: string, description: string, path: string, url: string, size: number, formattedSize: string, md5Hash: string, user: { __typename?: 'User', id: string, email: string, createdAt: any, profilePicture?: string | null } }> } };
 
 export type GetResourceStatsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -691,7 +693,7 @@ export type SearchResourcesByUserIdQueryVariables = Exact<{
 }>;
 
 
-export type SearchResourcesByUserIdQuery = { __typename?: 'Query', searchResourcesByUserId: { __typename?: 'PaginatedResources', totalCount: number, totalPages: number, currentPage: number, hasNextPage: boolean, hasPreviousPage: boolean, resources: Array<{ __typename?: 'Resource', description: string, id: number, name: string, path: string, url: string, size: number, formattedSize: string, user: { __typename?: 'User', id: string, email: string, createdAt: any, profilePicture?: string | null } }> } };
+export type SearchResourcesByUserIdQuery = { __typename?: 'Query', searchResourcesByUserId: { __typename?: 'PaginatedResources', totalCount: number, totalPages: number, currentPage: number, hasNextPage: boolean, hasPreviousPage: boolean, resources: Array<{ __typename?: 'Resource', description: string, id: number, name: string, path: string, url: string, size: number, formattedSize: string, md5Hash: string, user: { __typename?: 'User', id: string, email: string, createdAt: any, profilePicture?: string | null } }> } };
 
 export type CreateSubscriptionMutationVariables = Exact<{
   userId: Scalars['ID']['input'];
@@ -1654,6 +1656,7 @@ export const GetAllResourcesDocument = gql`
     url
     size
     formattedSize
+    md5Hash
     user {
       id
       email
@@ -1703,6 +1706,7 @@ export const GetResourcesByUserIdDocument = gql`
     url
     size
     formattedSize
+    md5Hash
   }
 }
     `;
@@ -1750,6 +1754,7 @@ export const GetResourcesByUserIdPaginatedDocument = gql`
       url
       size
       formattedSize
+      md5Hash
       user {
         id
         email
@@ -1809,6 +1814,7 @@ export const GetUserSharedResourcesDocument = gql`
     url
     size
     formattedSize
+    md5Hash
     user {
       id
       email
@@ -1862,6 +1868,7 @@ export const GetUserSharedResourcesPaginatedDocument = gql`
       url
       size
       formattedSize
+      md5Hash
       user {
         id
         email
@@ -2040,6 +2047,7 @@ export const SearchResourcesByUserIdDocument = gql`
       url
       size
       formattedSize
+      md5Hash
       user {
         id
         email

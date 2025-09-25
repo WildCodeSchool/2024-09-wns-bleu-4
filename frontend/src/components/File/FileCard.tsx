@@ -35,6 +35,7 @@ const FileCard: React.FC<FileCardProps> = ({
     id,
     description,
     formattedSize,
+    md5Hash,
     isShared = false,
     isCompact = false,
     owner,
@@ -91,6 +92,7 @@ const FileCard: React.FC<FileCardProps> = ({
                                                     {description}
                                                 </p>
                                             )}
+                                            
                                             {!isCompact && isShared && owner && (
                                                 <p className="truncate">
                                                     {t('fileCard.sharedBy')}{' '}
@@ -150,6 +152,7 @@ const FileCard: React.FC<FileCardProps> = ({
                                     fileName={name}
                                     fileSize={formattedSize}
                                     description={description}
+                                    md5Hash={md5Hash}
                                     owner={owner}
                                     isShared={isShared}
                                 />
