@@ -37,6 +37,7 @@ const Sign = () => {
             title={t('auth.signup.title')}
             onSubmit={handleSubmit}
             loading={loading}
+            requireCaptcha
             links={
                 <span>
                     {t('auth.signup.links.terms')}{' '}
