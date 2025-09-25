@@ -1,7 +1,7 @@
 import FileShareDialog from '@/components/File/FileShareDialog';
 import FilePreview from '@/components/FilePreview';
 import { Button } from '@/components/ui/button';
-import { CREATE_RESOURCE, DELETE_RESOURCE } from '@/graphql/Resource/mutations';
+import { CREATE_RESOURCE } from '@/graphql/Resource/mutations';
 import { useAuth } from '@/hooks/useAuth';
 import { useMyContacts } from '@/hooks/useMyContacts';
 import {
@@ -39,7 +39,6 @@ export default function FileUploader({ acceptedFileTypes }: FileUploaderProps) {
     const { user } = useAuth();
     const { acceptedContacts } = useMyContacts();
     const [createResource] = useMutation(CREATE_RESOURCE);
-    const [deleteResource] = useMutation(DELETE_RESOURCE);
 
     const [files, setFiles] = useState<FileWithPreview[]>([]);
     const [isDragging, setIsDragging] = useState(false);
