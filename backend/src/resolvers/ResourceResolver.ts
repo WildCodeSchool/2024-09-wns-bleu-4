@@ -15,6 +15,8 @@ import {
 } from 'type-graphql';
 import { isAuth } from '@/middleware/isAuth';
 import SystemLogResolver from './SystemLogResolver';
+import { AntivirusService } from '@/services/antivirusService';
+import { ScanStatus } from '@/services/antivirusService';
 
 @InputType()
 export class ResourceInput implements Partial<Resource> {
@@ -59,6 +61,12 @@ export class SearchInput {
 
     @Field(() => Number, { defaultValue: 10 })
     limit: number = 10;
+
+    @Field(() => [String], { nullable: true })
+    types?: string[];
+
+    @Field(() => Number, { nullable: true })
+    authorId?: number;
 }
 
 @ObjectType()
@@ -80,6 +88,30 @@ export class PaginatedResources {
 
     @Field(() => Boolean)
     hasPreviousPage: boolean;
+}
+
+@ObjectType()
+export class ResourceScanResult {
+    @Field(() => ScanStatus)
+    status: ScanStatus;
+
+    @Field(() => String, { nullable: true })
+    analysisId?: string | null;
+
+    @Field(() => Date, { nullable: true })
+    scanDate?: Date | null;
+
+    @Field(() => Number, { nullable: true })
+    threatCount?: number | null;
+
+    @Field(() => String, { nullable: true })
+    error?: string | null;
+
+    @Field(() => Boolean)
+    isProcessing: boolean;
+
+    @Field(() => ID)
+    resourceId: number;
 }
 
 @Resolver(Resource)
@@ -141,7 +173,7 @@ class ResourceResolver {
         @Arg('userId', () => ID) userId: number,
         @Arg('search', () => SearchInput) search: SearchInput,
     ): Promise<PaginatedResources> {
-        const { searchTerm, page, limit } = search;
+        const { searchTerm, page, limit, types } = search;
         const skip = (page - 1) * limit;
 
         // Create a query builder for more complex search
@@ -151,6 +183,36 @@ class ResourceResolver {
             .andWhere('resource.name ILIKE :searchTerm', { searchTerm: `%${searchTerm}%` })
             .orderBy('resource.name', 'ASC') // Sort by name for relevance
             .addOrderBy('resource.createdAt', 'DESC'); // Secondary sort by creation date
+
+        // Optional type filters by extension groups
+        if (types && types.length > 0) {
+            const extensionGroups: Record<string, string[]> = {
+                image: ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp', 'bmp', 'ico'],
+                video: ['mp4', 'avi', 'mov', 'wmv', 'flv', 'webm', 'mkv', 'm4v'],
+                audio: ['mp3', 'wav', 'flac', 'aac', 'ogg', 'm4a'],
+                pdf: ['pdf'],
+                archive: ['zip', 'rar', '7z', 'tar', 'gz', 'bz2', 'xz'],
+                document: ['doc', 'docx', 'txt', 'rtf', 'odt'],
+                spreadsheet: ['xls', 'xlsx', 'csv', 'ods'],
+                code: ['js', 'jsx', 'ts', 'tsx', 'html', 'css', 'scss', 'json', 'xml', 'sql', 'py', 'java', 'c', 'cpp', 'php', 'rb', 'go', 'rs'],
+            };
+
+            const selectedExtensions = types
+                .flatMap((type) => extensionGroups[type] || [])
+                .filter((v, i, a) => a.indexOf(v) === i);
+
+            if (selectedExtensions.length > 0) {
+                // Build OR conditions for matching file extensions in the name
+                const orConditions: string[] = [];
+                const params: Record<string, string> = {};
+                selectedExtensions.forEach((ext, idx) => {
+                    const key = `ext${idx}`;
+                    orConditions.push(`resource.name ILIKE :${key}`);
+                    params[key] = `%.${ext}`;
+                });
+                queryBuilder.andWhere(`(${orConditions.join(' OR ')})`, params);
+            }
+        }
 
         // Get total count for pagination
         const totalCount = await queryBuilder.getCount();
@@ -286,7 +348,12 @@ class ResourceResolver {
             }
 
             // Set expiration date for non-subscribed users (90 days)
-            const resourceData: any = { ...data, user, size: data.size };
+            const resourceData: any = { 
+                ...data, 
+                user, 
+                size: data.size,
+                scanStatus: ScanStatus.PENDING,
+            };
             if (!user.subscription) {
                 resourceData.expireAt = new Date(
                     Date.now() + 90 * 24 * 60 * 60 * 1000,
@@ -294,8 +361,12 @@ class ResourceResolver {
             }
 
             const resource = Resource.create(resourceData);
-
             const savedResource = await Resource.save(resource);
+
+            // Start antivirus scan asynchronously with a delay to ensure file is uploaded
+            setTimeout(() => {
+                this.performAntivirusScan(savedResource, data.path, user.email);
+            }, 5000); // Wait 5 seconds for file upload to complete
 
             // Log de l'événement
             await SystemLogResolver.logEvent(
@@ -399,6 +470,166 @@ class ResourceResolver {
             );
             throw error;
         }
+    }
+
+    /**
+     * Perform antivirus scan asynchronously
+     */
+    private async performAntivirusScan(
+        resource: Resource,
+        filePath: string,
+        userEmail: string,
+    ): Promise<void> {
+        try {
+            // Update status to scanning
+            resource.scanStatus = ScanStatus.SCANNING;
+            await Resource.save(resource);
+
+            // Perform the scan
+            const scanResult = await AntivirusService.scanFile(
+                filePath,
+                resource.name,
+                userEmail,
+            );
+
+            // Update resource with scan results
+            resource.scanStatus = scanResult.status;
+            if (scanResult.analysisId) {
+                resource.scanAnalysisId = scanResult.analysisId;
+            }
+            if (scanResult.scanDate) {
+                resource.scanDate = scanResult.scanDate;
+            }
+            if (scanResult.threatCount !== undefined) {
+                resource.threatCount = scanResult.threatCount;
+            }
+            if (scanResult.error) {
+                resource.scanError = scanResult.error;
+            }
+
+            await Resource.save(resource);
+
+            // If file is infected, log a warning
+            if (scanResult.status === ScanStatus.INFECTED) {
+                await SystemLogResolver.logEvent(
+                    LogType.ERROR,
+                    'Fichier infecté détecté',
+                    `Le fichier "${resource.name}" a été détecté comme infecté par ${scanResult.threatCount} moteurs antivirus`,
+                    userEmail,
+                );
+            }
+
+        } catch (error) {
+            // Update resource with error status
+            resource.scanStatus = ScanStatus.ERROR;
+            resource.scanError = error instanceof Error ? error.message : 'Unknown error';
+            await Resource.save(resource);
+
+            await SystemLogResolver.logEvent(
+                LogType.ERROR,
+                'Erreur lors du scan antivirus',
+                `Erreur lors du scan antivirus du fichier "${resource.name}": ${error}`,
+                userEmail,
+            );
+        }
+    }
+
+    /**
+     * Check the status of an antivirus scan
+     */
+    @Query(() => Resource, { nullable: true })
+    async getResourceScanStatus(
+        @Arg('resourceId', () => ID) resourceId: number,
+    ): Promise<Resource | null> {
+        const resource = await Resource.findOne({
+            where: { id: resourceId },
+            relations: ['user'],
+        });
+
+        if (!resource) {
+            return null;
+        }
+
+        // If scan is still in progress, check for updates
+        if (resource.scanStatus === ScanStatus.SCANNING && resource.scanAnalysisId) {
+            try {
+                const scanResult = await AntivirusService.checkScanStatus(
+                    resource.scanAnalysisId,
+                    resource.name,
+                    resource.user?.email,
+                );
+
+                // Update resource if status changed
+                if (scanResult.status !== resource.scanStatus) {
+                    resource.scanStatus = scanResult.status;
+                    if (scanResult.scanDate) {
+                        resource.scanDate = scanResult.scanDate;
+                    }
+                    if (scanResult.threatCount !== undefined) {
+                        resource.threatCount = scanResult.threatCount;
+                    }
+                    if (scanResult.error) {
+                        resource.scanError = scanResult.error;
+                    }
+                    await Resource.save(resource);
+                }
+            } catch (error) {
+                console.error('Error checking scan status:', error);
+            }
+        }
+
+        return resource;
+    }
+
+    /**
+     * Return a ScanResult-like object for UI polling/loader control
+     */
+    @Query(() => ResourceScanResult, { nullable: true })
+    async getResourceScanResult(
+        @Arg('resourceId', () => ID) resourceId: number,
+    ): Promise<ResourceScanResult | null> {
+        const resource = await Resource.findOne({
+            where: { id: resourceId },
+            relations: ['user'],
+        });
+
+        if (!resource) return null;
+
+        // If scanning and we have an analysis id, try to refresh
+        if (
+            resource.scanStatus === ScanStatus.SCANNING &&
+            resource.scanAnalysisId
+        ) {
+            try {
+                const scan = await AntivirusService.checkScanStatus(
+                    resource.scanAnalysisId,
+                    resource.name,
+                    resource.user?.email,
+                );
+
+                // Persist any change
+                if (scan.status !== resource.scanStatus) {
+                    resource.scanStatus = scan.status;
+                    if (scan.scanDate) resource.scanDate = scan.scanDate;
+                    if (scan.threatCount !== undefined)
+                        resource.threatCount = scan.threatCount;
+                    if (scan.error) resource.scanError = scan.error;
+                    await Resource.save(resource);
+                }
+            } catch (e) {
+                // ignore transient errors; UI will continue polling
+            }
+        }
+
+        return {
+            status: resource.scanStatus,
+            analysisId: resource.scanAnalysisId,
+            scanDate: resource.scanDate ?? null,
+            threatCount: resource.threatCount ?? null,
+            error: resource.scanError ?? null,
+            isProcessing: resource.scanStatus === ScanStatus.SCANNING,
+            resourceId: resource.id,
+        };
     }
 }
 

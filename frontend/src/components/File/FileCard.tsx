@@ -28,6 +28,8 @@ import FileEditDialog from './FileEditDialog';
 import FilePreviewDialog from './FilePreviewDialog';
 import FileReportDialog from './FileReportDialog';
 import FileShareDialog from './FileShareDialog';
+import FileScanDialog from './FileScanDialog';
+import VirusTotal from '@/components/Icons/VirusTotal';
 
 const FileCard: React.FC<FileCardProps> = ({
     name,
@@ -67,7 +69,11 @@ const FileCard: React.FC<FileCardProps> = ({
                                             {getFileTypeInfo(name).emoji}
                                         </div>
                                     ) : (
-                                        <FilePreview context="card" fileName={name} fileUrl={url} />
+                                        <FilePreview
+                                            context="card"
+                                            fileName={name}
+                                            fileUrl={url}
+                                        />
                                     )}
                                     <div className="min-w-0 flex-1">
                                         <h3 className="font-semibold text-sm truncate mb-1">
@@ -76,23 +82,31 @@ const FileCard: React.FC<FileCardProps> = ({
                                         <div className="text-xs text-muted-foreground space-y-1">
                                             <p className="font-medium">
                                                 {formattedSize}
-                                                {isCompact && isShared && owner && (
-                                                    <span className="ml-2">
-                                                        • {t('fileCard.sharedBy')}{' '}
-                                                        <UserHoverCard user={owner}>
-                                                            <span className="text-blue-500 cursor-pointer hover:underline">
-                                                                {owner.email}
-                                                            </span>
-                                                        </UserHoverCard>
-                                                    </span>
-                                                )}
+                                                {isCompact &&
+                                                    isShared &&
+                                                    owner && (
+                                                        <span className="ml-2">
+                                                            •{' '}
+                                                            {t(
+                                                                'fileCard.sharedBy',
+                                                            )}{' '}
+                                                            <UserHoverCard
+                                                                user={owner}
+                                                            >
+                                                                <span className="text-blue-500 cursor-pointer hover:underline">
+                                                                    {
+                                                                        owner.email
+                                                                    }
+                                                                </span>
+                                                            </UserHoverCard>
+                                                        </span>
+                                                    )}
                                             </p>
                                             {!isCompact && description && (
                                                 <p className="truncate line-clamp-2">
                                                     {description}
                                                 </p>
                                             )}
-                                            
                                             {!isCompact && isShared && owner && (
                                                 <p className="truncate">
                                                     {t('fileCard.sharedBy')}{' '}
@@ -118,6 +132,20 @@ const FileCard: React.FC<FileCardProps> = ({
 
                     {/* Right: actions (do NOT open preview dialog) */}
                     <div className="flex items-center gap-2">
+                        <FileScanDialog
+                            trigger={
+                                <Button
+                                    variant="default"
+                                    size="sm"
+                                    className="flex items-center gap-2 cursor-pointer bg-blue-300 hover:bg-blue-200 border-blue-200 dark:bg-blue-900/50 dark:hover:bg-blue-800/50 dark:border-blue-700"
+                                >
+                                    <VirusTotal />
+                                    <span className="sr-only">{t('fileCard.scan')}</span>
+                                </Button>
+                            }
+                            resourceId={id}
+                            fileName={name}
+                        />
                         <Button
                             variant="outline"
                             size="sm"
@@ -125,14 +153,22 @@ const FileCard: React.FC<FileCardProps> = ({
                             className="flex-shrink-0"
                         >
                             <Download className="h-4 w-4" />
-                            <span className="sr-only">{t('fileCard.download')}</span>
+                            <span className="sr-only">
+                                {t('fileCard.download')}
+                            </span>
                         </Button>
 
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <Button variant="outline" size="sm" className="flex-shrink-0">
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="flex-shrink-0"
+                                >
                                     <MoreVertical className="h-4 w-4" />
-                                    <span className="sr-only">{t('fileCard.moreOptions')}</span>
+                                    <span className="sr-only">
+                                        {t('fileCard.moreOptions')}
+                                    </span>
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" className="w-48">
@@ -144,7 +180,9 @@ const FileCard: React.FC<FileCardProps> = ({
                                 <DropdownMenuSeparator />
                                 <FileInfoDialog
                                     trigger={
-                                        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                                        <DropdownMenuItem
+                                            onSelect={(e) => e.preventDefault()}
+                                        >
                                             <Info className="h-4 w-4 mr-2" />
                                             {t('fileCard.menu.info')}
                                         </DropdownMenuItem>
@@ -160,7 +198,11 @@ const FileCard: React.FC<FileCardProps> = ({
                                 {owner && !isShared && (
                                     <FileEditDialog
                                         trigger={
-                                            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                                            <DropdownMenuItem
+                                                onSelect={(e) =>
+                                                    e.preventDefault()
+                                                }
+                                            >
                                                 <Pencil className="h-4 w-4 mr-2" />
                                                 {t('fileCard.menu.edit')}
                                             </DropdownMenuItem>
@@ -177,7 +219,11 @@ const FileCard: React.FC<FileCardProps> = ({
                                 {!isShared && myContacts.length > 0 && (
                                     <FileShareDialog
                                         trigger={
-                                            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                                            <DropdownMenuItem
+                                                onSelect={(e) =>
+                                                    e.preventDefault()
+                                                }
+                                            >
                                                 <Share2 className="h-4 w-4 mr-2" />
                                                 {t('fileCard.menu.share')}
                                             </DropdownMenuItem>
@@ -190,7 +236,9 @@ const FileCard: React.FC<FileCardProps> = ({
 
                                 <FileReportDialog
                                     trigger={
-                                        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                                        <DropdownMenuItem
+                                            onSelect={(e) => e.preventDefault()}
+                                        >
                                             <Flag className="h-4 w-4 mr-2" />
                                             {t('fileCard.menu.report')}
                                         </DropdownMenuItem>
@@ -205,7 +253,9 @@ const FileCard: React.FC<FileCardProps> = ({
                                             trigger={
                                                 <DropdownMenuItem
                                                     className="text-destructive focus:text-destructive"
-                                                    onSelect={(e) => e.preventDefault()}
+                                                    onSelect={(e) =>
+                                                        e.preventDefault()
+                                                    }
                                                 >
                                                     <Trash2 className="h-4 w-4 mr-2" />
                                                     {t('fileCard.menu.delete')}

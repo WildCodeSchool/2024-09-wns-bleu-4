@@ -9,7 +9,8 @@
         "add": "Add",
         "sending": "Sending...",
         "sent": "Sent !",
-        "back": "Back"
+        "back": "Back",
+        "close": "Close"
     },
     "profile": {
         "title": "My Profile",
@@ -67,7 +68,11 @@
             "placeholder": "Search files by name..."
         },
         "sortByRecent": "Sort by most recent",
+        "reset": "Reset to default",
         "results": "results",
+        "filterByType": "Filter by type",
+        "filterByAuthor": "Filter by author",
+        "allAuthors": "All authors",
         "errors": {
             "invalidResourceId": "Invalid resource ID",
             "deleting": "Deleting...",
@@ -78,6 +83,18 @@
         },
         "uploadNew": "Upload a new file",
         "filter": "Filter",
+        "filterTypes": "Types",
+        "filterAuthors": "Authors",
+        "types": {
+            "image": "Image",
+            "video": "Video",
+            "pdf": "PDF",
+            "audio": "Audio",
+            "archive": "Archive",
+            "document": "Document",
+            "spreadsheet": "Spreadsheet",
+            "code": "Code"
+        },
         "emptyState": {
             "noFilesDescription": "Upload your first file to share it with your contacts.",
             "noSharedFilesDescription": "Your contacts haven't shared any files with you yet."
@@ -314,7 +331,7 @@
             "viewAll": "View All Files",
             "sharedBy": "Shared by",
             "search": {
-                "placeholder": "Search for a file by name..."
+                "placeholder": "Search for files by name..."
             },
             "stats": {
                 "total": "Total files",
@@ -675,6 +692,7 @@
         }
     },
     "fileCard": {
+        "scan": "Scan",
         "download": "Download",
         "moreOptions": "More options",
         "sharedBy": "Shared by",
@@ -755,6 +773,18 @@
             "save": "Save",
             "success": "Description updated successfully",
             "error": "Error updating description"
+        },
+        "scanDialog": {
+            "title": "Antivirus scan",
+            "description": "VirusTotal scan status and results",
+            "analysisId": "Analysis ID",
+            "scanDate": "Scan date",
+            "threatCount": "Potential threats count",
+            "error": "Error",
+            "refresh": "Refresh",
+            "loading": "loading...",
+            "clean": "Clean",
+            "infected": "Possibly Infected"
         }
     },
     "meta": {

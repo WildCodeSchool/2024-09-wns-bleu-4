@@ -2,6 +2,7 @@ import { getFileTypeInfo } from '@/utils/fileUtils';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import PDF from './Icons/PDF';
+import Audio from './Icons/Audio';
 
 interface FilePreviewProps {
     context: 'card' | 'dialog';
@@ -22,6 +23,7 @@ const FilePreview: React.FC<FilePreviewProps> = ({
     const [imageError, setImageError] = useState(false);
     const [videoError, setVideoError] = useState(false);
     const [pdfError, setPdfError] = useState(false);
+    const [audioError, setAudioError] = useState(false);
 
     if (fileTypeInfo.isImage && fileUrl && !imageError) {
         return (
@@ -70,7 +72,7 @@ const FilePreview: React.FC<FilePreviewProps> = ({
         return (
             <div className={`${className} h-full rounded bg-white`}>
                 {context === 'card' ? (
-                    <PDF className={`${className} ${fileTypeInfo.color}`} />
+                    <PDF className={`${className} text-white`} />
                 ) : (
                     <object
                         data={fileUrl}
@@ -89,6 +91,18 @@ const FilePreview: React.FC<FilePreviewProps> = ({
                     </object>
                 )}
             </div>
+        );
+    }
+
+    if (fileTypeInfo.isAudio && fileUrl && !audioError) {
+        return (
+            <>
+            {context === 'card' ? (
+                <Audio className={`${className} ${fileTypeInfo.color}`} />
+            ) : (
+                <audio src={fileUrl} controls autoPlay onError={() => setAudioError(true)} />
+            )}
+            </>
         );
     }
 
