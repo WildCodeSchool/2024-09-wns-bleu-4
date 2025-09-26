@@ -16,6 +16,7 @@ export interface FileTypeInfo {
     isImage: boolean;
     isVideo: boolean;
     isPdf: boolean;
+    isAudio: boolean;
     emoji: string;
 }
 
@@ -39,6 +40,7 @@ const getFileTypeData = (extension: string) => {
             isImage: true,
             isVideo: false,
             isPdf: false,
+            isAudio: false,
             emoji: '🖼️',
         };
     }
@@ -61,6 +63,7 @@ const getFileTypeData = (extension: string) => {
             isImage: false,
             isVideo: true,
             isPdf: false,
+            isAudio: false,
             emoji: '🎥',
         };
     }
@@ -74,6 +77,7 @@ const getFileTypeData = (extension: string) => {
             isImage: false,
             isVideo: false,
             isPdf: false,
+            isAudio: true,
             emoji: '🎵',
         };
     }
@@ -86,6 +90,7 @@ const getFileTypeData = (extension: string) => {
             isImage: false,
             isVideo: false,
             isPdf: true,
+            isAudio: false,
             emoji: '📄',
         };
     }
@@ -99,6 +104,7 @@ const getFileTypeData = (extension: string) => {
             isImage: false,
             isVideo: false,
             isPdf: false,
+            isAudio: false,
             emoji: '📊',
         };
     }
@@ -131,6 +137,7 @@ const getFileTypeData = (extension: string) => {
             isImage: false,
             isVideo: false,
             isPdf: false,
+            isAudio: false,
             emoji: '💻',
         };
     }
@@ -144,6 +151,7 @@ const getFileTypeData = (extension: string) => {
             isImage: false,
             isVideo: false,
             isPdf: false,
+            isAudio: false,
             emoji: '📦',
         };
     }
@@ -157,6 +165,7 @@ const getFileTypeData = (extension: string) => {
             isImage: false,
             isVideo: false,
             isPdf: false,
+            isAudio: false,
             emoji: '📝',
         };
     }
@@ -168,6 +177,7 @@ const getFileTypeData = (extension: string) => {
         isImage: false,
         isVideo: false,
         isPdf: false,
+        isAudio: false,
         emoji: '📄',
     };
 };

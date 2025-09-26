@@ -56,6 +56,12 @@ export class SearchInput {
 
     @Field(() => Number, { defaultValue: 10 })
     limit: number = 10;
+
+    @Field(() => [String], { nullable: true })
+    types?: string[];
+
+    @Field(() => Number, { nullable: true })
+    authorId?: number;
 }
 
 @ObjectType()
@@ -138,7 +144,7 @@ class ResourceResolver {
         @Arg('userId', () => ID) userId: number,
         @Arg('search', () => SearchInput) search: SearchInput,
     ): Promise<PaginatedResources> {
-        const { searchTerm, page, limit } = search;
+        const { searchTerm, page, limit, types } = search;
         const skip = (page - 1) * limit;
 
         // Create a query builder for more complex search
@@ -148,6 +154,36 @@ class ResourceResolver {
             .andWhere('resource.name ILIKE :searchTerm', { searchTerm: `%${searchTerm}%` })
             .orderBy('resource.name', 'ASC') // Sort by name for relevance
             .addOrderBy('resource.createdAt', 'DESC'); // Secondary sort by creation date
+
+        // Optional type filters by extension groups
+        if (types && types.length > 0) {
+            const extensionGroups: Record<string, string[]> = {
+                image: ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp', 'bmp', 'ico'],
+                video: ['mp4', 'avi', 'mov', 'wmv', 'flv', 'webm', 'mkv', 'm4v'],
+                audio: ['mp3', 'wav', 'flac', 'aac', 'ogg', 'm4a'],
+                pdf: ['pdf'],
+                archive: ['zip', 'rar', '7z', 'tar', 'gz', 'bz2', 'xz'],
+                document: ['doc', 'docx', 'txt', 'rtf', 'odt'],
+                spreadsheet: ['xls', 'xlsx', 'csv', 'ods'],
+                code: ['js', 'jsx', 'ts', 'tsx', 'html', 'css', 'scss', 'json', 'xml', 'sql', 'py', 'java', 'c', 'cpp', 'php', 'rb', 'go', 'rs'],
+            };
+
+            const selectedExtensions = types
+                .flatMap((type) => extensionGroups[type] || [])
+                .filter((v, i, a) => a.indexOf(v) === i);
+
+            if (selectedExtensions.length > 0) {
+                // Build OR conditions for matching file extensions in the name
+                const orConditions: string[] = [];
+                const params: Record<string, string> = {};
+                selectedExtensions.forEach((ext, idx) => {
+                    const key = `ext${idx}`;
+                    orConditions.push(`resource.name ILIKE :${key}`);
+                    params[key] = `%.${ext}`;
+                });
+                queryBuilder.andWhere(`(${orConditions.join(' OR ')})`, params);
+            }
+        }
 
         // Get total count for pagination
         const totalCount = await queryBuilder.getCount();

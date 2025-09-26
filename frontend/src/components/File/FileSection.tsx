@@ -5,7 +5,16 @@ import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { Contact, Resource } from '@/generated/graphql-types';
-import { ChevronLeft, ChevronRight, LucideIcon, Plus, Search, Clock, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, LucideIcon, Plus, Search, RotateCcw, X, Filter, Users } from 'lucide-react';
+import { 
+    DropdownMenu,
+    DropdownMenuCheckboxItem,
+    DropdownMenuContent,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
@@ -33,6 +42,12 @@ interface FileSectionProps {
     onSearch?: (searchTerm: string) => void;
     onSortByRecent?: () => void;
     isSearching?: boolean;
+    selectedTypes?: string[];
+    onTypesChange?: (types: string[]) => void;
+    // Shared-only author filter
+    authorOptions?: { id: number; email: string; profilePicture?: string | null }[];
+    selectedAuthorId?: number | null;
+    onAuthorChange?: (authorId: number | null) => void;
 }
 
 const FileSection: React.FC<FileSectionProps> = ({
@@ -49,11 +64,26 @@ const FileSection: React.FC<FileSectionProps> = ({
     onPageChange,
     onSearch,
     onSortByRecent,
-    isSearching = false,
+    selectedTypes = [],
+    onTypesChange,
+    authorOptions = [],
+    selectedAuthorId = null,
+    onAuthorChange,
 }) => {
     const { t } = useTranslation();
     const [isCompact, setIsCompact] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
+
+    const typeOptions: { key: string; label: string }[] = [
+        { key: 'image', label: t('files.types.image') || 'Image' },
+        { key: 'video', label: t('files.types.video') || 'Video' },
+        { key: 'pdf', label: 'PDF' },
+        { key: 'audio', label: t('files.types.audio') || 'Audio' },
+        { key: 'archive', label: t('files.types.archive') || 'Archive' },
+        { key: 'document', label: t('files.types.document') || 'Document' },
+        { key: 'spreadsheet', label: t('files.types.spreadsheet') || 'Spreadsheet' },
+        { key: 'code', label: t('files.types.code') || 'Code' },
+    ];
 
     const handleSearch = () => {
         if (onSearch) {
@@ -73,6 +103,15 @@ const FileSection: React.FC<FileSectionProps> = ({
         if (onSortByRecent) {
             onSortByRecent();
         }
+    };
+
+    const toggleType = (key: string, checked: boolean | string) => {
+        if (!onTypesChange) return;
+        const isChecked = !!checked;
+        const next = isChecked
+            ? Array.from(new Set([...(selectedTypes || []), key]))
+            : (selectedTypes || []).filter((t) => t !== key);
+        onTypesChange(next);
     };
 
     return (
@@ -131,24 +170,92 @@ const FileSection: React.FC<FileSectionProps> = ({
                 <Button
                     className="cursor-pointer"
                     onClick={handleSearch}
-                    disabled={isSearching}
                     size="sm"
                     variant="outline"
                 >
-                    {isSearching ? (
-                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                    ) : (
-                        <Search className="h-4 w-4" />
-                    )}
+                    <Search className="h-4 w-4" />
                 </Button>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button
+                            className="cursor-pointer"
+                            size="sm"
+                            variant="outline"
+                            title={t('files.filterByType')}
+                        >
+                            <Filter className="h-4 w-4" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56">
+                        <DropdownMenuLabel>{t('files.filterTypes') || 'Types'}</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        {typeOptions.map((opt) => (
+                            <DropdownMenuCheckboxItem
+                                key={opt.key}
+                                checked={selectedTypes?.includes(opt.key)}
+                                onCheckedChange={(checked) => toggleType(opt.key, checked)}
+                                onSelect={(e) => e.preventDefault()}
+                            >
+                                {opt.label}
+                            </DropdownMenuCheckboxItem>
+                        ))}
+                    </DropdownMenuContent>
+                </DropdownMenu>
+                {isShared && (
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button
+                                className="cursor-pointer"
+                                size="sm"
+                                variant="outline"
+                                title={t('files.filterByAuthor')}
+                            >
+                                <Users className="h-4 w-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="w-64">
+                            <DropdownMenuLabel>{t('files.filterAuthors') || 'Authors'}</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <ScrollArea className="h-56 w-full">
+                                <div className="py-1">
+                                    <DropdownMenuCheckboxItem
+                                        checked={selectedAuthorId === null}
+                                        onCheckedChange={(checked) => {
+                                            if (checked && onAuthorChange) {
+                                                onAuthorChange(null);
+                                            }
+                                        }}
+                                        onSelect={(e) => e.preventDefault()}
+                                    >
+                                        {t('files.allAuthors') || 'All authors'}
+                                    </DropdownMenuCheckboxItem>
+                                    {authorOptions.map((a) => (
+                                        <DropdownMenuCheckboxItem
+                                            key={Number(a.id)}
+                                            checked={selectedAuthorId === Number(a.id)}
+                                            onCheckedChange={(checked) => {
+                                                if (checked && onAuthorChange) {
+                                                    onAuthorChange(Number(a.id));
+                                                }
+                                            }}
+                                            onSelect={(e) => e.preventDefault()}
+                                        >
+                                            {a.email}
+                                        </DropdownMenuCheckboxItem>
+                                    ))}
+                                </div>
+                            </ScrollArea>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                )}
                 <Button
                     className="cursor-pointer"
                     onClick={handleSortByRecent}
                     size="sm"
                     variant="outline"
-                    title={t('files.sortByRecent')}
+                    title={t('files.reset')}
                 >
-                    <Clock className="h-4 w-4" />
+                    <RotateCcw className="h-4 w-4" />
                 </Button>
             </div>
             <Separator />

@@ -67,7 +67,11 @@
             "placeholder": "Search files by name..."
         },
         "sortByRecent": "Sort by most recent",
+        "reset": "Reset to default",
         "results": "results",
+        "filterByType": "Filter by type",
+        "filterByAuthor": "Filter by author",
+        "allAuthors": "All authors",
         "errors": {
             "invalidResourceId": "Invalid resource ID",
             "deleting": "Deleting...",
@@ -78,6 +82,18 @@
         },
         "uploadNew": "Upload a new file",
         "filter": "Filter",
+        "filterTypes": "Types",
+        "filterAuthors": "Authors",
+        "types": {
+            "image": "Image",
+            "video": "Video",
+            "pdf": "PDF",
+            "audio": "Audio",
+            "archive": "Archive",
+            "document": "Document",
+            "spreadsheet": "Spreadsheet",
+            "code": "Code"
+        },
         "emptyState": {
             "noFilesDescription": "Upload your first file to share it with your contacts.",
             "noSharedFilesDescription": "Your contacts haven't shared any files with you yet."
@@ -314,7 +330,7 @@
             "viewAll": "View All Files",
             "sharedBy": "Shared by",
             "search": {
-                "placeholder": "Search for a file by name..."
+                "placeholder": "Search for files by name..."
             },
             "stats": {
                 "total": "Total files",

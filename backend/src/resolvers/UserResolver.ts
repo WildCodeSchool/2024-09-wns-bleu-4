@@ -5,7 +5,7 @@ import { SubscriptionStatus } from '@/entities/Subscription';
 import { LogType } from '@/entities/SystemLog';
 import { TempUser, User, UserRole, UserStorage } from '@/entities/User';
 import SystemLogResolver from '@/resolvers/SystemLogResolver';
-import { PaginatedResources, PaginationInput } from './ResourceResolver';
+import { PaginatedResources, PaginationInput, SearchInput } from './ResourceResolver';
 import { getDomain } from '@/utils/envUtils';
 import {
     calculateStoragePercentage,
@@ -396,6 +396,125 @@ class UserResolver {
             .skip(skip)
             .take(limit)
             .getManyAndCount();
+
+        const totalPages = Math.ceil(totalCount / limit);
+        const hasNextPage = page < totalPages;
+        const hasPreviousPage = page > 1;
+
+        return {
+            resources,
+            totalCount,
+            totalPages,
+            currentPage: page,
+            hasNextPage,
+            hasPreviousPage,
+        };
+    }
+
+    @Query(() => [User])
+    async getAuthorsWhoSharedWithUser(
+        @Arg('userId', () => ID) userId: number,
+    ): Promise<User[]> {
+        // Get user and related shared resources
+        const user = await User.findOne({
+            where: { id: userId },
+            relations: ['sharedResources', 'sharedResources.user'],
+        });
+
+        const authorsMap = new Map<number, User>();
+        (user?.sharedResources || []).forEach((res) => {
+            if (res.user) {
+                authorsMap.set(res.user.id, res.user);
+            }
+        });
+        
+        return Array.from(authorsMap.values());
+    }
+
+    @Query(() => PaginatedResources)
+    async searchSharedResourcesByUserId(
+        @Arg('userId', () => ID) userId: number,
+        @Arg('search', () => SearchInput) search: SearchInput,
+    ): Promise<PaginatedResources> {
+        const { searchTerm, page, limit, types, authorId } = search;
+        const skip = (page - 1) * limit;
+
+        // First get the user with shared resources
+        const user = await User.findOne({
+            where: { id: userId },
+            relations: ['sharedResources'],
+        });
+        const sharedResources = user?.sharedResources ?? [];
+
+        if (sharedResources.length === 0) {
+            return {
+                resources: [],
+                totalCount: 0,
+                totalPages: 0,
+                currentPage: page,
+                hasNextPage: false,
+                hasPreviousPage: false,
+            };
+        }
+
+        // Get the resource IDs
+        const resourceIds = sharedResources.map(resource => resource.id);
+
+        // Create a query builder for more complex search
+        const queryBuilder = Resource.createQueryBuilder('resource')
+            .leftJoinAndSelect('resource.user', 'user')
+            .where('resource.id IN (:...resourceIds)', { resourceIds });
+        
+        // Add search term filter only if provided
+        if (searchTerm && searchTerm.trim()) {
+            queryBuilder.andWhere('resource.name ILIKE :searchTerm', { searchTerm: `%${searchTerm}%` });
+        }
+        
+        queryBuilder.orderBy('resource.name', 'ASC') // Sort by name for relevance
+            .addOrderBy('resource.createdAt', 'DESC'); // Secondary sort by creation date
+
+        if (authorId) {
+            queryBuilder.andWhere('user.id = :authorId', { authorId });
+        }
+
+        // Optional type filters by extension groups
+        if (types && types.length > 0) {
+            const extensionGroups: Record<string, string[]> = {
+                image: ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp', 'bmp', 'ico'],
+                video: ['mp4', 'avi', 'mov', 'wmv', 'flv', 'webm', 'mkv', 'm4v'],
+                audio: ['mp3', 'wav', 'flac', 'aac', 'ogg', 'm4a'],
+                pdf: ['pdf'],
+                archive: ['zip', 'rar', '7z', 'tar', 'gz', 'bz2', 'xz'],
+                document: ['doc', 'docx', 'txt', 'rtf', 'odt'],
+                spreadsheet: ['xls', 'xlsx', 'csv', 'ods'],
+                code: ['js', 'jsx', 'ts', 'tsx', 'html', 'css', 'scss', 'json', 'xml', 'sql', 'py', 'java', 'c', 'cpp', 'php', 'rb', 'go', 'rs'],
+            };
+
+            const selectedExtensions = types
+                .flatMap((type: string) => extensionGroups[type] || [])
+                .filter((v: string, i: number, a: string[]) => a.indexOf(v) === i);
+
+            if (selectedExtensions.length > 0) {
+                // Build OR conditions for matching file extensions in the name
+                const orConditions: string[] = [];
+                const params: Record<string, string> = {};
+                selectedExtensions.forEach((ext: string, idx: number) => {
+                    const key = `ext${idx}`;
+                    orConditions.push(`resource.name ILIKE :${key}`);
+                    params[key] = `%.${ext}`;
+                });
+                queryBuilder.andWhere(`(${orConditions.join(' OR ')})`, params);
+            }
+        }
+
+        // Get total count for pagination
+        const totalCount = await queryBuilder.getCount();
+
+        // Apply pagination
+        const resources = await queryBuilder
+            .skip(skip)
+            .take(limit)
+            .getMany();
 
         const totalPages = Math.ceil(totalCount / limit);
         const hasNextPage = page < totalPages;
