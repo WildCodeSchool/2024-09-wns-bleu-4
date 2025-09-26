@@ -27,6 +27,12 @@ export const CONFIRM_EMAIL = gql`
     }
 `;
 
+export const RESEND_CONFIRMATION_EMAIL = gql`
+    mutation ResendConfirmationEmail($email: String!, $lang: String!) {
+        resendConfirmationEmail(email: $email, lang: $lang)
+    }
+`;
+
 export const DELETE_USER = gql`
     mutation DeleteUser($id: ID!) {
         deleteUser(id: $id)

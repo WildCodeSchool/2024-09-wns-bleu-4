@@ -48,6 +48,9 @@ export class TempUser extends BaseEntity {
 
     @Column('varchar')
     randomCode: string;
+
+    @Column('timestamp')
+    codeExpirationDate: Date;
 }
 
 @ObjectType()

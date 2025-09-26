@@ -93,6 +93,7 @@ export type Mutation = {
   refuseContactRequest: Contact;
   register: Scalars['String']['output'];
   removeContact: Scalars['Boolean']['output'];
+  resendConfirmationEmail: Scalars['String']['output'];
   resetPassword: Scalars['String']['output'];
   resetPasswordSendCode: Scalars['String']['output'];
   sendContactRequest: Contact;
@@ -215,6 +216,12 @@ export type MutationRegisterArgs = {
 
 export type MutationRemoveContactArgs = {
   contactId: Scalars['ID']['input'];
+};
+
+
+export type MutationResendConfirmationEmailArgs = {
+  email: Scalars['String']['input'];
+  lang: Scalars['String']['input'];
 };
 
 
@@ -828,6 +835,14 @@ export type ConfirmEmailMutationVariables = Exact<{
 
 
 export type ConfirmEmailMutation = { __typename?: 'Mutation', confirmEmail: string };
+
+export type ResendConfirmationEmailMutationVariables = Exact<{
+  email: Scalars['String']['input'];
+  lang: Scalars['String']['input'];
+}>;
+
+
+export type ResendConfirmationEmailMutation = { __typename?: 'Mutation', resendConfirmationEmail: string };
 
 export type DeleteUserMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -2663,6 +2678,38 @@ export function useConfirmEmailMutation(baseOptions?: Apollo.MutationHookOptions
 export type ConfirmEmailMutationHookResult = ReturnType<typeof useConfirmEmailMutation>;
 export type ConfirmEmailMutationResult = Apollo.MutationResult<ConfirmEmailMutation>;
 export type ConfirmEmailMutationOptions = Apollo.BaseMutationOptions<ConfirmEmailMutation, ConfirmEmailMutationVariables>;
+export const ResendConfirmationEmailDocument = gql`
+    mutation ResendConfirmationEmail($email: String!, $lang: String!) {
+  resendConfirmationEmail(email: $email, lang: $lang)
+}
+    `;
+export type ResendConfirmationEmailMutationFn = Apollo.MutationFunction<ResendConfirmationEmailMutation, ResendConfirmationEmailMutationVariables>;
+
+/**
+ * __useResendConfirmationEmailMutation__
+ *
+ * To run a mutation, you first call `useResendConfirmationEmailMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useResendConfirmationEmailMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [resendConfirmationEmailMutation, { data, loading, error }] = useResendConfirmationEmailMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *      lang: // value for 'lang'
+ *   },
+ * });
+ */
+export function useResendConfirmationEmailMutation(baseOptions?: Apollo.MutationHookOptions<ResendConfirmationEmailMutation, ResendConfirmationEmailMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ResendConfirmationEmailMutation, ResendConfirmationEmailMutationVariables>(ResendConfirmationEmailDocument, options);
+      }
+export type ResendConfirmationEmailMutationHookResult = ReturnType<typeof useResendConfirmationEmailMutation>;
+export type ResendConfirmationEmailMutationResult = Apollo.MutationResult<ResendConfirmationEmailMutation>;
+export type ResendConfirmationEmailMutationOptions = Apollo.BaseMutationOptions<ResendConfirmationEmailMutation, ResendConfirmationEmailMutationVariables>;
 export const DeleteUserDocument = gql`
     mutation DeleteUser($id: ID!) {
   deleteUser(id: $id)
