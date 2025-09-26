@@ -17,10 +17,11 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import ScrollBox from '@/components/Wrappers/ScrollBox';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface PaginationInfo {
     totalCount: number;
@@ -165,7 +166,12 @@ const FileSection: React.FC<FileSectionProps> = ({
     const handleFileMouseEnter = (fileId: number) => {
         if (isDragSelecting) {
             const newSelectedFiles = new Set(selectedFiles);
-            newSelectedFiles.add(fileId);
+            // Toggle the file - if it's selected, unselect it; if not selected, select it
+            if (newSelectedFiles.has(fileId)) {
+                newSelectedFiles.delete(fileId);
+            } else {
+                newSelectedFiles.add(fileId);
+            }
             setSelectedFiles(newSelectedFiles);
         }
     };
@@ -298,13 +304,13 @@ const FileSection: React.FC<FileSectionProps> = ({
                                 className="cursor-pointer"
                                 size="sm"
                                 variant="outline"
-                                title={t('files.filterByAuthor')}
+                                title={t('files.filterByContact')}
                             >
                                 <Users className="h-4 w-4" />
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="w-64">
-                            <DropdownMenuLabel>{t('files.filterAuthors') || 'Authors'}</DropdownMenuLabel>
+                            <DropdownMenuLabel>{t('files.filterContacts') || 'Contacts'}</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <ScrollArea className="h-56 w-full">
                                 <div className="py-1">
@@ -317,7 +323,7 @@ const FileSection: React.FC<FileSectionProps> = ({
                                         }}
                                         onSelect={(e) => e.preventDefault()}
                                     >
-                                        {t('files.allAuthors') || 'All authors'}
+                                        {t('files.allContacts') || 'All contacts'}
                                     </DropdownMenuCheckboxItem>
                                     {authorOptions.map((a) => (
                                         <DropdownMenuCheckboxItem
@@ -424,7 +430,7 @@ const FileSection: React.FC<FileSectionProps> = ({
             ) : (
                 <div className="flex flex-col h-[500px]">
                     {/* File Cards Container - Fixed height with scroll */}
-                    <div className="flex-1 space-y-2 pr-2 scrollbar-elegant">
+                    <ScrollBox>
                         {files.map((file: Resource) => (
                             <FileCard
                                 key={file.id}
@@ -456,7 +462,7 @@ const FileSection: React.FC<FileSectionProps> = ({
                                 onMouseEnter={onGroupedAction ? () => handleFileMouseEnter(file.id) : undefined}
                             />
                         ))}
-                    </div>
+                    </ScrollBox>
                     
                     {/* Pagination Controls - Always visible for consistent UI */}
                     {pagination && onPageChange && (

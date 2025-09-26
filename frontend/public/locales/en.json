@@ -102,8 +102,8 @@
         "reset": "Reset to default",
         "results": "results",
         "filterByType": "Filter by type",
-        "filterByAuthor": "Filter by author",
-        "allAuthors": "All authors",
+        "filterByContact": "Filter by contact",
+        "allContacts": "All contacts",
         "errors": {
             "invalidResourceId": "Invalid resource ID",
             "deleting": "Deleting...",
@@ -115,7 +115,7 @@
         "uploadNew": "Upload a new file",
         "filter": "Filter",
         "filterTypes": "Types",
-        "filterAuthors": "Authors",
+        "filterContacts": "Contacts",
         "types": {
             "image": "Image",
             "video": "Video",
