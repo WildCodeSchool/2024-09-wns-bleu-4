@@ -9,7 +9,8 @@
         "add": "Add",
         "sending": "Sending...",
         "sent": "Sent !",
-        "back": "Back"
+        "back": "Back",
+        "close": "Close"
     },
     "profile": {
         "title": "My Profile",
@@ -691,6 +692,7 @@
         }
     },
     "fileCard": {
+        "scan": "Scan",
         "download": "Download",
         "moreOptions": "More options",
         "sharedBy": "Shared by",
@@ -771,6 +773,18 @@
             "save": "Save",
             "success": "Description updated successfully",
             "error": "Error updating description"
+        },
+        "scanDialog": {
+            "title": "Antivirus scan",
+            "description": "VirusTotal scan status and results",
+            "analysisId": "Analysis ID",
+            "scanDate": "Scan date",
+            "threatCount": "Potential threats count",
+            "error": "Error",
+            "refresh": "Refresh",
+            "loading": "loading...",
+            "clean": "Clean",
+            "infected": "Possibly Infected"
         }
     },
     "meta": {
