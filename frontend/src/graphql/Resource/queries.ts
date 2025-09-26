@@ -156,7 +156,6 @@ export const SEARCH_RESOURCES_BY_USER_ID = gql`
     }
 `;
 
-// Get VT scan status for a resource and update it server-side if progressing
 export const GET_RESOURCE_SCAN_STATUS = gql`
     query GetResourceScanStatus($resourceId: ID!) {
         getResourceScanStatus(resourceId: $resourceId) {
@@ -181,6 +180,45 @@ export const GET_RESOURCE_SCAN_RESULT = gql`
             threatCount
             error
             isProcessing
+        }
+    }
+`;
+
+export const SEARCH_SHARED_RESOURCES_BY_USER_ID = gql`
+    query SearchSharedResourcesByUserId($userId: ID!, $search: SearchInput!) {
+        searchSharedResourcesByUserId(userId: $userId, search: $search) {
+            resources {
+                description
+                id
+                name
+                path
+                url
+                size
+                formattedSize
+                user {
+                    id
+                    email
+                    createdAt
+                    profilePicture
+                }
+            }
+            totalCount
+            totalPages
+            currentPage
+            hasNextPage
+            hasPreviousPage
+        }
+    }
+`;
+
+export const GET_AUTHORS_WHO_SHARED_WITH_USER = gql`
+    query GetAuthorsWhoSharedWithUser($userId: ID!) {
+        getAuthorsWhoSharedWithUser(userId: $userId) {
+            id
+            email
+            createdAt
+            profilePicture
+
         }
     }
 `;

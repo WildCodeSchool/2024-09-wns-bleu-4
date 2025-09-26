@@ -9,6 +9,7 @@ import { Button } from '../ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
+import { ReCAPTCHA } from '../ReCaptcha/ReCaptcha';
 
 const formSchema = z.object({
     email: z.string().email('Veuillez saisir une adresse email valide'),
@@ -24,15 +25,18 @@ type FormData = z.infer<typeof formSchema>;
 
 interface FormProps {
     title: string;
-    onSubmit: (email: string, password: string) => Promise<void>;
+    onSubmit: (email: string, password: string, recaptchaToken?: string) => Promise<void>;
     loading: boolean;
     error?: string;
     links?: React.ReactNode;
+    requireCaptcha?: boolean;
 }
 
-const Form = ({ title, onSubmit, loading, links, error }: FormProps) => {
+const Form = ({ title, onSubmit, loading, links, error, requireCaptcha = false }: FormProps) => {
     const { t } = useTranslation();
     const [showPassword, setShowPassword] = useState(false);
+    const [recaptchaToken, setRecaptchaToken] = useState<string | undefined>(undefined);
+    const [captchaError, setCaptchaError] = useState<string | undefined>(undefined);
 
     const {
         register,
@@ -45,7 +49,13 @@ const Form = ({ title, onSubmit, loading, links, error }: FormProps) => {
 
     const submitForm = async (data: FormData) => {
         try {
-            await onSubmit(data.email, data.password);
+            if (requireCaptcha && !recaptchaToken) {
+                const message = t('auth.form.captchaRequired', 'Veuillez compléter le reCAPTCHA');
+                setCaptchaError(message);
+                toast.error(message);
+                return;
+            }
+            await onSubmit(data.email, data.password, recaptchaToken);
         } catch (error) {
             const errorMessage =
                 error instanceof Error
@@ -55,6 +65,18 @@ const Form = ({ title, onSubmit, loading, links, error }: FormProps) => {
             throw new Error(errorMessage);
         }
     };
+
+    const handleCaptchaSuccess = (token: string) => {
+        setRecaptchaToken(token);
+        setCaptchaError(undefined);
+    };
+
+    const handleCaptchaError = (err: Error) => {
+        setRecaptchaToken(undefined);
+        setCaptchaError(err.message);
+    };
+
+    const disableSubmit = requireCaptcha ? !isValid || !recaptchaToken : !isValid;
 
     return (
         <Card className="w-auto sm:w-[50%] mx-auto md:my-40  my-6">
@@ -132,12 +154,24 @@ const Form = ({ title, onSubmit, loading, links, error }: FormProps) => {
                         )}
                     </div>
 
+                    {requireCaptcha && (
+                        <div className="space-y-2">
+                            <ReCAPTCHA
+                                onSuccess={handleCaptchaSuccess}
+                                onError={handleCaptchaError}
+                            />
+                            {captchaError && (
+                                <div className="text-sm text-red-500">{captchaError}</div>
+                            )}
+                        </div>
+                    )}
+
                     {error && (
                         <div className="text-sm text-red-500">{error}</div>
                     )}
 
                     <Button
-                        disabled={!isValid}
+                        disabled={disableSubmit}
                         type="submit"
                         className="mt-2 cursor-pointer"
                     >
