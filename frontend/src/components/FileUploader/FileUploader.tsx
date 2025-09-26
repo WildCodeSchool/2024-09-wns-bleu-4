@@ -1,7 +1,7 @@
 import FileShareDialog from '@/components/File/FileShareDialog';
 import FilePreview from '@/components/FilePreview';
 import { Button } from '@/components/ui/button';
-import { CREATE_RESOURCE, DELETE_RESOURCE } from '@/graphql/Resource/mutations';
+import { CREATE_RESOURCE } from '@/graphql/Resource/mutations';
 import { useAuth } from '@/hooks/useAuth';
 import { useMyContacts } from '@/hooks/useMyContacts';
 import {
@@ -39,7 +39,6 @@ export default function FileUploader({ acceptedFileTypes }: FileUploaderProps) {
     const { user } = useAuth();
     const { acceptedContacts } = useMyContacts();
     const [createResource] = useMutation(CREATE_RESOURCE);
-    const [deleteResource] = useMutation(DELETE_RESOURCE);
 
     const [files, setFiles] = useState<FileWithPreview[]>([]);
     const [isDragging, setIsDragging] = useState(false);
@@ -130,6 +129,41 @@ export default function FileUploader({ acceptedFileTypes }: FileUploaderProps) {
             const secureName = file.name.replace(/\s+/g, '_');
             const fileUrl = `/storage/uploads/${secureName}`;
 
+            // First upload file to storage to get MD5 hash
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const storageUrl = `/storage/upload?filename=${encodeURIComponent(
+                secureName,
+            )}`;
+            const storageResponse = await fetch(storageUrl, {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (!storageResponse.ok) {
+                const errorData = await storageResponse
+                    .json()
+                    .catch(() => ({}));
+
+                // Utiliser le message d'erreur détaillé de la storage API
+                if (errorData.message) {
+                    throw new Error(errorData.message);
+                }
+
+                // Fallback pour les erreurs connues
+                if (storageResponse.status === 429) {
+                    throw new Error(
+                        "Trop d'uploads. Veuillez patienter avant de réessayer.",
+                    );
+                } else {
+                    throw new Error(t('upload.errors.fileUpload'));
+                }
+            }
+
+            const storageData = await storageResponse.json();
+
+            // Now create resource with MD5 hash
             const resourceResponse = await createResource({
                 variables: {
                     data: {
@@ -140,6 +174,7 @@ export default function FileUploader({ acceptedFileTypes }: FileUploaderProps) {
                             description || `Fichier uploadé : ${file.name}`,
                         userId: user.id,
                         size: file.size,
+                        md5Hash: storageData.md5Hash,
                     },
                 },
             });
@@ -147,63 +182,12 @@ export default function FileUploader({ acceptedFileTypes }: FileUploaderProps) {
             if (resourceResponse.data?.createResource) {
                 const resourceId = resourceResponse.data.createResource.id;
 
-                try {
-                    const formData = new FormData();
-                    formData.append('file', file);
-
-                    const storageUrl = `/storage/upload?filename=${encodeURIComponent(
-                        secureName,
-                    )}`;
-                    const storageResponse = await fetch(storageUrl, {
-                        method: 'POST',
-                        body: formData,
-                    });
-
-                    if (!storageResponse.ok) {
-                        const errorData = await storageResponse
-                            .json()
-                            .catch(() => ({}));
-
-                        // Utiliser le message d'erreur détaillé de la storage API
-                        if (errorData.message) {
-                            throw new Error(errorData.message);
-                        }
-
-                        // Fallback pour les erreurs connues
-                        if (storageResponse.status === 429) {
-                            throw new Error(
-                                "Trop d'uploads. Veuillez patienter avant de réessayer.",
-                            );
-                        } else {
-                            throw new Error(t('upload.errors.fileUpload'));
-                        }
-                    }
-
-                    setLastUploadedResourceId(resourceId);
-                    setUploadedFileName(file.name);
-                    setFiles([]);
-                    setDescription('');
-                    mutate('/storage/files');
-                    toast.success(t('upload.success.message'));
-                } catch (uploadError) {
-                    // Rollback: supprimer la ressource créée si l'upload échoue
-                    console.error(
-                        'Upload failed, rolling back resource creation:',
-                        uploadError,
-                    );
-                    try {
-                        await deleteResource({
-                            variables: { deleteResourceId: resourceId },
-                        });
-                        console.log(`Rolled back resource ${resourceId}`);
-                    } catch (rollbackError) {
-                        console.error(
-                            'Failed to rollback resource:',
-                            rollbackError,
-                        );
-                    }
-                    throw uploadError; // Re-throw pour afficher l'erreur à l'utilisateur
-                }
+                setLastUploadedResourceId(resourceId);
+                setUploadedFileName(file.name);
+                setFiles([]);
+                setDescription('');
+                mutate('/storage/files');
+                toast.success(t('upload.success.message'));
             }
         } catch (error) {
             console.error("Erreur lors de l'upload:", error);

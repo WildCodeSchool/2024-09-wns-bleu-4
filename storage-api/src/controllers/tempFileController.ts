@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import fs from 'fs';
+import md5File from 'md5-file';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { v4 as uuidv4 } from 'uuid';
@@ -31,7 +32,7 @@ interface TempLink {
     accessCount: number;
 }
 
-export const uploadTempFile = (req: Request, res: Response): void => {
+export const uploadTempFile = async (req: Request, res: Response): Promise<void> => {
     if (!req.file) {
         res.status(400).json({ message: 'No file uploaded' });
         return;
@@ -55,6 +56,9 @@ export const uploadTempFile = (req: Request, res: Response): void => {
             });
             return;
         }
+
+        // Compute MD5 hash of the temporary file
+        const md5Hash = await md5File(filePath);
 
         // Create temp link record
         const tempLink: TempLink = {
@@ -82,6 +86,7 @@ export const uploadTempFile = (req: Request, res: Response): void => {
             tempId,
             originalName,
             fileSize,
+            md5Hash,
             expiresAt,
             accessUrl: `/temp/${tempId}`,
         });

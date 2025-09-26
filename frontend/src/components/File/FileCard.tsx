@@ -37,6 +37,7 @@ const FileCard: React.FC<FileCardProps> = ({
     id,
     description,
     formattedSize,
+    md5Hash,
     isShared = false,
     isCompact = false,
     owner,
@@ -106,20 +107,16 @@ const FileCard: React.FC<FileCardProps> = ({
                                                     {description}
                                                 </p>
                                             )}
-                                            {!isCompact &&
-                                                isShared &&
-                                                owner && (
-                                                    <p className="truncate">
-                                                        {t('fileCard.sharedBy')}{' '}
-                                                        <UserHoverCard
-                                                            user={owner}
-                                                        >
-                                                            <span className="text-blue-500 cursor-pointer hover:underline">
-                                                                {owner.email}
-                                                            </span>
-                                                        </UserHoverCard>
-                                                    </p>
-                                                )}
+                                            {!isCompact && isShared && owner && (
+                                                <p className="truncate">
+                                                    {t('fileCard.sharedBy')}{' '}
+                                                    <UserHoverCard user={owner}>
+                                                        <span className="text-blue-500 cursor-pointer hover:underline">
+                                                            {owner.email}
+                                                        </span>
+                                                    </UserHoverCard>
+                                                </p>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
@@ -193,6 +190,7 @@ const FileCard: React.FC<FileCardProps> = ({
                                     fileName={name}
                                     fileSize={formattedSize}
                                     description={description}
+                                    md5Hash={md5Hash}
                                     owner={owner}
                                     isShared={isShared}
                                 />

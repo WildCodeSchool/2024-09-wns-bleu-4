@@ -37,6 +37,9 @@ export class ResourceInput implements Partial<Resource> {
 
     @Field(() => Number, { nullable: false })
     size: number;
+
+    @Field(() => String, { nullable: true })
+    md5Hash: string;
 }
 
 @InputType()

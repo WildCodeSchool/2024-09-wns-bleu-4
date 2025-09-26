@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import fs from 'fs';
+import md5File from 'md5-file';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -8,21 +9,34 @@ const __dirname = path.dirname(__filename);
 
 const uploadDir = path.join(__dirname, '../../uploads');
 
-export const uploadFile = (req: Request, res: Response): void => {
+export const uploadFile = async (req: Request, res: Response): Promise<void> => {
     if (!req.file) {
         res.status(400).json({ message: 'Aucun fichier envoyé' });
         return;
     }
 
-    // Log de l'action d'upload avec l'utilisateur
-    console.log(`Upload de fichier par ${req.user?.email}: ${req.file.filename}`);
+    try {
+        // Log de l'action d'upload avec l'utilisateur
+        console.log(`Upload de fichier par ${req.user?.email}: ${req.file.filename}`);
 
-    res.json({
-        message: 'Fichier uploadé avec succès !',
-        filename: req.file.filename,
-        path: `/uploads/${req.file.filename}`, // Chemin vers la route sécurisée
-        uploadedBy: req.user?.email
-    });
+        // Compute MD5 hash of the uploaded file
+        const filePath = path.join(uploadDir, req.file.filename);
+        const md5Hash = await md5File(filePath);
+
+        res.json({
+            message: 'Fichier uploadé avec succès !',
+            filename: req.file.filename,
+            path: `/uploads/${req.file.filename}`, // Chemin vers la route sécurisée
+            md5Hash,
+            uploadedBy: req.user?.email
+        });
+    } catch (error) {
+        console.error('Error computing MD5 hash:', error);
+        res.status(500).json({ 
+            message: 'Erreur lors du calcul du hash MD5',
+            error: error instanceof Error ? error.message : 'Unknown error'
+        });
+    }
 };
 
 export const deleteFile = (req: Request, res: Response): void => {
