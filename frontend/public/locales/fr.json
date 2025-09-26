@@ -73,6 +73,15 @@
             "execute": "Exécuter",
             "clear": "Effacer la sélection"
         },
+        "groupDeleteDialog": {
+            "title": "Confirmer les suppressions multiples",
+            "description": "Êtes-vous sûr de vouloir supprimer {{count}} fichier(s) ? Cette action est irréversible.",
+            "cancel": "Annuler",
+            "confirm": "Supprimer {{count}} fichier(s)",
+            "error": "Erreur lors de la suppression des fichiers",
+            "success": "{{count}} fichier(s) supprimé(s) avec succès",
+            "partialSuccess": "{{success}} sur {{total}} fichiers supprimés avec succès"
+        },
         "compactMode": "Mode réduit",
         "toggleCompactMode": "Basculer en mode réduit",
         "search": {

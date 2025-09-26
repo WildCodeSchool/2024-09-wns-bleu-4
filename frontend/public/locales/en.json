@@ -73,6 +73,15 @@
             "execute": "Execute",
             "clear": "Clear selection"
         },
+        "groupDeleteDialog": {
+            "title": "Confirm Multiple Deletions",
+            "description": "Are you sure you want to delete {{count}} file(s)? This action is irreversible.",
+            "cancel": "Cancel",
+            "confirm": "Delete {{count}} file(s)",
+            "error": "Error deleting files",
+            "success": "{{count}} file(s) successfully deleted",
+            "partialSuccess": "{{success}} of {{total}} files successfully deleted"
+        },
         "compactMode": "Condensed mode",
         "toggleCompactMode": "Toggle condensed mode",
         "search": {

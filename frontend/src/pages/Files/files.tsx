@@ -9,6 +9,7 @@ import {
     GET_AUTHORS_WHO_SHARED_WITH_USER,
 } from '@/graphql/Resource/queries';
 import { GET_USER_ID } from '@/graphql/User/queries';
+import { Resource } from '@/generated/graphql-types';
 import { useMyContacts } from '@/hooks/useMyContacts';
 import { useQuery } from '@apollo/client';
 import { FolderOpen, Plus, Users } from 'lucide-react';
@@ -212,21 +213,31 @@ const FilesPage: React.FC = () => {
 
     // Grouped actions handlers
     const handleMyFilesGroupedAction = async (action: string, fileIds: number[]) => {
-        console.log('My files grouped action:', action, fileIds);
-        // TODO: Implement grouped actions for my files
-        // This would typically involve:
-        // - Share: Open share dialog for multiple files
-        // - Report: Report multiple files
-        // - Delete: Delete multiple files
         switch (action) {
+            case 'download':
+                // Download multiple files
+                fileIds.forEach(fileId => {
+                    const file = myFiles.find((f: Resource) => f.id === fileId);
+                    if (file) {
+                        const link = document.createElement('a');
+                        link.href = file.url;
+                        link.download = file.name;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }
+                });
+                break;
             case 'share':
-                // Open share dialog for multiple files
+                // TODO: Implement multi-file sharing
+                console.log('Share multiple files:', fileIds);
                 break;
             case 'report':
-                // Report multiple files
+                // TODO: Implement multi-file reporting
+                console.log('Report multiple files:', fileIds);
                 break;
             case 'delete':
-                // Delete multiple files
+                // Delete multiple files - handled by FileGroupDeleteDialog
                 break;
             default:
                 console.warn('Unknown grouped action:', action);
@@ -234,15 +245,28 @@ const FilesPage: React.FC = () => {
     };
 
     const handleSharedFilesGroupedAction = async (action: string, fileIds: number[]) => {
-        console.log('Shared files grouped action:', action, fileIds);
-        // TODO: Implement grouped actions for shared files
-        // Note: Delete action should not be available for shared files
         switch (action) {
+            case 'download':
+                // Download multiple files
+                fileIds.forEach(fileId => {
+                    const file = sharedFiles.find((f: Resource) => f.id === fileId);
+                    if (file) {
+                        const link = document.createElement('a');
+                        link.href = file.url;
+                        link.download = file.name;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }
+                });
+                break;
             case 'share':
-                // Open share dialog for multiple files
+                // TODO: Implement multi-file sharing
+                console.log('Share multiple files:', fileIds);
                 break;
             case 'report':
-                // Report multiple files
+                // TODO: Implement multi-file reporting
+                console.log('Report multiple files:', fileIds);
                 break;
             default:
                 console.warn('Unknown grouped action:', action);

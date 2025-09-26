@@ -1,4 +1,5 @@
 import FileCard from '@/components/File/FileCard';
+import FileGroupDeleteDialog from '@/components/File/FileGroupDeleteDialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -79,6 +80,7 @@ const FileSection: React.FC<FileSectionProps> = ({
     // Selection state
     const [selectedFiles, setSelectedFiles] = useState<Set<number>>(new Set());
     const [selectedAction, setSelectedAction] = useState<string>('');
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
     const typeOptions: { key: string; label: string }[] = [
         { key: 'image', label: t('files.types.image') || 'Image' },
@@ -138,6 +140,10 @@ const FileSection: React.FC<FileSectionProps> = ({
 
     const handleGroupedActionExecute = () => {
         if (selectedAction && selectedFiles.size > 0 && onGroupedAction) {
+            if (selectedAction === 'delete') {
+                setIsDeleteDialogOpen(true);
+                return;
+            }
             onGroupedAction(selectedAction, Array.from(selectedFiles));
             // Clear selection after action
             setSelectedFiles(new Set());
@@ -326,7 +332,11 @@ const FileSection: React.FC<FileSectionProps> = ({
                             onClick={handleGroupedActionExecute}
                             disabled={!selectedAction || selectedFiles.size === 0}
                             size="sm"
-                            className="flex-shrink-0 cursor-pointer"
+                            className={`flex-shrink-0 cursor-pointer ${
+                                selectedAction === 'delete' 
+                                    ? 'bg-destructive hover:bg-destructive/90' 
+                                    : ''
+                            }`}
                         >
                             <Check className="h-4 w-4 mr-2" />
                             {t('files.groupedActions.execute')}
@@ -440,6 +450,18 @@ const FileSection: React.FC<FileSectionProps> = ({
                     )}
                 </div>
             )}
+            
+            {/* Group Delete Dialog */}
+            <FileGroupDeleteDialog
+                fileIds={Array.from(selectedFiles)}
+                fileCount={selectedFiles.size}
+                isOpen={isDeleteDialogOpen}
+                onOpenChange={setIsDeleteDialogOpen}
+                onFilesDeleted={() => {
+                    clearSelection();
+                    onFileDeleted?.();
+                }}
+            />
         </div>
     );
 };
