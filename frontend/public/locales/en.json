@@ -66,12 +66,20 @@
             "selectFiles": "Select files to perform grouped actions",
             "selected": "{{count}} file(s) selected",
             "selectAction": "Select action...",
-            "download": "Download",
             "share": "Share",
             "report": "Report",
             "delete": "Delete",
             "execute": "Execute",
-            "clear": "Clear selection"
+            "clear": "Clear selection",
+            "export": {
+                "label": "Export to ZIP",
+                "loading": "Creating ZIP archive with {{count}} file(s)...",
+                "success": "{{count}} file(s) exported to ZIP successfully",
+                "error": {
+                    "noFiles": "No files selected for export",
+                    "general": "Error creating ZIP archive"
+                }
+            }
         },
         "groupDeleteDialog": {
             "title": "Confirm Multiple Deletions",
@@ -105,6 +113,14 @@
                 "description": "Are you sure you want to report {{count}} file(s) for {{reason}}?",
                 "button": "Report {{count}} file(s)"
             }
+        },
+        "groupExportDialog": {
+            "title": "Export Files to ZIP",
+            "description": "Create a ZIP archive with {{count}} file(s)",
+            "filenameLabel": "ZIP filename",
+            "placeholder": "Enter filename...",
+            "help": "The .zip extension will be added automatically if not provided",
+            "createZip": "Create ZIP"
         },
         "compactMode": "Condensed mode",
         "toggleCompactMode": "Toggle condensed mode",

@@ -66,12 +66,20 @@
             "selectFiles": "Sélectionnez des fichiers pour effectuer des actions groupées",
             "selected": "{{count}} fichier(s) sélectionné(s)",
             "selectAction": "Sélectionner une action...",
-            "download": "Télécharger",
             "share": "Partager",
             "report": "Signaler",
             "delete": "Supprimer",
             "execute": "Exécuter",
-            "clear": "Effacer la sélection"
+            "clear": "Effacer la sélection",
+            "export": {
+                "label": "Exporter en ZIP",
+                "loading": "Création de l'archive ZIP avec {{count}} fichier(s)...",
+                "success": "{{count}} fichier(s) exporté(s) en ZIP avec succès",
+                "error": {
+                    "noFiles": "Aucun fichier sélectionné pour l'export",
+                    "general": "Erreur lors de la création de l'archive ZIP"
+                }
+            }
         },
         "groupDeleteDialog": {
             "title": "Confirmer les suppressions multiples",
@@ -105,6 +113,14 @@
                 "description": "Êtes-vous sûr de vouloir signaler {{count}} fichier(s) pour {{reason}} ?",
                 "button": "Signaler {{count}} fichier(s)"
             }
+        },
+        "groupExportDialog": {
+            "title": "Exporter les fichiers en ZIP",
+            "description": "Créer une archive ZIP avec {{count}} fichier(s)",
+            "filenameLabel": "Nom du fichier ZIP",
+            "placeholder": "Entrez le nom du fichier...",
+            "help": "L'extension .zip sera ajoutée automatiquement si elle n'est pas fournie",
+            "createZip": "Créer le ZIP"
         },
         "compactMode": "Mode réduit",
         "toggleCompactMode": "Basculer en mode réduit",

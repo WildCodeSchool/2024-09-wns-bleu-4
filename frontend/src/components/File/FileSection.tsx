@@ -2,6 +2,7 @@ import FileCard from '@/components/File/FileCard';
 import FileGroupDeleteDialog from '@/components/File/FileGroupDeleteDialog';
 import FileGroupShareDialog from '@/components/File/FileGroupShareDialog';
 import FileGroupReportDialog from '@/components/File/FileGroupReportDialog';
+import FileExportDialog from '@/components/File/FileExportDialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -52,7 +53,7 @@ interface FileSectionProps {
     authorOptions?: { id: number; email: string; profilePicture?: string | null }[];
     selectedAuthorId?: number | null;
     onAuthorChange?: (authorId: number | null) => void;
-    onGroupedAction?: (action: string, fileIds: number[]) => void;
+    onGroupedAction?: (action: string, fileIds: number[], filename?: string) => void;
 }
 
 const FileSection: React.FC<FileSectionProps> = ({
@@ -86,6 +87,7 @@ const FileSection: React.FC<FileSectionProps> = ({
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
     const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
+    const [isExportDialogOpen, setIsExportDialogOpen] = useState(false);
     const [isDragSelecting, setIsDragSelecting] = useState(false);
 
     const typeOptions: { key: string; label: string }[] = [
@@ -202,6 +204,10 @@ const FileSection: React.FC<FileSectionProps> = ({
             }
             if (selectedAction === 'report') {
                 setIsReportDialogOpen(true);
+                return;
+            }
+            if (selectedAction === 'export') {
+                setIsExportDialogOpen(true);
                 return;
             }
             onGroupedAction(selectedAction, Array.from(selectedFiles));
@@ -380,7 +386,7 @@ const FileSection: React.FC<FileSectionProps> = ({
                                 <SelectValue placeholder={t('files.groupedActions.selectAction')} />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="download">{t('files.groupedActions.download')}</SelectItem>
+                                <SelectItem value="export">{t('files.groupedActions.export.label')}</SelectItem>
                                 <SelectItem value="share">{t('files.groupedActions.share')}</SelectItem>
                                 <SelectItem value="report">{t('files.groupedActions.report')}</SelectItem>
                                 {!isShared && (
@@ -540,6 +546,17 @@ const FileSection: React.FC<FileSectionProps> = ({
                 fileCount={selectedFiles.size}
                 isOpen={isReportDialogOpen}
                 onOpenChange={setIsReportDialogOpen}
+            />
+
+            {/* Export Dialog */}
+            <FileExportDialog
+                fileCount={selectedFiles.size}
+                isOpen={isExportDialogOpen}
+                onOpenChange={setIsExportDialogOpen}
+                onConfirm={(filename) => {
+                    onGroupedAction?.('export', Array.from(selectedFiles), filename);
+                    clearSelection();
+                }}
             />
         </div>
     );

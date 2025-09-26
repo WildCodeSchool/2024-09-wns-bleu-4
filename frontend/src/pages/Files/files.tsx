@@ -16,6 +16,7 @@ import { FolderOpen, Plus, Users } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const FilesPage: React.FC = () => {
     const { t } = useTranslation();
@@ -212,21 +213,11 @@ const FilesPage: React.FC = () => {
     };
 
     // Grouped actions handlers
-    const handleMyFilesGroupedAction = async (action: string, fileIds: number[]) => {
+    const handleMyFilesGroupedAction = async (action: string, fileIds: number[], filename?: string) => {
         switch (action) {
-            case 'download':
-                // Download multiple files
-                fileIds.forEach(fileId => {
-                    const file = myFiles.find((f: Resource) => f.id === fileId);
-                    if (file) {
-                        const link = document.createElement('a');
-                        link.href = file.url;
-                        link.download = file.name;
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                    }
-                });
+            case 'export':
+                // Export multiple files to zip
+                await exportFilesToZip(fileIds, myFiles, filename);
                 break;
             case 'share':
                 // TODO: Implement multi-file sharing
@@ -244,21 +235,11 @@ const FilesPage: React.FC = () => {
         }
     };
 
-    const handleSharedFilesGroupedAction = async (action: string, fileIds: number[]) => {
+    const handleSharedFilesGroupedAction = async (action: string, fileIds: number[], filename?: string) => {
         switch (action) {
-            case 'download':
-                // Download multiple files
-                fileIds.forEach(fileId => {
-                    const file = sharedFiles.find((f: Resource) => f.id === fileId);
-                    if (file) {
-                        const link = document.createElement('a');
-                        link.href = file.url;
-                        link.download = file.name;
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                    }
-                });
+            case 'export':
+                // Export multiple files to zip
+                await exportFilesToZip(fileIds, sharedFiles, filename);
                 break;
             case 'share':
                 // TODO: Implement multi-file sharing
@@ -270,6 +251,68 @@ const FilesPage: React.FC = () => {
                 break;
             default:
                 console.warn('Unknown grouped action:', action);
+        }
+    };
+
+    // Export files to zip function
+    const exportFilesToZip = async (fileIds: number[], files: Resource[], customFilename?: string) => {
+        try {
+            const selectedFiles = files.filter(file => fileIds.includes(file.id));
+            
+            if (selectedFiles.length === 0) {
+                toast.error(t('files.groupedActions.export.error.noFiles'));
+                return;
+            }
+
+            // Show loading toast
+            const loadingToast = toast.loading(t('files.groupedActions.export.loading', { count: selectedFiles.length }));
+
+            // Import JSZip dynamically
+            const JSZip = (await import('jszip')).default;
+            const zip = new JSZip();
+
+            // Add files to zip
+            for (const file of selectedFiles) {
+                try {
+                    const response = await fetch(file.url);
+                    if (!response.ok) {
+                        throw new Error(`Failed to fetch ${file.name}`);
+                    }
+                    const blob = await response.blob();
+                    zip.file(file.name, blob);
+                } catch (error) {
+                    console.error(`Failed to fetch file ${file.name}:`, error);
+                    // Continue with other files even if one fails
+                }
+            }
+
+            // Generate zip file
+            const zipBlob = await zip.generateAsync({ 
+                type: 'blob',
+                compression: 'DEFLATE',
+                compressionOptions: {
+                    level: 6
+                }
+            });
+            
+            // Create download link
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(zipBlob);
+            link.download = customFilename || `files-export-${new Date().toISOString().split('T')[0]}.zip`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Clean up
+            URL.revokeObjectURL(link.href);
+            
+            // Update toast
+            toast.dismiss(loadingToast);
+            toast.success(t('files.groupedActions.export.success', { count: selectedFiles.length }));
+            
+        } catch (error) {
+            console.error('Export to zip failed:', error);
+            toast.error(t('files.groupedActions.export.error.general'));
         }
     };
 
