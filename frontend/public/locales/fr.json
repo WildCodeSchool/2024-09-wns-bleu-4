@@ -82,6 +82,17 @@
             "success": "{{count}} fichier(s) supprimé(s) avec succès",
             "partialSuccess": "{{success}} sur {{total}} fichiers supprimés avec succès"
         },
+        "groupShareDialog": {
+            "title": "Partager plusieurs fichiers",
+            "description": "Partager {{count}} fichier(s) avec vos contacts",
+            "button": "Partager {{count}} fichier(s) avec {{contacts}} contact(s)",
+            "error": {
+                "noSelection": "Veuillez sélectionner au moins un contact",
+                "sharing": "Erreur lors du partage des fichiers"
+            },
+            "success": "{{count}} fichier(s) partagé(s) avec {{contacts}} contact(s) avec succès",
+            "partialSuccess": "{{success}} sur {{total}} opérations de partage terminées avec succès"
+        },
         "compactMode": "Mode réduit",
         "toggleCompactMode": "Basculer en mode réduit",
         "search": {

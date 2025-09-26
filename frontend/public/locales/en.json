@@ -82,6 +82,17 @@
             "success": "{{count}} file(s) successfully deleted",
             "partialSuccess": "{{success}} of {{total}} files successfully deleted"
         },
+        "groupShareDialog": {
+            "title": "Share Multiple Files",
+            "description": "Share {{count}} file(s) with your contacts",
+            "button": "Share {{count}} file(s) with {{contacts}} contact(s)",
+            "error": {
+                "noSelection": "Please select at least one contact",
+                "sharing": "Error sharing files"
+            },
+            "success": "{{count}} file(s) shared with {{contacts}} contact(s) successfully",
+            "partialSuccess": "{{success}} of {{total}} sharing operations completed successfully"
+        },
         "compactMode": "Condensed mode",
         "toggleCompactMode": "Toggle condensed mode",
         "search": {

@@ -1,5 +1,6 @@
 import FileCard from '@/components/File/FileCard';
 import FileGroupDeleteDialog from '@/components/File/FileGroupDeleteDialog';
+import FileGroupShareDialog from '@/components/File/FileGroupShareDialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -81,6 +82,7 @@ const FileSection: React.FC<FileSectionProps> = ({
     const [selectedFiles, setSelectedFiles] = useState<Set<number>>(new Set());
     const [selectedAction, setSelectedAction] = useState<string>('');
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+    const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
     const [isDragSelecting, setIsDragSelecting] = useState(false);
 
     const typeOptions: { key: string; label: string }[] = [
@@ -184,6 +186,10 @@ const FileSection: React.FC<FileSectionProps> = ({
         if (selectedAction && selectedFiles.size > 0 && onGroupedAction) {
             if (selectedAction === 'delete') {
                 setIsDeleteDialogOpen(true);
+                return;
+            }
+            if (selectedAction === 'share') {
+                setIsShareDialogOpen(true);
                 return;
             }
             onGroupedAction(selectedAction, Array.from(selectedFiles));
@@ -505,6 +511,15 @@ const FileSection: React.FC<FileSectionProps> = ({
                     clearSelection();
                     onFileDeleted?.();
                 }}
+            />
+            
+            {/* Group Share Dialog */}
+            <FileGroupShareDialog
+                fileIds={Array.from(selectedFiles)}
+                fileCount={selectedFiles.size}
+                isOpen={isShareDialogOpen}
+                onOpenChange={setIsShareDialogOpen}
+                myContacts={myContacts || []}
             />
         </div>
     );
