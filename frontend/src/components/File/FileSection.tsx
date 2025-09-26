@@ -81,6 +81,7 @@ const FileSection: React.FC<FileSectionProps> = ({
     const [selectedFiles, setSelectedFiles] = useState<Set<number>>(new Set());
     const [selectedAction, setSelectedAction] = useState<string>('');
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+    const [isDragSelecting, setIsDragSelecting] = useState(false);
 
     const typeOptions: { key: string; label: string }[] = [
         { key: 'image', label: t('files.types.image') || 'Image' },
@@ -125,11 +126,13 @@ const FileSection: React.FC<FileSectionProps> = ({
     // Selection handlers
     const handleFileSelection = (fileId: number, selected: boolean) => {
         const newSelectedFiles = new Set(selectedFiles);
+        
         if (selected) {
             newSelectedFiles.add(fileId);
         } else {
             newSelectedFiles.delete(fileId);
         }
+        
         setSelectedFiles(newSelectedFiles);
         
         // Reset action when selection changes
@@ -137,6 +140,45 @@ const FileSection: React.FC<FileSectionProps> = ({
             setSelectedAction('');
         }
     };
+
+    const handleFileMouseDown = (fileId: number) => {
+        setIsDragSelecting(true);
+        const newSelectedFiles = new Set(selectedFiles);
+        
+        // Toggle the clicked file
+        if (newSelectedFiles.has(fileId)) {
+            newSelectedFiles.delete(fileId);
+        } else {
+            newSelectedFiles.add(fileId);
+        }
+        
+        setSelectedFiles(newSelectedFiles);
+        
+        // Reset action when selection changes
+        if (selectedAction) {
+            setSelectedAction('');
+        }
+    };
+
+    const handleFileMouseEnter = (fileId: number) => {
+        if (isDragSelecting) {
+            const newSelectedFiles = new Set(selectedFiles);
+            newSelectedFiles.add(fileId);
+            setSelectedFiles(newSelectedFiles);
+        }
+    };
+
+    // Add global mouse up listener to stop drag selection
+    React.useEffect(() => {
+        const handleMouseUp = () => {
+            setIsDragSelecting(false);
+        };
+
+        if (isDragSelecting) {
+            document.addEventListener('mouseup', handleMouseUp);
+            return () => document.removeEventListener('mouseup', handleMouseUp);
+        }
+    }, [isDragSelecting]);
 
     const handleGroupedActionExecute = () => {
         if (selectedAction && selectedFiles.size > 0 && onGroupedAction) {
@@ -404,6 +446,8 @@ const FileSection: React.FC<FileSectionProps> = ({
                                 myContacts={myContacts}
                                 isSelected={selectedFiles.has(file.id)}
                                 onSelectionChange={onGroupedAction ? handleFileSelection : undefined}
+                                onMouseDown={onGroupedAction ? () => handleFileMouseDown(file.id) : undefined}
+                                onMouseEnter={onGroupedAction ? () => handleFileMouseEnter(file.id) : undefined}
                             />
                         ))}
                     </div>

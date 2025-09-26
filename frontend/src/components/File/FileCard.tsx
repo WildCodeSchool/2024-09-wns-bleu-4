@@ -46,6 +46,8 @@ const FileCard: React.FC<FileCardProps> = ({
     myContacts = [],
     isSelected = false,
     onSelectionChange,
+    onMouseDown,
+    onMouseEnter,
 }) => {
     const { t } = useTranslation();
 
@@ -64,6 +66,19 @@ const FileCard: React.FC<FileCardProps> = ({
         }
     };
 
+    const handleMouseDown = (e: React.MouseEvent) => {
+        e.preventDefault();
+        if (onMouseDown) {
+            onMouseDown();
+        }
+    };
+
+    const handleMouseEnter = () => {
+        if (onMouseEnter) {
+            onMouseEnter();
+        }
+    };
+
     return (
         <Card className={`hover:shadow-md transition-all duration-200 p-2.5 hover:bg-accent ${isSelected ? 'ring-2 ring-primary bg-accent/50' : ''}`}>
             <CardContent className="p-0">
@@ -73,13 +88,14 @@ const FileCard: React.FC<FileCardProps> = ({
                         {/* Checkbox for selection with larger clickable area */}
                         {onSelectionChange && (
                             <div 
-                                className="flex items-center justify-center h-full min-h-[40px] cursor-pointer"
-                                onClick={() => handleCheckboxChange(!isSelected)}
+                                className="flex items-center justify-center h-full min-h-[40px] cursor-pointer select-none"
+                                onMouseDown={handleMouseDown}
+                                onMouseEnter={handleMouseEnter}
                             >
                                 <Checkbox
                                     checked={isSelected}
                                     onCheckedChange={handleCheckboxChange}
-                                    className="flex-shrink-0 cursor-pointer"
+                                    className="flex-shrink-0 cursor-pointer pointer-events-none"
                                 />
                             </div>
                         )}
