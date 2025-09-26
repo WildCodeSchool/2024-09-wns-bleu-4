@@ -216,19 +216,10 @@ const FilesPage: React.FC = () => {
     const handleMyFilesGroupedAction = async (action: string, fileIds: number[], filename?: string) => {
         switch (action) {
             case 'export':
-                // Export multiple files to zip
                 await exportFilesToZip(fileIds, myFiles, filename);
                 break;
-            case 'share':
-                // TODO: Implement multi-file sharing
-                console.log('Share multiple files:', fileIds);
-                break;
-            case 'report':
-                // TODO: Implement multi-file reporting
-                console.log('Report multiple files:', fileIds);
-                break;
             case 'delete':
-                // Delete multiple files - handled by FileGroupDeleteDialog
+                // Delete action is handled by FileGroupDeleteDialog in FileSection
                 break;
             default:
                 console.warn('Unknown grouped action:', action);
@@ -238,16 +229,7 @@ const FilesPage: React.FC = () => {
     const handleSharedFilesGroupedAction = async (action: string, fileIds: number[], filename?: string) => {
         switch (action) {
             case 'export':
-                // Export multiple files to zip
                 await exportFilesToZip(fileIds, sharedFiles, filename);
-                break;
-            case 'share':
-                // TODO: Implement multi-file sharing
-                console.log('Share multiple files:', fileIds);
-                break;
-            case 'report':
-                // TODO: Implement multi-file reporting
-                console.log('Report multiple files:', fileIds);
                 break;
             default:
                 console.warn('Unknown grouped action:', action);
