@@ -76,7 +76,7 @@ const FileGroupReportDialog: React.FC<FileGroupReportDialogProps> = ({
                         });
                         successCount++;
                     } catch {
-                        errorCount++;
+                        errorCount = errorCount + 1;
                     }
                 }
 
