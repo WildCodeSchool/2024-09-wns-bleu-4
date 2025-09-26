@@ -3,13 +3,15 @@ import { Button } from './ui/button';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 export const OneShotButton = ({
-    handleClick,
+    onClick,
     label,
+    labelClicked,
     successToast,
     errorToast,
 }: {
-    handleClick: () => void;
+    onClick: () => void;
     label: string;
+    labelClicked: string;
     successToast?: string;
     errorToast?: string;
 }) => {
@@ -20,7 +22,7 @@ export const OneShotButton = ({
             disabled={isClicked}
             onClick={() => {
                 setIsClicked(true);
-                handleClick();
+                onClick();
                 if (successToast) {
                     toast.success(t(successToast));
                 } else if (errorToast) {
@@ -29,7 +31,7 @@ export const OneShotButton = ({
             }}
             className="cursor-pointer w-fit"
         >
-            {isClicked ? `${t('common.sent')} !` : t(label)}
+            {isClicked ? t(labelClicked) : t(label)}
         </Button>
     );
 };

@@ -88,10 +88,16 @@ class UserResolver {
         const codeToConfirm = Array.from({ length: 8 }, () =>
             Math.floor(Math.random() * 10),
         ).join('');
+        
+        // Set expiration date to 10 minutes from now
+        const codeExpirationDate = new Date();
+        codeExpirationDate.setMinutes(codeExpirationDate.getMinutes() + 1);
+        
         await TempUser.save({
             email: newUserData.email,
             password: await argon2.hash(newUserData.password),
             randomCode: codeToConfirm,
+            codeExpirationDate: codeExpirationDate,
         });
         const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -213,21 +219,89 @@ class UserResolver {
 
     @Mutation(() => String)
     async confirmEmail(@Arg('codeByUser', () => String) codeByUser: string) {
-        const tempUser = await TempUser.findOneByOrFail({
+        const tempUser = await TempUser.findOneBy({
             randomCode: codeByUser,
         });
+
+        // Check if TempUser exists
+        if (!tempUser) {
+            throw new Error('Le code de confirmation a expiré');
+        }
+
+        // Check if code has expired
+        const now = new Date();
+        if (now > tempUser.codeExpirationDate) {
+            // Delete the expired TempUser
+            await tempUser.remove();
+            throw new Error('Le code de confirmation a expiré');
+        }
 
         const existingUser = await User.findOneBy({ email: tempUser.email });
 
         if (existingUser) {
+            // Delete TempUser if it exists
+            await tempUser.remove();
             throw new Error('Un compte est déjà associé à cette adresse email');
         }
+        
         await User.save({
             email: tempUser.email,
             password: tempUser.password,
         });
-        tempUser.remove();
+        await tempUser.remove();
         return 'ok';
+    }
+
+    @Mutation(() => String)
+    async resendConfirmationEmail(
+        @Arg('email', () => String) email: string,
+        @Arg('lang', () => String) lang: string = 'fr',
+    ) {
+        // Check if user already exists
+        const existingUser = await User.findOneBy({ email });
+        if (existingUser) {
+            throw new Error('Un compte est déjà associé à cette adresse email');
+        }
+
+        // Find existing TempUser
+        let tempUser = await TempUser.findOneBy({ email });
+        
+        // Generate new code
+        const codeToConfirm = Array.from({ length: 8 }, () =>
+            Math.floor(Math.random() * 10),
+        ).join('');
+        
+        // Set expiration date to 10 minutes from now
+        const codeExpirationDate = new Date();
+        codeExpirationDate.setMinutes(codeExpirationDate.getMinutes() + 10);
+
+        if (tempUser) {
+            // Update existing TempUser with new code and expiration
+            tempUser.randomCode = codeToConfirm;
+            tempUser.codeExpirationDate = codeExpirationDate;
+            await tempUser.save();
+        } else {
+            throw new Error('Aucun compte temporaire trouvé pour cette adresse email');
+        }
+
+        const resend = new Resend(process.env.RESEND_API_KEY);
+
+        try {
+            await resend.emails.send({
+                from: `verify@${process.env.RESEND_EMAIL_DOMAIN}`,
+                to: [email],
+                subject: 'Verify Account Creation',
+                react: VerifyAccountEmail({
+                    validationCode: codeToConfirm,
+                    lang: lang as 'fr' | 'en',
+                }),
+            });
+        } catch (error) {
+            console.error('Error sending confirmation email:', error);
+            throw new Error('Erreur lors de l\'envoi de l\'email');
+        }
+        
+        return 'Un nouveau code de confirmation a été envoyé à votre adresse email';
     }
 
     async isPasswordCorrect(
