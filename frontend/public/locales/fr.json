@@ -93,6 +93,19 @@
             "success": "{{count}} fichier(s) partagé(s) avec {{contacts}} contact(s) avec succès",
             "partialSuccess": "{{success}} sur {{total}} opérations de partage terminées avec succès"
         },
+        "groupReportDialog": {
+            "title": "Signaler plusieurs fichiers",
+            "description": "Signaler {{count}} fichier(s) pour contenu inapproprié",
+            "button": "Signaler {{count}} fichier(s)",
+            "error": "Erreur lors du signalement des fichiers",
+            "success": "{{count}} fichier(s) signalé(s) avec succès",
+            "partialSuccess": "{{success}} sur {{total}} fichiers signalés avec succès",
+            "confirm": {
+                "title": "Confirmer les signalements multiples",
+                "description": "Êtes-vous sûr de vouloir signaler {{count}} fichier(s) pour {{reason}} ?",
+                "button": "Signaler {{count}} fichier(s)"
+            }
+        },
         "compactMode": "Mode réduit",
         "toggleCompactMode": "Basculer en mode réduit",
         "search": {

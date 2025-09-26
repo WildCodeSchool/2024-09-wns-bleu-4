@@ -1,6 +1,7 @@
 import FileCard from '@/components/File/FileCard';
 import FileGroupDeleteDialog from '@/components/File/FileGroupDeleteDialog';
 import FileGroupShareDialog from '@/components/File/FileGroupShareDialog';
+import FileGroupReportDialog from '@/components/File/FileGroupReportDialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -84,6 +85,7 @@ const FileSection: React.FC<FileSectionProps> = ({
     const [selectedAction, setSelectedAction] = useState<string>('');
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
+    const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
     const [isDragSelecting, setIsDragSelecting] = useState(false);
 
     const typeOptions: { key: string; label: string }[] = [
@@ -196,6 +198,10 @@ const FileSection: React.FC<FileSectionProps> = ({
             }
             if (selectedAction === 'share') {
                 setIsShareDialogOpen(true);
+                return;
+            }
+            if (selectedAction === 'report') {
+                setIsReportDialogOpen(true);
                 return;
             }
             onGroupedAction(selectedAction, Array.from(selectedFiles));
@@ -526,6 +532,14 @@ const FileSection: React.FC<FileSectionProps> = ({
                 isOpen={isShareDialogOpen}
                 onOpenChange={setIsShareDialogOpen}
                 myContacts={myContacts || []}
+            />
+            
+            {/* Group Report Dialog */}
+            <FileGroupReportDialog
+                fileIds={Array.from(selectedFiles)}
+                fileCount={selectedFiles.size}
+                isOpen={isReportDialogOpen}
+                onOpenChange={setIsReportDialogOpen}
             />
         </div>
     );

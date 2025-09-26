@@ -93,6 +93,19 @@
             "success": "{{count}} file(s) shared with {{contacts}} contact(s) successfully",
             "partialSuccess": "{{success}} of {{total}} sharing operations completed successfully"
         },
+        "groupReportDialog": {
+            "title": "Report Multiple Files",
+            "description": "Report {{count}} file(s) for inappropriate content",
+            "button": "Report {{count}} file(s)",
+            "error": "Error reporting files",
+            "success": "{{count}} file(s) reported successfully",
+            "partialSuccess": "{{success}} of {{total}} files reported successfully",
+            "confirm": {
+                "title": "Confirm Multiple Reports",
+                "description": "Are you sure you want to report {{count}} file(s) for {{reason}}?",
+                "button": "Report {{count}} file(s)"
+            }
+        },
         "compactMode": "Condensed mode",
         "toggleCompactMode": "Toggle condensed mode",
         "search": {
