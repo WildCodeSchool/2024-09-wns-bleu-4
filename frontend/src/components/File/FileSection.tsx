@@ -4,8 +4,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Contact, Resource } from '@/generated/graphql-types';
-import { ChevronLeft, ChevronRight, LucideIcon, Plus, Search, RotateCcw, X, Filter, Users } from 'lucide-react';
+import { ChevronLeft, ChevronRight, LucideIcon, Plus, Search, RotateCcw, X, Filter, Users, Check } from 'lucide-react';
 import { 
     DropdownMenu,
     DropdownMenuCheckboxItem,
@@ -44,10 +45,10 @@ interface FileSectionProps {
     isSearching?: boolean;
     selectedTypes?: string[];
     onTypesChange?: (types: string[]) => void;
-    // Shared-only author filter
     authorOptions?: { id: number; email: string; profilePicture?: string | null }[];
     selectedAuthorId?: number | null;
     onAuthorChange?: (authorId: number | null) => void;
+    onGroupedAction?: (action: string, fileIds: number[]) => void;
 }
 
 const FileSection: React.FC<FileSectionProps> = ({
@@ -69,10 +70,15 @@ const FileSection: React.FC<FileSectionProps> = ({
     authorOptions = [],
     selectedAuthorId = null,
     onAuthorChange,
+    onGroupedAction,
 }) => {
     const { t } = useTranslation();
     const [isCompact, setIsCompact] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
+    
+    // Selection state
+    const [selectedFiles, setSelectedFiles] = useState<Set<number>>(new Set());
+    const [selectedAction, setSelectedAction] = useState<string>('');
 
     const typeOptions: { key: string; label: string }[] = [
         { key: 'image', label: t('files.types.image') || 'Image' },
@@ -112,6 +118,36 @@ const FileSection: React.FC<FileSectionProps> = ({
             ? Array.from(new Set([...(selectedTypes || []), key]))
             : (selectedTypes || []).filter((t) => t !== key);
         onTypesChange(next);
+    };
+
+    // Selection handlers
+    const handleFileSelection = (fileId: number, selected: boolean) => {
+        const newSelectedFiles = new Set(selectedFiles);
+        if (selected) {
+            newSelectedFiles.add(fileId);
+        } else {
+            newSelectedFiles.delete(fileId);
+        }
+        setSelectedFiles(newSelectedFiles);
+        
+        // Reset action when selection changes
+        if (selectedAction) {
+            setSelectedAction('');
+        }
+    };
+
+    const handleGroupedActionExecute = () => {
+        if (selectedAction && selectedFiles.size > 0 && onGroupedAction) {
+            onGroupedAction(selectedAction, Array.from(selectedFiles));
+            // Clear selection after action
+            setSelectedFiles(new Set());
+            setSelectedAction('');
+        }
+    };
+
+    const clearSelection = () => {
+        setSelectedFiles(new Set());
+        setSelectedAction('');
     };
 
     return (
@@ -258,6 +294,58 @@ const FileSection: React.FC<FileSectionProps> = ({
                     <RotateCcw className="h-4 w-4" />
                 </Button>
             </div>
+            
+            {/* Grouped Actions */}
+            {onGroupedAction && (
+                <div className="flex items-center gap-2 bg-muted/30 rounded-lg">
+                    <span className="text-sm text-muted-foreground">
+                        {selectedFiles.size > 0 
+                            ? t('files.groupedActions.selected', { count: selectedFiles.size })
+                            : t('files.groupedActions.selectFiles')
+                        }
+                    </span>
+                    <div className="flex items-center gap-2 ml-auto">
+                        <Select 
+                            value={selectedAction} 
+                            onValueChange={setSelectedAction}
+                            disabled={selectedFiles.size === 0}
+                        >
+                            <SelectTrigger className="w-48 cursor-pointer">
+                                <SelectValue placeholder={t('files.groupedActions.selectAction')} />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="download">{t('files.groupedActions.download')}</SelectItem>
+                                <SelectItem value="share">{t('files.groupedActions.share')}</SelectItem>
+                                <SelectItem value="report">{t('files.groupedActions.report')}</SelectItem>
+                                {!isShared && (
+                                    <SelectItem value="delete">{t('files.groupedActions.delete')}</SelectItem>
+                                )}
+                            </SelectContent>
+                        </Select>
+                        <Button
+                            onClick={handleGroupedActionExecute}
+                            disabled={!selectedAction || selectedFiles.size === 0}
+                            size="sm"
+                            className="flex-shrink-0 cursor-pointer"
+                        >
+                            <Check className="h-4 w-4 mr-2" />
+                            {t('files.groupedActions.execute')}
+                        </Button>
+                        {selectedFiles.size > 0 && (
+                            <Button
+                                onClick={clearSelection}
+                                variant="outline"
+                                size="sm"
+                                className="flex-shrink-0 cursor-pointer"
+                            >
+                                <X className="h-4 w-4 mr-2" />
+                                {t('files.groupedActions.clear')}
+                            </Button>
+                        )}
+                    </div>
+                </div>
+            )}
+            
             <Separator />
             {files.length === 0 ? (
                 <div className="text-center py-8">
@@ -276,9 +364,9 @@ const FileSection: React.FC<FileSectionProps> = ({
                     )}
                 </div>
             ) : (
-                <div className="flex flex-col h-[550px]">
+                <div className="flex flex-col h-[500px]">
                     {/* File Cards Container - Fixed height with scroll */}
-                    <div className="flex-1 space-y-2 overflow-y-auto pr-2 scrollbar-elegant">
+                    <div className="flex-1 space-y-2 pr-2 scrollbar-elegant">
                         {files.map((file: Resource) => (
                             <FileCard
                                 key={file.id}
@@ -304,6 +392,8 @@ const FileSection: React.FC<FileSectionProps> = ({
                                 }
                                 onFileDeleted={onFileDeleted}
                                 myContacts={myContacts}
+                                isSelected={selectedFiles.has(file.id)}
+                                onSelectionChange={onGroupedAction ? handleFileSelection : undefined}
                             />
                         ))}
                     </div>

@@ -62,6 +62,17 @@
         "actions": {
             "addFiles": "Ajouter des fichiers"
         },
+        "groupedActions": {
+            "selectFiles": "Sélectionnez des fichiers pour effectuer des actions groupées",
+            "selected": "{{count}} fichier(s) sélectionné(s)",
+            "selectAction": "Sélectionner une action...",
+            "download": "Télécharger",
+            "share": "Partager",
+            "report": "Signaler",
+            "delete": "Supprimer",
+            "execute": "Exécuter",
+            "clear": "Effacer la sélection"
+        },
         "compactMode": "Mode réduit",
         "toggleCompactMode": "Basculer en mode réduit",
         "search": {

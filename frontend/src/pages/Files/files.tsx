@@ -210,6 +210,45 @@ const FilesPage: React.FC = () => {
         }
     };
 
+    // Grouped actions handlers
+    const handleMyFilesGroupedAction = async (action: string, fileIds: number[]) => {
+        console.log('My files grouped action:', action, fileIds);
+        // TODO: Implement grouped actions for my files
+        // This would typically involve:
+        // - Share: Open share dialog for multiple files
+        // - Report: Report multiple files
+        // - Delete: Delete multiple files
+        switch (action) {
+            case 'share':
+                // Open share dialog for multiple files
+                break;
+            case 'report':
+                // Report multiple files
+                break;
+            case 'delete':
+                // Delete multiple files
+                break;
+            default:
+                console.warn('Unknown grouped action:', action);
+        }
+    };
+
+    const handleSharedFilesGroupedAction = async (action: string, fileIds: number[]) => {
+        console.log('Shared files grouped action:', action, fileIds);
+        // TODO: Implement grouped actions for shared files
+        // Note: Delete action should not be available for shared files
+        switch (action) {
+            case 'share':
+                // Open share dialog for multiple files
+                break;
+            case 'report':
+                // Report multiple files
+                break;
+            default:
+                console.warn('Unknown grouped action:', action);
+        }
+    };
+
     // Handle search loading state
     useEffect(() => {
         if (isSearchMode && searchLoading) {
@@ -284,6 +323,7 @@ const FilesPage: React.FC = () => {
                     isSearching={isSearchingMyFiles}
                     selectedTypes={selectedTypes}
                     onTypesChange={handleTypesChange}
+                    onGroupedAction={handleMyFilesGroupedAction}
                 />
 
                 {/* Fichiers partagés */}
@@ -306,6 +346,7 @@ const FilesPage: React.FC = () => {
                     authorOptions={authors}
                     selectedAuthorId={selectedAuthorId}
                     onAuthorChange={handleAuthorChange}
+                    onGroupedAction={handleSharedFilesGroupedAction}
                 />
             </div>
         </div>

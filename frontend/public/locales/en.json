@@ -62,6 +62,17 @@
         "actions": {
             "addFiles": "Add files"
         },
+        "groupedActions": {
+            "selectFiles": "Select files to perform grouped actions",
+            "selected": "{{count}} file(s) selected",
+            "selectAction": "Select action...",
+            "download": "Download",
+            "share": "Share",
+            "report": "Report",
+            "delete": "Delete",
+            "execute": "Execute",
+            "clear": "Clear selection"
+        },
         "compactMode": "Condensed mode",
         "toggleCompactMode": "Toggle condensed mode",
         "search": {
