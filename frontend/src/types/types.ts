@@ -37,4 +37,8 @@ export interface FileCardProps {
     };
     onFileDeleted?: () => void;
     myContacts?: Contact[];
+    isSelected?: boolean;
+    onSelectionChange?: (id: number, selected: boolean) => void;
+    onMouseDown?: () => void;
+    onMouseEnter?: () => void;
 }

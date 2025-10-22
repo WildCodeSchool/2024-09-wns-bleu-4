@@ -62,6 +62,66 @@
         "actions": {
             "addFiles": "Ajouter des fichiers"
         },
+        "groupedActions": {
+            "selectFiles": "Sélectionnez des fichiers pour effectuer des actions groupées",
+            "selected": "{{count}} fichier(s) sélectionné(s)",
+            "selectAction": "Sélectionner une action...",
+            "share": "Partager",
+            "report": "Signaler",
+            "delete": "Supprimer",
+            "execute": "Exécuter",
+            "clear": "Effacer la sélection",
+            "export": {
+                "label": "Exporter en ZIP",
+                "loading": "Création de l'archive ZIP avec {{count}} fichier(s)...",
+                "success": "{{count}} fichier(s) exporté(s) en ZIP avec succès",
+                "error": {
+                    "noFiles": "Aucun fichier sélectionné pour l'export",
+                    "general": "Erreur lors de la création de l'archive ZIP"
+                }
+            }
+        },
+        "groupDeleteDialog": {
+            "title": "Confirmer les suppressions multiples",
+            "description": "Êtes-vous sûr de vouloir supprimer {{count}} fichier(s) ? Cette action est irréversible.",
+            "cancel": "Annuler",
+            "confirm": "Supprimer {{count}} fichier(s)",
+            "error": "Erreur lors de la suppression des fichiers",
+            "success": "{{count}} fichier(s) supprimé(s) avec succès",
+            "partialSuccess": "{{success}} sur {{total}} fichiers supprimés avec succès"
+        },
+        "groupShareDialog": {
+            "title": "Partager plusieurs fichiers",
+            "description": "Partager {{count}} fichier(s) avec vos contacts",
+            "button": "Partager {{count}} fichier(s) avec {{contacts}} contact(s)",
+            "error": {
+                "noSelection": "Veuillez sélectionner au moins un contact",
+                "sharing": "Erreur lors du partage des fichiers"
+            },
+            "success": "{{count}} fichier(s) partagé(s) avec {{contacts}} contact(s) avec succès",
+            "partialSuccess": "{{success}} sur {{total}} opérations de partage terminées avec succès"
+        },
+        "groupReportDialog": {
+            "title": "Signaler plusieurs fichiers",
+            "description": "Signaler {{count}} fichier(s) pour contenu inapproprié",
+            "button": "Signaler {{count}} fichier(s)",
+            "error": "Erreur lors du signalement des fichiers",
+            "success": "{{count}} fichier(s) signalé(s) avec succès",
+            "partialSuccess": "{{success}} sur {{total}} fichiers signalés avec succès",
+            "confirm": {
+                "title": "Confirmer les signalements multiples",
+                "description": "Êtes-vous sûr de vouloir signaler {{count}} fichier(s) pour {{reason}} ?",
+                "button": "Signaler {{count}} fichier(s)"
+            }
+        },
+        "groupExportDialog": {
+            "title": "Exporter les fichiers en ZIP",
+            "description": "Créer une archive ZIP avec {{count}} fichier(s)",
+            "filenameLabel": "Nom du fichier ZIP",
+            "placeholder": "Entrez le nom du fichier...",
+            "help": "L'extension .zip sera ajoutée automatiquement si elle n'est pas fournie",
+            "createZip": "Créer le ZIP"
+        },
         "compactMode": "Mode réduit",
         "toggleCompactMode": "Basculer en mode réduit",
         "search": {
@@ -71,8 +131,8 @@
         "reset": "Réinitialiser par défaut",
         "results": "résultats",
         "filterByType": "Filtrer par type",
-        "filterByAuthor": "Filtrer par auteur",
-        "allAuthors": "Tous les auteurs",
+        "filterByContact": "Filtrer par contact",
+        "allContacts": "Tous les contacts",
         "errors": {
             "invalidResourceId": "ID de ressource non valide",
             "deleting": "Suppression en cours...",
@@ -84,7 +144,7 @@
         "uploadNew": "Télécharger un nouveau fichier",
         "filter": "Filtrer",
         "filterTypes": "Types",
-        "filterAuthors": "Auteurs",
+        "filterContacts": "Contacts",
         "types": {
             "image": "Image",
             "video": "Vidéo",

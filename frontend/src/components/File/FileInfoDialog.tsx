@@ -7,6 +7,7 @@ import {
     DialogTrigger,
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
+import UserHoverCard from '@/components/UserHoverCard';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -37,7 +38,7 @@ const FileInfoDialog: React.FC<FileInfoDialogProps> = ({
 
     const handleCopyMD5 = async () => {
         if (!md5Hash) return;
-        
+
         try {
             await navigator.clipboard.writeText(md5Hash);
             setIsCopied(true);
@@ -101,13 +102,15 @@ const FileInfoDialog: React.FC<FileInfoDialogProps> = ({
                         </div>
                     )}
                     {isShared && owner && (
-                        <div className="space-y-2">
+                        <div className="flex flex-col">
                             <Label className="text-sm font-medium">
                                 {t('fileCard.info.owner')}
                             </Label>
-                            <p className="text-sm text-muted-foreground">
-                                {owner.email}
-                            </p>
+                            <UserHoverCard user={owner}>
+                                <span className="text-sm text-blue-500 cursor-pointer hover:underline">
+                                    {owner.email}
+                                </span>
+                            </UserHoverCard>
                         </div>
                     )}
                 </div>

@@ -1,6 +1,7 @@
 import FilePreview from '@/components/FilePreview';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -43,6 +44,10 @@ const FileCard: React.FC<FileCardProps> = ({
     owner,
     onFileDeleted,
     myContacts = [],
+    isSelected = false,
+    onSelectionChange,
+    onMouseDown,
+    onMouseEnter,
 }) => {
     const { t } = useTranslation();
 
@@ -55,12 +60,45 @@ const FileCard: React.FC<FileCardProps> = ({
         document.body.removeChild(link);
     };
 
+    const handleCheckboxChange = (checked: boolean) => {
+        if (onSelectionChange) {
+            onSelectionChange(id, checked);
+        }
+    };
+
+    const handleMouseDown = (e: React.MouseEvent) => {
+        e.preventDefault();
+        if (onMouseDown) {
+            onMouseDown();
+        }
+    };
+
+    const handleMouseEnter = () => {
+        if (onMouseEnter) {
+            onMouseEnter();
+        }
+    };
+
     return (
-        <Card className="hover:shadow-md transition-all duration-200 p-2.5 hover:bg-accent">
+        <Card className={`hover:shadow-md transition-all duration-200 p-2.5 hover:bg-accent ${isSelected ? 'ring-2 ring-primary bg-accent/50' : ''}`}>
             <CardContent className="p-0">
                 <div className="flex items-center justify-between">
-                    {/* Left: preview + meta (this opens the preview dialog) */}
+                    {/* Left: checkbox + preview + meta */}
                     <div className="flex items-center gap-3 flex-1 min-w-0">
+                        {/* Checkbox for selection with larger clickable area */}
+                        {onSelectionChange && (
+                            <div 
+                                className="flex items-center justify-center h-full min-h-[40px] cursor-pointer select-none"
+                                onMouseDown={handleMouseDown}
+                                onMouseEnter={handleMouseEnter}
+                            >
+                                <Checkbox
+                                    checked={isSelected}
+                                    onCheckedChange={handleCheckboxChange}
+                                    className="flex-shrink-0 cursor-pointer pointer-events-none"
+                                />
+                            </div>
+                        )}
                         <FilePreviewDialog
                             trigger={
                                 <div className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer">
