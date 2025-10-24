@@ -7,7 +7,8 @@ import {
     DialogTrigger,
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
-import React from 'react';
+import UserHoverCard from '@/components/UserHoverCard';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface FileInfoDialogProps {
@@ -15,6 +16,7 @@ interface FileInfoDialogProps {
     fileName: string;
     fileSize?: string;
     description?: string;
+    md5Hash?: string;
     owner?: {
         id: number;
         email: string;
@@ -27,10 +29,24 @@ const FileInfoDialog: React.FC<FileInfoDialogProps> = ({
     fileName,
     fileSize,
     description,
+    md5Hash,
     owner,
     isShared = false,
 }) => {
     const { t } = useTranslation();
+    const [isCopied, setIsCopied] = useState(false);
+
+    const handleCopyMD5 = async () => {
+        if (!md5Hash) return;
+
+        try {
+            await navigator.clipboard.writeText(md5Hash);
+            setIsCopied(true);
+            setTimeout(() => setIsCopied(false), 2000);
+        } catch (error) {
+            console.error('Failed to copy MD5 hash:', error);
+        }
+    };
 
     return (
         <Dialog>
@@ -71,14 +87,30 @@ const FileInfoDialog: React.FC<FileInfoDialogProps> = ({
                             </p>
                         </div>
                     )}
-                    {isShared && owner && (
+                    {md5Hash && (
                         <div className="space-y-2">
+                            <Label className="text-sm font-medium">
+                                MD5 Hash
+                            </Label>
+                            <button
+                                onClick={handleCopyMD5}
+                                className="text-sm text-muted-foreground break-words font-mono text-left hover:text-foreground hover:bg-muted/50 p-2 rounded transition-colors cursor-pointer w-full"
+                                title="Click to copy MD5 hash"
+                            >
+                                {isCopied ? 'Copied!' : md5Hash}
+                            </button>
+                        </div>
+                    )}
+                    {isShared && owner && (
+                        <div className="flex flex-col">
                             <Label className="text-sm font-medium">
                                 {t('fileCard.info.owner')}
                             </Label>
-                            <p className="text-sm text-muted-foreground">
-                                {owner.email}
-                            </p>
+                            <UserHoverCard user={owner}>
+                                <span className="text-sm text-blue-500 cursor-pointer hover:underline">
+                                    {owner.email}
+                                </span>
+                            </UserHoverCard>
                         </div>
                     )}
                 </div>

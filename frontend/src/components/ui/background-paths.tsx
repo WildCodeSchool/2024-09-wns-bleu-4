@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 function FloatingPaths({ position }: { position: number }) {
     const paths = Array.from({ length: 36 }, (_, i) => ({
@@ -77,7 +78,7 @@ export function BackgroundPaths({ title }: BackgroundPathsProps) {
                         dark:from-white/10 dark:to-black/10 p-px py-3 rounded-2xl backdrop-blur-lg 
                         overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
                     >
-                        <a href='/upload'
+                        <Link to='/upload'
                             className="rounded-[1.15rem] px-8 py-6 text-lg font-semibold backdrop-blur-md 
                             bg-white/95 hover:bg-white/100 dark:bg-black/95 dark:hover:bg-black/100 
                             text-black dark:text-white transition-all duration-300 
@@ -93,7 +94,7 @@ export function BackgroundPaths({ title }: BackgroundPathsProps) {
                                 >
                                 →
                             </span>
-                        </a>
+                        </Link>
                     </div>
                 </motion.div>
             </div>

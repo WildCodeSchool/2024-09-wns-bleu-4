@@ -1,53 +1,336 @@
 import FileSection from '@/components/File/FileSection';
-import { Loader } from '@/components/Loader';
 import { Button } from '@/components/ui/button';
+import { useAuthContext } from '@/context/useAuthContext';
 import {
-    GET_RESOURCES_BY_USER_ID,
-    GET_SHARED_RESOURCES,
+    GET_RESOURCES_BY_USER_ID_PAGINATED,
+    GET_SHARED_RESOURCES_PAGINATED,
+    SEARCH_RESOURCES_BY_USER_ID,
+    SEARCH_SHARED_RESOURCES_BY_USER_ID,
+    GET_AUTHORS_WHO_SHARED_WITH_USER,
 } from '@/graphql/Resource/queries';
 import { GET_USER_ID } from '@/graphql/User/queries';
-import { useAuthContext } from '@/context/useAuthContext';
+import { Resource } from '@/generated/graphql-types';
 import { useMyContacts } from '@/hooks/useMyContacts';
 import { useQuery } from '@apollo/client';
 import { FolderOpen, Plus, Users } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const FilesPage: React.FC = () => {
     const { t } = useTranslation();
     const { data: userData } = useQuery(GET_USER_ID);
     const { refreshAuth } = useAuthContext();
+    
+    // Pagination state
+    const [myFilesPage, setMyFilesPage] = useState(1);
+    const [sharedFilesPage, setSharedFilesPage] = useState(1);
+    
+    // Search / filter state for my files
+    const [myFilesSearchTerm, setMyFilesSearchTerm] = useState('');
+    const [isSearchingMyFiles, setIsSearchingMyFiles] = useState(false);
+    const [isSearchMode, setIsSearchMode] = useState(false);
+    const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+    
+    // Search / filter state for shared files
+    const [sharedFilesSearchTerm, setSharedFilesSearchTerm] = useState('');
+    const [isSearchingSharedFiles, setIsSearchingSharedFiles] = useState(false);
+    const [isSharedSearchMode, setIsSharedSearchMode] = useState(false);
+    const [selectedSharedTypes, setSelectedSharedTypes] = useState<string[]>([]);
+    const [authors, setAuthors] = useState<{ id: number; email: string; profilePicture?: string | null }[]>([]);
+    const [selectedAuthorId, setSelectedAuthorId] = useState<number | null>(null);
+    
     const {
         data: resources,
-        loading,
         refetch: refetchMyFiles,
-    } = useQuery(GET_RESOURCES_BY_USER_ID, {
-        variables: { userId: userData?.getUserInfo?.id },
+    } = useQuery(GET_RESOURCES_BY_USER_ID_PAGINATED, {
+        variables: { 
+            userId: userData?.getUserInfo?.id,
+            pagination: { page: myFilesPage, limit: 10 }
+        },
         fetchPolicy: 'cache-and-network',
-        skip: !userData?.getUserInfo?.id,
+        skip: !userData?.getUserInfo?.id || isSearchMode,
     });
-    const { data: sharedResources } = useQuery(GET_SHARED_RESOURCES, {
-        variables: { userId: userData?.getUserInfo?.id },
+
+    const {
+        data: searchResults,
+        refetch: refetchSearch,
+        loading: searchLoading,
+    } = useQuery(SEARCH_RESOURCES_BY_USER_ID, {
+        variables: { 
+            userId: userData?.getUserInfo?.id,
+            search: { 
+                searchTerm: myFilesSearchTerm, 
+                page: myFilesPage, 
+                limit: 10,
+                types: selectedTypes.length ? selectedTypes : null,
+            }
+        },
         fetchPolicy: 'cache-and-network',
+        skip: !userData?.getUserInfo?.id || !isSearchMode || (!myFilesSearchTerm.trim() && selectedTypes.length === 0),
+    });
+    
+    const { 
+        data: sharedResources,
+        refetch: refetchSharedFiles,
+    } = useQuery(GET_SHARED_RESOURCES_PAGINATED, {
+        variables: { 
+            userId: userData?.getUserInfo?.id,
+            pagination: { page: sharedFilesPage, limit: 10 }
+        },
+        fetchPolicy: 'cache-and-network',
+        skip: !userData?.getUserInfo?.id || isSharedSearchMode,
+    });
+
+    const {
+        data: sharedSearchResults,
+        refetch: refetchSharedSearch,
+        loading: sharedSearchLoading,
+    } = useQuery(SEARCH_SHARED_RESOURCES_BY_USER_ID, {
+        variables: { 
+            userId: userData?.getUserInfo?.id,
+            search: { 
+                searchTerm: sharedFilesSearchTerm || '', 
+                page: sharedFilesPage, 
+                limit: 10,
+                types: selectedSharedTypes.length ? selectedSharedTypes : null,
+                authorId: selectedAuthorId,
+            }
+        },
+        fetchPolicy: 'cache-and-network',
+        skip: !userData?.getUserInfo?.id || !isSharedSearchMode,
     });
 
     const { acceptedContacts } = useMyContacts();
 
-    if (loading) {
-        return (
-            <div className="flex justify-center items-center min-h-[400px]">
-                <Loader size={50} />
-            </div>
-        );
-    }
+    const myFiles = isSearchMode 
+        ? (searchResults?.searchResourcesByUserId?.resources || [])
+        : (resources?.getResourcesByUserIdPaginated?.resources || []);
+    const myFilesPagination = isSearchMode 
+        ? searchResults?.searchResourcesByUserId
+        : resources?.getResourcesByUserIdPaginated;
+    const sharedFiles = isSharedSearchMode 
+        ? (sharedSearchResults?.searchSharedResourcesByUserId?.resources || [])
+        : (sharedResources?.getUserSharedResourcesPaginated?.resources || []);
+    const sharedFilesPagination = isSharedSearchMode 
+        ? sharedSearchResults?.searchSharedResourcesByUserId
+        : sharedResources?.getUserSharedResourcesPaginated;
 
-    const myFiles = resources?.getResourcesByUserId || [];
-    const sharedFiles = sharedResources?.getUserSharedResources || [];
-
-    const handleFileDeleted = () => {
-        refetchMyFiles();
-        refreshAuth();
+    const handleFileDeleted = async () => {
+        if (isSearchMode) {
+            refetchSearch();
+        } else {
+            refetchMyFiles();
+        }
+        if (isSharedSearchMode) {
+            refetchSharedSearch();
+        } else {
+            refetchSharedFiles();
+        }
+        await refreshAuth();
     };
+
+    const handleMyFilesPageChange = (page: number) => {
+        setMyFilesPage(page);
+    };
+
+    const handleSharedFilesPageChange = (page: number) => {
+        setSharedFilesPage(page);
+    };
+
+    const handleMyFilesSearch = (searchTerm: string) => {
+        setMyFilesSearchTerm(searchTerm);
+        if (searchTerm.trim() || selectedTypes.length > 0) {
+            setIsSearchMode(true);
+            setIsSearchingMyFiles(true);
+            // Reset to first page when searching
+            setMyFilesPage(1);
+        } else {
+            setIsSearchMode(false);
+            setIsSearchingMyFiles(false);
+        }
+    };
+
+    const handleSortByRecent = () => {
+        setIsSearchMode(false);
+        setMyFilesSearchTerm('');
+        setIsSearchingMyFiles(false);
+        setMyFilesPage(1);
+        setSelectedTypes([]);
+    };
+
+    const handleTypesChange = (types: string[]) => {
+        setSelectedTypes(types);
+        if (types.length > 0 || myFilesSearchTerm.trim()) {
+            setIsSearchMode(true);
+            setMyFilesPage(1);
+        } else {
+            setIsSearchMode(false);
+        }
+    };
+
+    const handleSharedFilesSearch = (searchTerm: string) => {
+        setSharedFilesSearchTerm(searchTerm);
+        if (searchTerm.trim() || selectedSharedTypes.length > 0) {
+            setIsSharedSearchMode(true);
+            setIsSearchingSharedFiles(true);
+            // Reset to first page when searching
+            setSharedFilesPage(1);
+        } else {
+            setIsSharedSearchMode(false);
+            setIsSearchingSharedFiles(false);
+        }
+    };
+
+    const handleSharedSortByRecent = () => {
+        setIsSharedSearchMode(false);
+        setSharedFilesSearchTerm('');
+        setIsSearchingSharedFiles(false);
+        setSharedFilesPage(1);
+        setSelectedSharedTypes([]);
+        setSelectedAuthorId(null);
+    };
+
+    const handleSharedTypesChange = (types: string[]) => {
+        setSelectedSharedTypes(types);
+        if (types.length > 0 || sharedFilesSearchTerm.trim()) {
+            setIsSharedSearchMode(true);
+            setSharedFilesPage(1);
+        } else {
+            setIsSharedSearchMode(false);
+        }
+    };
+
+    const handleAuthorChange = (authorId: number | null) => {
+        setSelectedAuthorId(authorId);
+        if (authorId !== null || selectedSharedTypes.length > 0 || sharedFilesSearchTerm.trim()) {
+            setIsSharedSearchMode(true);
+            setSharedFilesPage(1);
+        } else {
+            setIsSharedSearchMode(false);
+        }
+    };
+
+    // Grouped actions handlers
+    const handleMyFilesGroupedAction = async (action: string, fileIds: number[], filename?: string) => {
+        switch (action) {
+            case 'export':
+                await exportFilesToZip(fileIds, myFiles, filename);
+                break;
+            case 'delete':
+                // Delete action is handled by FileGroupDeleteDialog in FileSection
+                break;
+            default:
+                console.warn('Unknown grouped action:', action);
+        }
+    };
+
+    const handleSharedFilesGroupedAction = async (action: string, fileIds: number[], filename?: string) => {
+        switch (action) {
+            case 'export':
+                await exportFilesToZip(fileIds, sharedFiles, filename);
+                break;
+            default:
+                console.warn('Unknown grouped action:', action);
+        }
+    };
+
+    // Export files to zip function
+    const exportFilesToZip = async (fileIds: number[], files: Resource[], customFilename?: string) => {
+        try {
+            const selectedFiles = files.filter(file => fileIds.includes(file.id));
+            
+            if (selectedFiles.length === 0) {
+                toast.error(t('files.groupedActions.export.error.noFiles'));
+                return;
+            }
+
+            // Show loading toast
+            const loadingToast = toast.loading(t('files.groupedActions.export.loading', { count: selectedFiles.length }));
+
+            // Import JSZip dynamically
+            const JSZip = (await import('jszip')).default;
+            const zip = new JSZip();
+
+            // Add files to zip
+            for (const file of selectedFiles) {
+                try {
+                    const response = await fetch(file.url);
+                    if (!response.ok) {
+                        throw new Error(`Failed to fetch ${file.name}`);
+                    }
+                    const blob = await response.blob();
+                    zip.file(file.name, blob);
+                } catch (error) {
+                    console.error(`Failed to fetch file ${file.name}:`, error);
+                    // Continue with other files even if one fails
+                }
+            }
+
+            // Generate zip file
+            const zipBlob = await zip.generateAsync({ 
+                type: 'blob',
+                compression: 'DEFLATE',
+                compressionOptions: {
+                    level: 6
+                }
+            });
+            
+            // Create download link
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(zipBlob);
+            link.download = customFilename || `files-export-${new Date().toISOString().split('T')[0]}.zip`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Clean up
+            URL.revokeObjectURL(link.href);
+            
+            // Update toast
+            toast.dismiss(loadingToast);
+            toast.success(t('files.groupedActions.export.success', { count: selectedFiles.length }));
+            
+        } catch (error) {
+            console.error('Export to zip failed:', error);
+            toast.error(t('files.groupedActions.export.error.general'));
+        }
+    };
+
+    // Handle search loading state
+    useEffect(() => {
+        if (isSearchMode && searchLoading) {
+            setIsSearchingMyFiles(true);
+        } else if (isSearchMode && !searchLoading) {
+            setIsSearchingMyFiles(false);
+        }
+    }, [isSearchMode, searchLoading]);
+
+    useEffect(() => {
+        if (isSharedSearchMode && sharedSearchLoading) {
+            setIsSearchingSharedFiles(true);
+        } else if (isSharedSearchMode && !sharedSearchLoading) {
+            setIsSearchingSharedFiles(false);
+        }
+    }, [isSharedSearchMode, sharedSearchLoading]);
+
+    // Load authors for shared files dropdown
+    const { data: authorsData } = useQuery(GET_AUTHORS_WHO_SHARED_WITH_USER, {
+        variables: { userId: userData?.getUserInfo?.id },
+        skip: !userData?.getUserInfo?.id,
+        fetchPolicy: 'cache-and-network',
+    });
+
+    useEffect(() => {
+        if (authorsData?.getAuthorsWhoSharedWithUser) {
+            type AuthorGQL = { id: string | number; email: string; profilePicture?: string | null };
+            const normalized = (authorsData.getAuthorsWhoSharedWithUser as AuthorGQL[])
+                .filter(Boolean)
+                .map((a) => ({ id: Number(a.id), email: a.email, profilePicture: a.profilePicture ?? null }));
+            setAuthors(normalized);
+        }
+    }, [authorsData]);
 
     return (
         <div className="py-6 space-y-6">
@@ -82,6 +365,14 @@ const FilesPage: React.FC = () => {
                     onFileDeleted={handleFileDeleted}
                     myContacts={acceptedContacts}
                     showUploadButton={true}
+                    pagination={myFilesPagination}
+                    onPageChange={handleMyFilesPageChange}
+                    onSearch={handleMyFilesSearch}
+                    onSortByRecent={handleSortByRecent}
+                    isSearching={isSearchingMyFiles}
+                    selectedTypes={selectedTypes}
+                    onTypesChange={handleTypesChange}
+                    onGroupedAction={handleMyFilesGroupedAction}
                 />
 
                 {/* Fichiers partagés */}
@@ -94,6 +385,17 @@ const FilesPage: React.FC = () => {
                         'files.emptyState.noSharedFilesDescription',
                     )}
                     isShared={true}
+                    pagination={sharedFilesPagination}
+                    onPageChange={handleSharedFilesPageChange}
+                    onSearch={handleSharedFilesSearch}
+                    onSortByRecent={handleSharedSortByRecent}
+                    isSearching={isSearchingSharedFiles}
+                    selectedTypes={selectedSharedTypes}
+                    onTypesChange={handleSharedTypesChange}
+                    authorOptions={authors}
+                    selectedAuthorId={selectedAuthorId}
+                    onAuthorChange={handleAuthorChange}
+                    onGroupedAction={handleSharedFilesGroupedAction}
                 />
             </div>
         </div>

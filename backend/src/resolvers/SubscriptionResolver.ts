@@ -14,7 +14,7 @@ class SubscriptionResolver {
     ): Promise<Subscription> {
         const user = await User.findOneBy({ id: userId });
         if (!user) {
-            throw new Error('L\'utilisateur demandé n\'a pas été trouvé');
+            throw new Error("L'utilisateur demandé n'a pas été trouvé");
         }
         const paidAt = new Date();
 
@@ -34,10 +34,12 @@ class SubscriptionResolver {
     ): Promise<string> {
         const user = await User.findOneBy({ id: userId });
         if (!user || !user.subscription) {
-            throw new Error('L\'utilisateur ou l\'abonnement demandé n\'a pas été trouvé');
+            throw new Error(
+                "L'utilisateur ou l'abonnement demandé n'a pas été trouvé",
+            );
         }
 
-        try {   
+        try {
             await Subscription.delete({ id: user.subscription.id });
             user.subscription = null;
             await user.save();

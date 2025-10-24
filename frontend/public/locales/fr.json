@@ -7,7 +7,10 @@
         "cancel": "Annuler",
         "delete": "Supprimer",
         "add": "Ajouter",
-        "sending": "Envoi..."
+        "sending": "Envoi...",
+        "sent": "Envoyé !",
+        "back": "Retour",
+        "close": "Fermer"
     },
     "profile": {
         "title": "Mon profil",
@@ -26,7 +29,12 @@
             }
         },
         "actions": {
-            "save": "Enregistrer"
+            "save": "Enregistrer",
+            "changePassword": {
+                "label": "Changer de mot de passe",
+                "description": "Vous recevrez un email avec un lien pour réinitialiser votre mot de passe",
+                "mailSent": "Email envoyé !"
+            }
         },
         "avatar": {
             "tooltip": "Cliquez pour changer votre photo de profil",
@@ -54,6 +62,77 @@
         "actions": {
             "addFiles": "Ajouter des fichiers"
         },
+        "groupedActions": {
+            "selectFiles": "Sélectionnez des fichiers pour effectuer des actions groupées",
+            "selected": "{{count}} fichier(s) sélectionné(s)",
+            "selectAction": "Sélectionner une action...",
+            "share": "Partager",
+            "report": "Signaler",
+            "delete": "Supprimer",
+            "execute": "Exécuter",
+            "clear": "Effacer la sélection",
+            "export": {
+                "label": "Exporter en ZIP",
+                "loading": "Création de l'archive ZIP avec {{count}} fichier(s)...",
+                "success": "{{count}} fichier(s) exporté(s) en ZIP avec succès",
+                "error": {
+                    "noFiles": "Aucun fichier sélectionné pour l'export",
+                    "general": "Erreur lors de la création de l'archive ZIP"
+                }
+            }
+        },
+        "groupDeleteDialog": {
+            "title": "Confirmer les suppressions multiples",
+            "description": "Êtes-vous sûr de vouloir supprimer {{count}} fichier(s) ? Cette action est irréversible.",
+            "cancel": "Annuler",
+            "confirm": "Supprimer {{count}} fichier(s)",
+            "error": "Erreur lors de la suppression des fichiers",
+            "success": "{{count}} fichier(s) supprimé(s) avec succès",
+            "partialSuccess": "{{success}} sur {{total}} fichiers supprimés avec succès"
+        },
+        "groupShareDialog": {
+            "title": "Partager plusieurs fichiers",
+            "description": "Partager {{count}} fichier(s) avec vos contacts",
+            "button": "Partager {{count}} fichier(s) avec {{contacts}} contact(s)",
+            "error": {
+                "noSelection": "Veuillez sélectionner au moins un contact",
+                "sharing": "Erreur lors du partage des fichiers"
+            },
+            "success": "{{count}} fichier(s) partagé(s) avec {{contacts}} contact(s) avec succès",
+            "partialSuccess": "{{success}} sur {{total}} opérations de partage terminées avec succès"
+        },
+        "groupReportDialog": {
+            "title": "Signaler plusieurs fichiers",
+            "description": "Signaler {{count}} fichier(s) pour contenu inapproprié",
+            "button": "Signaler {{count}} fichier(s)",
+            "error": "Erreur lors du signalement des fichiers",
+            "success": "{{count}} fichier(s) signalé(s) avec succès",
+            "partialSuccess": "{{success}} sur {{total}} fichiers signalés avec succès",
+            "confirm": {
+                "title": "Confirmer les signalements multiples",
+                "description": "Êtes-vous sûr de vouloir signaler {{count}} fichier(s) pour {{reason}} ?",
+                "button": "Signaler {{count}} fichier(s)"
+            }
+        },
+        "groupExportDialog": {
+            "title": "Exporter les fichiers en ZIP",
+            "description": "Créer une archive ZIP avec {{count}} fichier(s)",
+            "filenameLabel": "Nom du fichier ZIP",
+            "placeholder": "Entrez le nom du fichier...",
+            "help": "L'extension .zip sera ajoutée automatiquement si elle n'est pas fournie",
+            "createZip": "Créer le ZIP"
+        },
+        "compactMode": "Mode réduit",
+        "toggleCompactMode": "Basculer en mode réduit",
+        "search": {
+            "placeholder": "Rechercher des fichiers par nom..."
+        },
+        "sortByRecent": "Trier par plus récent",
+        "reset": "Réinitialiser par défaut",
+        "results": "résultats",
+        "filterByType": "Filtrer par type",
+        "filterByContact": "Filtrer par contact",
+        "allContacts": "Tous les contacts",
         "errors": {
             "invalidResourceId": "ID de ressource non valide",
             "deleting": "Suppression en cours...",
@@ -63,21 +142,87 @@
             "loadError": "Erreur lors du chargement des fichiers"
         },
         "uploadNew": "Télécharger un nouveau fichier",
-        "search": "Rechercher des fichiers",
         "filter": "Filtrer",
+        "filterTypes": "Types",
+        "filterContacts": "Contacts",
+        "types": {
+            "image": "Image",
+            "video": "Vidéo",
+            "pdf": "PDF",
+            "audio": "Audio",
+            "archive": "Archive",
+            "document": "Document",
+            "spreadsheet": "Tableur",
+            "code": "Code"
+        },
         "emptyState": {
             "noFilesDescription": "Téléchargez votre premier fichier pour le partager avec vos contacts.",
             "noSharedFilesDescription": "Vos contacts n'ont pas encore partagé de fichiers avec vous."
+        },
+        "pagination": {
+            "showing": "Affichage de {{start}} à {{end}} sur {{total}} fichiers",
+            "page": "Page {{current}} sur {{total}}",
+            "previous": "Précédent",
+            "next": "Suivant"
         }
     },
     "upload": {
         "title": "Télécharger un fichier",
+        "page": {
+            "deposit": {
+                "title": "Déposer votre fichier",
+                "description": "Téléchargez un fichier pour le partager avec vos contacts",
+                "dropBox": {
+                    "title": "Déposez votre fichier permanent ici",
+                    "supportedTypes": "Supporte les images, documents, vidéos, et plus",
+                    "notice": "Les fichiers seront conservés indéfiniment"
+                }
+            },
+            "tempLink": {
+                "title": "Générer un lien temporaire",
+                "description": "Téléchargez un fichier pour générer un lien temporaire qui expirera dans 30 minutes",
+                "dropBox": {
+                    "title": "Téléchargez votre fichier temporaire ici",
+                    "supportedTypes": "Supporte les images, documents, vidéos, et plus",
+                    "notice": "Taille maximale : 10MB (utilisateurs non connectés et sans abonnement) • Illimitée (connectés)"
+                },
+                "generatedLinks": "Liens générés",
+                "actions": {
+                    "generate": "Générer un lien",
+                    "copy": "Copier le lien",
+                    "view": "Ouvrir dans le navigateur",
+                    "download": "Télécharger le fichier",
+                    "delete": "Supprimer le lien"
+                },
+                "toast": {
+                    "success": "Le lien a été généré avec succès",
+                    "error": "Erreur lors de la génération du lien",
+                    "copy": "Le lien a été copié avec succès",
+                    "delete": "Le lien a été supprimé avec succès",
+                    "fileTooLarge": "La taille du fichier dépasse la limite de 10MB pour les utilisateurs non-abonnés"
+                },
+                "type": {
+                    "browser": "Voir dans le navigateur",
+                    "download": "Télécharger uniquement"
+                },
+                "expired": "Expiré",
+                "linkExpired": "Le lien a expiré",
+                "generating": "Génération du lien...",
+                "remaining": "restant"
+            }
+        },
+        "blocked": {
+            "line1": "Le depot de fichier est bloqué",
+            "line2": "pour les utilisateurs non enregistrés",
+            "button": "S'inscrire"
+        },
         "dragDrop": {
             "title": "Transférez votre fichier",
             "dropHere": "Déposez le fichier ici",
             "releaseToUpload": "Relâchez pour télécharger",
             "browse": "parcourez",
-            "supportedTypes": "Supporte les images, documents, vidéos, et plus"
+            "supportedTypes": "Supporte les images, documents, vidéos, et plus",
+            "maxSize": "Taille maximale du fichier : 10MB"
         },
         "selectedFile": {
             "title": "Fichier sélectionné",
@@ -92,11 +237,11 @@
             "save": "Enregistrer le fichier"
         },
         "success": {
-            "message": "✅ Le fichier a été envoyé et enregistré avec succès !",
+            "message": "Le fichier a été envoyé et enregistré avec succès !",
             "shareNow": "Partager maintenant"
         },
         "errors": {
-            "upload": "❌ Une erreur s'est produite. Veuillez réessayer.",
+            "upload": "Une erreur s'est produite. Veuillez réessayer.",
             "fileUpload": "Erreur lors de l'upload du fichier",
             "storageLimitExceeded": "❌ Limite de stockage dépassée. Ce fichier dépasserait votre limite de 20MB.",
             "share": {
@@ -227,14 +372,26 @@
             },
             "actions": {
                 "delete": "Supprimer"
+            },
+            "role": {
+                "success": "Rôle utilisateur mis à jour avec succès",
+                "error": "Erreur lors de la mise à jour du rôle"
+            },
+            "delete": {
+                "title": "Supprimer l'utilisateur",
+                "description": "Êtes-vous sûr de vouloir supprimer l'utilisateur {{email}} ? Cette action est irréversible.",
+                "confirm": "Supprimer",
+                "success": "Utilisateur supprimé avec succès",
+                "error": "Erreur lors de la suppression de l'utilisateur"
             }
         },
         "files": {
             "title": "Gestion des fichiers",
             "description": "Surveiller et gérer les fichiers téléchargés et le stockage",
             "viewAll": "Voir tous les fichiers",
+            "sharedBy": "Partagé par",
             "search": {
-                "placeholder": "Rechercher un fichier par nom..."
+                "placeholder": "Rechercher des fichiers par nom..."
             },
             "stats": {
                 "total": "Total fichiers",
@@ -244,6 +401,16 @@
                 "title": "Liste des fichiers",
                 "empty": "Aucun fichier trouvé",
                 "noResults": "Aucun fichier ne correspond à votre recherche"
+            },
+            "actions": {
+                "download": "Télécharger",
+                "delete": "Supprimer",
+                "downloadSuccess": "Fichier téléchargé avec succès"
+            },
+            "delete": {
+                "description": "Êtes-vous sûr de vouloir supprimer le fichier \"{{name}}\" ? Cette action est irréversible.",
+                "success": "Fichier supprimé avec succès",
+                "error": "Erreur lors de la suppression du fichier"
             }
         },
         "reports": {
@@ -260,6 +427,12 @@
                 "title": "Liste des signalements",
                 "empty": "Aucun signalement trouvé",
                 "noResults": "Aucun signalement ne correspond à votre recherche"
+            },
+            "details": {
+                "reporter": "Signalé par",
+                "fileName": "Nom du fichier",
+                "fileOwner": "Propriétaire du fichier",
+                "content": "Détails du signalement"
             }
         },
         "logs": {
@@ -334,14 +507,34 @@
         "disclaimer": "Wildtransfer est un projet d'étude réalisé par des étudiants de la Wild Code School. Pour des raisons de sécurité nous vous conseillons de ne pas fournir des informations sensibles ou personnelles. Utilisez des emails temporaires pour vous inscrire ainsi que des mots de passe différents de ceux utilisés habituellement et ne partagez pas de fichiers sensibles."
     },
     "about": {
-        "title": "À propos de Wild Transfer",
-        "subtitle": "Une plateforme moderne pour transférer vos fichiers en toute sérénité",
-        "description1": "est une solution simple, rapide et sécurisée pour le partage de fichiers. Elle s'adresse aussi bien aux professionnels qu'aux particuliers, avec une interface intuitive pensée pour une expérience fluide.",
-        "description2": "Notre mission est de garantir un service fiable et respectueux de votre vie privée. Nous utilisons des technologies modernes pour assurer la sécurité et la confidentialité de vos données.",
-        "description3": "Développée par une équipe de développeurs, la plateforme évolue en permanence pour répondre aux nouveaux usages et proposer des fonctionnalités adaptées à vos besoins.",
-        "contactText": "Pour toute question ou suggestion, n'hésitez pas à nous contacter via la",
-        "contactLink": "page de contact",
-        "description": "En savoir plus sur Wild Transfer"
+        "hero": {
+            "title": "À propos de Wild Transfer",
+            "subtitle": "Une plateforme moderne pour transférer vos fichiers en toute sérénité"
+        },
+        "badge": {
+            "studentProject": "Projet étudiant"
+        },
+        "sections": {
+            "whatIs": {
+                "title": "Qu'est-ce que Wild Transfer ?",
+                "description": "est une solution simple, rapide et sécurisée pour le partage de fichiers. Elle s'adresse aussi bien aux professionnels qu'aux particuliers, avec une interface intuitive pensée pour une expérience fluide."
+            },
+            "mission": {
+                "title": "Notre mission",
+                "description": "Notre mission est de garantir un service fiable et respectueux de votre vie privée. Nous utilisons des technologies modernes pour assurer la sécurité et la confidentialité de vos données."
+            },
+            "development": {
+                "title": "Développement",
+                "description": "Ce projet a été développé par des étudiants de la Wild Code School dans un délai de quelques mois, démontrant notre capacité à créer des solutions innovantes et fonctionnelles en un temps record."
+            },
+            "quality": {
+                "title": "Qualité et bonnes pratiques",
+                "description": "Bien que ce soit un projet d'étude, nous avons mis l'accent sur la qualité du code, l'expérience utilisateur et la sécurité, en utilisant les meilleures pratiques de développement moderne."
+            }
+        },
+        "meta": {
+            "description": "En savoir plus sur Wild Transfer"
+        }
     },
     "contact": {
         "title": "Mes contacts",
@@ -430,7 +623,8 @@
         "details": {
             "reporter": "Auteur du rapport",
             "fileOwner": "Propriétaire du fichier",
-            "fileName": "Nom du fichier"
+            "fileName": "Nom du fichier",
+            "content": "Détails du signalement"
         },
         "reasons": {
             "corrupted": "Fichier corrompu ou illisible",
@@ -461,26 +655,31 @@
         },
         "cta": {
             "title": "Prêt à commencer ?",
+            "description": "Inscrivez-vous gratuitement en quelques secondes pour accéder à toutes nos fonctionnalités",
             "createAccount": "Créer un compte",
             "viewSubscriptions": "Voir nos abonnements"
         },
         "features": {
             "title": "Fonctionnalités principales",
-            "security": {
-                "title": "Sécurité maximale",
-                "description": "Vos fichiers sont cryptés et stockés de manière sécurisée."
+            "deposit": {
+                "title": "Deposer vos fichiers de manière permanente",
+                "description": "Vos fichiers sont cryptés et stockés de manière sécurisée.",
+                "benefit": "Vos fichiers sont conservés indéfiniment"
             },
-            "transfer": {
-                "title": "Transfert rapide",
-                "description": "Transférez vos fichiers rapidement avec notre infrastructure optimisée."
+            "linking": {
+                "title": "Générer des liens temporaires de fichiers",
+                "description": "Générez des liens de partage temporaires avec expiration automatique.",
+                "benefit": "Transfert rapide"
             },
             "contacts": {
                 "title": "Gestion des contacts",
-                "description": "Organisez vos contacts et partagez facilement vos fichiers."
+                "description": "Organisez vos contacts et partagez facilement vos fichiers.",
+                "benefit": "Organisez et gérez vos contacts facilement"
             },
-            "support": {
-                "title": "Support 24/7",
-                "description": "Notre équipe est disponible pour vous aider à tout moment."
+            "more": {
+                "title": "Simplicité, ergonomie, prévisualisation et plus",
+                "description": "Interface intuitive avec prévisualisation des fichiers, glisser-déposer, et toutes les fonctionnalités modernes pour une expérience utilisateur exceptionnelle.",
+                "benefit": "Interface moderne et intuitive"
             }
         }
     },
@@ -549,13 +748,15 @@
             "description": "Veuillez vérifier votre boîte mail afin de finaliser votre inscription.",
             "resendEmail": "Renvoyer un email",
             "success": "Votre email a bien été confirmé, vous pouvez vous connecter !",
-            "error": "Le code saisie est incorrect ou a expiré, veuillez réessayer."
+            "error": "Le code saisie est incorrect ou a expiré, veuillez réessayer.",
+            "emailResent": "Un email de confirmation a été renvoyé à votre adresse email."
         },
         "protectedRoute": {
             "error": "Vous devez être connecté pour accéder à cette page"
         }
     },
     "fileCard": {
+        "scan": "Analyser",
         "download": "Télécharger",
         "moreOptions": "Plus d'options",
         "sharedBy": "Partagé par",
@@ -563,7 +764,8 @@
             "info": "Informations",
             "share": "Partager",
             "report": "Signaler",
-            "delete": "Supprimer"
+            "delete": "Supprimer",
+            "edit": "Modifier"
         },
         "info": {
             "title": "Informations du fichier",
@@ -587,7 +789,8 @@
                 "sharing": "Erreur lors du partage du fichier",
                 "console": "Erreur lors du partage du fichier"
             },
-            "success": "Fichier partagé avec succès"
+            "success": "Fichier partagé avec succès",
+            "alreadyShared": "Déjà partagé"
         },
         "report": {
             "title": "Signaler ce fichier",
@@ -628,7 +831,28 @@
         },
         "preview": {
             "audio": "Votre navigateur ne supporte pas la lecture audio",
-            "video": "Votre navigateur ne supporte pas la lecture vidéo"
+            "video": "Votre navigateur ne supporte pas la lecture vidéo",
+            "pdf": "PDF non disponible"
+        },
+        "edit": {
+            "title": "Modifier le fichier",
+            "description": "Mettre à jour la description de \"{{fileName}}\"",
+            "placeholder": "Saisissez une nouvelle description...",
+            "save": "Enregistrer",
+            "success": "Description mise à jour avec succès",
+            "error": "Erreur lors de la mise à jour de la description"
+        },
+        "scanDialog": {
+            "title": "Analyse antivirus",
+            "description": "Statut et résultats de l'analyse VirusTotal",
+            "analysisId": "ID d'analyse",
+            "scanDate": "Date d'analyse",
+            "threatCount": "Nombre de menaces potentielles",
+            "error": "Erreur",
+            "refresh": "Rafraîchir",
+            "loading": "chargement...",
+            "clean": "Indétecté",
+            "infected": "Possiblement infecté"
         }
     },
     "meta": {
@@ -659,6 +883,10 @@
         "forgotPassword": {
             "title": "Mot de passe oublié",
             "description": "Récupération de mot de passe"
+        },
+        "resetPassword": {
+            "title": "Réinitialiser le mot de passe",
+            "description": "Réinitialisez votre mot de passe"
         },
         "payment": {
             "title": "Paiement d'abonnement",
@@ -731,5 +959,38 @@
         "memberDescription": "Membre de la plateforme",
         "joinedOn": "Membre depuis le",
         "unknownDate": "Date inconnue"
+    },
+    "password": {
+        "forgot": {
+            "form": {
+                "title": "Mot de passe oublié",
+                "description": "Récupération de mot de passe",
+                "submit": "Récupérer le mot de passe",
+                "email": {
+                    "label": "Email",
+                    "placeholder": "exemple@exemple.com"
+                }
+            }
+        },
+        "reset": {
+            "form": {
+                "title": "Réinitialisation de mot de passe pour {{email}}",
+                "description": "Entrez votre nouveau mot de passe ci-dessous",
+                "password": {
+                    "label": "Mot de passe",
+                    "placeholder": "Votre nouveau mot de passe"
+                },
+                "confirmPassword": {
+                    "label": "Confirmer le mot de passe",
+                    "placeholder": "Confirmez votre nouveau mot de passe"
+                },
+                "submit": "Réinitialiser le mot de passe",
+                "invalidLink": "Lien de réinitialisation invalide",
+                "passwordsDoNotMatch": "Les mots de passe ne correspondent pas",
+                "passwordTooShort": "Le mot de passe doit contenir au moins 12 caractères",
+                "success": "Mot de passe réinitialisé avec succès"
+            },
+            "loading": "Chargement..."
+        }
     }
 }

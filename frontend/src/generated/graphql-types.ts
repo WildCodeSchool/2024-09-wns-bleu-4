@@ -18,20 +18,6 @@ export type Scalars = {
   DateTimeISO: { input: any; output: any; }
 };
 
-export type Comment = {
-  __typename?: 'Comment';
-  content: Scalars['String']['output'];
-  id: Scalars['ID']['output'];
-  resource: Resource;
-  user: User;
-};
-
-export type CommentInput = {
-  content: Scalars['String']['input'];
-  resource: Scalars['ID']['input'];
-  user: Scalars['ID']['input'];
-};
-
 export type Contact = {
   __typename?: 'Contact';
   createdAt: Scalars['DateTimeISO']['output'];
@@ -73,18 +59,6 @@ export type CreateReportInput = {
   userId: Scalars['ID']['input'];
 };
 
-export type Like = {
-  __typename?: 'Like';
-  id: Scalars['ID']['output'];
-  resource: Resource;
-  user: User;
-};
-
-export type LikeInput = {
-  resource: Scalars['ID']['input'];
-  user: Scalars['ID']['input'];
-};
-
 /** System log type enum */
 export enum LogType {
   Error = 'ERROR',
@@ -100,8 +74,6 @@ export type Mutation = {
   clearSystemLogs: Scalars['String']['output'];
   confirmEmail: Scalars['String']['output'];
   confirmPayment: Scalars['Boolean']['output'];
-  createComment: Comment;
-  createLike: Like;
   createPaymentIntent: Scalars['String']['output'];
   createReport: Report;
   createReportByIds: Report;
@@ -111,8 +83,6 @@ export type Mutation = {
   createSystemLog: SystemLog;
   createUser: User;
   createUserAccess: Scalars['String']['output'];
-  deleteComment: Scalars['String']['output'];
-  deleteLike: Scalars['String']['output'];
   deleteReport: Scalars['String']['output'];
   deleteResource: Scalars['String']['output'];
   deleteSubscription: Scalars['String']['output'];
@@ -123,9 +93,12 @@ export type Mutation = {
   refuseContactRequest: Contact;
   register: Scalars['String']['output'];
   removeContact: Scalars['Boolean']['output'];
-  resetSendCode: Scalars['String']['output'];
+  resendConfirmationEmail: Scalars['String']['output'];
+  resetPassword: Scalars['String']['output'];
+  resetPasswordSendCode: Scalars['String']['output'];
   sendContactRequest: Contact;
   updateProfilePicture: User;
+  updateResourceDescription: Resource;
   updateUserRole: Scalars['String']['output'];
 };
 
@@ -148,16 +121,6 @@ export type MutationConfirmEmailArgs = {
 export type MutationConfirmPaymentArgs = {
   clientSecret: Scalars['String']['input'];
   paymentMethodId: Scalars['String']['input'];
-};
-
-
-export type MutationCreateCommentArgs = {
-  newComment: CommentInput;
-};
-
-
-export type MutationCreateLikeArgs = {
-  data: LikeInput;
 };
 
 
@@ -210,16 +173,6 @@ export type MutationCreateUserAccessArgs = {
 };
 
 
-export type MutationDeleteCommentArgs = {
-  commentToDelete: CommentInput;
-};
-
-
-export type MutationDeleteLikeArgs = {
-  likeToDelete: LikeInput;
-};
-
-
 export type MutationDeleteReportArgs = {
   reportToDelete: ReportInput;
 };
@@ -266,7 +219,19 @@ export type MutationRemoveContactArgs = {
 };
 
 
-export type MutationResetSendCodeArgs = {
+export type MutationResendConfirmationEmailArgs = {
+  email: Scalars['String']['input'];
+  lang: Scalars['String']['input'];
+};
+
+
+export type MutationResetPasswordArgs = {
+  newPassword: Scalars['String']['input'];
+  token: Scalars['String']['input'];
+};
+
+
+export type MutationResetPasswordSendCodeArgs = {
   email: Scalars['String']['input'];
   lang: Scalars['String']['input'];
 };
@@ -282,54 +247,69 @@ export type MutationUpdateProfilePictureArgs = {
 };
 
 
+export type MutationUpdateResourceDescriptionArgs = {
+  description: Scalars['String']['input'];
+  id: Scalars['ID']['input'];
+};
+
+
 export type MutationUpdateUserRoleArgs = {
   id: Scalars['ID']['input'];
   role: UserRole;
 };
 
+export type PaginatedResources = {
+  __typename?: 'PaginatedResources';
+  currentPage: Scalars['Float']['output'];
+  hasNextPage: Scalars['Boolean']['output'];
+  hasPreviousPage: Scalars['Boolean']['output'];
+  resources: Array<Resource>;
+  totalCount: Scalars['Float']['output'];
+  totalPages: Scalars['Float']['output'];
+};
+
+export type PaginationInput = {
+  limit?: Scalars['Float']['input'];
+  page?: Scalars['Float']['input'];
+};
+
 export type Query = {
   __typename?: 'Query';
+  checkUserExists: Scalars['Boolean']['output'];
   getAllReports: Array<Report>;
   getAllResources: Array<Resource>;
   getAllUsers: Array<User>;
-  getCommentsByResource: Array<Comment>;
-  getCommentsByUser: Array<Comment>;
-  getLikesByResource: Array<Like>;
-  getLikesByUser: Array<Like>;
+  getAuthorsWhoSharedWithUser: Array<User>;
   getMyContacts: ContactsResponse;
   getPaymentIntent: Scalars['String']['output'];
   getReportsByResource: Array<Report>;
   getReportsByUser: Array<Report>;
   getResourceById?: Maybe<Resource>;
+  getResourceScanResult?: Maybe<ResourceScanResult>;
+  getResourceScanStatus?: Maybe<Resource>;
   getResourcesByUserId: Array<Resource>;
+  getResourcesByUserIdPaginated: PaginatedResources;
   getSystemLogById?: Maybe<SystemLog>;
   getSystemLogs: Array<SystemLog>;
   getUserInfo: UserInfo;
   getUserSharedResources: Array<Resource>;
+  getUserSharedResourcesPaginated: PaginatedResources;
   getUserStripeCustomerId?: Maybe<Scalars['String']['output']>;
   getUserSubscription?: Maybe<Subscription>;
   getUserTotalFileSize: Scalars['Float']['output'];
   getUsersWithAccess: Array<User>;
+  searchResourcesByUserId: PaginatedResources;
+  searchSharedResourcesByUserId: PaginatedResources;
 };
 
 
-export type QueryGetCommentsByResourceArgs = {
-  id: Scalars['ID']['input'];
+export type QueryCheckUserExistsArgs = {
+  email: Scalars['String']['input'];
 };
 
 
-export type QueryGetCommentsByUserArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type QueryGetLikesByResourceArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type QueryGetLikesByUserArgs = {
-  id: Scalars['ID']['input'];
+export type QueryGetAuthorsWhoSharedWithUserArgs = {
+  userId: Scalars['ID']['input'];
 };
 
 
@@ -353,7 +333,23 @@ export type QueryGetResourceByIdArgs = {
 };
 
 
+export type QueryGetResourceScanResultArgs = {
+  resourceId: Scalars['ID']['input'];
+};
+
+
+export type QueryGetResourceScanStatusArgs = {
+  resourceId: Scalars['ID']['input'];
+};
+
+
 export type QueryGetResourcesByUserIdArgs = {
+  userId: Scalars['ID']['input'];
+};
+
+
+export type QueryGetResourcesByUserIdPaginatedArgs = {
+  pagination: PaginationInput;
   userId: Scalars['ID']['input'];
 };
 
@@ -375,6 +371,12 @@ export type QueryGetUserSharedResourcesArgs = {
 };
 
 
+export type QueryGetUserSharedResourcesPaginatedArgs = {
+  pagination: PaginationInput;
+  userId: Scalars['ID']['input'];
+};
+
+
 export type QueryGetUserSubscriptionArgs = {
   userId: Scalars['ID']['input'];
 };
@@ -387,6 +389,18 @@ export type QueryGetUserTotalFileSizeArgs = {
 
 export type QueryGetUsersWithAccessArgs = {
   resourceId: Scalars['ID']['input'];
+};
+
+
+export type QuerySearchResourcesByUserIdArgs = {
+  search: SearchInput;
+  userId: Scalars['ID']['input'];
+};
+
+
+export type QuerySearchSharedResourcesByUserIdArgs = {
+  search: SearchInput;
+  userId: Scalars['ID']['input'];
 };
 
 /** The reasons for reporting a resource */
@@ -419,15 +433,19 @@ export type ReportInput = {
 
 export type Resource = {
   __typename?: 'Resource';
-  comments: Array<Comment>;
   description: Scalars['String']['output'];
   formattedSize: Scalars['String']['output'];
   id: Scalars['Float']['output'];
-  likes: Array<Like>;
+  md5Hash: Scalars['String']['output'];
   name: Scalars['String']['output'];
   path: Scalars['String']['output'];
   reports: Array<Report>;
+  scanAnalysisId?: Maybe<Scalars['String']['output']>;
+  scanDate?: Maybe<Scalars['DateTimeISO']['output']>;
+  scanError?: Maybe<Scalars['String']['output']>;
+  scanStatus: ScanStatus;
   size: Scalars['Float']['output'];
+  threatCount?: Maybe<Scalars['Float']['output']>;
   url: Scalars['String']['output'];
   user: User;
   usersWithAccess: Array<User>;
@@ -435,11 +453,40 @@ export type Resource = {
 
 export type ResourceInput = {
   description: Scalars['String']['input'];
+  md5Hash?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
   path: Scalars['String']['input'];
   size: Scalars['Float']['input'];
   url: Scalars['String']['input'];
   userId: Scalars['ID']['input'];
+};
+
+export type ResourceScanResult = {
+  __typename?: 'ResourceScanResult';
+  analysisId?: Maybe<Scalars['String']['output']>;
+  error?: Maybe<Scalars['String']['output']>;
+  isProcessing: Scalars['Boolean']['output'];
+  resourceId: Scalars['ID']['output'];
+  scanDate?: Maybe<Scalars['DateTimeISO']['output']>;
+  status: ScanStatus;
+  threatCount?: Maybe<Scalars['Float']['output']>;
+};
+
+/** Status of antivirus scan */
+export enum ScanStatus {
+  Clean = 'CLEAN',
+  Error = 'ERROR',
+  Infected = 'INFECTED',
+  Pending = 'PENDING',
+  Scanning = 'SCANNING'
+}
+
+export type SearchInput = {
+  authorId?: InputMaybe<Scalars['Float']['input']>;
+  limit?: Scalars['Float']['input'];
+  page?: Scalars['Float']['input'];
+  searchTerm: Scalars['String']['input'];
+  types?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type Subscription = {
@@ -479,13 +526,13 @@ export type User = {
 
 export type UserInfo = {
   __typename?: 'UserInfo';
-  email: Scalars['String']['output'];
-  id: Scalars['ID']['output'];
+  email?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
   isLoggedIn: Scalars['Boolean']['output'];
   isSubscribed?: Maybe<Scalars['Boolean']['output']>;
   profilePicture?: Maybe<Scalars['String']['output']>;
-  role: UserRole;
-  storage: UserStorage;
+  role?: Maybe<UserRole>;
+  storage?: Maybe<UserStorage>;
 };
 
 export type UserInput = {
@@ -637,24 +684,48 @@ export type CreateUserAccessMutationVariables = Exact<{
 
 export type CreateUserAccessMutation = { __typename?: 'Mutation', createUserAccess: string };
 
+export type UpdateResourceDescriptionMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+  description: Scalars['String']['input'];
+}>;
+
+
+export type UpdateResourceDescriptionMutation = { __typename?: 'Mutation', updateResourceDescription: { __typename?: 'Resource', id: number, name: string, description: string, url: string, path: string } };
+
 export type GetAllResourcesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllResourcesQuery = { __typename?: 'Query', getAllResources: Array<{ __typename?: 'Resource', id: number, name: string, description: string, path: string, url: string, size: number, formattedSize: string, user: { __typename?: 'User', id: string, email: string } }> };
+export type GetAllResourcesQuery = { __typename?: 'Query', getAllResources: Array<{ __typename?: 'Resource', id: number, name: string, description: string, path: string, url: string, size: number, formattedSize: string, md5Hash: string, user: { __typename?: 'User', id: string, email: string } }> };
 
 export type GetResourcesByUserIdQueryVariables = Exact<{
   userId: Scalars['ID']['input'];
 }>;
 
 
-export type GetResourcesByUserIdQuery = { __typename?: 'Query', getResourcesByUserId: Array<{ __typename?: 'Resource', description: string, id: number, name: string, path: string, url: string, size: number, formattedSize: string }> };
+export type GetResourcesByUserIdQuery = { __typename?: 'Query', getResourcesByUserId: Array<{ __typename?: 'Resource', description: string, id: number, name: string, path: string, url: string, size: number, formattedSize: string, md5Hash: string }> };
+
+export type GetResourcesByUserIdPaginatedQueryVariables = Exact<{
+  userId: Scalars['ID']['input'];
+  pagination: PaginationInput;
+}>;
+
+
+export type GetResourcesByUserIdPaginatedQuery = { __typename?: 'Query', getResourcesByUserIdPaginated: { __typename?: 'PaginatedResources', totalCount: number, totalPages: number, currentPage: number, hasNextPage: boolean, hasPreviousPage: boolean, resources: Array<{ __typename?: 'Resource', description: string, id: number, name: string, path: string, url: string, size: number, formattedSize: string, md5Hash: string, user: { __typename?: 'User', id: string, email: string, createdAt: any, profilePicture?: string | null } }> } };
 
 export type GetUserSharedResourcesQueryVariables = Exact<{
   userId: Scalars['ID']['input'];
 }>;
 
 
-export type GetUserSharedResourcesQuery = { __typename?: 'Query', getUserSharedResources: Array<{ __typename?: 'Resource', id: number, name: string, description: string, path: string, url: string, size: number, formattedSize: string, user: { __typename?: 'User', id: string, email: string, createdAt: any, profilePicture?: string | null } }> };
+export type GetUserSharedResourcesQuery = { __typename?: 'Query', getUserSharedResources: Array<{ __typename?: 'Resource', id: number, name: string, description: string, path: string, url: string, size: number, formattedSize: string, md5Hash: string, user: { __typename?: 'User', id: string, email: string, createdAt: any, profilePicture?: string | null } }> };
+
+export type GetUserSharedResourcesPaginatedQueryVariables = Exact<{
+  userId: Scalars['ID']['input'];
+  pagination: PaginationInput;
+}>;
+
+
+export type GetUserSharedResourcesPaginatedQuery = { __typename?: 'Query', getUserSharedResourcesPaginated: { __typename?: 'PaginatedResources', totalCount: number, totalPages: number, currentPage: number, hasNextPage: boolean, hasPreviousPage: boolean, resources: Array<{ __typename?: 'Resource', id: number, name: string, description: string, path: string, url: string, size: number, formattedSize: string, md5Hash: string, user: { __typename?: 'User', id: string, email: string, createdAt: any, profilePicture?: string | null } }> } };
 
 export type GetResourceStatsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -667,6 +738,50 @@ export type GetUserTotalFileSizeQueryVariables = Exact<{
 
 
 export type GetUserTotalFileSizeQuery = { __typename?: 'Query', getUserTotalFileSize: number };
+
+export type GetUsersWithAccessQueryVariables = Exact<{
+  resourceId: Scalars['ID']['input'];
+}>;
+
+
+export type GetUsersWithAccessQuery = { __typename?: 'Query', getUsersWithAccess: Array<{ __typename?: 'User', id: string, email: string }> };
+
+export type SearchResourcesByUserIdQueryVariables = Exact<{
+  userId: Scalars['ID']['input'];
+  search: SearchInput;
+}>;
+
+
+export type SearchResourcesByUserIdQuery = { __typename?: 'Query', searchResourcesByUserId: { __typename?: 'PaginatedResources', totalCount: number, totalPages: number, currentPage: number, hasNextPage: boolean, hasPreviousPage: boolean, resources: Array<{ __typename?: 'Resource', description: string, id: number, name: string, path: string, url: string, size: number, formattedSize: string, md5Hash: string, user: { __typename?: 'User', id: string, email: string, createdAt: any, profilePicture?: string | null } }> } };
+
+export type GetResourceScanStatusQueryVariables = Exact<{
+  resourceId: Scalars['ID']['input'];
+}>;
+
+
+export type GetResourceScanStatusQuery = { __typename?: 'Query', getResourceScanStatus?: { __typename?: 'Resource', id: number, name: string, scanStatus: ScanStatus, scanAnalysisId?: string | null, scanDate?: any | null, threatCount?: number | null, scanError?: string | null } | null };
+
+export type GetResourceScanResultQueryVariables = Exact<{
+  resourceId: Scalars['ID']['input'];
+}>;
+
+
+export type GetResourceScanResultQuery = { __typename?: 'Query', getResourceScanResult?: { __typename?: 'ResourceScanResult', resourceId: string, status: ScanStatus, analysisId?: string | null, scanDate?: any | null, threatCount?: number | null, error?: string | null, isProcessing: boolean } | null };
+
+export type SearchSharedResourcesByUserIdQueryVariables = Exact<{
+  userId: Scalars['ID']['input'];
+  search: SearchInput;
+}>;
+
+
+export type SearchSharedResourcesByUserIdQuery = { __typename?: 'Query', searchSharedResourcesByUserId: { __typename?: 'PaginatedResources', totalCount: number, totalPages: number, currentPage: number, hasNextPage: boolean, hasPreviousPage: boolean, resources: Array<{ __typename?: 'Resource', description: string, id: number, name: string, path: string, url: string, size: number, formattedSize: string, user: { __typename?: 'User', id: string, email: string, createdAt: any, profilePicture?: string | null } }> } };
+
+export type GetAuthorsWhoSharedWithUserQueryVariables = Exact<{
+  userId: Scalars['ID']['input'];
+}>;
+
+
+export type GetAuthorsWhoSharedWithUserQuery = { __typename?: 'Query', getAuthorsWhoSharedWithUser: Array<{ __typename?: 'User', id: string, email: string, createdAt: any, profilePicture?: string | null }> };
 
 export type CreateSubscriptionMutationVariables = Exact<{
   userId: Scalars['ID']['input'];
@@ -751,6 +866,14 @@ export type ConfirmEmailMutationVariables = Exact<{
 
 export type ConfirmEmailMutation = { __typename?: 'Mutation', confirmEmail: string };
 
+export type ResendConfirmationEmailMutationVariables = Exact<{
+  email: Scalars['String']['input'];
+  lang: Scalars['String']['input'];
+}>;
+
+
+export type ResendConfirmationEmailMutation = { __typename?: 'Mutation', resendConfirmationEmail: string };
+
 export type DeleteUserMutationVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -773,6 +896,22 @@ export type UpdateProfilePictureMutationVariables = Exact<{
 
 export type UpdateProfilePictureMutation = { __typename?: 'Mutation', updateProfilePicture: { __typename?: 'User', id: string, email: string, profilePicture?: string | null } };
 
+export type ResetPasswordSendCodeMutationVariables = Exact<{
+  email: Scalars['String']['input'];
+  lang: Scalars['String']['input'];
+}>;
+
+
+export type ResetPasswordSendCodeMutation = { __typename?: 'Mutation', resetPasswordSendCode: string };
+
+export type ResetPasswordMutationVariables = Exact<{
+  token: Scalars['String']['input'];
+  newPassword: Scalars['String']['input'];
+}>;
+
+
+export type ResetPasswordMutation = { __typename?: 'Mutation', resetPassword: string };
+
 export type GetAllUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -781,17 +920,24 @@ export type GetAllUsersQuery = { __typename?: 'Query', getAllUsers: Array<{ __ty
 export type GetUserInfoQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUserInfoQuery = { __typename?: 'Query', getUserInfo: { __typename?: 'UserInfo', email: string, isLoggedIn: boolean, id: string, isSubscribed?: boolean | null, role: UserRole, profilePicture?: string | null, storage: { __typename?: 'UserStorage', bytesUsed: string, percentage: number } } };
+export type GetUserInfoQuery = { __typename?: 'Query', getUserInfo: { __typename?: 'UserInfo', email?: string | null, isLoggedIn: boolean, id?: string | null, isSubscribed?: boolean | null, role?: UserRole | null, profilePicture?: string | null, storage?: { __typename?: 'UserStorage', bytesUsed: string, percentage: number } | null } };
 
 export type GetUserIdQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUserIdQuery = { __typename?: 'Query', getUserInfo: { __typename?: 'UserInfo', id: string, email: string } };
+export type GetUserIdQuery = { __typename?: 'Query', getUserInfo: { __typename?: 'UserInfo', id?: string | null, email?: string | null } };
 
 export type GetUserStatsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetUserStatsQuery = { __typename?: 'Query', getAllUsers: Array<{ __typename?: 'User', id: string, role: UserRole, subscription?: { __typename?: 'Subscription', id: string } | null }> };
+
+export type CheckUserExistsQueryVariables = Exact<{
+  email: Scalars['String']['input'];
+}>;
+
+
+export type CheckUserExistsQuery = { __typename?: 'Query', checkUserExists: boolean };
 
 
 export const SendContactRequestDocument = gql`
@@ -1558,6 +1704,44 @@ export function useCreateUserAccessMutation(baseOptions?: Apollo.MutationHookOpt
 export type CreateUserAccessMutationHookResult = ReturnType<typeof useCreateUserAccessMutation>;
 export type CreateUserAccessMutationResult = Apollo.MutationResult<CreateUserAccessMutation>;
 export type CreateUserAccessMutationOptions = Apollo.BaseMutationOptions<CreateUserAccessMutation, CreateUserAccessMutationVariables>;
+export const UpdateResourceDescriptionDocument = gql`
+    mutation UpdateResourceDescription($id: ID!, $description: String!) {
+  updateResourceDescription(id: $id, description: $description) {
+    id
+    name
+    description
+    url
+    path
+  }
+}
+    `;
+export type UpdateResourceDescriptionMutationFn = Apollo.MutationFunction<UpdateResourceDescriptionMutation, UpdateResourceDescriptionMutationVariables>;
+
+/**
+ * __useUpdateResourceDescriptionMutation__
+ *
+ * To run a mutation, you first call `useUpdateResourceDescriptionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateResourceDescriptionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateResourceDescriptionMutation, { data, loading, error }] = useUpdateResourceDescriptionMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      description: // value for 'description'
+ *   },
+ * });
+ */
+export function useUpdateResourceDescriptionMutation(baseOptions?: Apollo.MutationHookOptions<UpdateResourceDescriptionMutation, UpdateResourceDescriptionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateResourceDescriptionMutation, UpdateResourceDescriptionMutationVariables>(UpdateResourceDescriptionDocument, options);
+      }
+export type UpdateResourceDescriptionMutationHookResult = ReturnType<typeof useUpdateResourceDescriptionMutation>;
+export type UpdateResourceDescriptionMutationResult = Apollo.MutationResult<UpdateResourceDescriptionMutation>;
+export type UpdateResourceDescriptionMutationOptions = Apollo.BaseMutationOptions<UpdateResourceDescriptionMutation, UpdateResourceDescriptionMutationVariables>;
 export const GetAllResourcesDocument = gql`
     query GetAllResources {
   getAllResources {
@@ -1568,6 +1752,7 @@ export const GetAllResourcesDocument = gql`
     url
     size
     formattedSize
+    md5Hash
     user {
       id
       email
@@ -1617,6 +1802,7 @@ export const GetResourcesByUserIdDocument = gql`
     url
     size
     formattedSize
+    md5Hash
   }
 }
     `;
@@ -1653,6 +1839,67 @@ export type GetResourcesByUserIdQueryHookResult = ReturnType<typeof useGetResour
 export type GetResourcesByUserIdLazyQueryHookResult = ReturnType<typeof useGetResourcesByUserIdLazyQuery>;
 export type GetResourcesByUserIdSuspenseQueryHookResult = ReturnType<typeof useGetResourcesByUserIdSuspenseQuery>;
 export type GetResourcesByUserIdQueryResult = Apollo.QueryResult<GetResourcesByUserIdQuery, GetResourcesByUserIdQueryVariables>;
+export const GetResourcesByUserIdPaginatedDocument = gql`
+    query GetResourcesByUserIdPaginated($userId: ID!, $pagination: PaginationInput!) {
+  getResourcesByUserIdPaginated(userId: $userId, pagination: $pagination) {
+    resources {
+      description
+      id
+      name
+      path
+      url
+      size
+      formattedSize
+      md5Hash
+      user {
+        id
+        email
+        createdAt
+        profilePicture
+      }
+    }
+    totalCount
+    totalPages
+    currentPage
+    hasNextPage
+    hasPreviousPage
+  }
+}
+    `;
+
+/**
+ * __useGetResourcesByUserIdPaginatedQuery__
+ *
+ * To run a query within a React component, call `useGetResourcesByUserIdPaginatedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetResourcesByUserIdPaginatedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetResourcesByUserIdPaginatedQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      pagination: // value for 'pagination'
+ *   },
+ * });
+ */
+export function useGetResourcesByUserIdPaginatedQuery(baseOptions: Apollo.QueryHookOptions<GetResourcesByUserIdPaginatedQuery, GetResourcesByUserIdPaginatedQueryVariables> & ({ variables: GetResourcesByUserIdPaginatedQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetResourcesByUserIdPaginatedQuery, GetResourcesByUserIdPaginatedQueryVariables>(GetResourcesByUserIdPaginatedDocument, options);
+      }
+export function useGetResourcesByUserIdPaginatedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetResourcesByUserIdPaginatedQuery, GetResourcesByUserIdPaginatedQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetResourcesByUserIdPaginatedQuery, GetResourcesByUserIdPaginatedQueryVariables>(GetResourcesByUserIdPaginatedDocument, options);
+        }
+export function useGetResourcesByUserIdPaginatedSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetResourcesByUserIdPaginatedQuery, GetResourcesByUserIdPaginatedQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetResourcesByUserIdPaginatedQuery, GetResourcesByUserIdPaginatedQueryVariables>(GetResourcesByUserIdPaginatedDocument, options);
+        }
+export type GetResourcesByUserIdPaginatedQueryHookResult = ReturnType<typeof useGetResourcesByUserIdPaginatedQuery>;
+export type GetResourcesByUserIdPaginatedLazyQueryHookResult = ReturnType<typeof useGetResourcesByUserIdPaginatedLazyQuery>;
+export type GetResourcesByUserIdPaginatedSuspenseQueryHookResult = ReturnType<typeof useGetResourcesByUserIdPaginatedSuspenseQuery>;
+export type GetResourcesByUserIdPaginatedQueryResult = Apollo.QueryResult<GetResourcesByUserIdPaginatedQuery, GetResourcesByUserIdPaginatedQueryVariables>;
 export const GetUserSharedResourcesDocument = gql`
     query GetUserSharedResources($userId: ID!) {
   getUserSharedResources(userId: $userId) {
@@ -1663,6 +1910,7 @@ export const GetUserSharedResourcesDocument = gql`
     url
     size
     formattedSize
+    md5Hash
     user {
       id
       email
@@ -1705,6 +1953,67 @@ export type GetUserSharedResourcesQueryHookResult = ReturnType<typeof useGetUser
 export type GetUserSharedResourcesLazyQueryHookResult = ReturnType<typeof useGetUserSharedResourcesLazyQuery>;
 export type GetUserSharedResourcesSuspenseQueryHookResult = ReturnType<typeof useGetUserSharedResourcesSuspenseQuery>;
 export type GetUserSharedResourcesQueryResult = Apollo.QueryResult<GetUserSharedResourcesQuery, GetUserSharedResourcesQueryVariables>;
+export const GetUserSharedResourcesPaginatedDocument = gql`
+    query GetUserSharedResourcesPaginated($userId: ID!, $pagination: PaginationInput!) {
+  getUserSharedResourcesPaginated(userId: $userId, pagination: $pagination) {
+    resources {
+      id
+      name
+      description
+      path
+      url
+      size
+      formattedSize
+      md5Hash
+      user {
+        id
+        email
+        createdAt
+        profilePicture
+      }
+    }
+    totalCount
+    totalPages
+    currentPage
+    hasNextPage
+    hasPreviousPage
+  }
+}
+    `;
+
+/**
+ * __useGetUserSharedResourcesPaginatedQuery__
+ *
+ * To run a query within a React component, call `useGetUserSharedResourcesPaginatedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserSharedResourcesPaginatedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserSharedResourcesPaginatedQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      pagination: // value for 'pagination'
+ *   },
+ * });
+ */
+export function useGetUserSharedResourcesPaginatedQuery(baseOptions: Apollo.QueryHookOptions<GetUserSharedResourcesPaginatedQuery, GetUserSharedResourcesPaginatedQueryVariables> & ({ variables: GetUserSharedResourcesPaginatedQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserSharedResourcesPaginatedQuery, GetUserSharedResourcesPaginatedQueryVariables>(GetUserSharedResourcesPaginatedDocument, options);
+      }
+export function useGetUserSharedResourcesPaginatedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserSharedResourcesPaginatedQuery, GetUserSharedResourcesPaginatedQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserSharedResourcesPaginatedQuery, GetUserSharedResourcesPaginatedQueryVariables>(GetUserSharedResourcesPaginatedDocument, options);
+        }
+export function useGetUserSharedResourcesPaginatedSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetUserSharedResourcesPaginatedQuery, GetUserSharedResourcesPaginatedQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetUserSharedResourcesPaginatedQuery, GetUserSharedResourcesPaginatedQueryVariables>(GetUserSharedResourcesPaginatedDocument, options);
+        }
+export type GetUserSharedResourcesPaginatedQueryHookResult = ReturnType<typeof useGetUserSharedResourcesPaginatedQuery>;
+export type GetUserSharedResourcesPaginatedLazyQueryHookResult = ReturnType<typeof useGetUserSharedResourcesPaginatedLazyQuery>;
+export type GetUserSharedResourcesPaginatedSuspenseQueryHookResult = ReturnType<typeof useGetUserSharedResourcesPaginatedSuspenseQuery>;
+export type GetUserSharedResourcesPaginatedQueryResult = Apollo.QueryResult<GetUserSharedResourcesPaginatedQuery, GetUserSharedResourcesPaginatedQueryVariables>;
 export const GetResourceStatsDocument = gql`
     query GetResourceStats {
   getAllResources {
@@ -1782,6 +2091,303 @@ export type GetUserTotalFileSizeQueryHookResult = ReturnType<typeof useGetUserTo
 export type GetUserTotalFileSizeLazyQueryHookResult = ReturnType<typeof useGetUserTotalFileSizeLazyQuery>;
 export type GetUserTotalFileSizeSuspenseQueryHookResult = ReturnType<typeof useGetUserTotalFileSizeSuspenseQuery>;
 export type GetUserTotalFileSizeQueryResult = Apollo.QueryResult<GetUserTotalFileSizeQuery, GetUserTotalFileSizeQueryVariables>;
+export const GetUsersWithAccessDocument = gql`
+    query GetUsersWithAccess($resourceId: ID!) {
+  getUsersWithAccess(resourceId: $resourceId) {
+    id
+    email
+  }
+}
+    `;
+
+/**
+ * __useGetUsersWithAccessQuery__
+ *
+ * To run a query within a React component, call `useGetUsersWithAccessQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUsersWithAccessQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUsersWithAccessQuery({
+ *   variables: {
+ *      resourceId: // value for 'resourceId'
+ *   },
+ * });
+ */
+export function useGetUsersWithAccessQuery(baseOptions: Apollo.QueryHookOptions<GetUsersWithAccessQuery, GetUsersWithAccessQueryVariables> & ({ variables: GetUsersWithAccessQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUsersWithAccessQuery, GetUsersWithAccessQueryVariables>(GetUsersWithAccessDocument, options);
+      }
+export function useGetUsersWithAccessLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUsersWithAccessQuery, GetUsersWithAccessQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUsersWithAccessQuery, GetUsersWithAccessQueryVariables>(GetUsersWithAccessDocument, options);
+        }
+export function useGetUsersWithAccessSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetUsersWithAccessQuery, GetUsersWithAccessQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetUsersWithAccessQuery, GetUsersWithAccessQueryVariables>(GetUsersWithAccessDocument, options);
+        }
+export type GetUsersWithAccessQueryHookResult = ReturnType<typeof useGetUsersWithAccessQuery>;
+export type GetUsersWithAccessLazyQueryHookResult = ReturnType<typeof useGetUsersWithAccessLazyQuery>;
+export type GetUsersWithAccessSuspenseQueryHookResult = ReturnType<typeof useGetUsersWithAccessSuspenseQuery>;
+export type GetUsersWithAccessQueryResult = Apollo.QueryResult<GetUsersWithAccessQuery, GetUsersWithAccessQueryVariables>;
+export const SearchResourcesByUserIdDocument = gql`
+    query SearchResourcesByUserId($userId: ID!, $search: SearchInput!) {
+  searchResourcesByUserId(userId: $userId, search: $search) {
+    resources {
+      description
+      id
+      name
+      path
+      url
+      size
+      formattedSize
+      md5Hash
+      user {
+        id
+        email
+        createdAt
+        profilePicture
+      }
+    }
+    totalCount
+    totalPages
+    currentPage
+    hasNextPage
+    hasPreviousPage
+  }
+}
+    `;
+
+/**
+ * __useSearchResourcesByUserIdQuery__
+ *
+ * To run a query within a React component, call `useSearchResourcesByUserIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchResourcesByUserIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchResourcesByUserIdQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      search: // value for 'search'
+ *   },
+ * });
+ */
+export function useSearchResourcesByUserIdQuery(baseOptions: Apollo.QueryHookOptions<SearchResourcesByUserIdQuery, SearchResourcesByUserIdQueryVariables> & ({ variables: SearchResourcesByUserIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SearchResourcesByUserIdQuery, SearchResourcesByUserIdQueryVariables>(SearchResourcesByUserIdDocument, options);
+      }
+export function useSearchResourcesByUserIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchResourcesByUserIdQuery, SearchResourcesByUserIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SearchResourcesByUserIdQuery, SearchResourcesByUserIdQueryVariables>(SearchResourcesByUserIdDocument, options);
+        }
+export function useSearchResourcesByUserIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<SearchResourcesByUserIdQuery, SearchResourcesByUserIdQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<SearchResourcesByUserIdQuery, SearchResourcesByUserIdQueryVariables>(SearchResourcesByUserIdDocument, options);
+        }
+export type SearchResourcesByUserIdQueryHookResult = ReturnType<typeof useSearchResourcesByUserIdQuery>;
+export type SearchResourcesByUserIdLazyQueryHookResult = ReturnType<typeof useSearchResourcesByUserIdLazyQuery>;
+export type SearchResourcesByUserIdSuspenseQueryHookResult = ReturnType<typeof useSearchResourcesByUserIdSuspenseQuery>;
+export type SearchResourcesByUserIdQueryResult = Apollo.QueryResult<SearchResourcesByUserIdQuery, SearchResourcesByUserIdQueryVariables>;
+export const GetResourceScanStatusDocument = gql`
+    query GetResourceScanStatus($resourceId: ID!) {
+  getResourceScanStatus(resourceId: $resourceId) {
+    id
+    name
+    scanStatus
+    scanAnalysisId
+    scanDate
+    threatCount
+    scanError
+  }
+}
+    `;
+
+/**
+ * __useGetResourceScanStatusQuery__
+ *
+ * To run a query within a React component, call `useGetResourceScanStatusQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetResourceScanStatusQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetResourceScanStatusQuery({
+ *   variables: {
+ *      resourceId: // value for 'resourceId'
+ *   },
+ * });
+ */
+export function useGetResourceScanStatusQuery(baseOptions: Apollo.QueryHookOptions<GetResourceScanStatusQuery, GetResourceScanStatusQueryVariables> & ({ variables: GetResourceScanStatusQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetResourceScanStatusQuery, GetResourceScanStatusQueryVariables>(GetResourceScanStatusDocument, options);
+      }
+export function useGetResourceScanStatusLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetResourceScanStatusQuery, GetResourceScanStatusQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetResourceScanStatusQuery, GetResourceScanStatusQueryVariables>(GetResourceScanStatusDocument, options);
+        }
+export function useGetResourceScanStatusSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetResourceScanStatusQuery, GetResourceScanStatusQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetResourceScanStatusQuery, GetResourceScanStatusQueryVariables>(GetResourceScanStatusDocument, options);
+        }
+export type GetResourceScanStatusQueryHookResult = ReturnType<typeof useGetResourceScanStatusQuery>;
+export type GetResourceScanStatusLazyQueryHookResult = ReturnType<typeof useGetResourceScanStatusLazyQuery>;
+export type GetResourceScanStatusSuspenseQueryHookResult = ReturnType<typeof useGetResourceScanStatusSuspenseQuery>;
+export type GetResourceScanStatusQueryResult = Apollo.QueryResult<GetResourceScanStatusQuery, GetResourceScanStatusQueryVariables>;
+export const GetResourceScanResultDocument = gql`
+    query GetResourceScanResult($resourceId: ID!) {
+  getResourceScanResult(resourceId: $resourceId) {
+    resourceId
+    status
+    analysisId
+    scanDate
+    threatCount
+    error
+    isProcessing
+  }
+}
+    `;
+
+/**
+ * __useGetResourceScanResultQuery__
+ *
+ * To run a query within a React component, call `useGetResourceScanResultQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetResourceScanResultQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetResourceScanResultQuery({
+ *   variables: {
+ *      resourceId: // value for 'resourceId'
+ *   },
+ * });
+ */
+export function useGetResourceScanResultQuery(baseOptions: Apollo.QueryHookOptions<GetResourceScanResultQuery, GetResourceScanResultQueryVariables> & ({ variables: GetResourceScanResultQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetResourceScanResultQuery, GetResourceScanResultQueryVariables>(GetResourceScanResultDocument, options);
+      }
+export function useGetResourceScanResultLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetResourceScanResultQuery, GetResourceScanResultQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetResourceScanResultQuery, GetResourceScanResultQueryVariables>(GetResourceScanResultDocument, options);
+        }
+export function useGetResourceScanResultSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetResourceScanResultQuery, GetResourceScanResultQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetResourceScanResultQuery, GetResourceScanResultQueryVariables>(GetResourceScanResultDocument, options);
+        }
+export type GetResourceScanResultQueryHookResult = ReturnType<typeof useGetResourceScanResultQuery>;
+export type GetResourceScanResultLazyQueryHookResult = ReturnType<typeof useGetResourceScanResultLazyQuery>;
+export type GetResourceScanResultSuspenseQueryHookResult = ReturnType<typeof useGetResourceScanResultSuspenseQuery>;
+export type GetResourceScanResultQueryResult = Apollo.QueryResult<GetResourceScanResultQuery, GetResourceScanResultQueryVariables>;
+export const SearchSharedResourcesByUserIdDocument = gql`
+    query SearchSharedResourcesByUserId($userId: ID!, $search: SearchInput!) {
+  searchSharedResourcesByUserId(userId: $userId, search: $search) {
+    resources {
+      description
+      id
+      name
+      path
+      url
+      size
+      formattedSize
+      user {
+        id
+        email
+        createdAt
+        profilePicture
+      }
+    }
+    totalCount
+    totalPages
+    currentPage
+    hasNextPage
+    hasPreviousPage
+  }
+}
+    `;
+
+/**
+ * __useSearchSharedResourcesByUserIdQuery__
+ *
+ * To run a query within a React component, call `useSearchSharedResourcesByUserIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchSharedResourcesByUserIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchSharedResourcesByUserIdQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      search: // value for 'search'
+ *   },
+ * });
+ */
+export function useSearchSharedResourcesByUserIdQuery(baseOptions: Apollo.QueryHookOptions<SearchSharedResourcesByUserIdQuery, SearchSharedResourcesByUserIdQueryVariables> & ({ variables: SearchSharedResourcesByUserIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SearchSharedResourcesByUserIdQuery, SearchSharedResourcesByUserIdQueryVariables>(SearchSharedResourcesByUserIdDocument, options);
+      }
+export function useSearchSharedResourcesByUserIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchSharedResourcesByUserIdQuery, SearchSharedResourcesByUserIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SearchSharedResourcesByUserIdQuery, SearchSharedResourcesByUserIdQueryVariables>(SearchSharedResourcesByUserIdDocument, options);
+        }
+export function useSearchSharedResourcesByUserIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<SearchSharedResourcesByUserIdQuery, SearchSharedResourcesByUserIdQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<SearchSharedResourcesByUserIdQuery, SearchSharedResourcesByUserIdQueryVariables>(SearchSharedResourcesByUserIdDocument, options);
+        }
+export type SearchSharedResourcesByUserIdQueryHookResult = ReturnType<typeof useSearchSharedResourcesByUserIdQuery>;
+export type SearchSharedResourcesByUserIdLazyQueryHookResult = ReturnType<typeof useSearchSharedResourcesByUserIdLazyQuery>;
+export type SearchSharedResourcesByUserIdSuspenseQueryHookResult = ReturnType<typeof useSearchSharedResourcesByUserIdSuspenseQuery>;
+export type SearchSharedResourcesByUserIdQueryResult = Apollo.QueryResult<SearchSharedResourcesByUserIdQuery, SearchSharedResourcesByUserIdQueryVariables>;
+export const GetAuthorsWhoSharedWithUserDocument = gql`
+    query GetAuthorsWhoSharedWithUser($userId: ID!) {
+  getAuthorsWhoSharedWithUser(userId: $userId) {
+    id
+    email
+    createdAt
+    profilePicture
+  }
+}
+    `;
+
+/**
+ * __useGetAuthorsWhoSharedWithUserQuery__
+ *
+ * To run a query within a React component, call `useGetAuthorsWhoSharedWithUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAuthorsWhoSharedWithUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAuthorsWhoSharedWithUserQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useGetAuthorsWhoSharedWithUserQuery(baseOptions: Apollo.QueryHookOptions<GetAuthorsWhoSharedWithUserQuery, GetAuthorsWhoSharedWithUserQueryVariables> & ({ variables: GetAuthorsWhoSharedWithUserQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAuthorsWhoSharedWithUserQuery, GetAuthorsWhoSharedWithUserQueryVariables>(GetAuthorsWhoSharedWithUserDocument, options);
+      }
+export function useGetAuthorsWhoSharedWithUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAuthorsWhoSharedWithUserQuery, GetAuthorsWhoSharedWithUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAuthorsWhoSharedWithUserQuery, GetAuthorsWhoSharedWithUserQueryVariables>(GetAuthorsWhoSharedWithUserDocument, options);
+        }
+export function useGetAuthorsWhoSharedWithUserSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAuthorsWhoSharedWithUserQuery, GetAuthorsWhoSharedWithUserQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetAuthorsWhoSharedWithUserQuery, GetAuthorsWhoSharedWithUserQueryVariables>(GetAuthorsWhoSharedWithUserDocument, options);
+        }
+export type GetAuthorsWhoSharedWithUserQueryHookResult = ReturnType<typeof useGetAuthorsWhoSharedWithUserQuery>;
+export type GetAuthorsWhoSharedWithUserLazyQueryHookResult = ReturnType<typeof useGetAuthorsWhoSharedWithUserLazyQuery>;
+export type GetAuthorsWhoSharedWithUserSuspenseQueryHookResult = ReturnType<typeof useGetAuthorsWhoSharedWithUserSuspenseQuery>;
+export type GetAuthorsWhoSharedWithUserQueryResult = Apollo.QueryResult<GetAuthorsWhoSharedWithUserQuery, GetAuthorsWhoSharedWithUserQueryVariables>;
 export const CreateSubscriptionDocument = gql`
     mutation CreateSubscription($userId: ID!) {
   createSubscription(userId: $userId) {
@@ -2205,6 +2811,38 @@ export function useConfirmEmailMutation(baseOptions?: Apollo.MutationHookOptions
 export type ConfirmEmailMutationHookResult = ReturnType<typeof useConfirmEmailMutation>;
 export type ConfirmEmailMutationResult = Apollo.MutationResult<ConfirmEmailMutation>;
 export type ConfirmEmailMutationOptions = Apollo.BaseMutationOptions<ConfirmEmailMutation, ConfirmEmailMutationVariables>;
+export const ResendConfirmationEmailDocument = gql`
+    mutation ResendConfirmationEmail($email: String!, $lang: String!) {
+  resendConfirmationEmail(email: $email, lang: $lang)
+}
+    `;
+export type ResendConfirmationEmailMutationFn = Apollo.MutationFunction<ResendConfirmationEmailMutation, ResendConfirmationEmailMutationVariables>;
+
+/**
+ * __useResendConfirmationEmailMutation__
+ *
+ * To run a mutation, you first call `useResendConfirmationEmailMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useResendConfirmationEmailMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [resendConfirmationEmailMutation, { data, loading, error }] = useResendConfirmationEmailMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *      lang: // value for 'lang'
+ *   },
+ * });
+ */
+export function useResendConfirmationEmailMutation(baseOptions?: Apollo.MutationHookOptions<ResendConfirmationEmailMutation, ResendConfirmationEmailMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ResendConfirmationEmailMutation, ResendConfirmationEmailMutationVariables>(ResendConfirmationEmailDocument, options);
+      }
+export type ResendConfirmationEmailMutationHookResult = ReturnType<typeof useResendConfirmationEmailMutation>;
+export type ResendConfirmationEmailMutationResult = Apollo.MutationResult<ResendConfirmationEmailMutation>;
+export type ResendConfirmationEmailMutationOptions = Apollo.BaseMutationOptions<ResendConfirmationEmailMutation, ResendConfirmationEmailMutationVariables>;
 export const DeleteUserDocument = gql`
     mutation DeleteUser($id: ID!) {
   deleteUser(id: $id)
@@ -2303,6 +2941,70 @@ export function useUpdateProfilePictureMutation(baseOptions?: Apollo.MutationHoo
 export type UpdateProfilePictureMutationHookResult = ReturnType<typeof useUpdateProfilePictureMutation>;
 export type UpdateProfilePictureMutationResult = Apollo.MutationResult<UpdateProfilePictureMutation>;
 export type UpdateProfilePictureMutationOptions = Apollo.BaseMutationOptions<UpdateProfilePictureMutation, UpdateProfilePictureMutationVariables>;
+export const ResetPasswordSendCodeDocument = gql`
+    mutation ResetPasswordSendCode($email: String!, $lang: String!) {
+  resetPasswordSendCode(email: $email, lang: $lang)
+}
+    `;
+export type ResetPasswordSendCodeMutationFn = Apollo.MutationFunction<ResetPasswordSendCodeMutation, ResetPasswordSendCodeMutationVariables>;
+
+/**
+ * __useResetPasswordSendCodeMutation__
+ *
+ * To run a mutation, you first call `useResetPasswordSendCodeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useResetPasswordSendCodeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [resetPasswordSendCodeMutation, { data, loading, error }] = useResetPasswordSendCodeMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *      lang: // value for 'lang'
+ *   },
+ * });
+ */
+export function useResetPasswordSendCodeMutation(baseOptions?: Apollo.MutationHookOptions<ResetPasswordSendCodeMutation, ResetPasswordSendCodeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ResetPasswordSendCodeMutation, ResetPasswordSendCodeMutationVariables>(ResetPasswordSendCodeDocument, options);
+      }
+export type ResetPasswordSendCodeMutationHookResult = ReturnType<typeof useResetPasswordSendCodeMutation>;
+export type ResetPasswordSendCodeMutationResult = Apollo.MutationResult<ResetPasswordSendCodeMutation>;
+export type ResetPasswordSendCodeMutationOptions = Apollo.BaseMutationOptions<ResetPasswordSendCodeMutation, ResetPasswordSendCodeMutationVariables>;
+export const ResetPasswordDocument = gql`
+    mutation ResetPassword($token: String!, $newPassword: String!) {
+  resetPassword(token: $token, newPassword: $newPassword)
+}
+    `;
+export type ResetPasswordMutationFn = Apollo.MutationFunction<ResetPasswordMutation, ResetPasswordMutationVariables>;
+
+/**
+ * __useResetPasswordMutation__
+ *
+ * To run a mutation, you first call `useResetPasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useResetPasswordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [resetPasswordMutation, { data, loading, error }] = useResetPasswordMutation({
+ *   variables: {
+ *      token: // value for 'token'
+ *      newPassword: // value for 'newPassword'
+ *   },
+ * });
+ */
+export function useResetPasswordMutation(baseOptions?: Apollo.MutationHookOptions<ResetPasswordMutation, ResetPasswordMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ResetPasswordMutation, ResetPasswordMutationVariables>(ResetPasswordDocument, options);
+      }
+export type ResetPasswordMutationHookResult = ReturnType<typeof useResetPasswordMutation>;
+export type ResetPasswordMutationResult = Apollo.MutationResult<ResetPasswordMutation>;
+export type ResetPasswordMutationOptions = Apollo.BaseMutationOptions<ResetPasswordMutation, ResetPasswordMutationVariables>;
 export const GetAllUsersDocument = gql`
     query getAllUsers {
   getAllUsers {
@@ -2478,3 +3180,41 @@ export type GetUserStatsQueryHookResult = ReturnType<typeof useGetUserStatsQuery
 export type GetUserStatsLazyQueryHookResult = ReturnType<typeof useGetUserStatsLazyQuery>;
 export type GetUserStatsSuspenseQueryHookResult = ReturnType<typeof useGetUserStatsSuspenseQuery>;
 export type GetUserStatsQueryResult = Apollo.QueryResult<GetUserStatsQuery, GetUserStatsQueryVariables>;
+export const CheckUserExistsDocument = gql`
+    query CheckUserExists($email: String!) {
+  checkUserExists(email: $email)
+}
+    `;
+
+/**
+ * __useCheckUserExistsQuery__
+ *
+ * To run a query within a React component, call `useCheckUserExistsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCheckUserExistsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCheckUserExistsQuery({
+ *   variables: {
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useCheckUserExistsQuery(baseOptions: Apollo.QueryHookOptions<CheckUserExistsQuery, CheckUserExistsQueryVariables> & ({ variables: CheckUserExistsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CheckUserExistsQuery, CheckUserExistsQueryVariables>(CheckUserExistsDocument, options);
+      }
+export function useCheckUserExistsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CheckUserExistsQuery, CheckUserExistsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CheckUserExistsQuery, CheckUserExistsQueryVariables>(CheckUserExistsDocument, options);
+        }
+export function useCheckUserExistsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<CheckUserExistsQuery, CheckUserExistsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<CheckUserExistsQuery, CheckUserExistsQueryVariables>(CheckUserExistsDocument, options);
+        }
+export type CheckUserExistsQueryHookResult = ReturnType<typeof useCheckUserExistsQuery>;
+export type CheckUserExistsLazyQueryHookResult = ReturnType<typeof useCheckUserExistsLazyQuery>;
+export type CheckUserExistsSuspenseQueryHookResult = ReturnType<typeof useCheckUserExistsSuspenseQuery>;
+export type CheckUserExistsQueryResult = Apollo.QueryResult<CheckUserExistsQuery, CheckUserExistsQueryVariables>;

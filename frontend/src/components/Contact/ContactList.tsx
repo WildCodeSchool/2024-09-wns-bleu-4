@@ -20,8 +20,8 @@ import {
 import { gql, useMutation } from '@apollo/client';
 import { Check, Clock, Mail, UserMinus, Users, X } from 'lucide-react';
 import React from 'react';
-import CardContact from './CardContact';
 import { useTranslation } from 'react-i18next';
+import CardContact from './CardContact';
 
 const REMOVE_CONTACT = gql`
     mutation RemoveContact($contactId: ID!) {
@@ -141,25 +141,25 @@ const ContactList: React.FC<ContactListProps> = ({
         switch (type) {
             case 'requests':
                 return {
-                    icon: <Mail className="w-12 h-12 text-gray-400" />,
+                    icon: <Mail className="w-12 h-12 text-muted-foreground" />,
                     title: t('contact.empty.requests.title'),
                     description: t('contact.empty.requests.description'),
                 };
             case 'contacts':
                 return {
-                    icon: <Users className="w-12 h-12 text-gray-400" />,
+                    icon: <Users className="w-12 h-12 text-muted-foreground" />,
                     title: t('contact.empty.contacts.title'),
                     description: t('contact.empty.contacts.description'),
                 };
             case 'sent':
                 return {
-                    icon: <Clock className="w-12 h-12 text-gray-400" />,
+                    icon: <Clock className="w-12 h-12 text-muted-foreground" />,
                     title: t('contact.empty.sent.title'),
                     description: t('contact.empty.sent.description'),
                 };
             default:
                 return {
-                    icon: <Users className="w-12 h-12 text-gray-400" />,
+                    icon: <Users className="w-12 h-12 text-muted-foreground" />,
                     title: t('contact.empty.default.title'),
                     description: t('contact.empty.default.description'),
                 };
@@ -171,10 +171,10 @@ const ContactList: React.FC<ContactListProps> = ({
         return (
             <div className="flex flex-col items-center justify-center py-12 text-center">
                 {emptyMessage.icon}
-                <h3 className="text-lg font-semibold text-gray-900 mt-4">
+                <h3 className="text-lg font-semibold text-foreground mt-4">
                     {emptyMessage.title}
                 </h3>
-                <p className="text-gray-500 mt-2 max-w-sm">
+                <p className="text-muted-foreground mt-2 max-w-sm">
                     {emptyMessage.description}
                 </p>
             </div>
@@ -237,7 +237,9 @@ const ContactList: React.FC<ContactListProps> = ({
                                         {t('contact.delete.title')}
                                     </AlertDialogTitle>
                                     <AlertDialogDescription>
-                                        {t('contact.delete.description', { email: contactInfo.email })}
+                                        {t('contact.delete.description', {
+                                            email: contactInfo.email,
+                                        })}
                                     </AlertDialogDescription>
                                 </AlertDialogHeader>
                                 <AlertDialogFooter>

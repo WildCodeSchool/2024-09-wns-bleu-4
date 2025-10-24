@@ -4,30 +4,60 @@ import {
     InputOTPSeparator,
     InputOTPSlot,
 } from '@/components/ui/input-otp';
-import { useConfirmEmailMutation } from '@/generated/graphql-types';
-import { useRef } from 'react';
+import { useConfirmEmailMutation, useResendConfirmationEmailMutation } from '@/generated/graphql-types';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card';
+import { OneShotButton } from '../OneShotButton';
 
-export const ConfirmForm: React.FC = () => {
-    const { t } = useTranslation();
+interface ConfirmFormProps {
+    email?: string;
+}
+
+export const ConfirmForm: React.FC<ConfirmFormProps> = ({ email }) => {
+    const { t, i18n } = useTranslation();
     const [confirmEmail] = useConfirmEmailMutation();
+    const [resendConfirmationEmail] = useResendConfirmationEmailMutation();
     const navigate = useNavigate();
-    const otpInputRef = useRef<HTMLInputElement>(null);
+    const [otpValue, setOtpValue] = useState<string>('');
 
-    const handleOtpChange = async () => {
-        const otpValue = otpInputRef.current?.value;
-        if (otpValue && otpValue.length === 8) {
+    const handleOtpChange = async (value: string) => {
+        setOtpValue(value);
+        if (value && value.length === 8) {
             try {
-                await confirmEmail({ variables: { codeByUser: otpValue } });
+                await confirmEmail({ variables: { codeByUser: value } });
                 toast.success(t('auth.confirm.success'));
                 navigate('/');
-            } catch (error) {
+            } catch (error: unknown) {
                 toast.error(t('auth.confirm.error'));
                 console.error('Email confirmation error:', error);
+                setOtpValue('');
             }
+        }
+    };
+
+    const handleResendEmail = async () => {
+        if (!email) {
+            toast.error(t('auth.confirm.emailRequired'));
+            return;
+        }
+
+        try {
+            await resendConfirmationEmail({
+                variables: {
+                    email: email,
+                    lang: i18n.language as 'fr' | 'en'
+                }
+            });
+            toast.success(t('auth.confirm.emailResent'));
+            setOtpValue('');
+        } catch (error: unknown) {
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            toast.error(errorMessage);
+            console.error('Resend confirmation email error:', error);
+            setOtpValue('');
         }
     };
 
@@ -40,9 +70,8 @@ export const ConfirmForm: React.FC = () => {
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <button className="btn py-2">{t('auth.confirm.resendEmail')}</button>
                 <InputOTP
-                    ref={otpInputRef}
+                    value={otpValue}
                     onChange={handleOtpChange}
                     maxLength={8}
                     pattern="^[0-9]*$"
@@ -62,6 +91,13 @@ export const ConfirmForm: React.FC = () => {
                     </InputOTPGroup>
                 </InputOTP>
             </CardContent>
+            <CardFooter>
+                <OneShotButton
+                    onClick={handleResendEmail}
+                    label="auth.confirm.resendEmail"
+                    labelClicked="common.sent"
+                />
+            </CardFooter>
         </Card>
     );
 };

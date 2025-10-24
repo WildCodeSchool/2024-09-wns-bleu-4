@@ -27,6 +27,12 @@ export const CONFIRM_EMAIL = gql`
     }
 `;
 
+export const RESEND_CONFIRMATION_EMAIL = gql`
+    mutation ResendConfirmationEmail($email: String!, $lang: String!) {
+        resendConfirmationEmail(email: $email, lang: $lang)
+    }
+`;
+
 export const DELETE_USER = gql`
     mutation DeleteUser($id: ID!) {
         deleteUser(id: $id)
@@ -45,5 +51,18 @@ export const UPDATE_PROFILE_PICTURE = gql`
             email
             profilePicture
         }
+    }
+`;
+
+// Password reset
+export const RESET_PASSWORD_SEND_CODE = gql`
+    mutation ResetPasswordSendCode($email: String!, $lang: String!) {
+        resetPasswordSendCode(email: $email, lang: $lang)
+    }
+`;
+
+export const RESET_PASSWORD = gql`
+    mutation ResetPassword($token: String!, $newPassword: String!) {
+        resetPassword(token: $token, newPassword: $newPassword)
     }
 `;

@@ -11,6 +11,7 @@ const Sign = () => {
     const { t, i18n } = useTranslation();
     const [register, { loading }] = useRegisterMutation();
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [userEmail, setUserEmail] = useState<string>('');
 
     const handleSubmit = async (email: string, password: string) => {
         try {
@@ -19,6 +20,7 @@ const Sign = () => {
             });
             if (response.data?.register) {
                 toast.info(t('auth.signup.success'));
+                setUserEmail(email);
                 setIsSubmitted(true);
             }
         } catch (error) {
@@ -31,12 +33,13 @@ const Sign = () => {
     };
 
     return isSubmitted ? (
-        <ConfirmForm />
+        <ConfirmForm email={userEmail} />
     ) : (
         <Form
             title={t('auth.signup.title')}
             onSubmit={handleSubmit}
             loading={loading}
+            requireCaptcha
             links={
                 <span>
                     {t('auth.signup.links.terms')}{' '}

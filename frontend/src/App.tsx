@@ -24,6 +24,8 @@ import { useTranslation } from 'react-i18next';
 import Payment from '@/pages/Subscription/Payment';
 import SubscriptionSuccess from '@/pages/Subscription/SubscriptionSuccess';
 import ReportManagement from '@/pages/Admin/ReportManagement';
+import ForgotPassword from '@/pages/Password/ForgotPassword';
+import ResetPassword from '@/pages/Password/ResetPassword';
 
 const App = () => {
     const { t } = useTranslation();
@@ -84,7 +86,6 @@ const App = () => {
                                 <PageWrapper
                                     title={t('meta.upload.title')}
                                     description={t('meta.upload.description')}
-                                    requireAuth
                                 >
                                     <UploadPage />
                                 </PageWrapper>
@@ -109,7 +110,18 @@ const App = () => {
                                     title={t('meta.forgotPassword.title')}
                                     description={t('meta.forgotPassword.description')}
                                 >
-                                    <div>{t('meta.forgotPassword.title')}</div>
+                                    <ForgotPassword />
+                                </PageWrapper>
+                            }
+                        />
+                        <Route
+                            path="/reset-password"
+                            element={
+                                <PageWrapper
+                                    title={t('meta.resetPassword.title')}
+                                    description={t('meta.resetPassword.description')}
+                                >
+                                    <ResetPassword />
                                 </PageWrapper>
                             }
                         />

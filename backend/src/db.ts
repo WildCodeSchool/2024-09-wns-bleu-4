@@ -1,7 +1,5 @@
 import { DataSource } from 'typeorm';
-import { Comment } from '@/entities/Comment';
 import { Contact } from '@/entities/Contact';
-import { Like } from '@/entities/Like';
 import { Report } from '@/entities/Report';
 import { Resource } from '@/entities/Resource';
 import { Subscription } from '@/entities/Subscription';
@@ -14,7 +12,7 @@ export const dataSource = new DataSource({
     username: 'postgres',
     database: 'postgres',
     password: 'example',
-    entities: [Comment, Contact, Like, Report, Resource, Subscription, SystemLog, User, TempUser],
+    entities: [Contact, Report, Resource, Subscription, SystemLog, User, TempUser],
     synchronize: true,
     logging: ['error', 'query'],
 });

@@ -1,5 +1,4 @@
-import { Comment } from '@/entities/Comment';
-import { Like } from '@/entities/Like';
+
 import { Report } from '@/entities/Report';
 import { Resource } from '@/entities/Resource';
 import { Subscription } from '@/entities/Subscription';
@@ -49,6 +48,9 @@ export class TempUser extends BaseEntity {
 
     @Column('varchar')
     randomCode: string;
+
+    @Column('timestamp')
+    codeExpirationDate: Date;
 }
 
 @ObjectType()
@@ -96,14 +98,8 @@ export class User extends BaseEntity {
     })
     role: UserRole;
 
-    @OneToMany(() => Like, (like) => like.user)
-    likes: Like[];
-
     @OneToMany(() => Report, (report) => report.user)
     reports: Report[];
-
-    @OneToMany(() => Comment, (comment) => comment.user)
-    comments: Comment[];
 
     @ManyToMany(() => Resource, (Resource) => Resource.usersWithAccess, {
         nullable: true,

@@ -10,11 +10,48 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { useAuthContext } from '@/context/useAuthContext';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useMutation } from '@apollo/client';
+import { RESET_PASSWORD_SEND_CODE } from '@/graphql/User/mutations';
+import { toast } from 'react-toastify';
 
 export const Profile = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const { user } = useAuthContext();
+    const [isMailSent, setIsMailSent] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const [resetPasswordSendCode] = useMutation(RESET_PASSWORD_SEND_CODE);
+
+    const handleChangePassword = async () => {
+        if (!user?.email) {
+            toast.error('User email not found');
+            return;
+        }
+
+        setIsSubmitting(true);
+        try {
+            await resetPasswordSendCode({
+                variables: {
+                    email: user.email,
+                    lang: i18n.language,
+                },
+            });
+            toast.success(t('profile.actions.changePassword.mailSent'));
+            setIsMailSent(true);
+        } catch (error: unknown) {
+            console.error('Error sending reset code:', error);
+            const errorMessage =
+                error instanceof Error
+                    ? error.message
+                    : 'Error sending reset link';
+            toast.error(errorMessage);
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
     return (
         <section>
             <h1 className="text-2xl font-bold mb-4">{t('profile.title')}</h1>
@@ -31,7 +68,7 @@ export const Profile = () => {
                     </p>
                 </CardHeader>
                 <Separator className="" />
-                <CardContent className="flex flex-col gap-2 my-4">
+                <CardContent className="flex flex-col gap-4 my-4">
                     <AvatarUploader
                         user={{
                             email: user?.email,
@@ -57,16 +94,22 @@ export const Profile = () => {
                         </p>
                     </div>
                     <div>
-                        <Label>{t('profile.form.password.label')}</Label>
-                        <Input type="password" />
+                        <Button
+                            disabled={isSubmitting || isMailSent}
+                            onClick={handleChangePassword}
+                            className="cursor-pointer w-fit"
+                        >
+                            {isSubmitting
+                                ? t('common.sending')
+                                : t('profile.actions.changePassword.label')}
+                        </Button>
+                        <p className="text-xs text-muted-foreground mt-1">
+                            {t('profile.actions.changePassword.description')}
+                        </p>
                     </div>
                 </CardContent>
                 <Separator className="" />
-                <CardFooter>
-                    <Button className="cursor-pointer">
-                        {t('profile.actions.save')}
-                    </Button>
-                </CardFooter>
+                <CardFooter></CardFooter>
             </Card>
         </section>
     );

@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from 'express';
-import jwt, { Secret } from 'jsonwebtoken';
 import * as cookie from 'cookie';
+import { NextFunction, Request, Response } from 'express';
+import jwt, { Secret } from 'jsonwebtoken';
 
 // ========================================
 // EXTENSION DES TYPES EXPRESS
@@ -11,8 +11,9 @@ declare global {
     namespace Express {
         interface Request {
             user?: {
-                email: string;      // Email de l'utilisateur connecté
-                userRole: string;   // Rôle de l'utilisateur (admin, user, etc.)
+                email: string; // Email de l'utilisateur connecté
+                userRole: string; // Rôle de l'utilisateur (admin, user, etc.)
+                isSubscribed: boolean; // Si l'utilisateur a un abonnement actif
             };
         }
     }
@@ -23,7 +24,11 @@ declare global {
 // ========================================
 // Cette fonction vérifie si l'utilisateur est authentifié via son token JWT
 // Elle s'exécute avant chaque route protégée
-export const authMiddleware = (req: Request, res: Response, next: NextFunction): void => {
+export const authMiddleware = (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+): void => {
     try {
         // ========================================
         // ÉTAPE 1: VÉRIFICATION DE LA CONFIGURATION
@@ -32,8 +37,8 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction):
         // Cette clé sert à signer et vérifier les tokens
         if (!process.env.JWT_SECRET_KEY) {
             console.error('JWT_SECRET_KEY not defined');
-            res.status(500).json({ 
-                message: 'Erreur de configuration serveur' 
+            res.status(500).json({
+                message: 'Erreur de configuration serveur',
             });
             return;
         }
@@ -44,8 +49,8 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction):
         // On vérifie que l'utilisateur a envoyé des cookies
         // Les cookies contiennent le token d'authentification
         if (!req.headers.cookie) {
-            res.status(401).json({ 
-                message: 'Token d\'authentification manquant' 
+            res.status(401).json({
+                message: "Token d'authentification manquant",
             });
             return;
         }
@@ -56,11 +61,11 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction):
         // On parse les cookies pour extraire le token
         // Les cookies sont au format "name=value; name2=value2"
         const cookies = cookie.parse(req.headers.cookie);
-        
+
         // On vérifie que le cookie 'token' existe
         if (!cookies.token) {
-            res.status(401).json({ 
-                message: 'Token d\'authentification manquant' 
+            res.status(401).json({
+                message: "Token d'authentification manquant",
             });
             return;
         }
@@ -74,8 +79,8 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction):
         // - Vérifier que le token n'est pas expiré
         // - Retourner le contenu du token (payload)
         const payload: any = jwt.verify(
-            cookies.token,                                    // Le token à vérifier
-            process.env.JWT_SECRET_KEY as Secret              // La clé secrète pour vérifier
+            cookies.token, // Le token à vérifier
+            process.env.JWT_SECRET_KEY as Secret, // La clé secrète pour vérifier
         );
 
         // ========================================
@@ -84,8 +89,8 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction):
         // On vérifie que le token contient bien un email
         // Le payload contient les informations de l'utilisateur
         if (!payload || !payload.email) {
-            res.status(401).json({ 
-                message: 'Token d\'authentification invalide' 
+            res.status(401).json({
+                message: "Token d'authentification invalide",
             });
             return;
         }
@@ -96,8 +101,9 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction):
         // On ajoute les informations de l'utilisateur à l'objet req
         // Maintenant on peut utiliser req.user?.email dans nos contrôleurs
         req.user = {
-            email: payload.email,                    // Email de l'utilisateur
-            userRole: payload.userRole || 'user'     // Rôle (par défaut 'user' si pas défini)
+            email: payload.email, // Email de l'utilisateur
+            userRole: payload.userRole || 'user', // Rôle (par défaut 'user' si pas défini)
+            isSubscribed: payload.isSubscribed || false, // Abonnement actif (par défaut false)
         };
 
         // ========================================
@@ -106,17 +112,15 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction):
         // L'utilisateur est authentifié, on peut continuer la route
         console.log(`Utilisateur authentifié: ${payload.email}`);
         next(); // Passe au middleware/contrôleur suivant
-
     } catch (error) {
         // ========================================
         // GESTION DES ERREURS
         // ========================================
         // Si une erreur survient (token invalide, expiré, etc.)
-        console.error('Erreur d\'authentification:', error);
-        res.status(401).json({ 
-            message: 'Token d\'authentification invalide' 
+        console.error("Erreur d'authentification:", error);
+        res.status(401).json({
+            message: "Token d'authentification invalide",
         });
         return;
     }
 };
-
