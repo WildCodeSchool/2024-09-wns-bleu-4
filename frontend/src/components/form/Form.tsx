@@ -32,6 +32,7 @@ interface FormProps {
     requireCaptcha?: boolean;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Form = ({ title, onSubmit, loading, links, error, requireCaptcha: _requireCaptcha = false }: FormProps) => {
     const { t } = useTranslation();
     const [showPassword, setShowPassword] = useState(false);
