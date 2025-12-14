@@ -37,7 +37,7 @@ services:
             backend:
                 condition: service_healthy
         healthcheck:
-            test: "curl --fail --request GET --url 'http://wildtransfer.cloud' || exit 1"
+            test: "curl --fail --request GET --url 'http://localhost' || exit 1"
             interval: 1s
             timeout: 10s
             retries: 100
@@ -64,4 +64,5 @@ services:
             frontend:
                 condition: service_healthy
         ports:
-            - 7007:80
+            - 80:80
+            - 443:443
