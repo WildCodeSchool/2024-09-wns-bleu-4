@@ -18,7 +18,7 @@ COPY tsconfig.app.json tsconfig.app.json
 COPY tsconfig.json tsconfig.json
 COPY tsconfig.node.json tsconfig.node.json
 COPY vite.config.ts vite.config.ts
-COPY .env* ./
+COPY .env.production .env
 
 # BUILD l'application
 RUN npm run build
