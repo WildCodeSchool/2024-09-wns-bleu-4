@@ -32,11 +32,12 @@ interface FormProps {
     requireCaptcha?: boolean;
 }
 
-const Form = ({ title, onSubmit, loading, links, error, requireCaptcha = false }: FormProps) => {
+const Form = ({ title, onSubmit, loading, links, error, requireCaptcha: _requireCaptcha = false }: FormProps) => {
     const { t } = useTranslation();
     const [showPassword, setShowPassword] = useState(false);
-    const [recaptchaToken, setRecaptchaToken] = useState<string | undefined>(undefined);
-    const [captchaError, setCaptchaError] = useState<string | undefined>(undefined);
+    // Temporairement désactivé - reCAPTCHA
+    // const [recaptchaToken, setRecaptchaToken] = useState<string | undefined>(undefined);
+    // const [captchaError, setCaptchaError] = useState<string | undefined>(undefined);
 
     const {
         register,
@@ -56,7 +57,7 @@ const Form = ({ title, onSubmit, loading, links, error, requireCaptcha = false }
             //     toast.error(message);
             //     return;
             // }
-            await onSubmit(data.email, data.password, recaptchaToken);
+            await onSubmit(data.email, data.password, undefined); // recaptchaToken temporairement désactivé
         } catch (error) {
             const errorMessage =
                 error instanceof Error
@@ -67,15 +68,16 @@ const Form = ({ title, onSubmit, loading, links, error, requireCaptcha = false }
         }
     };
 
-    const handleCaptchaSuccess = (token: string) => {
-        setRecaptchaToken(token);
-        setCaptchaError(undefined);
-    };
+    // Temporairement désactivé - reCAPTCHA
+    // const handleCaptchaSuccess = (token: string) => {
+    //     setRecaptchaToken(token);
+    //     setCaptchaError(undefined);
+    // };
 
-    const handleCaptchaError = (err: Error) => {
-        setRecaptchaToken(undefined);
-        setCaptchaError(err.message);
-    };
+    // const handleCaptchaError = (err: Error) => {
+    //     setRecaptchaToken(undefined);
+    //     setCaptchaError(err.message);
+    // };
 
     // Temporairement désactivé - reCAPTCHA non requis
     // const disableSubmit = requireCaptcha ? !isValid || !recaptchaToken : !isValid;
