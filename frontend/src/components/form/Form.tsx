@@ -9,7 +9,7 @@ import { Button } from '../ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
-import { ReCAPTCHA } from '../ReCaptcha/ReCaptcha';
+// import { ReCAPTCHA } from '../ReCaptcha/ReCaptcha';
 
 const formSchema = z.object({
     email: z.string().email('Veuillez saisir une adresse email valide'),
@@ -49,12 +49,13 @@ const Form = ({ title, onSubmit, loading, links, error, requireCaptcha = false }
 
     const submitForm = async (data: FormData) => {
         try {
-            if (requireCaptcha && !recaptchaToken) {
-                const message = t('auth.form.captchaRequired', 'Veuillez compléter le reCAPTCHA');
-                setCaptchaError(message);
-                toast.error(message);
-                return;
-            }
+            // Temporairement désactivé
+            // if (requireCaptcha && !recaptchaToken) {
+            //     const message = t('auth.form.captchaRequired', 'Veuillez compléter le reCAPTCHA');
+            //     setCaptchaError(message);
+            //     toast.error(message);
+            //     return;
+            // }
             await onSubmit(data.email, data.password, recaptchaToken);
         } catch (error) {
             const errorMessage =
@@ -76,7 +77,9 @@ const Form = ({ title, onSubmit, loading, links, error, requireCaptcha = false }
         setCaptchaError(err.message);
     };
 
-    const disableSubmit = requireCaptcha ? !isValid || !recaptchaToken : !isValid;
+    // Temporairement désactivé - reCAPTCHA non requis
+    // const disableSubmit = requireCaptcha ? !isValid || !recaptchaToken : !isValid;
+    const disableSubmit = !isValid;
 
     return (
         <Card className="w-auto sm:w-[50%] mx-auto md:my-40  my-6">
@@ -154,7 +157,8 @@ const Form = ({ title, onSubmit, loading, links, error, requireCaptcha = false }
                         )}
                     </div>
 
-                    {requireCaptcha && (
+                    {/* Temporairement désactivé */}
+                    {/* {requireCaptcha && (
                         <div className="space-y-2">
                             <ReCAPTCHA
                                 onSuccess={handleCaptchaSuccess}
@@ -164,7 +168,7 @@ const Form = ({ title, onSubmit, loading, links, error, requireCaptcha = false }
                                 <div className="text-sm text-red-500">{captchaError}</div>
                             )}
                         </div>
-                    )}
+                    )} */}
 
                     {error && (
                         <div className="text-sm text-red-500">{error}</div>
