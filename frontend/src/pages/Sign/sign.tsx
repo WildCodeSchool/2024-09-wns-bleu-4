@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 
-
 const Sign = () => {
     const { t, i18n } = useTranslation();
     const [register, { loading }] = useRegisterMutation();
@@ -16,7 +15,10 @@ const Sign = () => {
     const handleSubmit = async (email: string, password: string) => {
         try {
             const response = await register({
-                variables: { data: { email, password }, lang: i18n.language as 'fr' | 'en' },
+                variables: {
+                    data: { email, password },
+                    lang: i18n.language as 'fr' | 'en',
+                },
             });
             if (response.data?.register) {
                 toast.info(t('auth.signup.success'));
@@ -39,7 +41,7 @@ const Sign = () => {
             title={t('auth.signup.title')}
             onSubmit={handleSubmit}
             loading={loading}
-            requireCaptcha
+            // requireCaptcha - temporairement désactivé
             links={
                 <span>
                     {t('auth.signup.links.terms')}{' '}
