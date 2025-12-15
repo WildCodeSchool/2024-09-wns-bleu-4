@@ -18,10 +18,7 @@ const Sign = () => {
                 variables: {
                     data: { email, password },
                     lang: i18n.language as 'fr' | 'en',
-<<<<<<< HEAD
-=======
                     recaptchaToken,
->>>>>>> origin/dev
                 },
             });
             if (response.data?.register) {
@@ -45,11 +42,7 @@ const Sign = () => {
             title={t('auth.signup.title')}
             onSubmit={handleSubmit}
             loading={loading}
-<<<<<<< HEAD
-            // requireCaptcha - temporairement désactivé
-=======
             requireCaptcha={true}
->>>>>>> origin/dev
             links={
                 <span>
                     {t('auth.signup.links.terms')}{' '}
