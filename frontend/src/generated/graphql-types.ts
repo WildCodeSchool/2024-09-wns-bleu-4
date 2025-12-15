@@ -211,6 +211,7 @@ export type MutationRefuseContactRequestArgs = {
 export type MutationRegisterArgs = {
   data: UserInput;
   lang: Scalars['String']['input'];
+  recaptchaToken?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -854,6 +855,7 @@ export type LogoutMutation = { __typename?: 'Mutation', logout: string };
 export type RegisterMutationVariables = Exact<{
   data: UserInput;
   lang: Scalars['String']['input'];
+  recaptchaToken?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
@@ -2749,8 +2751,8 @@ export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
 export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
 export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
 export const RegisterDocument = gql`
-    mutation Register($data: UserInput!, $lang: String!) {
-  register(data: $data, lang: $lang)
+    mutation Register($data: UserInput!, $lang: String!, $recaptchaToken: String) {
+  register(data: $data, lang: $lang, recaptchaToken: $recaptchaToken)
 }
     `;
 export type RegisterMutationFn = Apollo.MutationFunction<RegisterMutation, RegisterMutationVariables>;
@@ -2770,6 +2772,7 @@ export type RegisterMutationFn = Apollo.MutationFunction<RegisterMutation, Regis
  *   variables: {
  *      data: // value for 'data'
  *      lang: // value for 'lang'
+ *      recaptchaToken: // value for 'recaptchaToken'
  *   },
  * });
  */
