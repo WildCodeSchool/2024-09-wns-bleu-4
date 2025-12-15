@@ -78,7 +78,14 @@ class UserResolver {
     async register(
         @Arg('data', () => UserInput) newUserData: User,
         @Arg('lang', () => String) lang: string = 'fr',
+        @Arg('recaptchaToken', () => String, { nullable: true }) recaptchaToken?: string,
     ) {
+        // TODO: Valider le token reCAPTCHA avec l'API Google
+        // Pour l'instant, on vérifie juste sa présence en production
+        if (process.env.NODE_ENV === 'production' && !recaptchaToken) {
+            throw new Error('reCAPTCHA token is required');
+        }
+
         const existingUser = await User.findOneBy({ email: newUserData.email });
 
         if (existingUser) {
