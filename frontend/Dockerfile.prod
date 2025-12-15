@@ -33,7 +33,7 @@ COPY vite.config.ts vite.config.ts
 # Créer le fichier .env avec les variables d'environnement
 RUN echo "VITE_ENVIRONMENT=${BUILD_ENV}" > .env && \
     if [ -n "${VITE_RECAPTCHA_SITE_KEY}" ]; then \
-        echo "VITE_RECAPTCHA_SITE_KEY=${VITE_RECAPTCHA_SITE_KEY}" >> .env; \
+    echo "VITE_RECAPTCHA_SITE_KEY=${VITE_RECAPTCHA_SITE_KEY}" >> .env; \
     fi
 
 # BUILD l'application avec logs détaillés
