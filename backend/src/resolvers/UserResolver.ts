@@ -83,7 +83,10 @@ class UserResolver {
         @Ctx() context?: any,
     ) {
         // Valider le token reCAPTCHA avec l'API Google
-        if (process.env.NODE_ENV === 'production') {
+        const nodeEnv = process.env.NODE_ENV;
+        
+        if (nodeEnv === 'production') {
+            // En production, la validation est obligatoire
             if (!recaptchaToken) {
                 throw new Error('reCAPTCHA token is required');
             }
@@ -101,7 +104,7 @@ class UserResolver {
                 );
             }
         } else {
-            // En développement, on valide quand même si un token est fourni
+            // En développement ou staging, on valide si un token est fourni et si la clé est configurée
             if (recaptchaToken) {
                 const clientIp =
                     context?.req?.ip ||
@@ -111,9 +114,10 @@ class UserResolver {
                     recaptchaToken,
                     clientIp,
                 );
-                if (!isValid) {
+                if (!isValid && process.env.RECAPTCHA_SECRET_KEY) {
+                    // Seulement logger un warning si la clé est configurée (sinon verifyRecaptchaToken retourne true)
                     console.warn(
-                        'reCAPTCHA validation failed in development mode',
+                        `reCAPTCHA validation failed in ${nodeEnv} mode`,
                     );
                 }
             }

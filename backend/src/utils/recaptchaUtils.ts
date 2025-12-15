@@ -21,10 +21,10 @@ export async function verifyRecaptchaToken(
     const secretKey = process.env.RECAPTCHA_SECRET_KEY;
 
     if (!secretKey) {
-        // En développement, on accepte si pas de clé configurée
-        if (process.env.NODE_ENV === 'development') {
+        // En développement ou staging, on accepte si pas de clé configurée
+        if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'staging') {
             console.warn(
-                'RECAPTCHA_SECRET_KEY not configured. Skipping validation in development.',
+                `RECAPTCHA_SECRET_KEY not configured. Skipping validation in ${process.env.NODE_ENV}.`,
             );
             return true;
         }
