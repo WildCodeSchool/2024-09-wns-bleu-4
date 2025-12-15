@@ -3,8 +3,6 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import { defineConfig, UserConfig, loadEnv } from 'vite';
 
-import 'dotenv/config';
-
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, process.cwd(), '');
