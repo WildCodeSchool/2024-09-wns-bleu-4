@@ -12,7 +12,11 @@ const Sign = () => {
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [userEmail, setUserEmail] = useState<string>('');
 
-    const handleSubmit = async (email: string, password: string, recaptchaToken?: string) => {
+    const handleSubmit = async (
+        email: string,
+        password: string,
+        recaptchaToken?: string,
+    ) => {
         try {
             const response = await register({
                 variables: {
