@@ -27,5 +27,7 @@ jobs:
         with:
           context: ./frontend
           file: ./frontend/Dockerfile.prod
+          build-args: |
+            BUILD_ENV=STAGING
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.STAGING_FRONT_IMAGE }}:latest
