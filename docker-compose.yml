@@ -58,7 +58,7 @@ services:
     api_gateway:
         image: nginx
         volumes:
-            - ./nginx.conf:/etc/nginx/nginx.conf
+            - ./nginx.dev.conf:/etc/nginx/nginx.conf
             - ./storage-api/uploads:/app/uploads
         depends_on:
             backend:
