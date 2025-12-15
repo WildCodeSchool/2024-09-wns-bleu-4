@@ -25,18 +25,33 @@ type FormData = z.infer<typeof formSchema>;
 
 interface FormProps {
     title: string;
-    onSubmit: (email: string, password: string, recaptchaToken?: string) => Promise<void>;
+    onSubmit: (
+        email: string,
+        password: string,
+        recaptchaToken?: string,
+    ) => Promise<void>;
     loading: boolean;
     error?: string;
     links?: React.ReactNode;
     requireCaptcha?: boolean;
 }
 
-const Form = ({ title, onSubmit, loading, links, error, requireCaptcha = false }: FormProps) => {
+const Form = ({
+    title,
+    onSubmit,
+    loading,
+    links,
+    error,
+    requireCaptcha = false,
+}: FormProps) => {
     const { t } = useTranslation();
     const [showPassword, setShowPassword] = useState(false);
-    const [recaptchaToken, setRecaptchaToken] = useState<string | undefined>(undefined);
-    const [captchaError, setCaptchaError] = useState<string | undefined>(undefined);
+    const [recaptchaToken, setRecaptchaToken] = useState<string | undefined>(
+        undefined,
+    );
+    const [captchaError, setCaptchaError] = useState<string | undefined>(
+        undefined,
+    );
 
     const {
         register,
@@ -50,7 +65,10 @@ const Form = ({ title, onSubmit, loading, links, error, requireCaptcha = false }
     const submitForm = async (data: FormData) => {
         try {
             if (requireCaptcha && !recaptchaToken) {
-                const message = t('auth.form.captchaRequired', 'Veuillez compléter le reCAPTCHA');
+                const message = t(
+                    'auth.form.captchaRequired',
+                    'Veuillez compléter le reCAPTCHA',
+                );
                 setCaptchaError(message);
                 toast.error(message);
                 return;
@@ -76,7 +94,9 @@ const Form = ({ title, onSubmit, loading, links, error, requireCaptcha = false }
         setCaptchaError(err.message);
     };
 
-    const disableSubmit = requireCaptcha ? !isValid || !recaptchaToken : !isValid;
+    const disableSubmit = requireCaptcha
+        ? !isValid || !recaptchaToken
+        : !isValid;
 
     return (
         <Card className="w-auto sm:w-[50%] mx-auto md:my-40  my-6">
@@ -161,7 +181,9 @@ const Form = ({ title, onSubmit, loading, links, error, requireCaptcha = false }
                                 onError={handleCaptchaError}
                             />
                             {captchaError && (
-                                <div className="text-sm text-red-500">{captchaError}</div>
+                                <div className="text-sm text-red-500">
+                                    {captchaError}
+                                </div>
                             )}
                         </div>
                     )}
