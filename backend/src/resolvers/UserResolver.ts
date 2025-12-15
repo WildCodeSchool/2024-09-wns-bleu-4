@@ -11,6 +11,10 @@ import {
     calculateStoragePercentage,
     formatFileSize,
 } from '@/utils/storageUtils';
+<<<<<<< HEAD
+=======
+import { verifyRecaptchaToken } from '@/utils/recaptchaUtils';
+>>>>>>> origin/dev
 import * as argon2 from 'argon2';
 import { IsEmail, Length, Matches } from 'class-validator';
 import jwt, { Secret } from 'jsonwebtoken';
@@ -78,7 +82,50 @@ class UserResolver {
     async register(
         @Arg('data', () => UserInput) newUserData: User,
         @Arg('lang', () => String) lang: string = 'fr',
+        @Arg('recaptchaToken', () => String, { nullable: true }) recaptchaToken?: string,
+        @Ctx() context?: any,
     ) {
+        // Valider le token reCAPTCHA avec l'API Google
+        const nodeEnv = process.env.NODE_ENV;
+        
+        if (nodeEnv === 'production') {
+            // En production, la validation est obligatoire
+            if (!recaptchaToken) {
+                throw new Error('reCAPTCHA token is required');
+            }
+
+            // Récupérer l'IP du client depuis le contexte (si disponible)
+            const clientIp =
+                context?.req?.ip ||
+                context?.req?.headers?.['x-forwarded-for']?.split(',')[0] ||
+                context?.req?.connection?.remoteAddress;
+
+            const isValid = await verifyRecaptchaToken(recaptchaToken, clientIp);
+            if (!isValid) {
+                throw new Error(
+                    'reCAPTCHA validation failed. Please try again.',
+                );
+            }
+        } else {
+            // En développement ou staging, on valide si un token est fourni et si la clé est configurée
+            if (recaptchaToken) {
+                const clientIp =
+                    context?.req?.ip ||
+                    context?.req?.headers?.['x-forwarded-for']?.split(',')[0] ||
+                    context?.req?.connection?.remoteAddress;
+                const isValid = await verifyRecaptchaToken(
+                    recaptchaToken,
+                    clientIp,
+                );
+                if (!isValid && process.env.RECAPTCHA_SECRET_KEY) {
+                    // Seulement logger un warning si la clé est configurée (sinon verifyRecaptchaToken retourne true)
+                    console.warn(
+                        `reCAPTCHA validation failed in ${nodeEnv} mode`,
+                    );
+                }
+            }
+        }
+
         const existingUser = await User.findOneBy({ email: newUserData.email });
 
         if (existingUser) {

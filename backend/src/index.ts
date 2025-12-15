@@ -8,9 +8,11 @@ import SystemLogResolver from '@/resolvers/SystemLogResolver';
 import UserResolver from '@/resolvers/UserResolver';
 import { cleanupExpiredResources } from '@/services/cleanupService';
 import { ApolloServer } from '@apollo/server';
-import { startStandaloneServer } from '@apollo/server/standalone';
+import { expressMiddleware } from '@apollo/server/express4';
 import * as cookie from 'cookie';
+import cors from 'cors';
 import 'dotenv/config';
+import express from 'express';
 import jwt, { Secret } from 'jsonwebtoken';
 import * as cron from 'node-cron';
 import 'reflect-metadata';
@@ -62,38 +64,75 @@ const start = async () => {
             }
         },
     });
+    // Configuration des origines autorisées pour CORS
+    const allowedOrigins = [
+        'https://wildtransfer.cloud',
+        'https://staging.wildtransfer.cloud',
+        'http://localhost:5173',
+        'http://localhost:7007',
+    ];
+
+    const app = express();
     const server = new ApolloServer({ schema });
-    const { url } = await startStandaloneServer(server, {
-        listen: { port: 4000 },
-        context: async ({ req, res }) => {
-            if (req.headers.cookie) {
-                const cookies = cookie.parse(req.headers.cookie as string);
-                if (cookies.token) {
-                    try {
-                        const payload: any = jwt.verify(
-                            cookies.token,
-                            process.env.JWT_SECRET_KEY as Secret,
-                        );
-                        console.log('payload in context', payload);
-                        if (payload) {
-                            console.log(
-                                'payload was found and returned to resolver',
+
+    await server.start();
+
+    // Configuration CORS avec credentials
+    app.use(
+        '/',
+        cors({
+            origin: (origin, callback) => {
+                // Autoriser les requêtes sans origine (ex: Postman, curl)
+                if (!origin) {
+                    return callback(null, true);
+                }
+                // Vérifier si l'origine est autorisée
+                if (allowedOrigins.includes(origin)) {
+                    callback(null, true);
+                } else {
+                    callback(new Error('Not allowed by CORS'));
+                }
+            },
+            credentials: true,
+            methods: ['GET', 'POST', 'OPTIONS'],
+            allowedHeaders: ['Content-Type', 'Authorization'],
+        }),
+        express.json(),
+        expressMiddleware(server, {
+            context: async ({ req, res }) => {
+                if (req.headers.cookie) {
+                    const cookies = cookie.parse(req.headers.cookie as string);
+                    if (cookies.token) {
+                        try {
+                            const payload: any = jwt.verify(
+                                cookies.token,
+                                process.env.JWT_SECRET_KEY as Secret,
                             );
-                            return {
-                                email: payload.email,
-                                userRole: payload.userRole,
-                                res: res,
-                            };
+                            console.log('payload in context', payload);
+                            if (payload) {
+                                console.log(
+                                    'payload was found and returned to resolver',
+                                );
+                                return {
+                                    email: payload.email,
+                                    userRole: payload.userRole,
+                                    res: res,
+                                };
+                            }
+                        } catch (error) {
+                            console.log('JWT verification failed:', error.message);
                         }
-                    } catch (error) {
-                        console.log('JWT verification failed:', error.message);
                     }
                 }
-            }
-            return { res: res };
-        },
+                return { res: res };
+            },
+        }),
+    );
+
+    const PORT = 4000;
+    app.listen(PORT, () => {
+        console.log(`🚀  Server ready at: http://localhost:${PORT}`);
     });
-    console.log(`🚀  Server ready at: ${url}`);
 
     // Schedule daily cleanup of expired resources at 2 AM
     cron.schedule('0 2 * * *', async () => {
