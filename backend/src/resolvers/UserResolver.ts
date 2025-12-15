@@ -11,6 +11,7 @@ import {
     calculateStoragePercentage,
     formatFileSize,
 } from '@/utils/storageUtils';
+import { verifyRecaptchaToken } from '@/utils/recaptchaUtils';
 import * as argon2 from 'argon2';
 import { IsEmail, Length, Matches } from 'class-validator';
 import jwt, { Secret } from 'jsonwebtoken';
@@ -79,11 +80,43 @@ class UserResolver {
         @Arg('data', () => UserInput) newUserData: User,
         @Arg('lang', () => String) lang: string = 'fr',
         @Arg('recaptchaToken', () => String, { nullable: true }) recaptchaToken?: string,
+        @Ctx() context?: any,
     ) {
-        // TODO: Valider le token reCAPTCHA avec l'API Google
-        // Pour l'instant, on vérifie juste sa présence en production
-        if (process.env.NODE_ENV === 'production' && !recaptchaToken) {
-            throw new Error('reCAPTCHA token is required');
+        // Valider le token reCAPTCHA avec l'API Google
+        if (process.env.NODE_ENV === 'production') {
+            if (!recaptchaToken) {
+                throw new Error('reCAPTCHA token is required');
+            }
+
+            // Récupérer l'IP du client depuis le contexte (si disponible)
+            const clientIp =
+                context?.req?.ip ||
+                context?.req?.headers?.['x-forwarded-for']?.split(',')[0] ||
+                context?.req?.connection?.remoteAddress;
+
+            const isValid = await verifyRecaptchaToken(recaptchaToken, clientIp);
+            if (!isValid) {
+                throw new Error(
+                    'reCAPTCHA validation failed. Please try again.',
+                );
+            }
+        } else {
+            // En développement, on valide quand même si un token est fourni
+            if (recaptchaToken) {
+                const clientIp =
+                    context?.req?.ip ||
+                    context?.req?.headers?.['x-forwarded-for']?.split(',')[0] ||
+                    context?.req?.connection?.remoteAddress;
+                const isValid = await verifyRecaptchaToken(
+                    recaptchaToken,
+                    clientIp,
+                );
+                if (!isValid) {
+                    console.warn(
+                        'reCAPTCHA validation failed in development mode',
+                    );
+                }
+            }
         }
 
         const existingUser = await User.findOneBy({ email: newUserData.email });

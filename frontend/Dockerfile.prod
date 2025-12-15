@@ -1,4 +1,9 @@
 FROM node:lts-alpine AS builder
+
+# Argument pour définir l'environnement (PROD, STAGING, DEV)
+ARG BUILD_ENV=PROD
+ENV VITE_ENVIRONMENT=${BUILD_ENV}
+
 WORKDIR /app
 COPY package.json package.json
 COPY package-lock.json package-lock.json
@@ -18,7 +23,9 @@ COPY tsconfig.app.json tsconfig.app.json
 COPY tsconfig.json tsconfig.json
 COPY tsconfig.node.json tsconfig.node.json
 COPY vite.config.ts vite.config.ts
-COPY .env.production .env
+
+# Créer le fichier .env avec la variable VITE_ENVIRONMENT
+RUN echo "VITE_ENVIRONMENT=${BUILD_ENV}" > .env
 
 # BUILD l'application
 RUN npm run build
