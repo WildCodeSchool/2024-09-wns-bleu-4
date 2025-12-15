@@ -29,5 +29,6 @@ jobs:
           file: ./frontend/Dockerfile.prod
           build-args: |
             BUILD_ENV=PROD
+            VITE_RECAPTCHA_SITE_KEY=${{ secrets.RECAPTCHA_SITE_KEY }}
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROD_FRONT_IMAGE }}:latest
