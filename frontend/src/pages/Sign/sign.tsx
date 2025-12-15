@@ -12,16 +12,17 @@ const Sign = () => {
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [userEmail, setUserEmail] = useState<string>('');
 
-    const handleSubmit = async (email: string, password: string, recaptchaToken?: string) => {
+    const handleSubmit = async (
+        email: string,
+        password: string,
+        recaptchaToken?: string,
+    ) => {
         try {
             const response = await register({
                 variables: {
                     data: { email, password },
                     lang: i18n.language as 'fr' | 'en',
-<<<<<<< HEAD
-=======
                     recaptchaToken,
->>>>>>> origin/dev
                 },
             });
             if (response.data?.register) {
@@ -45,11 +46,7 @@ const Sign = () => {
             title={t('auth.signup.title')}
             onSubmit={handleSubmit}
             loading={loading}
-<<<<<<< HEAD
-            // requireCaptcha - temporairement désactivé
-=======
             requireCaptcha={true}
->>>>>>> origin/dev
             links={
                 <span>
                     {t('auth.signup.links.terms')}{' '}

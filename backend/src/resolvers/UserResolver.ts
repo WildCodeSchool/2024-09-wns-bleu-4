@@ -11,10 +11,7 @@ import {
     calculateStoragePercentage,
     formatFileSize,
 } from '@/utils/storageUtils';
-<<<<<<< HEAD
-=======
 import { verifyRecaptchaToken } from '@/utils/recaptchaUtils';
->>>>>>> origin/dev
 import * as argon2 from 'argon2';
 import { IsEmail, Length, Matches } from 'class-validator';
 import jwt, { Secret } from 'jsonwebtoken';

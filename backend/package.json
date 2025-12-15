@@ -47,10 +47,7 @@
     },
     "devDependencies": {
         "@faker-js/faker": "^9.6.0",
-<<<<<<< HEAD
-=======
         "@types/cors": "^2.8.17",
->>>>>>> origin/dev
         "@types/form-data": "^2.5.2",
         "@types/jsonwebtoken": "^9.0.8",
         "@types/node": "^22.13.2",

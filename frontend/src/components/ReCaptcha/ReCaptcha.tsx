@@ -28,20 +28,12 @@ declare global {
 }
 
 export const ReCAPTCHA = ({ onSuccess, onError }: ReCAPTCHAProps) => {
-<<<<<<< HEAD
-    const { isDev } = useEnv();
-    const testSiteKey = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI';
-
-    const resolvedSiteKey =
-        isDev
-=======
     const { isDev, isStaging } = useEnv();
     const testSiteKey = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI';
 
     // Utiliser la clé de test en dev, ou en staging si la clé n'est pas configurée
     const resolvedSiteKey =
         isDev || (isStaging && !import.meta.env?.VITE_RECAPTCHA_SITE_KEY)
->>>>>>> origin/dev
             ? testSiteKey
             : import.meta.env?.VITE_RECAPTCHA_SITE_KEY;
 
@@ -56,7 +48,9 @@ export const ReCAPTCHA = ({ onSuccess, onError }: ReCAPTCHAProps) => {
         }
 
         const scriptId = 'google-recaptcha-script';
-        const existing = document.getElementById(scriptId) as HTMLScriptElement | null;
+        const existing = document.getElementById(
+            scriptId,
+        ) as HTMLScriptElement | null;
 
         const onLoad = () => {
             setScriptLoaded(true);
@@ -65,11 +59,13 @@ export const ReCAPTCHA = ({ onSuccess, onError }: ReCAPTCHAProps) => {
         if (!existing) {
             const script = document.createElement('script');
             script.id = scriptId;
-            script.src = 'https://www.google.com/recaptcha/api.js?render=explicit';
+            script.src =
+                'https://www.google.com/recaptcha/api.js?render=explicit';
             script.async = true;
             script.defer = true;
             script.onload = onLoad;
-            script.onerror = () => onError?.(new Error('Failed to load reCAPTCHA script'));
+            script.onerror = () =>
+                onError?.(new Error('Failed to load reCAPTCHA script'));
             document.body.appendChild(script);
         } else if (existing && window.grecaptcha) {
             // Script already present and grecaptcha available
@@ -89,18 +85,21 @@ export const ReCAPTCHA = ({ onSuccess, onError }: ReCAPTCHAProps) => {
         // Wait until grecaptcha fully initializes (render is available)
         window.grecaptcha.ready(() => {
             try {
-                const id = window.grecaptcha!.render(containerRef.current as HTMLDivElement, {
-                    sitekey: resolvedSiteKey,
-                    callback: (token: string) => {
-                        onSuccess(token);
+                const id = window.grecaptcha!.render(
+                    containerRef.current as HTMLDivElement,
+                    {
+                        sitekey: resolvedSiteKey,
+                        callback: (token: string) => {
+                            onSuccess(token);
+                        },
+                        'expired-callback': () => {
+                            onError?.(new Error('reCAPTCHA expired'));
+                        },
+                        'error-callback': () => {
+                            onError?.(new Error('reCAPTCHA error'));
+                        },
                     },
-                    'expired-callback': () => {
-                        onError?.(new Error('reCAPTCHA expired'));
-                    },
-                    'error-callback': () => {
-                        onError?.(new Error('reCAPTCHA error'));
-                    },
-                });
+                );
                 setWidgetId(id);
             } catch {
                 onError?.(new Error('Failed to initialize reCAPTCHA'));
