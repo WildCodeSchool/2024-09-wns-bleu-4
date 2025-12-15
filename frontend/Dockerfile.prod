@@ -1,4 +1,7 @@
-FROM node:lts-alpine AS builder
+FROM node:22-alpine AS builder
+
+# Mettre à jour npm vers la dernière version
+RUN npm install -g npm@latest
 
 # Argument pour définir l'environnement (PROD, STAGING, DEV)
 ARG BUILD_ENV=PROD
@@ -13,12 +16,11 @@ COPY package.json package.json
 COPY package-lock.json package-lock.json
 # Retry npm install avec délai en cas d'erreur E429 (rate limiting)
 RUN npm config set registry https://registry.npmjs.org/ && \
-    for i in 1 2 3; do \
-    npm ci && break || { \
-    echo "npm install failed, attempt $i/3. Retrying in 30 seconds..." && \
-    sleep 30; \
-    } \
-    done
+    npm ci --verbose || { \
+    echo "npm install failed, retrying..." && \
+    sleep 30 && \
+    npm ci --verbose; \
+    }
 COPY public public
 COPY src src
 COPY codegen.ts codegen.ts
@@ -34,8 +36,11 @@ RUN echo "VITE_ENVIRONMENT=${BUILD_ENV}" > .env && \
         echo "VITE_RECAPTCHA_SITE_KEY=${VITE_RECAPTCHA_SITE_KEY}" >> .env; \
     fi
 
-# BUILD l'application
-RUN npm run build
+# BUILD l'application avec logs détaillés
+RUN echo "Building with VITE_ENVIRONMENT=${BUILD_ENV}" && \
+    echo "Building with VITE_RECAPTCHA_SITE_KEY=${VITE_RECAPTCHA_SITE_KEY:+***}" && \
+    cat .env && \
+    npm run build
 
 # Stage 2: Servir avec nginx
 FROM nginx:alpine
