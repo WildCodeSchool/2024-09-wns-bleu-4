@@ -28,11 +28,12 @@ declare global {
 }
 
 export const ReCAPTCHA = ({ onSuccess, onError }: ReCAPTCHAProps) => {
-    const { isDev } = useEnv();
+    const { isDev, isStaging } = useEnv();
     const testSiteKey = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI';
 
+    // Utiliser la clé de test en dev, ou en staging si la clé n'est pas configurée
     const resolvedSiteKey =
-        isDev
+        isDev || (isStaging && !import.meta.env?.VITE_RECAPTCHA_SITE_KEY)
             ? testSiteKey
             : import.meta.env?.VITE_RECAPTCHA_SITE_KEY;
 

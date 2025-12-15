@@ -4,6 +4,10 @@ FROM node:lts-alpine AS builder
 ARG BUILD_ENV=PROD
 ENV VITE_ENVIRONMENT=${BUILD_ENV}
 
+# Argument optionnel pour la clé reCAPTCHA
+ARG VITE_RECAPTCHA_SITE_KEY
+ENV VITE_RECAPTCHA_SITE_KEY=${VITE_RECAPTCHA_SITE_KEY}
+
 WORKDIR /app
 COPY package.json package.json
 COPY package-lock.json package-lock.json
@@ -24,8 +28,11 @@ COPY tsconfig.json tsconfig.json
 COPY tsconfig.node.json tsconfig.node.json
 COPY vite.config.ts vite.config.ts
 
-# Créer le fichier .env avec la variable VITE_ENVIRONMENT
-RUN echo "VITE_ENVIRONMENT=${BUILD_ENV}" > .env
+# Créer le fichier .env avec les variables d'environnement
+RUN echo "VITE_ENVIRONMENT=${BUILD_ENV}" > .env && \
+    if [ -n "${VITE_RECAPTCHA_SITE_KEY}" ]; then \
+        echo "VITE_RECAPTCHA_SITE_KEY=${VITE_RECAPTCHA_SITE_KEY}" >> .env; \
+    fi
 
 # BUILD l'application
 RUN npm run build
