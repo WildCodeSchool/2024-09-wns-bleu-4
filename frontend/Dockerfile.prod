@@ -38,11 +38,7 @@ RUN echo "VITE_ENVIRONMENT=${BUILD_ENV}" > .env && \
 
 # BUILD l'application avec logs détaillés
 RUN echo "Building with VITE_ENVIRONMENT=${BUILD_ENV}" && \
-    if [ -n "${VITE_RECAPTCHA_SITE_KEY}" ]; then \
-        echo "VITE_RECAPTCHA_SITE_KEY is set (length: $(echo -n "${VITE_RECAPTCHA_SITE_KEY}" | wc -c))"; \
-    else \
-        echo "WARNING: VITE_RECAPTCHA_SITE_KEY is not set!"; \
-    fi && \
+    echo "Building with VITE_RECAPTCHA_SITE_KEY=${VITE_RECAPTCHA_SITE_KEY:+***}" && \
     cat .env && \
     npm run build
 
