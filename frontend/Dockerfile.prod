@@ -38,12 +38,17 @@ RUN echo "VITE_ENVIRONMENT=${BUILD_ENV}" > .env && \
 
 # BUILD l'application avec logs détaillés
 RUN echo "Building with VITE_ENVIRONMENT=${BUILD_ENV}" && \
-    echo "Building with VITE_RECAPTCHA_SITE_KEY=${VITE_RECAPTCHA_SITE_KEY:+***}" && \
+    if [ -n "${VITE_RECAPTCHA_SITE_KEY}" ]; then \
+        echo "VITE_RECAPTCHA_SITE_KEY is set (length: $(echo -n "${VITE_RECAPTCHA_SITE_KEY}" | wc -c))"; \
+    else \
+        echo "WARNING: VITE_RECAPTCHA_SITE_KEY is not set!"; \
+    fi && \
     cat .env && \
     npm run build
 
 # Stage 2: Servir avec nginx
 FROM nginx:alpine
 COPY --from=builder /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
