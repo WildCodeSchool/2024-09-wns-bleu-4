@@ -28,14 +28,23 @@ declare global {
 }
 
 export const ReCAPTCHA = ({ onSuccess, onError }: ReCAPTCHAProps) => {
-    const { isDev, isStaging } = useEnv();
+    const { isDev, isStaging, isProd } = useEnv();
     const testSiteKey = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI';
 
     // Utiliser la clé de test en dev, ou en staging si la clé n'est pas configurée
+    // En production, la clé doit être fournie via les build args Docker
     const resolvedSiteKey =
         isDev || (isStaging && !import.meta.env?.VITE_RECAPTCHA_SITE_KEY)
             ? testSiteKey
             : import.meta.env?.VITE_RECAPTCHA_SITE_KEY;
+    
+    // En production, si la clé n'est pas définie, c'est une erreur de configuration
+    if (isProd && !resolvedSiteKey) {
+        console.error(
+            'reCAPTCHA site key is missing in production. ' +
+            'Please ensure RECAPTCHA_SITE_KEY secret is configured in GitHub Actions.'
+        );
+    }
 
     const containerRef = useRef<HTMLDivElement | null>(null);
     const [widgetId, setWidgetId] = useState<number | null>(null);
